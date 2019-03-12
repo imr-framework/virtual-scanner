@@ -7,6 +7,20 @@ import os
 
 
 def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in second
+    """
+    Return T1 mapping of a series of IRSE images with variable TI.
+
+    Parameters
+    ----------
+    dicom_file_path: folder path where all dicom files are
+    TI: TI values used in IRSE experiments
+    TR: TR values used in IRSE experiments, should be constant
+
+    Returns
+    -------
+    T1_map: T1 map generated based on input images and TI TR values
+
+    """
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for filename in fileList:
@@ -32,7 +46,23 @@ def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in 
     plt.imshow(T1_map, cmap='hot')
     plt.show()
 
+    return T1_map
 
 def T1_sig_eq(x, y, a, b):
+    """
+    Generate an exponential function for curve fitting
+
+    Parameters
+    ----------
+    x: independent variables
+    y: independent variables
+    a: curve fitting parameters
+    b: curve fitting parameters
+
+    Returns
+    -------
+    exponential function used for T1 curve fitting
+
+    """
     return a * (1 - 2 * np.exp(-x / b) + np.exp(-y / b))
 
