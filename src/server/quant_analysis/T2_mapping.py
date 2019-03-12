@@ -1,3 +1,12 @@
+"""
+This script does T2 mapping of dicom images
+
+Author: Enlin Qian
+Date: 03/12/2019
+Version 0.0
+Copyright of the Board of Trustees of  Columbia University in the City of New York
+"""
+
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
@@ -68,7 +77,7 @@ def T2_sig_eq(X, a, b, c, d):
 
     Returns
     -------
-    exponential function used for T1 curve fitting
+    exponential function used for T2 curve fitting
 
     """
     x, y = X

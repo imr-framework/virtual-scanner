@@ -1,3 +1,12 @@
+"""
+This script does T1 mapping of dicom images
+
+Author: Enlin Qian
+Date: 03/12/2019
+Version 0.0
+Copyright of the Board of Trustees of  Columbia University in the City of New York
+"""
+
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,11 +44,11 @@ def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in 
         ds = pydicom.read_file(filenameDCM)  # read the file
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data
 
-    T1_map = np.zeros(image_data_final[0:1])
+    T1_map = np.zeros([image_size[0], image_size[1]])
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
-            popt, pcov = curve_fit(T1_sig_eq, TI, TR, y_data, p0=(0.97493124058553, 0.538564048808802), bounds=(0, 6))
+            popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data, p0=(0.97493124058553, 0.538564048808802), bounds=(0, 6))
             T1_map[n2, n3] = popt[1]
 
     plt.figure()
@@ -48,7 +57,7 @@ def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in 
 
     return T1_map
 
-def T1_sig_eq(x, y, a, b):
+def T1_sig_eq(X, a, b):
     """
     Generate an exponential function for curve fitting
 
@@ -64,5 +73,6 @@ def T1_sig_eq(x, y, a, b):
     exponential function used for T1 curve fitting
 
     """
+    x, y = X
     return a * (1 - 2 * np.exp(-x / b) + np.exp(-y / b))
 
