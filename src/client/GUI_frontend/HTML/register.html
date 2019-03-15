@@ -14,8 +14,10 @@
     <!--jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <!-- TODO: merge functions in one script -->
     <!-- External JS files-->
     <script src="../JS/form2Json.js"> </script>
+    <script src="../JS/metric2Imperial.js"> </script>
 
 
   </head>
@@ -65,9 +67,13 @@
 
                   <label for="">Gender</label>
                     <div class="w-100"></div>
+                  <label for="">Measuring System</label>
+                    <div class="w-100"></div>
                   <label for="">Weight</label>
                     <div class="w-100"></div>
                   <label for="">Height</label>
+
+
 
                 </div>
                 <!--Input column -->
@@ -89,21 +95,41 @@
 
                   </script>
                     <div class="w-100"></div>
+
+                  <!-- TODO: Style the readio buttons -->
                   <label class="radio-inline">
-                    <input type="radio" name="gender" value="male" checked >Male
-                  </label>
-                  <label class="radio-inline">
+                    <input type="radio" name="gender" value="male" checked style="margin-top:12px;">Male
                     <input type="radio" name="gender" value="female">Female
-                  </label>
-                  <label class="radio-inline">
                     <input type="radio" name="gender" value="other">Other
                   </label>
                     <div class="w-100"></div>
-                  <input id="weight" type="number" class="smallinput" name="weight"  >
-                  <label for="weight">Kg</label>
-                    <div class="w-100"></div>
-                  <input id="height" type="number" class="smallinput" name="height"  >
-                  <label for="height">cm</label>
+                  <label class="radio-inline">
+                    <input id="met" type="radio" name="measuresystem" value="metric" onclick="metric2Imperial()" checked >Metric
+                    <input id="imp" type="radio" name="measuresystem" value="imperial" onclick="metric2Imperial()" >Imperial
+                  </label>
+                  <div class="w-100"></div>
+
+                  <div class="row">
+                    <div class="col coltype2">
+                      <input id="weight" type="number" class="smallinput" name="weight"  >
+                      <label id="weightlabel" for="weight">kg</label>
+                        <div class="w-100"></div>
+                      <input  id="height" type="number" class="smallinput" name="height"  >
+                      <label id="heightlabel" for="height">cm</label>
+                    </div>
+                    <div id="extraImpFields" class="col coltype2" style="display:none;">
+                      <input id="weight2" type="number" class="smallinput" name="weight2"  >
+                      <label id="weightlabel2" for="weight2">oz</label>
+                        <div class="w-100"></div>
+                      <input id="height2" type="number" class="smallinput" name="height2"  >
+                      <label id="heightlabel2" for="height2">in</label>
+                    </div>
+
+                  </div>
+
+
+
+
                   <!-- TODO: Implement a function to change form metrics to imperial -->
 
 
