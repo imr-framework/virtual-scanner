@@ -1,5 +1,0 @@
-2019-03-08 12:53:05:Creating new database - subject.db
-2019-03-08 12:53:05:Opened database successfully
-2019-03-08 12:53:05:Opened database successfully
-2019-03-08 12:53:05:Inserted subject information to REGISTRATION table successfully
-2019-03-08 12:53:05:Opened database successfully

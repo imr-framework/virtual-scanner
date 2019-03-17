@@ -1,3 +1,30 @@
+/*
+"""
+This script runs the server based on the Flask package and hosts the GUIs on the web
+Parameters
+----------
+    payload,default = None
+
+Returns
+-------
+    payload or status on ping from clients
+
+Performs
+--------
+   Tx to client
+   Rx from client
+
+Unit Test app
+-------------
+     utest_coms_flask
+Author: Marina Manso; Modified by: Sairam Geethanath
+Date: 03/11/2019
+Version 0.0
+Copyright of the Board of Trustees of  Columbia University in the City of New York
+"""
+
+*/
+
 // TODO: get only name:value
 function form2Json(){
   var formData= $("#regparameters").serializeArray();

@@ -8,6 +8,18 @@
       <sourceFolder url="file://$MODULE_DIR$/src/server/dl_recon" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/coms" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/client/GUI_frontend/json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/CSS" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/JS" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/templates" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/templates/CSS" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/templates/JS" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/templates/json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/styles" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/client/GUI_frontend/JS" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/coms/coms_ui/static/styles" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (VENV_VS)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
