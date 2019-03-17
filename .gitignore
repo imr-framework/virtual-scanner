@@ -105,3 +105,6 @@ venv.bak/
 
 #database
 .db
+
+# Work in progress code
+src_working/
