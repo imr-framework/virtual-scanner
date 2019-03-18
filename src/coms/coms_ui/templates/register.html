@@ -1,3 +1,25 @@
+<!--"""-->
+<!--This script runs the server based on the Flask package and hosts the GUIs on the web-->
+<!--Parameters-->
+    <!--payload,default = None-->
+
+<!--Returns-->
+    <!--payload or status on ping from clients-->
+
+<!--Performs-->
+   <!--Tx to client-->
+   <!--Rx from client-->
+
+<!--Unit Test app-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+     <!--utest_coms_flask-->
+<!--Author: Marina Manso, Modified by: Sairam Geethanath-->
+<!--Date: 03/11/2019-->
+<!--Version 0.0-->
+<!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
+<!--"""-->
+
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -9,15 +31,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="../CSS/main.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main.css') }}">
 
     <!--jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- TODO: merge functions in one script -->
     <!-- External JS files-->
+<<<<<<< HEAD:src/client/GUI_frontend/HTML/register.html
     <script src="../JS/form2Json.js"> </script>
     <script src="../JS/metric2Imperial.js"> </script>
+=======
+      <!--<script src="{{ url_for('static',filename='styles/form2Json.js') }}"></script>-->
+      <script type="text/javascript" src="{{ url_for('static',filename='form2Json.js') }}"></script>
+>>>>>>> ISMRM2019:src/coms/coms_ui/templates/register.html
 
 
   </head>
@@ -174,7 +201,7 @@
               </div>
               <div class="row">
                 <div class="col" style="text-align:right;position:absolute;bottom:0;">
-                  <input id="reg-form-submit" type="button" class="btn btn-primary" value="Register Subject" onclick="form2Json()" >
+                  <input id="reg-form-submit" type="button" class="btn btn-primary" value="Register Subject" onclick="form2Json()">
 
 
                 </div>
