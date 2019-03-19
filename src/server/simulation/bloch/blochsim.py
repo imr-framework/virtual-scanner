@@ -8,7 +8,7 @@ import bloch as blc
 import bloch_sequence as blcs
 from pulseq.core.Sequence.sequence import Sequence as pulSequence
 import numpy as np
-
+import multiprocessing as mp
 
 class BlochSimulator:
     """
@@ -32,6 +32,48 @@ class BlochSimulator:
     def get_signal(self):
         return self._signal
 
+    # For parallel processing
+
+    def apply_ps_to(self,loc_ind,freq_offset=0):
+        signal = []
+        location = self._phantom.get_location(loc_ind)
+        isc = blc.SpinGroup(loc=location, params=self._phantom.get_params(loc_ind), df=freq_offset)
+        rf_ind = 0
+        grad_ind = 0
+        delay_ind = 0
+        signal_ind = 0
+
+        for event in self._seq.get_events():
+            # 1. rf: with optional gradient (no relaxation)
+            if event == "rf":
+                isc.apply_rf(pulse=self._seq.get_rf(rf_ind), grad=self._seq.get_grads(grad_ind)[0])
+                rf_ind += 1
+                grad_ind += 1
+
+            # 2. grad: relaxation with gradient
+            elif event == "grad":
+                this_grad = self._seq.get_grads(grad_ind)
+                isc.fpwg(grads=this_grad)
+                grad_ind += 1
+
+            # 3. delay: relaxation
+            elif event == "delay":
+                this_delay = self._seq.get_delay(delay_ind)
+                isc.delay(t=this_delay)
+                delay_ind += 1
+
+            # 4. readout: gradient with ADC readout
+            elif event == "readout":
+                this_grad = self._seq.get_grads(grad_ind)
+                s = isc.readout(this_grad[0], adc=self._seq.get_adc())
+                grad_ind += 1
+                # Store signal in appropriate place
+                signal.append(s)
+                signal_ind += 1
+    ###
+        return signal
+
+
     def simulate(self):
         if isinstance(self._seq,blcs.Sequence):
             self.simulate_blcseq()
@@ -39,6 +81,8 @@ class BlochSimulator:
         elif isinstance(self._seq,pulSequence):
             self.simulate_pulseq()
             self._simulated = True
+
+
 
     def simulate_blcseq(self):
         """ MAIN SIMULATION METHOD
@@ -54,7 +98,6 @@ class BlochSimulator:
         ys = np.arange(-ph_fov[1]/2+vsize/2, ph_fov[1]/2, vsize)
         zs = np.arange(-ph_fov[2]/2+vsize/2, ph_fov[2]/2, vsize)
 
-        # Get dims for signal storage
         # Now: only 2D cartesian supported
         nfe,npe,ns = self._seq.get_signal_dims()
         self._signal = np.zeros((npe*ns,nfe),dtype=np.complex_)
@@ -121,3 +164,15 @@ class BlochSimulator:
 
     def show_image(self):
         return 0
+
+
+# Helper methods
+# Take x,y,z coordinates and make into list of 3-tuples of all possible combinations
+def get_list_locs(Xs,Ys,Zs):
+    list_locs = []
+    for x in Xs:
+        for y in Ys:
+            for z in Zs:
+                list_locs.append((x,y,z))
+
+    return list_locs

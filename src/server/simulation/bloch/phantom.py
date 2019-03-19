@@ -11,9 +11,19 @@ class Phantom:
         self._vsize = vsize
         self._dBmap = dBmap
 
-        # Check shape consistency
         # Find field-of-view
         self._fov = vsize*np.array(np.shape(T1map))
+
+        # Make location vectors
+        ph_shape = np.shape(self._PDmap)
+
+        # Define coordinates
+        self._Xs = np.arange(-self._fov[0] / 2 + vsize / 2, self._fov[0] / 2, vsize)
+        self._Ys = np.arange(-self._fov[1] / 2 + vsize / 2, self._fov[1] / 2, vsize)
+        self._Zs = np.arange(-self._fov[2] / 2 + vsize / 2, self._fov[2] / 2, vsize)
+
+    def get_location(self,inds):
+        return self._Xs[inds[0]], self._Ys[inds[1]], self._Zs[inds[2]]
 
     def get_fov(self):
         return self._fov
@@ -36,6 +46,23 @@ class Phantom:
     def get_params(self,indx):
         return self._PDmap[indx],self._T1map[indx],self._T2map[indx]
 
+    def get_list_locs(self):
+        list_locs = []
+        for x in self._Xs:
+            for y in self._Ys:
+                for z in self._Zs:
+                    list_locs.append((x, y, z))
+        return list_locs
+
+    def get_list_inds(self):
+        list_inds = []
+        sh = self.get_shape()
+        for u in range(sh[0]):
+            for v in range(sh[1]):
+                for w in range(sh[2]):
+                    list_inds.append((u,v,w))
+        return list_inds
+
 
 class DTTPhantom(Phantom):
     """
@@ -50,8 +77,8 @@ class DTTPhantom(Phantom):
         """
         self._type_map = type_map
         self._type_params = type_params
-        T1map = np.zeros(np.shape(type_map))
-        T2map = np.zeros(np.shape(type_map))
+        T1map = np.ones(np.shape(type_map))
+        T2map = np.ones(np.shape(type_map))
         PDmap = np.zeros(np.shape(type_map))
 
 
@@ -85,7 +112,7 @@ def makeSphericalPhantom(n,fov,T1s,T2s,PDs,radii):
                         type_map[x,y,z] = k+1
                         break
 
-    type_params[0] = (0,0,0)
+    type_params[0] = (0,1,1)
     for k in range(m):
         type_params[k+1] = (PDs[k],T1s[k],T2s[k])
 
