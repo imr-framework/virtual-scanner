@@ -15,7 +15,7 @@ from scipy.optimize import curve_fit
 import os
 
 
-def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in second
+def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
     """
     Return T1 mapping of a series of IRSE images with variable TI.
 
@@ -40,14 +40,25 @@ def main(dicom_file_path: str, TI: np = None, TR: np = None): # TI should be in 
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
+    max_image_values = np.array([1.7268, 1.6283, 1.5113, 1.2964, 1.3450, 1.3308, 1.5066])
     for filenameDCM in lstFilesDCM:
         ds = pydicom.read_file(filenameDCM)  # read the file
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data
+    image_data_final = image_data_final.astype(np.float64)  # convert data type
+
+    for n1 in range(image_size[2]):  # convert images back to its original range
+        image_data_final[:, :, n1] = np.multiply(np.divide(image_data_final[:, :, n1], np.amax(image_data_final[:, :, n1])), max_image_values[n1])
 
     T1_map = np.zeros([image_size[0], image_size[1]])
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
+            n4 = 0
+            min_loc = np.argmin(y_data)
+            while n4<min_loc:
+                y_data[n4] = -y_data[n4]
+                n4 = n4+1
+
             popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data, p0=(0.97493124058553, 0.538564048808802), bounds=(0, 6))
             T1_map[n2, n3] = popt[1]
 
