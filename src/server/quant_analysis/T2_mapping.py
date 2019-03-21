@@ -15,7 +15,7 @@ from scipy.optimize import curve_fit
 import os
 
 
-def main(dicom_file_path: str, TE: np = None, TR: np = None): # TI should be in second
+def main(dicom_file_path: str, TE: np, TR: np): # TI should be in second
     """
     Return T2 mapping of a series of SE images with variable TE.
 
@@ -40,15 +40,17 @@ def main(dicom_file_path: str, TE: np = None, TR: np = None): # TI should be in 
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
+    max_image_values = np.array([2.5235, 2.5076, 2.4912, 5.4748, 8.1033, 9.8424, 12.9074])
     for filenameDCM in lstFilesDCM:
-        ds = pydicom.read_file(filenameDCM)  # read the file
-        image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data
+        ds = pydicom.read_file(filenameDCM)  # read the file, data type is uint16 (0~65535)
+        image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array
+    image_data_final = image_data_final.astype(np.float64)  # convert data type
+
+    for n1 in range(image_size[2]):  # convert images back to its original range
+        image_data_final[:, :, n1] = np.multiply(np.divide(image_data_final[:, :, n1], np.amax(image_data_final[:, :, n1])), max_image_values[n1])
 
     T2_map = np.zeros([image_size[0], image_size[1]])
     p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275, 0.915735525189067)  # initial guess for parameters
-    plt.figure()
-    plt.imshow(image_data_final[:, :, 3], cmap='gray')
-    plt.show()
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
