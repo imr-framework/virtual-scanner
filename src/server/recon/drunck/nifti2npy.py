@@ -1,0 +1,238 @@
+"""
+Convert NIFTI data to `numpy.ndarray` and undersample data.
+
+Author: Keerthi Sravan Ravi
+Date: 03/22/2019
+Version 0.1
+Copyright of the Board of Trustees of  Columbia University in the City of New York.
+"""
+import argparse
+import os
+
+import PIL
+import matplotlib.pyplot as plt
+import nibabel as nib
+import numpy as np
+
+
+def load_dataset_from_nifti(nifti_path: str, img_size: int = 128):
+    """
+    Make dataset by reading NIFTI files from `nifti_path` and resizing each image to `img_size`x`img_size`.
+
+    Parameters
+    ----------
+    nifti_path : str
+        Path to folder containing NIFTI files.
+    img_size : int
+        Desired size of images in dataset. Images read from NIFTI files will be resized.
+
+    Returns
+    -------
+    dataset : numpy.ndarray
+        ndarray of images converted from NIFTI files.
+    """
+    filenames = os.listdir(nifti_path)
+    num_files = len(filenames)
+
+    slice_min, slice_max = 64, 200  # Slices of interest from volume data
+    dataset = np.empty(shape=(0, img_size, img_size))  # Empty array
+
+    counter = 0
+    for file in filenames:
+        if not file.endswith('DS_Store'):
+            counter = counter + 1
+            n = nib.load(os.path.join(nifti_path, file))  # Load NIFTI
+            vol = n.get_data()[:, :, slice_min:slice_max + 1]  # Get image
+            print('File {}/{}, shape: {}'.format(counter, num_files, vol.shape))
+
+            for i in range(vol.shape[2]):
+                img = vol[:, :, i]
+                img = np.array(PIL.Image.fromarray(img).resize((img_size, img_size)))
+                img = img[np.newaxis, :, :]
+                dataset = np.append(dataset, img, axis=0)
+
+    return dataset
+
+
+def undersample(dataset: np.ndarray, low_freq_pc: float, skip_factor: int):
+    """
+    Undersample `dataset` as follows:
+    1. Obtain `ft_dataset` - Fourier Transform of `dataset`
+    2. Obtain `ft_dataset_undersampled` - undersample of `ft_dataset`
+    3. Add `low_freq_pc` low-frequency k-space components from `ft_dataset` to `ft_dataset_undersampled`.
+    4. Obtain `dataset_undersampled` - Inverse Fourier Transform of `ft_dataset_undersampled`.
+
+    Parameters
+    ----------
+    dataset : numpy.ndarray
+        ndarray of dataset samples.
+    low_freq_pc : float
+        Percentage of low-frequency fully-sampled k-space values to add to undersampled k-space.
+    skip_factor : int
+        Undersampling factor.
+
+    Returns
+    -------
+    ft_dataset : numpy.ndarray
+        ndarray of Fourier Transform of `dataset`.
+    dataset_undersampled : numpy.ndarray
+        ndarray of undersampled `dataset`.
+    ft_dataset_undersampled : numpy.ndarray
+        Fourier Transform of `dataset_undersampled`.
+    """
+    # Fourier transform
+    print('FT... ', end='')
+    ft_dataset = np.fft.fftshift(np.fft.fft2(dataset, axes=(1, 2)), axes=(1, 2))
+    print(ft_dataset.shape, ft_dataset.dtype, end='')
+    print('. Done.')
+
+    # Undersample the Fourier Transform and add low-frequencies
+    num_rows = dataset.shape[1]
+    num_lines = low_freq_pc * num_rows
+    num_lines = int(np.power(2, np.ceil(np.log2(num_lines))))
+    start = int((num_rows - num_lines) / 2)
+    end = int((num_rows + num_lines) / 2)
+    print('{}% of {}; {} lines from {} to {}'.format(skip_factor, num_rows, num_lines, start, end))
+
+    print('Undersampling... ', end='')
+    ft_dataset_undersampled = np.zeros_like(ft_dataset)
+    ft_dataset_undersampled[:, 0:start:skip_factor, :] = ft_dataset[:, 0:start:skip_factor, :]
+    ft_dataset_undersampled[:, start:end, :] = ft_dataset[:, start:end, :]
+    ft_dataset_undersampled[:, end::skip_factor, :] = ft_dataset[:, end::skip_factor, :]
+    print(ft_dataset_undersampled.shape, ft_dataset_undersampled.dtype, end='')
+    print('. Done.')
+
+    # Aliased reconstruction
+    print('Inverse FT... ', end='')
+    dataset_undersampled = np.fft.ifft2(np.fft.ifftshift(ft_dataset_undersampled, axes=(1, 2)), axes=(1, 2))
+    print(dataset_undersampled.shape, dataset_undersampled.dtype, end='')
+    print(' Done.')
+
+    return ft_dataset, dataset_undersampled, ft_dataset_undersampled
+
+
+def normalise_dataset(dataset: np.ndarray):
+    """
+    Normalised `dataset` to [0, 1].
+
+    Parameters
+    ----------
+    dataset : numpy.ndarray
+        ndarray of dataset samples.
+
+    Returns
+    -------
+    normalised_dataset : numpy.ndarray
+        ndarray of `dataset` normalised to [0, 1].
+    """
+    print('Normalising... ', end='')
+    m1 = np.min(dataset.min(axis=1), axis=1)
+    m1 = m1[:, np.newaxis, np.newaxis]
+    m2 = np.max(dataset.max(axis=1), axis=1)
+    m2 = m2[:, np.newaxis, np.newaxis]
+    normalised_dataset = dataset - m1
+    normalised_dataset *= 255 / (m2 - m1)
+    print(normalised_dataset.shape, normalised_dataset.dtype, end='')
+    print(' Done.')
+
+    return normalised_dataset
+
+
+def plot(dataset: np.ndarray, ft_dataset: np.ndarray, dataset_undersampled: np.ndarray,
+         ft_dataset_undersampled: np.ndarray, img_ind: int):
+    """
+
+    """
+    plt.figure(figsize=(10, 8))
+    plt.subplot(221)
+    plt.title('Fully-sampled')
+    plt.imshow(dataset[img_ind, :, :, 0], cmap='gray')
+    plt.subplot(222)
+    plt.title('Under-sampled')
+    plt.imshow(np.abs(dataset_undersampled[img_ind, :, :, 0]), cmap='gray')
+    plt.colorbar()
+    plt.subplot(223)
+    plt.imshow(np.abs(ft_dataset[img_ind, :, :, 0]), cmap='gray', vmax=5000)
+    plt.subplot(224)
+    plt.imshow(np.abs(ft_dataset_undersampled[img_ind, :, :, 0]), cmap='gray', vmax=5000)
+    plt.show()
+
+    plt.show()
+
+
+def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarray, save_path: str):
+    """
+    Save `file1` and `file2` to disk as `filename1` and `filename2 at `save_path`.
+
+    Parameters
+    ----------
+    filename1 : str
+        Filename of `file1`.
+    file1 : numpy.ndarray
+        ndarray to be saved to disk.
+    filename2 : str
+        Filename of `file2`.
+    file2 : numpy.ndarray
+        ndarray to be saved to disk.
+    save_path : str
+        Path to save ndarray files to.
+    """
+    print('Saving to {}...'.format(os.path.join(save_path)), end='')
+    path = os.path.join(save_path, filename1)
+    np.save(path, file1)
+    path = os.path.join(save_path, filename2)
+    np.save(path, file2)
+    print(' Done.')
+
+
+def main(nifti_path, img_size, low_freq_pc, save_path, skip_factor):
+    """
+    1. Load NIFTI data as `numpy.ndarray` and resize each image to `img_size`x`img_size`.
+    2. Undersample by `skip_factor` and add `low_freq_pc` low-frequency k-space values.
+    3. Save files to disk.
+
+    Parameters
+    ----------
+    nifti_path : str
+        Path to folder containing NIFTI files.
+    img_size : int
+        Desired size of images in dataset. Images read from NIFTI files will be resized.
+    low_freq_pc : float
+        Percentage of low-frequency fully-sampled k-space values to add to undersampled k-space.
+    save_path : str
+        Path to save ndarray files to.
+    skip_factor : int
+        Undersampling factor.
+    """
+    dataset = load_dataset_from_nifti(nifti_path=nifti_path, img_size=img_size)
+    dataset = normalise_dataset(dataset=dataset)
+    result = undersample(dataset=dataset, low_freq_pc=low_freq_pc, skip_factor=skip_factor)
+    ft_dataset, dataset_undersampled, ft_dataset_undersampled = result
+    dataset_undersampled = np.abs(dataset_undersampled)
+    dataset_undersampled = normalise_dataset(dataset=dataset_undersampled)
+
+    dataset = np.expand_dims(dataset, axis=-1)
+    dataset_undersampled = np.expand_dims(dataset_undersampled, axis=-1)
+
+    save2disk(filename1='x.npy', file1=dataset_undersampled, filename2='y', file2=dataset, save_path=save_path)
+    plot(dataset=dataset, ft_dataset=ft_dataset, dataset_undersampled=dataset_undersampled,
+         ft_dataset_undersampled=ft_dataset_undersampled, img_ind=123)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='DRUNCK: Deep-learning Reconstruction of UNdersampled Cartesian K-space data')
+    parser.add_argument('nifti_path', type=str, help='Path to folder containing NIFTI files')
+    parser.add_argument('img_size', type=int, help='Desired image size')
+    parser.add_argument('low_frequency', type=float, help='Percentage of low-frequency k-space to add')
+    parser.add_argument('save_path', type=str, help='Path to save converted .npy files')
+    parser.add_argument('-skip', '--skip_factor', type=int, default=4, help='Undersampling factor')
+    args = parser.parse_args()
+
+    nifti_path = args.nifti_path
+    img_size = args.img_size
+    low_freq_pc = args.low_frequency
+    save_path = args.save_path
+    skip_factor = args.skip_factor
+
+    main(nifti_path, img_size, low_freq_pc, save_path, skip_factor)
