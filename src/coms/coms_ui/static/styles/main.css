@@ -6,8 +6,12 @@ h1{
 }
 h2{
   padding-top: 30px;
-
   font-size: 1.25rem;
+}
+#dropdownMenuButton{
+  font-size: 1.25rem;
+  font-weight: 500;
+  height: auto;
 }
 h3{
   font-size: 1.1rem;
@@ -27,9 +31,12 @@ h3{
   background-color: #5a71a8;
   padding-left: 0px;
   padding-bottom: 0px;
+  height: innerWindow;
 }
 #mainpanel{
   padding-bottom: 30px;
+  min-width: 950px;
+  min-height: 80vh;
 
 }
 .jumbotron{
@@ -47,7 +54,12 @@ h3{
   height: 24px;
   border-color:black;
   border-width: 2px;
-
+}
+.mediuminput{
+  width: 100px;
+  height: 24px;
+  border-color:black;
+  border-width: 2px;
 }
 .largeinput{
   width: 180px;
@@ -62,6 +74,8 @@ h3{
   border-width: 2px;
 
 }
+
+
 .coltype1{
   text-align: right;
 }
@@ -78,7 +92,7 @@ h3{
   border-width: 2px;
   width: auto;
   height: 25px;
-  margin: 3px;
+
 }
 .voxsize{
   padding-top: 20px;
@@ -105,5 +119,14 @@ h3{
 }
 .radio-inline{
   font-size: 0.9rem;
-  padding: 2px;
+  margin-bottom: 0px;
+}
+label{
+  margin-bottom: 1.2rem; /*Default 0.5rem*/
+  font-size: 16px;
+}
+#subjectImage{
+  display: flex;
+  align-items: center;
+
 }

@@ -16,17 +16,21 @@ Performs
 Unit Test app
 -------------
      utest_coms_flask
-Author: Sairam Geethanath
-Date: 03/11/2019
+Author: Sairam Geethanath , Modified by: Marina Manso Jimeno
+Date: 03/22/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-
+import os
 import sys
 from flask import Flask, render_template, request, redirect, Response
 import random, json
 
-app = Flask(__name__)
+# Define the location of template and static folders
+template_dir = os.path.abspath('../templates')
+static_dir=os.path.abspath('../static')
+
+app = Flask(__name__,template_folder=template_dir,static_folder=static_dir)
 
 
 @app.route('/')  # This needs to point to the login screen and then we can use the register link seprately
