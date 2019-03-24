@@ -2,7 +2,7 @@ import bloch as blc
 import numpy as np
 import copy
 
-class Sequence(): # this is blc Sequence, not pulseq Sequence
+class BlochSequence(): # this is blc Sequence, not pulseq Sequence
     """
     Generic class for MR pulse sequences
     Different from the Sequence class in pulseq!!!!!!
@@ -21,7 +21,7 @@ class Sequence(): # this is blc Sequence, not pulseq Sequence
         print(self._events)
 
 
-class GRESequence(Sequence):
+class GRESequence(BlochSequence):
     """
     Basic gradient-echo sequence with 2D encoding (phase & frequency)
         for testing out bloch simulation

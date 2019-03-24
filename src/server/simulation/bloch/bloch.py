@@ -16,6 +16,12 @@ class Gradient:
         self._area = area
         self._duration = duration
 
+    def get_shape(self):
+        return self.get_amplitude()*np.ones((1,2))
+
+    def get_timing(self):
+        return np.array([0,self._duration])
+
     def get_area(self):
         return self._area
 
@@ -59,13 +65,11 @@ class TrapzGradient(Gradient):
     def get_fall_time(self):
         return self._fall_time
 
-    def plot(self):
-        rt = self._rise_time()
-        ft = self._flat_time()
-        dur = self._duration()
-        amp = self._amplitude()
-        plt.plot([0,rt,rt+ft,dur],[0,amp,amp,0])
-        plt.show()
+    def get_shape(self):
+        return np.array([[0,0,0],self._amplitude,self._amplitude,[0,0,0]])
+
+    def get_timing(self):
+        return np.array([0,self._rise_time,self._rise_time+self._flat_time,self._duration])
 
     def scale(self, s):
         super().scale(s)
@@ -73,27 +77,16 @@ class TrapzGradient(Gradient):
 
 # Time-resolved gradient
 class VaryingGradient(Gradient):
-    def __init__(self,shape_func,raster_time,interval):
-        self._shape_func = shape_func
-        self._interval = interval
-        self._dt = raster_time
-        self._timing = np.arange(interval[0],interval[1]+self._dt,self._dt)
-        self._shape = shape_func(self._timing)
-
-        my_area = np.zeros((3, np.shape(self._timing)[0]))
+    def __init__(self,shape,timing):
+        self._shape = shape
+        self._timing = timing
+        my_area = np.zeros(3)
         for a in range(3):
+            # TODO - what's up with the array dimensions????
             my_area[a] = np.trapz(self._shape[a],self._timing)
 
+
         super().__init__(area=my_area, duration=self._timing[-1]-self._timing[0])
-
-    def get_shape_func(self):
-        return self._shape_func
-
-    def get_raster_time(self):
-        return self._dt
-
-    def get_interval(self):
-        return self._interval
 
     def get_shape(self):
         return self._shape
@@ -101,22 +94,18 @@ class VaryingGradient(Gradient):
     def get_timing(self):
         return self._timing
 
-    def plot(self):
-        plt.plot(self._timing,self._shape)
-        plt.show()
-
     def scale(self,s):
         super().scale(s)
         self._shape = s*self._shape
-        self._shape_func = s*self._shape_func
 
 # RF pulses
 class RFPulse:
     GAMMA = 42.58e6 * 2 * np.pi
-    def __init__(self,shape,timing):
+    def __init__(self,shape,timing,raster_time):
         self._shape = shape
         self._timing = timing
         self._duration = timing[-1] - timing[0]
+        self._dt = raster_time
 
     def get_shape(self):
         return self._shape
@@ -128,12 +117,12 @@ class RFPulse:
         return self._duration
 
     def get_flip_angle(self):
-        return np.trapz(self._shape,self._timing)*self.GAMMA
+        return np.trapz(np.absolute(self._shape),self._timing)*self.GAMMA
+
+    def get_raster_time(self):
+        return self._dt
 
 
-
-
-# TODO fix construction of sinc pulse and try plotting
 class SincRFPulse(RFPulse):
     """
     Sinc-shaped RF pulse
@@ -146,11 +135,10 @@ class SincRFPulse(RFPulse):
         self._bw = bandwidth
         self._nzc = num_zeros
         self._fa = flip_angle
-        self._dt = raster_time
         self._df = offset
         self._phi0 = init_phase
 
-        dt = self._dt
+        dt = raster_time
 
         # Create pulse shape and store
         t_max = (1/self._bw)*self._nzc/2
@@ -163,7 +151,7 @@ class SincRFPulse(RFPulse):
         t = t_model + t_max
         B1 = np.multiply(amp*envelope, np.exp(-1j*(self._phi0 + 2*np.pi*self._df*t)))
 
-        super().__init__(shape=B1,timing=t)
+        super().__init__(shape=B1,timing=t,raster_time=dt)
 
     def get_offset(self):
         """
@@ -176,9 +164,6 @@ class SincRFPulse(RFPulse):
         Returns frequency range of pulse
         """
         return self._bw
-
-    def get_raster_time(self):
-        return self._dt
 
     def get_flip_angle(self):
         return self._fa
@@ -265,7 +250,7 @@ class SpinGroup:
         """
         Returns complex rep. of Mxy, scaled by PD
         """
-        return self._params[0]*(self._m[0] + 1j * self._m[1])
+        return np.squeeze(self._params[0]*(self._m[0] + 1j * self._m[1]))
 
     def fpwg(self, grads):
         """
@@ -281,6 +266,7 @@ class SpinGroup:
         for g in grads:
             dur = np.maximum(dur, g.get_duration())
             grad_area += g.get_area()
+
         phi = self.GAMMA*np.sum(np.multiply(self._loc, grad_area))+2*np.pi*self._df*dur
         C = np.cos(phi)
         S = np.sin(phi)
@@ -295,6 +281,7 @@ class SpinGroup:
             E2 = 1
         else:
             E2 = np.exp(-dur/T2)
+
         # Clockwise rotation by +phi (i.e. CCW rotation by -phi)
         A = np.array([[E2*C, E2*S, 0],
                       [-E2*S, E2*C, 0],
@@ -312,7 +299,10 @@ class SpinGroup:
         zero_grad = Gradient(0,t)
         self.fpwg([zero_grad])
 
-    def apply_rf(self, pulse, grad):
+
+
+
+    def apply_rf(self, pulse, grad, trapz_opt=False):
         """
         Applies a RF pulse to the spin group
         Simulation method: hard-pulse approximation across small time intervals
@@ -324,24 +314,43 @@ class SpinGroup:
         dt = pulse.get_raster_time()
 
         if isinstance(grad,TrapzGradient):
-            # Approximate rf + gradient as dt-wise discrete rotations
-            flat_g = grad.get_amplitude()
-            # ramp up
-            self.fpwg([Gradient(0.5*grad.get_rise_time()*flat_g,grad.get_rise_time())])
-            # flat part
-            for k in range(np.shape(rf_time)[0]):
-                bx = np.real(b1[k])
-                by = np.imag(b1[k])
-                bz = np.sum(np.multiply(flat_g,loc)) + self._df/self.GAMMA_BAR
-                be = np.array([bx,by,bz])
-                self._m = anyrot(self.GAMMA*be*dt)@self._m
-            # ramp down
-            self.fpwg([Gradient(0.5*grad.get_fall_time()*flat_g,grad.get_fall_time())])
+            if trapz_opt:
+                # Approximate rf + gradient as dt-wise discrete rotations
+                flat_g = grad.get_amplitude()
+                # ramp up
+                self.fpwg([Gradient(0.5*grad.get_rise_time()*flat_g,grad.get_rise_time())])
+                # flat part
+                for k in range(np.shape(rf_time)[0]):
+                    bx = np.real(b1[k])
+                    by = np.imag(b1[k])
+                    bz = np.sum(np.multiply(flat_g,loc)) + self._df/self.GAMMA_BAR
+                    be = np.array([bx,by,bz])
+                    self._m = anyrot(self.GAMMA*be*dt)@self._m
+                # ramp down
+                self.fpwg([Gradient(0.5*grad.get_fall_time()*flat_g,grad.get_fall_time())])
 
-        elif isinstance(grad,VaryingGradient):
+            else:  # default option (use this for pulseq sim)
+                grad_shape = grad.get_shape()
+                grad_timing = grad.get_timing()
+                tg = 0.0
+                for k in range(len(rf_time)):
+                    bx = np.real(b1[k])
+                    by = np.imag(b1[k]) # TODO fix 3D gradient issue
+                    gx = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,0])
+                    gy = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,1])
+                    gz = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,2])
+
+                    bz = np.sum(np.multiply([gx,gy,gz],loc)) + self._df/self.GAMMA_BAR
+                    be = np.array([bx,by,bz])
+                    self._m = anyrot(self.GAMMA*be*dt)@self._m
+                    tg += dt
+
+        elif isinstance(grad,VaryingGradient): # TODO check this code: is this needed or is the above general enough
             grad_shape = grad.get_shape()
-            if np.shape(grad_shape) != np.shape(b1):
+
+            if np.shape(grad_shape) != np.shape(b1): # TODO this constraint needs to be removed
                 raise ValueError("rf and gradient sequences are not the same length")
+
             for k in range(np.shape(rf_time)[0]):
                 bx = np.real(b1[k])
                 by = np.imag(b1[k])
@@ -359,6 +368,7 @@ class SpinGroup:
                 be = np.array([bx, by, bz])
                 self._m = anyrot(self.GAMMA*be*dt)@self._m
 
+
     def flat_readout(self,grad_level,adc):
         n = adc.get_num_samples()
         signal = np.zeros(n,dtype=np.complex_)
@@ -368,6 +378,40 @@ class SpinGroup:
             signal[p] = self.get_m_signal()
             self.fpwg([diff_grad])
         return signal
+
+
+    def readout_gen(self,grad,adc):#TODO
+        # Get ADC info
+        n = adc.get_num_samples()
+        dt = adc.get_dwell_time()
+        delay = adc.get_delay()
+        # Get gradient info
+        g_timing = grad.get_timing()
+        g_shape = grad.get_shape()
+        signal = np.zeros(n,dtype=np.complex_)
+        post_delay = grad.get_duration() - (n*dt+delay)
+
+        if post_delay < 0:
+            raise ValueError("Delay + readout time is longer than gradient duration")
+
+        t_acc = g_timing[0] # start accumulating time
+
+        # Delay - apply part of gradient before readout
+        self.fpwg([Gradient(find_approx_area(g_timing,g_shape,(t_acc,t_acc+delay)),delay)])
+        t_acc += delay
+
+        # Readout
+        for p in range(n):
+            signal[p] = self.get_m_signal()
+            self.fpwg([Gradient(find_approx_area(g_timing,g_shape,(t_acc,t_acc+dt)),dt)])
+            t_acc += dt
+
+        # Apply the rest of gradient ("post delay")
+        self.fpwg([Gradient(find_approx_area(g_timing,g_shape,(t_acc,t_acc+post_delay)),post_delay)])
+
+        return signal
+
+
 
     def readout(self, grad, adc):
         dt = adc.get_dwell_time()
@@ -425,6 +469,11 @@ class SpinGroup:
         return signal
 
 
+
+
+
+
+
 # Helper methods
 def anyrot(v):
     """ Returns Rodrigues's formula: 3 x 3 matrix for arbitrary rotation
@@ -439,9 +488,13 @@ def anyrot(v):
     C = np.cos(th)
     S = np.sin(th)
 
-    R = (1/(th*th))*np.array([[vx*vx*(1-C)+th*th*C, vx*vy*(1-C)-th*vz*S, vx*vz*(1-C)+th*vy*S],
-                              [vx*vy*(1-C)+th*vz*S, vy*vy*(1-C)+th*th*C, vy*vz*(1-C)-th*vx*S],
-                              [vx*vz*(1-C)-th*vy*S, vy*vz*(1-C)+th*vx*S, vz*vz*(1-C)+th*th*C]])
+    if th != 0:
+        R = (1/(th*th))*np.array([[vx*vx*(1-C)+th*th*C, vx*vy*(1-C)-th*vz*S, vx*vz*(1-C)+th*vy*S],
+                                  [vx*vy*(1-C)+th*vz*S, vy*vy*(1-C)+th*th*C, vy*vz*(1-C)-th*vx*S],
+                                  [vx*vz*(1-C)-th*vy*S, vy*vz*(1-C)+th*vx*S, vz*vz*(1-C)+th*th*C]])
+    else:
+        R = np.array([[1,0,0],[0,1,0],[0,0,1]])
+
     return R
 
 
@@ -452,17 +505,12 @@ def find_approx_area(timing,level,interval):
     """
     t1 = interval[0]
     t2 = interval[1]
-    a = np.where(timing<t1)[0][-1]
-    b = np.where(timing>=t1)[0][0]
-    c = np.where(timing<t2)[0][-1]
-    d = np.where(timing>=t2)[0][0]
+    ax = np.trapz(y=np.interp(x=[t1,t2],xp=timing,fp=level[:,0]), x=[t1,t2])
+    ay = np.trapz(y=np.interp(x=[t1,t2],xp=timing,fp=level[:,1]), x=[t1,t2])
+    az = np.trapz(y=np.interp(x=[t1,t2],xp=timing,fp=level[:,2]), x=[t1,t2])
 
-    new_timing = np.concatenate(([t1],timing[b:c+1],[t2]))
-    x1 = level[a] + (level[b]-level[a])*(t1-timing[a])/(timing[b]-timing[a])
-    x2 = level[c] + (level[d]-level[c])*(t2-timing[c])/(timing[d]-timing[c])
-    new_level = np.concatenate(([x1],level[b:c+1],[x2]))
+    return np.array([ax,ay,az])
 
-    return np.trapz(new_level,new_timing)
 
 
 def get_scaled_gradient(grad,s):
