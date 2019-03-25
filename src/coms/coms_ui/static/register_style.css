@@ -31,7 +31,7 @@ h3{
   background-color: #5a71a8;
   padding-left: 0px;
   padding-bottom: 0px;
-  height: innerWindow;
+  height: 100vh;
 }
 #mainpanel{
   padding-bottom: 30px;

@@ -21,19 +21,40 @@ Date: 03/22/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-import os
+#import os
 import sys
 from flask import Flask, render_template, request, redirect, Response
 import random, json
 
 # Define the location of template and static folders
-template_dir = os.path.abspath('../templates')
-static_dir=os.path.abspath('../static')
+#template_dir = os.path.abspath('../templates')
+#static_dir=os.path.abspath('../static')
 
-app = Flask(__name__,template_folder=template_dir,static_folder=static_dir)
+app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
 @app.route('/')  # This needs to point to the login screen and then we can use the register link seprately
+def home_page():
+    """
+
+         Parameters
+        ----------
+           void
+
+        Returns
+        -------
+           void (status in debug mode if required)
+
+        Performs
+        --------
+            Renders the registration html page on the web
+    """
+
+    # serve register template
+    return ("<h1>This will be the home page</h1>")
+
+@app.route('/register.html')  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
 
@@ -52,7 +73,6 @@ def on_register():
 
     # serve register template
     return render_template('register.html')
-
 
 @app.route('/acquire.html')
 def on_acq():

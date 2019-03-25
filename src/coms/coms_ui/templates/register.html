@@ -7,15 +7,10 @@
 <!--Returns-->
     <!--payload with the form inputs after pressing the submission button-->
 
-<!--Performs-->
-   <!--Tx to client-->
-   <!--Rx from client-->
 
-<!--Unit Test app-->
-     <!--utest_coms_flask-->
 <!--Author: Marina Manso, Modified by: Sairam Geethanath-->
-<!--Date: 03/22/2019-->
-<!--Version 0.0-->
+<!--Date: 03/25/2019-->
+<!--Version 1.0-->
 <!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
 <!--"""-->
 
@@ -29,7 +24,7 @@
     <!--favicon -->
     <!--<link rel="shortcut icon" icon” type=”image/png” href="favicomatic/favicon.ico">-->
 
-    <link rel=”shortcut  href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
 
     <!--bootstrap -->
@@ -38,7 +33,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="../static/styles/main.css">
+    <!--CSS-->
+
+    <link rel="stylesheet" href="{{url_for('static',filename='register_style.css')}}">
 
     <!--jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -48,6 +45,10 @@
     <script src="../static/form2Json.js"> </script>
     <script src="../static/metric2Imperial.js"> </script>
     <script src="../static/phantomAutofill.js"> </script>
+
+    <!--GUID code-->
+    <script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>
+
 
 
 
@@ -70,7 +71,8 @@
                   <a class="nav-link active" href="register.html">Register</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="acquire.html">Acquire</a>
+                  <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+                  <!--<a class="nav-link" href="acquire.html">Acquire</a>-->
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="analyze.html">Analyze</a>
