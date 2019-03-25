@@ -21,6 +21,7 @@ T1_map = dicom2mapT1.main(
     TI=[0.021, 0.1, 0.2, 0.4, 0.8, 1.6, 3.2],
     TR=[10, 10, 10, 10, 10, 10, 10])
 
+
 '''
 T2_map = dicom2mapT2.main(
     dicom_file_path='C:/Users/qiane/Desktop/Columbia/Research Materials/Programs/Phantom Standard Measurements'

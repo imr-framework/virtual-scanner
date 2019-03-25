@@ -2,8 +2,8 @@
 This script does T1 mapping of dicom images
 
 Author: Enlin Qian
-Date: 03/12/2019
-Version 0.0
+Date: 03/25/2019
+Version 1.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
@@ -40,15 +40,12 @@ def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
-    max_image_values = np.array([1.7268, 1.6283, 1.5113, 1.2964, 1.3450, 1.3308, 1.5066])
     for filenameDCM in lstFilesDCM:
         ds = pydicom.read_file(filenameDCM)  # read the file
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
-    for n1 in range(image_size[2]):  # convert images back to its original range
-        image_data_final[:, :, n1] = np.multiply(np.divide(image_data_final[:, :, n1], np.amax(image_data_final[:, :, n1])), max_image_values[n1])
-
+    image_data_final = np.divide(image_data_final, np.amax(image_data_final))
     T1_map = np.zeros([image_size[0], image_size[1]])
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
