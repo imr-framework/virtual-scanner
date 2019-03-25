@@ -46,7 +46,9 @@ class BlochSimulator:
         for event in self._seq.get_events():
             # 1. rf: with optional gradient (no relaxation)
             if event == "rf":
-                isc.apply_rf(pulse=self._seq.get_rf(rf_ind), grad=self._seq.get_grads(grad_ind)[0])
+                isc.apply_rf(pulse=self._seq.get_rf(rf_ind),
+                             grad=self._seq.get_grads(grad_ind)[0],
+                             trapz_opt=True)
                 rf_ind += 1
                 grad_ind += 1
 
@@ -75,7 +77,7 @@ class BlochSimulator:
 
 
     def simulate(self):
-        if isinstance(self._seq,blcs.Sequence):
+        if isinstance(self._seq,blcs.BlochSequence):
             self.simulate_blcseq()
             self._simulated = True
         elif isinstance(self._seq,pulSequence):
@@ -118,7 +120,9 @@ class BlochSimulator:
                         for event in self._seq.get_events():
                             # 1. rf: with optional gradient (no relaxation)
                             if event == "rf":
-                                isc.apply_rf(pulse=self._seq.get_rf(rf_ind), grad=self._seq.get_grads(grad_ind)[0])
+                                isc.apply_rf(pulse=self._seq.get_rf(rf_ind),
+                                             grad=self._seq.get_grads(grad_ind)[0],
+                                             trapz_opt=True)
                                 rf_ind += 1
                                 grad_ind += 1
 
@@ -145,11 +149,7 @@ class BlochSimulator:
 
         print("Simulation complete!")
 
-# TODO : seamless pulseq integration
-# The following code are WIPs!!!
-    def simulate_pulseq(self,recon=False):  # simulate with pulseq
-        # Read pulseq file
-        # Go event by event in pulseq file
+    def simulate_pulseq(self):
         return []
 
     def cartesian_recon(self):  # simple recon for testing simulator

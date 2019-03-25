@@ -35,7 +35,7 @@ if __name__ == "__main__":
     results = pool.starmap_async(run_sim, [(mysim,ind,0) for ind in loc_ind_list]).get()
     pool.close()
 
-    # Sum all isochromats :) ~
+    # Sum all isochromats :)
     my_signal = np.sum(results,axis=0)
     np.save('my_signal_p2.npy', my_signal)
 
