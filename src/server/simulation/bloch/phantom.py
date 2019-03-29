@@ -82,6 +82,7 @@ class DTTPhantom(Phantom):
         PDmap = np.zeros(np.shape(type_map))
 
 
+
         for x in range(np.shape(type_map)[0]):
             for y in range(np.shape(type_map)[1]):
                 for z in range(np.shape(type_map)[2]):
@@ -117,3 +118,24 @@ def makeSphericalPhantom(n,fov,T1s,T2s,PDs,radii):
         type_params[k+1] = (PDs[k],T1s[k],T2s[k])
 
     return DTTPhantom(type_map,type_params,vsize)
+
+
+def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii):
+    radii = np.sort(radii)
+    m = np.shape(radii)[0]
+    vsize = fov / n
+    type_map = np.zeros((n, n, 1))
+    type_params = {}
+    for x in range(n):
+        for y in range(n):
+                d = vsize * np.linalg.norm(np.array([x, y]) - (n - 1) / 2)
+                for k in range(m):
+                    if d <= radii[k]:
+                        type_map[x,y,0] = k + 1
+                        break
+
+    type_params[0] = (0, 1, 1)
+    for k in range(m):
+        type_params[k + 1] = (PDs[k], T1s[k], T2s[k])
+
+    return DTTPhantom(type_map, type_params, vsize)

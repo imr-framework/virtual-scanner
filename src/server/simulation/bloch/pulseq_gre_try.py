@@ -18,10 +18,10 @@ system = Opts(kwargs_for_opts)
 seq = Sequence(system)
 
 #####################
-fov = 320e-3
-Nx = 9
-Ny = 9
-slice_thickness = 0.32/9
+fov = 0.32
+Nx = 15
+Ny = 15
+slice_thickness = 0.32/15
 flip = 90*pi/180
 ####################
 kwargs_for_sinc = {"flip_angle": flip, "system": system, "duration": 4e-3, "slice_thickness": slice_thickness,
@@ -59,7 +59,6 @@ for i in range(Ny):
     seq.add_block(delay1)
     seq.add_block(gx, adc)
     seq.add_block(delay2)
-    print("another added!")
 
 # The .seq file will be available inside the /gpi/<user>/imr_framework folder
-seq.write("gre_python_forsim.seq")
+seq.write("gre_python_forsim_15.seq")

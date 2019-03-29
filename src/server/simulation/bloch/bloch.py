@@ -329,21 +329,23 @@ class SpinGroup:
                 # ramp down
                 self.fpwg([Gradient(0.5*grad.get_fall_time()*flat_g,grad.get_fall_time())])
 
-            else:  # default option (use this for pulseq sim)
+            else:  # default option (use this for pulseq sim) # TODO why does this work
                 grad_shape = grad.get_shape()
                 grad_timing = grad.get_timing()
                 tg = 0.0
                 for k in range(len(rf_time)):
                     bx = np.real(b1[k])
-                    by = np.imag(b1[k]) # TODO fix 3D gradient issue
+                    by = np.imag(b1[k])
                     gx = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,0])
                     gy = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,1])
                     gz = np.interp(x=tg,xp=grad_timing,fp=grad_shape[:,2])
 
                     bz = np.sum(np.multiply([gx,gy,gz],loc)) + self._df/self.GAMMA_BAR
                     be = np.array([bx,by,bz])
+
                     self._m = anyrot(self.GAMMA*be*dt)@self._m
                     tg += dt
+
 
         elif isinstance(grad,VaryingGradient): # TODO check this code: is this needed or is the above general enough
             grad_shape = grad.get_shape()
@@ -510,7 +512,6 @@ def find_approx_area(timing,level,interval):
     az = np.trapz(y=np.interp(x=[t1,t2],xp=timing,fp=level[:,2]), x=[t1,t2])
 
     return np.array([ax,ay,az])
-
 
 
 def get_scaled_gradient(grad,s):
