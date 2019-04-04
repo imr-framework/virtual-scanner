@@ -1,256 +1,207 @@
+<!--"""-->
+<!--This script corresponds to the GUI content for the Acquire tab of the virtual scanner-->
+<!--Parameters-->
+    <!-- TODO: change this -->
+    <!--Requires input from the user regarding subject data and Procedure-->
+    <!--ID, Name, Age, Date of Birth, Gender, Weight, height, orientation within the scanner and anatomy imaged -->
+
+<!--Returns-->
+    <!--payload with the form inputs after pressing the submission button-->
+
+
+<!--Author: Marina Manso-->
+<!--Date: 04/04/2019-->
+<!--Version 0.0-->
+<!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
+<!--"""-->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Standard Mode</title>
+<head>
+  <meta charset="utf-8">
+  <title>Standard Mode</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{url_for('static',filename='register_style.css')}}">
-  </head>
-  <body>
+  <!--Bootstrap-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!--CSS-->
+  <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='acquire_style.css')}}">
+
+  <!--Favicon -->
+  <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+<body>
+
+  <!--Enclosing Panel-->
   <div id="enclosingjumbo" class="jumbotron">
+
     <h1>Virtual MR Scanner - Standard Mode</h1>
+
+    <!--Acquired images will be displayed in three views: axial, sagital and coronal-->
+    <div class="images-container">
+      <!--Axial-->
+      <div id="axial-container" class="container acquire-container">
+        <p>Axial View</p>
+      </div>
+
+      <!--Sagital-->
+      <div id="sagital-container" class="container acquire-container">
+        <p>Sagital View</p>
+      </div>
+
+      <!--Coronal-->
+      <div id="coronal-container" class="container acquire-container">
+        <p>Coronal View</p>
+      </div>
+    </div>
+
     <!-- TODO: name all the inputs -->
 
+      <!--Main Panel-->
+      <div id="panel-container" class="container">
 
-      <div class="row">
+        <div id="mainpanel" class="jumbotron">
 
-        <div class="col-8">
-          <div id="mainpanel" class="jumbotron">
-            <nav>
+          <!--Navigation Bar-->
+          <nav>
             <ul class="nav nav-tabs nav-fill">
             <li class="nav-item">
-              <a class="nav-link" href="register.html">Register</a>
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="acquire.html">Acquire</a>
+              <a class="nav-link active" href="{{ url_for('on_acq')}}">Acquire</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="analyze.html">Analyze</a>
+              <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="export.html" >Export</a>
             </li>
           </nav>
 
-            <form id="seqparameters">
-
-            <h2>Contrast</h2>
+          <form id="seqparameters">
 
             <div class="row">
 
-                <div class="col coltype1">
-                  <label for="TRtag">TR</label>
-                   <div class="w-100"></div>
-                  <label for="TEtag">TE</label>
-                   <div class="w-100"></div>
-                  <label for="TItag">TI</label>
-                   <div class="w-100"></div>
-                  <label for="FAtag">Flip Angle</label>
-                </div>
-
-                <div class="col coltype2">
-                  <input id="TRtag" type="number" class="smallinput" placeholder="" >
-                  <label for="TRtag">ms</label>
-                    <div class="w-100"></div>
-                  <input id="TEtag" type="number" class="smallinput" placeholder="">
-                  <label for="TEtag">ms</label>
-                    <div class="w-100"></div>
-                  <input id="TItag" type="number"  class="smallinput" placeholder="">
-                  <label for="TItag">ms</label>
-                    <div class="w-100"></div>
-                  <input id="FAtag" type="number" class="smallinput" placeholder="">
-                  <label for="FAtag">deg</label>
-                </div>
-
-                <div class="col coltype1">
-                  <label for="watsup">Water Supression:</label>
-                    <div class="w-100"></div>
-                  <label for="fatsup">Fat Supression:</label>
-                </div>
-
-                <div class="col coltype2">
-                  <select id="watsup" class="selector" name="ws">
-                    <option value="no">None</option>
-                    <option value="yes">Yes</option>
-                  </select>
-                    <div class="w-100"></div>
-                  <select id="fatsup" class="selector" name="fs">
-                    <option value="no">None</option>
-                    <option value="yes">Yes</option>
-                  </select>
-                </div>
-
-            </div>
-
-            <h2>Geometry</h2>
-
-            <div class="row">
-
+              <!--Column 1: Sequence Contrast-->
               <div class="col">
 
-                <h3>Slice Selection</h3>
-
-              </div>
-
-              <div class="col">
-
-                <h3 style="text-align:left;">Spatial Encoding</h3>
-
-              </div>
-
-            </div>
-
-            <div class="row">
-
-              <div class="col-3 coltype1">
-                <label for="Thickness">Thickness</label>
-                  <div class="w-100"></div>
-                <label for="Slices">Slices</label>
-                  <div class="w-100"></div>
-                <label for="Gap">Gap</label>
-                  <div class="w-100"></div>
-                <label for="Pos">Position</label>
-                  <div class="w-100"></div>
-                <label for="Posx">x</label>
-                  <div class="w-100"></div>
-                <label for="Posy">y</label>
-                  <div class="w-100"></div>
-                <label for="Posz">z</label>
-              </div>
-
-              <div class="col-3 coltype2 ">
-                <input id="Thickness" type="number" class="smallinput" placeholder="" onchange="voxelSizeCalc()">
-                <label for="Thickness">mm</label>
-                  <div class="w-100"></div>
-                <input id="Slices" type="number" class="smallinput" placeholder="">
-                  <div class="w-100"></div>
-                <input id="Gap" type="number"  class="smallinput" style="margin-top:8px;" placeholder="">
-                <label for="Gap">%</label>
-                  <div class="w-100"></div>
-                <input id="Posx" type="number" class="smallinput" style="margin-top:35px;width:50px;" placeholder="">
-                <label for="Posx">mm</label>
-                  <div class="w-100"></div>
-                <input id="Posy" type="number" class="smallinput" style="width:50px;" placeholder="">
-                <label for="Posy">mm</label>
-                  <div class="w-100"></div>
-                <input id="Posz" type="number" class="smallinput" style="width:50px;" placeholder="">
-                <label for="Posz">mm</label>
-              </div>
-
-
-              <div class="col">
-
+                <h2 id="first-row-item">Contrast</h2>
                 <div class="row">
 
-                  <div class="col-3 coltype2">
-                        <div class="w-100"></div>
-                      <label for="freq" style="margin-top:30px">Frequency:</label>
-                        <div class="w-100"></div>
-                      <label for="phase">Phase:</label>
-                  </div>
+                  <!--Column 1.1: Parameters: TR,TE,TI,FA-->
+                  <div class="col">
+                    <div class="row">
 
-                  <div class="col-3 coltype2">
-                      <div class="w-100"></div>
-                    <select id="freq" class="selector" name="freq" style="margin-top:30px">
-                      <option value="x">x</option>
-                      <option value="y">y</option>
-                      <option value="z">z</option>
-                    </select>
-                      <div class="w-100"></div>
-                    <select id="phase" class="selector" name="ph">
-                      <option value="x">x</option>
-                      <option value="y">y</option>
-                      <option value="z">z</option>
-                    </select>
-                  </div>
+                      <!--Column 1.1.1: TAGS (Parameters: TR,TE,TI,FA)-->
+                      <div class="col coltype1">
+                        <label>TR</label>
+                         <div class="w-100"></div>
+                        <label>TE</label>
+                         <div class="w-100"></div>
+                        <label>TI</label>
+                         <div class="w-100"></div>
+                        <label>Flip Angle</label>
+                      </div>
 
-                  <div class="col-2 coltype3">
-                      <label>N</label>
-                        <div class="w-100"></div>
-                      <input  id="Nx" type="number" class="smallinput" style="width:50px;" placeholder="" onchange="voxelSizeCalc()">
+                      <!--Column 1.1.2: INPUTS (Parameters: TR,TE,TI,FA)-->
+                      <div class="col coltype2">
 
-                      <input id="Ny" type="number" class="smallinput" style="margin-top:8px;width:50px;" placeholder="" onchange="voxelSizeCalc()">
-                  </div>
+                        <label>
+                          <input id="TR" type="number" class="smallinput" name="TR">
+                        </label>
+                        <label>ms</label>
 
-                  <div class="col-4 coltype2">
-                      <label >FOV</label>
-                        <div class="w-100"></div>
-                      <input id="FOVx" type="number" class="smallinput" style="width:50px;" placeholder="" onchange="voxelSizeCalc()">
-                      <label for="FOVx">mm</label>
-                        <div class="w-100"></div>
-                      <input id="FOVy"type="number" class="smallinput" style="width:50px;" onchange="voxelSizeCalc()">
-                      <label for="FOVy">mm</label>
-                  </div>
+                          <div class="w-100"></div>
 
-                </div>
+                        <label>
+                          <input id="TE" type="number" class="smallinput" name="TE">
+                        </label>
+                        <label>ms</label>
 
-                <div class="row">
+                          <div class="w-100"></div>
 
-                  <div class="col coltype1">
+                        <label>
+                          <input id="TI" type="number"  class="smallinput" name="TI">
+                        </label>
+                        <label>ms</label>
 
-                    <label for="BW">ADC Bandwidth</label>
+                          <div class="w-100"></div>
 
-                  </div>
+                        <label>
+                          <input id="FA" type="number" class="smallinput" name="FA">
+                        </label>
+                        <label>deg</label>
 
-                  <div class="col coltype2">
-
-                    <input id="BW" type="number" class="smallinput" style="width:50px;">
-                    <label for="BW">kHz</label>
-                    <div class="voxsize">
-                      <p>Voxel size:</p>
-                      <p>x: <span id="vsx">0</span> mm</p>
-                      <p>y: <span id="vsy">0</span> mm</p>
-                      <p>z: <span id="thick">0</span> mm</p>
+                      </div>
                     </div>
 
-                    <script>
-                      function voxelSizeCalc() {
-                        var Nx=document.getElementById('Nx').value;
-                        var FOVx=document.getElementById('FOVx').value;
-                        var Ny=document.getElementById('Ny').value;
-                        var FOVy=document.getElementById('FOVy').value;
-                        var thck=document.getElementById("Thickness").value;
-                        document.getElementById("vsx").innerHTML=Nx/FOVx;
-                        document.getElementById("vsy").innerHTML=Ny/FOVy;
-                        document.getElementById("thick").innerHTML=thck;
-                      }
+                  </div>
 
+                  <!--Column 1.2: Water/Fat supression-->
+                  <div class="col">
+                    <div class="row">
 
+                      <!--Column 1.2.1: (TAGS) Water/Fat supression-->
+                      <div class="col coltype1">
+                        <label>Water Supression:</label>
+                          <div class="w-100"></div>
+                        <label>Fat Supression:</label>
+                      </div>
 
-                    </script>
+                      <div class="col coltype2">
+                        <label>
+                          <select id="watsup" class="selector" name="ws">
+                            <option value="no">None</option>
+                            <option value="yes">Yes</option>
+                          </select>
+                        </label>
 
+                          <div class="w-100"></div>
 
+                        <label>
+                          <select id="fatsup" class="selector" name="fs">
+                            <option value="no">None</option>
+                            <option value="yes">Yes</option>
+                          </select>
+                        </label>
 
-
+                      </div>
+                    </div>
                   </div>
 
                 </div>
 
               </div>
 
+              <!--Column 2: Sequence Geometry-->
+              <div class="col">
 
+                <h2 id="first-row-item">Geometry</h2>
+
+              </div>
 
             </div>
-
-
-
-
 
           </form>
 
-          </div>
-        </div>
+        </div> <!--Main Panel-->
+
+      </div> <!--Panel container-->
+
+      <!--<div class="row">
 
         <div class="col">
 
           <button type="button" class="btn btn-primary">+</button>
-          <button type="button" class="btn btn-primary" onclick="submitseqpars()">Run Exam</button>
+          <button type="button" class="btn btn-primary" onclick="submitseqpars()">Run Exam</button>-->
           <!-- TODO: migrate this function to jQuery -->
-          <script>
+          <!--<script>
             function submitseqpars() {
               document.getElementById("seqparameters").submit();
             }
@@ -266,9 +217,9 @@
                 Spin Echo
               </a>
 
-            </div>
+            </div>-->
             <!-- TODO: Fix this -->
-            <script>
+            <!--<script>
 
             if (document.getElementById("se").disabled == "active"){
               document.getElementById("TItag").disabled=true;
@@ -281,16 +232,9 @@
 
 
 
-        </div>
+        </div>-->
 
-
-      </div>
-
-
-
-    </div>
-  </div>
-
+  </div> <!-- Enclosing panel-->
 
 </body>
 

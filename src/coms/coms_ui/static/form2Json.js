@@ -18,7 +18,7 @@ Unit Test app
 -------------
      utest_coms_flask
 Author: Marina Manso; Modified by: Sairam Geethanath
-Date: 03/11/2019
+Date: 03/27/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
@@ -27,7 +27,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 
 //  TODO:generalize form
 function form2Json(){
-  var formData= $("#regparameters").serializeArray();
+  var formData= $("form").serializeArray();
   var data2Send={};
   $.each(formData, function(i, field){
     data2Send[field.name]=field.value;
@@ -49,26 +49,13 @@ function form2Json(){
   });
   //Alert if any field is empty and prevent submission
 
-  // Code to change the dictionary structure in case of metric or Imperial
+// Code to change the dictionary structure in case of metric or Imperial
 //It always has to return the values in kg and cm
+// TODO: Maybe convert it to a switch when more functionalities are added
+if (data2Send["formName"] == "reg"){
+  imperial2metric(data2Send);
+}
 
-  if (data2Send["measuresystem"]=="metric"){
-    delete data2Send.weight2;
-    delete data2Send.height2;
-    delete data2Send.measuresystem;
-  }
-  else if (data2Send["measuresystem"]=="imperial") {
-    var weight_t = data2Send.weight*0.453592 + data2Send.weight2*0.0283495231;
-    data2Send.weight = weight_t.toFixed(1);
-    delete data2Send.weight2;
-
-    var height_t = data2Send.height*30.48 + data2Send.height2*2.54;
-    data2Send.height = height_t.toFixed();
-    delete data2Send.height2;
-
-    delete data2Send.measuresystem;
-
-  }
 
 
 

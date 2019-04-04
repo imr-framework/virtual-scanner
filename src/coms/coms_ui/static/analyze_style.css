@@ -1,0 +1,98 @@
+/*JUMBOTRON*/
+#mainpanel{
+  height: 45vh;
+  width: 84vw;
+  /* TODO: Set min width  */
+}
+/*CONTAINERS*/
+.images-container{
+  height: 48vh;
+  width: 84vw;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+#enclosingjumbo .images-container{
+  position: absolute;
+  left: 0;
+  bottom: 45vh;
+}
+.analysis-container{
+  border: 5px solid #003865;
+  height: 100%;
+  width: 48vh;
+  min-width: 48vh;
+  text-align: center;
+}
+.analysis-container p{
+  vertical-align: middle;
+  line-height: 48vh;
+  font-weight: bold;
+  color: #003865;
+}
+.workspace-container{
+  width: 16vw;
+  border: 2px solid #003865;
+  border-radius: 15px;
+  background-color: white;
+
+}
+.workspace-container h2{
+  text-align: center;
+  color: white;
+  padding-top: 15px;
+  background-color: #5f9bef;
+  border-radius: 15px 15px 0px 0px;
+  height: 7vh;
+}
+#enclosingjumbo .workspace-container{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+/*LABELS*/
+label{
+  margin-bottom: 1.2vh;
+}
+
+.tag-label-small{
+  width: 5%
+}
+.tag-label-large{
+  width:20%;
+}
+.input-label{
+  padding-left: 5%;
+}
+.no-tag{
+  padding-left: 10%;
+}
+#skip-a-line{
+  width: 1rem;
+
+}
+/*INPUT*/
+.fileInput{
+  width: 50%;
+  height: 24px;
+  border-color:black;
+  border-width: 2px;
+}
+#file-select{
+  display: none;
+}
+/*BUTTONS*/
+.btn-align-right{
+  float: right;
+}
+.analysis-btn{
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+
+}
+
+/*COLS AND ROWS*/

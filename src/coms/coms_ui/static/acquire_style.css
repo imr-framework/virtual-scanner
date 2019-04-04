@@ -1,0 +1,31 @@
+/*CONTAINERS*/
+#mainpanel{
+  height: 45vh;
+  width: 84vw;
+  /* TODO: Set min width  */
+}
+.images-container{
+  height: 48vh;
+  width: 84vw;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+#enclosingjumbo .images-container{
+  position: absolute;
+  left: 0;
+  bottom: 45vh;
+}
+.acquire-container{
+  border: 5px solid #003865;
+  height: 100%;
+  width: 48vh;
+  min-width: 48vh;
+  text-align: center;
+}
+.acquire-container p{
+  vertical-align: middle;
+  line-height: 48vh;
+  font-weight: bold;
+  color: #003865;
+}

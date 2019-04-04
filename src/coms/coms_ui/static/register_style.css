@@ -1,72 +1,28 @@
-h1{
-  font-size:1.5rem;
-  text-align: left;
-  background: #5a71a8;
-  color:white;
+#mainpanel{
+  min-height: 90vh;
+  min-width: 950px;
 }
-h2{
+.first-row-header{
   padding-top: 30px;
-  font-size: 1.25rem;
 }
+
 #dropdownMenuButton{
   font-size: 1.25rem;
   font-weight: 500;
   height: auto;
 }
-h3{
-  font-size: 1.1rem;
-}
-.nav-item{
-  background:#7f98d6;
-}
-.nav-link{
-  color:white;
-}
-.nav-tabs .nav-link.active{
-  background:#b1c3f2;
-  color:black;
-}
-
-#enclosingjumbo{
-  background-color: #5a71a8;
-  padding-left: 0px;
-  padding-bottom: 0px;
-  height: 100vh;
-}
-#mainpanel{
-  padding-bottom: 30px;
-  min-width: 950px;
-  min-height: 80vh;
-
-}
-.jumbotron{
-  padding:1px;
-  background-color: #b1c3f2;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-bottom: 0px;
-
-}
 
 
-.smallinput{
-  width: 60px;
-  height: 24px;
-  border-color:black;
-  border-width: 2px;
-}
+
+
+
 .mediuminput{
   width: 100px;
   height: 24px;
   border-color:black;
   border-width: 2px;
 }
-.largeinput{
-  width: 180px;
-  height: 24px;
-  border-color:black;
-  border-width: 2px;
-}
+
 .smallinput2{
   width: 60px;
   height: 24px;
@@ -76,24 +32,13 @@ h3{
 }
 
 
-.coltype1{
-  text-align: right;
-}
-.coltype2{
-  text-align: left;
-}
+
 
 .coltype3{
   text-align: center;
 
 }
-.selector{
-  border-color:black;
-  border-width: 2px;
-  width: auto;
-  height: 25px;
 
-}
 .voxsize{
   padding-top: 20px;
   line-height:2px;
@@ -109,24 +54,33 @@ h3{
   border-color:#2f2f91;
   border-width: 2px;
 }
-.btn{
-  background-color: #5f9bef;
-  border-color: #2f2f91;
-  border-width: 2px;
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 10px;
-}
+
 .radio-inline{
   font-size: 0.9rem;
   margin-bottom: 0px;
+}
+.not-first-radio{
+  margin-left:8px;
 }
 label{
   margin-bottom: 1.2rem; /*Default 0.5rem*/
   font-size: 16px;
 }
-#subjectImage{
-  display: flex;
-  align-items: center;
 
+#subjectImage{
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  /*margin-left:25px;*/
+}
+#extraImpFields{
+  display:none;
+}
+#submitButton{
+  margin-top:15px;
+  margin-bottom: 20px;
+  text-align:center;
+  position:relative;
+  bottom:0;
 }

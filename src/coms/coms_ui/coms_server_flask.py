@@ -51,10 +51,10 @@ def home_page():
             Renders the registration html page on the web
     """
 
-    # serve register template
-    return ("<h1>This will be the home page</h1>")
+    
+    return render_template("home_page.html")
 
-@app.route('/register.html')  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/register')  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
 
@@ -74,7 +74,7 @@ def on_register():
     # serve register template
     return render_template('register.html')
 
-@app.route('/acquire.html')
+@app.route('/acquire')
 def on_acq():
     """
 
@@ -92,6 +92,11 @@ def on_acq():
         """
     # serve index template
     return render_template('acquire.html')
+
+@app.route('/analyze')
+def on_analyze():
+
+    return render_template('analyze.html')
 
 
 @app.route('/receiver', methods=['POST'])
@@ -117,7 +122,6 @@ def worker():
     print(payload)
     result = ''
     return result
-
 
 if __name__ == '__main__':
     # run!

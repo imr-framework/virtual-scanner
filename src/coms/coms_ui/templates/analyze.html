@@ -1,31 +1,229 @@
+<!--"""-->
+<!--This script corresponds to the GUI content for the Analysis tab of the virtual scanner-->
+<!--Parameters-->
+    <!-- TODO: change this -->
+    <!--Requires input from the user regarding subject data and Procedure-->
+    <!--ID, Name, Age, Date of Birth, Gender, Weight, height, orientation within the scanner and anatomy imaged -->
+
+<!--Returns-->
+    <!--payload with the form inputs after pressing the submission button-->
+
+
+<!--Author: Marina Manso-->
+<!--Date: 04/02/2019-->
+<!--Version 0.0-->
+<!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
+<!--"""-->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>Standard Mode</title>
 
+    <!--Bootstrap-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="main.css">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='analyze_style.css')}}">
+
+    <!--Favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--jQuery and JS files-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='analyze_func.js')}}"></script>
+
+
   </head>
   <body>
-    <h1>Virtual MR Scanner - Standard Mode</h1>
-    <ul class="nav nav-tabs nav-fill">
-    <li class="nav-item">
-      <a class="nav-link" href="register.html">Register</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="acquire.html">Acquire</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="analyze.html">Analyze</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="export.html" >Export</a>
-    </li>
-  </nav>
-  <p></p>
+
+    <div id="enclosingjumbo" class="jumbotron">
+
+      <h1>Virtual MR Scanner - Standard Mode</h1>
+
+      <div class="images-container">
+        <!--Original data-->
+        <div id="data-container" class="container analysis-container">
+          <p>ORIGINAL DATA</p>
+        </div>
+
+        <!--T1/T2 map-->
+        <div id="map-container" class="container analysis-container">
+          <p>T1/T2 MAP</p>
+        </div>
+
+        <!--ROI analysis results-->
+        <div id="roiresults-container" class="container analysis-container">
+          <p>ROI ANALYSIS RESULTS</p>
+        </div>
+      </div>
+
+      <div class="workspace-container">
+        <h2>Workspace</h2>
+
+      </div>
+
+      <!--Main Panel-->
+      <div id="panel-container" class="container">
+
+        <div id="mainpanel" class="jumbotron">
+
+          <!--Navigation Bar-->
+          <nav>
+            <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_analyze')}}">Analyze</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="export.html" >Export</a>
+            </li>
+          </nav>
+
+          <form class="analyzeForm" >
+
+            <!--Load a DICOM file-->
+            <label id="first-row-item" for="fileInput">
+              <input id="file-input-display" class="fileInput" type="text" name="fileInput" placeholder="Choose a DICOM file..."/>
+              <input id="load-btn" class="btn btn-primary" type="button" value="Load" onclick="selectFile()"/>
+              <!-- Hidden file input to trigger file choice dialog to open-->
+              <!--Set accept=".dicom" to filter the files and only allow dicom selection-->
+              <input id="file-select" type="file" accept=".jpg">
+
+              <!--Save and reset buttons-->
+              <input class="btn btn-primary btn-align-right" type="button" value="Save"/>
+              <input class="btn btn-primary btn-align-right" type="button" value="Reset"/>
+            </label>
+
+            <!--Sequece selection: currently only SE and IRSE-->
+            <label>Sequence</label>
+            <label class="input-label">
+              <select class="selector" name="seq-choice">
+                <option value="SE">SE</option>
+                <option value="IRSE">IRSE</option>
+              </select>
+            </label>
+
+
+            <div class="row">
+
+              <!--Column 1 (Map generation): Sequence parameters and model-->
+              <div class="col">
+
+                <div class="row">
+                  <!--Column 1.1: Sequence parameters-->
+                  <div class="col">
+
+                    <h2>Parameters</h2>
+
+                    <!--Repetition Time (TR): Unique value -->
+                    <label class="tag-label-small">TR</label>
+                    <label class="input-label">
+                      <input class="smallinput" type="number" name="TR">
+                    </label>
+                    <label>s</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Echo Time (TE): same number as number of images, if T2 map -->
+                    <label class="tag-label-small">TE</label>
+                    <label class="input-label">
+                      <input class="largeinput" type="number" name="TE">
+                    </label>
+                    <label>s</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Inversion Time (TI): same number as number of images, if T1 map -->
+                    <label class="tag-label-small">TI</label>
+                    <label class="input-label">
+                      <input class="largeinput" type="number" name="TI">
+                    </label>
+                    <label>s</label>
+                  </div>
+
+                  <!--Column 1.2: Model equation-->
+                  <div class="col">
+
+                    <h2>Model</h2>
+                    <label class="input-label no-tag">
+                    <label class="input-label">
+                      <input class="largeinput" type="text" name="model-eq">
+                    </label>
+
+                  </div>
+                </div>
+              <div class="row">
+                <input  class="btn btn-primary analysis-btn" type="button" value="Generate Map"/>
+              </div>
+            </div>
+
+              <div class="col">
+
+                <h2 >ROI Analysis</h2>
+
+                <!--Intensity range: Everything inside intensity range will be set to 1, and 0 otherwise. -->
+                <label class="tag-label-large">Intensity Range</label>
+                <label class="input-label">min:
+                  <input class="smallinput" type="number" name="intensity-min">
+                </label>
+                <label class="input-label">max:
+                  <input class="smallinput" type="number" name="intensity-max">
+                </label>
+
+                <div class="w-100"></div>
+
+                <!--Connectivity: Currently only 4 or 8-->
+                <label class="tag-label-large">Connectivity</label>
+                <label class="input-label">
+                  <select class="selector" name="connect-choice">
+                    <option value="4-connect">4</option>
+                    <option value="8-connect">8</option>
+                  </select>
+                </label>
+
+                <div class="w-100"></div>
+
+                <!--Sensitivity: How well can the algorithm detects circles. User should provide a initial guess and the algorithm will refine the values. -->
+                <label class="tag-label-large">Sensitivity</label>
+                <label class="input-label">
+                  <input class="smallinput" type="number" name="sensitivity">
+                </label>
+
+                <div class="w-100"></div>
+
+
+                <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="button" value="Detect Spheres"/>
+
+              </div>
+            </div>
+
+
+          </form>
+
+
+        </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+
+
+
   </body>
 </html>
