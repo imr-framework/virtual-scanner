@@ -9,7 +9,7 @@
 
 
 <!--Author: Marina Manso, Modified by: Sairam Geethanath-->
-<!--Date: 03/25/2019-->
+<!--Date: 03/28/2019-->
 <!--Version 1.0-->
 <!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
 <!--"""-->
@@ -34,7 +34,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!--CSS-->
-
+    <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='register_style.css')}}">
 
     <!--jQuery -->
@@ -42,14 +42,14 @@
 
     <!-- TODO: merge functions in one script -->
     <!-- External JS files-->
-    <script src="../static/form2Json.js"> </script>
-    <script src="../static/metric2Imperial.js"> </script>
+    <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
+    <!--<script src="../static/form2Json.js"> </script>-->
+    <script src="../static/metric_imperial.js"> </script>
     <script src="../static/phantomAutofill.js"> </script>
 
     <!--GUID code-->
-    <script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>
-
-
+    <!--<!-- <!-- FIXME: link not working https://github.com/kelektiv/node-uuid
+    /script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>-->
 
 
 
@@ -58,138 +58,142 @@
 
     <div id="enclosingjumbo" class="jumbotron">
       <h1>Virtual MR Scanner - Standard Mode</h1>
+      <div id="panel-container" class="container">
+        <div class="row" id="panel-row">
+          <div class="col">
 
-      <!--Main Panel -->
-      <div class="row">
-        <div class="col-8">
+            <!--Main Panel -->
+            <div id="mainpanel" class="jumbotron">
+              <nav>
 
-          <div id="mainpanel" class="jumbotron">
-            <nav>
+                <ul class="nav nav-tabs nav-fill">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('on_register')}}">Register</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+                    <!--<a class="nav-link" href="acquire.html">Acquire</a>-->
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="export.html" >Export</a>
+                  </li>
+                </ul>
+              </nav>
 
-              <ul class="nav nav-tabs nav-fill">
-                <li class="nav-item">
-                  <a class="nav-link active" href="register.html">Register</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
-                  <!--<a class="nav-link" href="acquire.html">Acquire</a>-->
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="analyze.html">Analyze</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="export.html" >Export</a>
-                </li>
-              </ul>
-            </nav>
+              <form id="regparameters"  >
 
-            <form id="regparameters"  >
+                <input type="hidden" id="formId" name="formName" value="reg">
 
-                <div class="row">
+                  <div class="row">
 
-                  <!--PATIENT Parameters -->
-                  <div class="col">
-                    <h2>
-
-
-                        <select id="subjectSelect" class="selector" name="subjecttype">
-                          <option selected hidden>Subject</option>
-                          <option value="human" disabled>Human</option>
-                          <option id="phantomopt" value="phantom">Phantom</option>
-
-                        </select>
+                    <!--PATIENT Parameters -->
+                    <div class="col">
+                      <h2 class="first-row-header">
 
 
-                    </h2>
-                    <div class="row">
-                      <!--Labels column -->
-                      <div class="col coltype1">
+                          <select id="subjectSelect" class="selector" name="subjecttype">
+                            <option selected hidden>Subject</option>
+                            <option value="human" disabled>Human</option>
+                            <option id="phantomopt" value="phantom">Phantom</option>
 
-                        <label for="">ID</label>
+                          </select>
+
+
+                      </h2>
+                      <div class="row">
+                        <!--Labels column -->
+                        <div class="col coltype1">
+
+                          <label for="">ID</label>
+                            <div class="w-100"></div>
+                          <label for="">Name</label>
+                            <div class="w-100"></div>
+                          <label for="">Age</label>
+                            <div class="w-100"></div>
+                          <label for="">Date of Birth</label>
+                            <div class="w-100"></div>
+
+                          <label for="">Gender</label>
+                            <div class="w-100"></div>
+                          <label for="">Measuring System</label>
+                            <div class="w-100"></div>
+                          <label for="">Weight</label>
+                            <div class="w-100"></div>
+                          <label for="">Height</label>
+
+
+
+                        </div>
+                        <!--Input column -->
+                        <div class="col coltype2">
+
+                          <label for="patid">
+                            <input id="patid" type="text" class="largeinput" name="patid" >
+                          </label>
+
+                            <div class="w-100"></div>
+
+                          <label for="name">
+                            <input id="name" type="text" class="largeinput" placeholder="LastName, FirstName"  name="name">
+                          </label>
+
+                            <div class="w-100"></div>
+
+                          <input id="age" type="number" class="smallinput"  name="age" >
+                          <label for="age">Years</label>
+
+                            <div class="w-100"></div>
+
+                          <input id="dob" type="text" class="mediuminput"  name="dob" >
+                          <label for="dob">M/D/YYYY</label>
+
+                          <!-- TODO: Implement a Funtion to calculate age from DOB or viceversa-->
+
+                            <div class="w-100"></div>
+
+
+                          <label class="radio-inline" >
+                            <input id="opt1" type="radio" name="gender" value="male" checked >
+                              <label for="opt1">Male</label>
+                            <input class="not-first-radio" id="opt2" type="radio" name="gender" value="female" >
+                              <label for="opt2">Female</label>
+                            <input class="not-first-radio" id="opt3" type="radio" name="gender" value="other">
+                              <label for="opt3">Other</label>
+                          </label>
+
+                            <div class="w-100"></div>
+
+                          <label class="radio-inline">
+                            <input id="met" type="radio" name="measuresystem" value="metric" onclick="metric2Imperial()" checked >
+                              <label for="met">Metric</label>
+                            <input class="not-first-radio" id="imp" type="radio" name="measuresystem" value="imperial" onclick="metric2Imperial()" >
+                              <label for="imp">Imperial</label>
+                          </label>
+
                           <div class="w-100"></div>
-                        <label for="">Name</label>
-                          <div class="w-100"></div>
-                        <label for="">Age</label>
-                          <div class="w-100"></div>
-                        <label for="">Date of Birth</label>
-                          <div class="w-100"></div>
 
-                        <label for="">Gender</label>
-                          <div class="w-100"></div>
-                        <label for="">Measuring System</label>
-                          <div class="w-100"></div>
-                        <label for="">Weight</label>
-                          <div class="w-100"></div>
-                        <label for="">Height</label>
+                          <div class="row">
+                            <div class="col coltype2">
+                              <input id="weight" type="number" class="smallinput" name="weight"  >
+                              <label id="weightlabel" for="weight">kg</label>
 
+                                <div class="w-100"></div>
 
+                              <input  id="height" type="number" class="smallinput" name="height"  >
+                              <label id="heightlabel" for="height">cm</label>
+                            </div>
+                            <div id="extraImpFields" class="col coltype2" >
+                              <input id="weight2" type="number" class="smallinput" name="weight2"  >
+                              <label id="weightlabel2" for="weight2">oz</label>
 
-                      </div>
-                      <!--Input column -->
-                      <div class="col coltype2">
+                                <div class="w-100"></div>
+                              <input id="height2" type="number" class="smallinput" name="height2"  >
+                              <label id="heightlabel2" for="height2">in</label>
+                            </div>
 
-                        <label for="patid">
-                          <input id="patid" type="text" class="largeinput" name="patid" >
-                        </label>
-
-                          <div class="w-100"></div>
-
-                        <label for="name">
-                          <input id="name" type="text" class="largeinput" placeholder="LastName, FirstName"  name="name">
-                        </label>
-
-                          <div class="w-100"></div>
-
-                        <input id="age" type="number" class="smallinput"  name="age" >
-                        <label for="age">Years</label>
-
-                          <div class="w-100"></div>
-
-                        <input id="dob" type="text" class="mediuminput"  name="dob" >
-                        <label for="dob">M/D/YYYY</label>
-
-                        <!-- TODO: Implement a Funtion to calculate age from DOB or viceversa-->
-
-                          <div class="w-100"></div>
-
-
-                        <label class="radio-inline" >
-                          <input id="opt1" type="radio" name="gender" value="male" checked >
-                            <label for="opt1">Male</label>
-                          <input id="opt2" type="radio" name="gender" value="female" style="margin-left:8px;">
-                            <label for="opt2">Female</label>
-                          <input id="opt3" type="radio" name="gender" value="other" style="margin-left:8px;">
-                            <label for="opt3">Other</label>
-                        </label>
-
-                          <div class="w-100"></div>
-
-                        <label class="radio-inline">
-                          <input id="met" type="radio" name="measuresystem" value="metric" onclick="metric2Imperial()" checked >
-                            <label for="met">Metric</label>
-                          <input id="imp" type="radio" name="measuresystem" value="imperial" onclick="metric2Imperial()" style="margin-left:8px;">
-                            <label for="imp">Imperial</label>
-                        </label>
-
-                        <div class="w-100"></div>
-
-                        <div class="row">
-                          <div class="col coltype2">
-                            <input id="weight" type="number" class="smallinput" name="weight"  >
-                            <label id="weightlabel" for="weight">kg</label>
-
-                              <div class="w-100"></div>
-
-                            <input  id="height" type="number" class="smallinput" name="height"  >
-                            <label id="heightlabel" for="height">cm</label>
-                          </div>
-                          <div id="extraImpFields" class="col coltype2" style="display:none;">
-                            <input id="weight2" type="number" class="smallinput" name="weight2"  >
-                            <label id="weightlabel2" for="weight2">oz</label>
-
-                              <div class="w-100"></div>
-                            <input id="height2" type="number" class="smallinput" name="height2"  >
-                            <label id="heightlabel2" for="height2">in</label>
                           </div>
 
                         </div>
@@ -198,76 +202,71 @@
 
                     </div>
 
-                  </div>
+                    <!--Procedure Parameters -->
+                    <div class="col">
+                      <h2 class="first-row-header">Procedure</h2>
+                      <div class="row">
+                        <!--Labels column -->
+                        <div class="col coltype1">
+                          <label for="orient">Orientation</label>
+                            <div class="w-100"></div>
+                          <label for="anatomy">Anatomy</label>
 
-                  <!--Procedure Parameters -->
-                  <div class="col">
-                    <h2>Procedure</h2>
-                    <div class="row">
-                      <!--Labels column -->
-                      <div class="col coltype1">
-                        <label for="orient">Orientation</label>
-                          <div class="w-100"></div>
-                        <label for="anatomy">Anatomy</label>
+                        </div>
+                        <!--Input column -->
+                        <div class="col coltype2">
+                          <label for="orient">
+                            <select id="orient" class="selector" name="orient">
+                              <option value="HFS">Head First Supine</option>
+                              <option value="FFS">Feet First Supine</option>
+                              <option value="HFP">Head First Prone</option>
+                              <option value="HFR">Head First LR</option>
+                              <option value="FFR">Feet First LR</option>
+                              <option value="HFL">Head First LL</option>
+                              <option value="FFL">Feet First LL</option>
+                            </select>
+                          </label>
 
-                      </div>
-                      <!--Input column -->
-                      <div class="col coltype2">
-                        <label for="orient">
-                          <select id="orient" class="selector" name="orient">
-                            <option value="HFS">Head First Supine</option>
-                            <option value="FFS">Feet First Supine</option>
-                            <option value="HFP">Head First Prone</option>
-                            <option value="HFR">Head First LR</option>
-                            <option value="FFR">Feet First LR</option>
-                            <option value="HFL">Head First LL</option>
-                            <option value="FFL">Feet First LL</option>
-                          </select>
-                        </label>
+                            <div class="w-100"></div>
 
-                          <div class="w-100"></div>
+                          <label for="anatomy">
+                            <select id="anatomy" class="selector" name="anatomy">
+                              <option value="brain">Brain</option>
+                              <option value="abdomen">Abdomen</option>
+                              <option value="knee">Knee</option>
+                            </select>
+                          </label>
 
-                        <label for="anatomy">
-                          <select id="anatomy" class="selector" name="anatomy">
-                            <option value="brain">Brain</option>
-                            <option value="abdomen">Abdomen</option>
-                            <option value="knee">Knee</option>
-                          </select>
-                        </label>
-
-                      </div>
-
-                    </div>
-
-                    </div>
-                  </div>
-                    <div class="row flexitem2">
-                      <div class="col" style="margin-top:15px;text-align:center;position:relative;bottom:0;">
-                        <input id="reg-form-submit" type="button" class="btn btn-primary" value="Register Subject" onclick="form2Json()">
-
+                        </div>
 
                       </div>
 
+                      </div>
                     </div>
+                      <div class="row">
+                        <div class="col" id="submitButton" >
+                          <input id="reg-form-submit" type="button" class="btn btn-primary" value="Register Subject" onclick="form2Json()">
+
+
+                        </div>
+
+                      </div>
 
 
 
 
 
-            </form>
-
-
-
-
+              </form>
+            </div>
           </div>
+
+          <div id="subjectImage" class="col" >
+          </div>
+
         </div>
-
-        <div id="subjectImage" class="col" style="margin-left:25px">
-
-
-        </div>
-
       </div>
+
+
 
     </div>
 
