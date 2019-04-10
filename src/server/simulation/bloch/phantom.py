@@ -1,7 +1,8 @@
 # Phantom (i.e. 3D subject model with T1,T2,PD,df maps) functionalities
 
 import numpy as np
-
+import scipy.ndimage as sci
+import scipy.signal as ss
 
 class Phantom:
     def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0):
@@ -92,6 +93,89 @@ class DTTPhantom(Phantom):
 
 
         super().__init__(T1map,T2map,PDmap,vsize,dBmap)
+
+
+class BrainwebPhantom(Phantom):
+    def __init__(self, filename,dsf=1,make2d=False,loc=0,dir='z',dBmap=0):
+        dsf = int(np.absolute(dsf))
+        bw_data = np.load(filename).all()
+        params = {k: np.array([v[3],v[0],v[1]]) for k, v in bw_data['params'].items()}
+
+        typemap =  bw_data['typemap']
+        #typemap_ds = typemap[0:-1:dsf,0:-1:dsf,0:-1:dsf]# TODO: properly down-sample
+
+        dr = 1e-3 # 1mm voxel size
+
+        # If we want planar phantom, then let's take the slice!
+        if make2d:
+            if dir in ['sagittal','x']:
+                n = np.shape(typemap)[0]
+                xx = dr*(n-1)
+                loc_ind = int((n/xx)*loc + n/2)
+                if loc_ind < 0:
+                    loc_ind = 0
+                if loc_ind > n-1:
+                    loc_ind = n-1
+                typemap = typemap[[loc_ind],:,:]
+
+            elif dir in ['coronal','y']:
+                n = np.shape(typemap)[1]
+                yy = dr*(n-1)
+                loc_ind = int((n/yy)*loc + n/2)
+                if loc_ind < 0:
+                    loc_ind = 0
+                if loc_ind > n - 1:
+                    loc_ind = n - 1
+                typemap = typemap[:,[loc_ind],:]
+
+            elif dir in ['axial','z']:
+                n = np.shape(typemap)[2]
+                zz = dr*(n-1)
+                loc_ind = int((n/zz)*loc + n/2)
+                if loc_ind < 0:
+                    loc_ind = 0
+                if loc_ind > n - 1:
+                    loc_ind = n - 1
+                typemap = typemap[:,:,[loc_ind]]
+
+        # Make parm maps from typemap
+        a,b,c = np.shape(typemap)
+        T1map = np.ones((a,b,c))
+        T2map = np.ones((a,b,c))
+        PDmap = np.zeros((a,b,c))
+
+        for x in range(a):
+            for y in range(b):
+                for z in range(c):
+                    PDmap[x,y,z] = params[typemap[x,y,z]][0]
+                    T1map[x,y,z] = params[typemap[x,y,z]][1]
+                    T2map[x,y,z] = params[typemap[x,y,z]][2]
+
+        # Downsample maps
+        a,b,c = np.shape(PDmap)
+
+        if a == 1:
+            ax = [1,2]
+        elif b == 1:
+            ax = [0,2]
+        elif c == 1:
+            ax = [0,1]
+        else:
+            ax = [0,1,2]
+
+        for v in range(len(ax)):
+            PDmap = ss.decimate(PDmap, dsf, axis=ax[v], ftype='fir')
+            T1map = ss.decimate(T1map, dsf, axis=ax[v], ftype='fir')
+            T2map = ss.decimate(T2map, dsf, axis=ax[v], ftype='fir')
+
+
+        dr = dr*dsf
+        PDmap = np.clip(PDmap,a_min=0,a_max=1)
+        T1map = np.clip(T1map,a_min=0,a_max=None)
+        T2map = np.clip(T2map,a_min=0,a_max=None)
+
+        super().__init__(T1map,T2map,PDmap,dr,dBmap)
+
 
 
 

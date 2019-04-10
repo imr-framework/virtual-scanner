@@ -55,6 +55,8 @@ class SpinGroup:
         i.e. T1, T2 relaxation with no gradients
             INPUTS: t (s) - delay interval
         """
+        self.T1 = max(0,self.T1)
+        self.T2 = max(0,self.T2)
         E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
         E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
 
@@ -84,6 +86,17 @@ class SpinGroup:
             bz = np.sum(np.multiply([gs[0,k],gs[1,k],gs[2,k]],loc)) + self.df/GAMMA_BAR
             be = np.array([bx,by,bz])
             self.m = anyrot(GAMMA*be*dt)@self.m
+
+    def apply_rf_b(self, pulse_shape, grads_shape, dt):
+        # TODO more accurate RF action!
+        for v in range(len(pulse_shape)):
+            B1x = np.real(pulse_shape[v])
+            B1y = np.imag(pulse_shape[v])
+            glocp = np.sum(np.multiply([grads_shape[0,v],grads_shape[1,v],grads_shape[2,v]],self.loc))
+            A = np.array([[0, glocp, B1y],
+                          [-glocp, 0, B1x],
+                          [B1y, -B1x, 0]])
+            self.m = self.m + dt*GAMMA*A@self.m
 
 
     def readout(self,grads_shape,dt):

@@ -45,10 +45,11 @@ def apply_pulseq(isc,seq):
             b1 = this_blk['rf'].signal/GAMMA_BAR
             rf_time = np.array(this_blk['rf'].t[0]) - dt_rf
             rf_grad, rf_timing, rf_duration = combine_gradients(blk=this_blk, timing=rf_time)
-            isc.apply_rf(b1,rf_grad,dt_rf)
+            # TODO 2 versions of apply_rf still exist
+            #isc.apply_rf(b1,rf_grad,dt_rf)
+            isc.apply_rf_b(b1,rf_grad,dt_rf)
 
-        # Case 3: ADC sampling #TODO what's wrong?? dk is wrong - fix
-        # TODO Add post-delay
+        # Case 3: ADC sampling
         elif event_row[5] != 0:
             adc = this_blk['adc']
             signal_1D = []
@@ -70,11 +71,13 @@ def apply_pulseq(isc,seq):
             fp_grads_area = combine_gradient_areas(blk=this_blk)
             dur = find_precessing_time(blk=this_blk,dt=dt_grad)
             isc.fpwg(fp_grads_area,dur)
-
+    # TODO delete printout
+    print('one more!')
     return signal
 
 
 def sim_single_spingroup(loc_ind,freq_offset,phantom,seq):
+
     isc = sg.SpinGroup(loc=phantom.get_location(loc_ind), pdt1t2=phantom.get_params(loc_ind), df=freq_offset)
     signal = apply_pulseq(isc,seq)
     return signal
@@ -169,26 +172,32 @@ def find_precessing_time(blk,dt):
 # Parallel simulation
 if __name__ == '__main__':
     # Create phantom
-    Nph = 5
-    #FOVph = 0.32
-    FOVph = 32
-    #Rs = [0.06, 0.12, 0.15]
-    Rs = [6,12,15]
+    Nph = 9
+    FOVph = 0.32
+    Rs = [0.06, 0.12, 0.15]
     PDs = [1, 1, 1]
     T1s = [2, 1, 0.5]
     T2s = [0.1, 0.15, 0.25]
-    phantom = pht.makeSphericalPhantom(n=Nph, fov=FOVph, T1s=T1s, T2s=T2s, PDs=PDs, radii=Rs)
+    #phantom = pht.makeSphericalPhantom(n=Nph, fov=FOVph, T1s=T1s, T2s=T2s, PDs=PDs, radii=Rs)
+    phantom = pht.makePlanarPhantom(n=Nph, fov=FOVph, T1s=T1s, T2s=T2s, PDs=PDs, radii=Rs)
+
     df = 0
+
+    # Brainweb!
+    #phantom = pht.BrainwebPhantom('brainweb.npy',dsf=8,make2d=True,loc=0,dir='z')
 
     # Tic
     start_time = time.time()
 
     # Load pulseq file
     myseq = Sequence()
-#    myseq.read("gre_python_forsim_9.seq")
-    myseq.read('irse_python_forsim_5_fov32_rev.seq')
+    myseq.read('irse_fov320mm_Nx9_Ny9_TI20ms_TE50ms_TR10000ms.seq')
+    #myseq.read('gre_fov320mm_Nx9_Ny9_TE30ms_TR1000ms_FA90deg.seq')
     loc_ind_list = phantom.get_list_inds()
     pool = mp.Pool(mp.cpu_count())
+
+
+    # TODO add B0 map!
     results = pool.starmap_async(sim_single_spingroup, [(loc_ind, df, phantom, myseq) for loc_ind in loc_ind_list]).get()
     pool.close()
 

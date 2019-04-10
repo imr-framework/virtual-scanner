@@ -10,35 +10,37 @@ from pulseq.core.Sequence.sequence import Sequence
 from pulseq.core.Sequence.read_seq import read
 import multiprocessing as mp
 import spingroup_ps as sg
-
-
-
+import scipy.io as sio
+import pulseq_library as psl
 
 if __name__ == '__main__':
     # Make a phantom
     Nph = 15
-    #FOVph = 0.32 (for GRE sequence with FOV = 0.32)
-    FOVph = 32 #<- use this for irse (fov32) sequences
-    #Rs = [0.06,0.12,0.15] (for GRE sequence with FOV = 0.32)
-    Rs = [6,12,15] #<- use this instead for irse (fov32) sequences
+    FOVph = 0.32 #(for GRE sequence with FOV = 0.32)
+    Rs = [0.06,0.12,0.15] #(for GRE sequence with FOV = 0.32)
     PDs = [1, 1, 1]
     T1s = [2, 1, 0.5]
     T2s = [0.1, 0.15, 0.25]
 
-    # Use makeSphericalPhantom for 3D simulation
     #phantom = pht.makeSphericalPhantom(n=Nph, fov=FOVph, T1s=T1s, T2s=T2s, PDs=PDs, radii=Rs)
-    # Use makePlanarPhantom for 2D simulation (much faster!!)
     phantom = pht.makePlanarPhantom(n=Nph, fov=FOVph, T1s=T1s, T2s=T2s, PDs=PDs, radii=Rs)
     df = 0
 
+    # Make a pulse sequence
+    fov = FOVph
+    n = Nph
+    thk = FOVph/n
+    fa = 90
+    tr = 10
+    te = 0.08
+    ti = [0.02]
+
+    #myseq = psl.make_pulseq_gre(fov,n,thk,fa,tr,te,write=False)
+    myseq = psl.make_pulseq_irse(fov,n,thk,fa,tr,te,ti,write=False)
+
+
     # Time the code: Tic
     start_time = time.time()
-
-    # Load pulseq file
-    # Feel free to generate your own
-    myseq = Sequence()
-    myseq.read('irse_python_forsim_15_fov32_rev.seq')
-    #myseq.read('gre_python_forsim_15.seq')
     loc_ind_list = phantom.get_list_inds()
 
     # Initiate multiprocessing pool
