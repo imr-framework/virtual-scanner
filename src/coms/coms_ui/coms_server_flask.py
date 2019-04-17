@@ -23,7 +23,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 """
 #import os
 import sys
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response, session
 import random, json
 import register as reg
 
@@ -33,6 +33,10 @@ import register as reg
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+users = []
+app.secret_key='Session_key'
+
 
 @app.route('/', methods =['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
@@ -99,6 +103,10 @@ def on_analyze():
 
     return render_template('analyze.html')
 
+@app.route('/recon')
+def on_recon():
+
+    return render_template('recon.html')
 
 @app.route('/receiver', methods=['POST'])
 def worker():
