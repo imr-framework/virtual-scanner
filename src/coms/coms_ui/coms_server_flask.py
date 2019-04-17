@@ -34,28 +34,27 @@ import register as reg
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+@app.route('/', methods =['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
+def log_in():
 
-@app.route('/')  # This needs to point to the login screen and then we can use the register link seprately
 
-def home_page():
-    """
+    if request.method == 'POST':
+        users.append(request.form['user-name'])
+        session['username']= users[-1]
 
-         Parameters
-        ----------
-           void
+        if request.form['mode'] == "Standard":
+            return redirect("register")
+        else:
+            return redirect("recon")
+    else:
+        if 'username' in session  and session['username'] in users:
 
-        Returns
-        -------
-           void (status in debug mode if required)
+            return render_template("log_in.html")
+        else:
 
-        Performs
-        --------
-            Renders the registration html page on the web
-    """
 
-    
-    return render_template("home_page.html")
-
+            return render_template("log_in.html")
+        
 @app.route('/register')  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
