@@ -31,7 +31,6 @@ class SpinGroup:
         return np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
 
     def fpwg(self,grad_area,t):
-        # TODO: print out gradient actions and compare to old script
         """
         free precession with gradients for the duration of the longest gradient in the list
         INPUT: grads: list of Gradient objects [g1, g2, g3, ...]
@@ -65,11 +64,11 @@ class SpinGroup:
                       [0, 0, E1]])
         self.m = A@self.m + np.array([[0], [0], [1 - E1]])
 
-    def apply_rf(self, pulse_shape, grads_shape, dt):
+    def apply_rf_old(self, pulse_shape, grads_shape, dt):
         """
         Applies a RF pulse to the spin group
         Simulation method: hard-pulse approximation across small time intervals
-        With a trapezoid gradient, rf is applied only on the flat part
+        With any gradient
 
         INPUTS
         # pulse_shape : 1 x n complex array (B1)[tesla]
@@ -87,8 +86,16 @@ class SpinGroup:
             be = np.array([bx,by,bz])
             self.m = anyrot(GAMMA*be*dt)@self.m
 
-    def apply_rf_b(self, pulse_shape, grads_shape, dt):
-        # TODO more accurate RF action!
+    def apply_rf(self, pulse_shape, grads_shape, dt):
+        """
+        Applies a RF pulse to the spin group
+        Simulation method: numerical integration of Bloch equation with B1 field and arbitrary gradient field
+
+        INPUTS
+        # pulse_shape : 1 x n complex array (B1)[tesla]
+        # grads_shape : 3 x n real array  [tesla/meter]
+        # dt: raster time for both shapes [seconds]
+        """
         for v in range(len(pulse_shape)):
             B1x = np.real(pulse_shape[v])
             B1y = np.imag(pulse_shape[v])
@@ -97,6 +104,7 @@ class SpinGroup:
                           [-glocp, 0, B1x],
                           [B1y, -B1x, 0]])
             self.m = self.m + dt*GAMMA*A@self.m
+
 
 
     def readout(self,grads_shape,dt):
@@ -113,7 +121,6 @@ class SpinGroup:
             self.fpwg(dt*grads_shape[:,p],dt)
 
         return signal
-
 
 
 # Helpers
