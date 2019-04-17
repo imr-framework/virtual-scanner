@@ -67,6 +67,8 @@ function voxelSizeCalc() {
 
 /*Function to open a new dialog to select the desired sequence everytime the + button is pressed*/
 $(document).on("click", "#addseq-btn", function(){
+
+  //$("#sl-gap").val(0);
   $("#dialog").dialog({
     open : function (ui){
       $( "#enclosingjumbo" ).addClass( "blur" );
@@ -87,9 +89,20 @@ $(document).on("click", ".menu-item", function(){
   /*If the selected sequence is SE show the option of IRSE*/
   if (seq_name == "SE") {
     $(".IRSE-checkbox").show();
+    if ($(this).is(':checked')) {
+      $(".TI-IRSE").show();
+      $("#TI").prop("disabled",false);
+    }
+
+    else if ($(this).is(':checked') == false) {
+      $(".TI-IRSE").hide();
+      $("#TI").prop("disabled",true);
+    }
   }
   else {
     $(".IRSE-checkbox").hide();
+    $(".TI-IRSE").hide();
+    $("#TI").prop("disabled",true);
   }
 
   var addlistitem_seq_name = "<li><a href='#'>" + seq_name + "</a></li>";
@@ -117,18 +130,24 @@ $(document).on("click", ".menu-item", function(){
   $("#FOVx").prop("readonly", true);
   $("#FOVy").val(240);
   $("#FOVy").prop("readonly", true);
-  voxelSizeCalc();
 
+  voxelSizeCalc();
+  /* Add the default ADC bandwidth value
+  $("#ADC-bw").val();
+  $("#ADC-bw").prop("readonly", true);
+  */
 });
 
 /*Add TI if IRSE is checked and hide it otherwise*/
 $(document).on("change", "#IRSE-check", function(){
-  if ($(this).is(':checked')) {
+  if ($("#IRSE-check").is(':checked')) {
     $(".TI-IRSE").show();
+    $("#TI").prop("disabled",false);
   }
 
-  else if ($(this).is(':checked') == false) {
+  else if ($("#IRSE-check").is(':checked') == false) {
     $(".TI-IRSE").hide();
+    $("#TI").prop("disabled",true);
   }
 
 });
