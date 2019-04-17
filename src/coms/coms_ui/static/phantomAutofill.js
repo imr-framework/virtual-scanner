@@ -28,8 +28,15 @@ $(document).ready(() => {
 
 
     $("#name").val($(this).val());
+  
+    // TODO: change This
+    if ($(this).val() == "ISMRM-NIST") {
+      var img_element = "<img src='../static/phantom_pics/" + $(this).val() + ".jpg'/>"
+    }
+    else {
+      var img_element = "<img src='../static/phantom_pics/" + $(this).val() + ".png'/>"
+    }
 
-    var img_element = "<img src='../static/phantom_pics/" + $(this).val() + ".jpg'/>"
     $("#subjectImage-container").html(img_element)
 
     $("#name").prop("readonly", true);
