@@ -127,20 +127,12 @@ if __name__ == '__main__':
     print("Time used: %s seconds" % (time.time()-start_time))
 
 
-
-
     # Recon and save
-
-
     # TODO refine recon, data and image saving, etc.
-
     # 1. Find image dimension
     # 2. Recon all images
     # 3. store: (a) raw data (b) recon data (c) images (optional) (d) info: slice loc, TI (for now)
     #                                                            in general, varying TR, TE, etc. should be stored (how?)
-
-
-
 
     # Recon
     if args.seq_type in ['se','gre','irse']: # Cartesian recon
@@ -176,7 +168,7 @@ if __name__ == '__main__':
             plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
-            mypath = 'outputs/sim_slices'
+            mypath = 'src/server/simulation/bloch/outputs/sim_slices'
             if not os.path.isdir(mypath):
                 os.makedirs(mypath)
             plt.savefig(mypath+'/slice_'+str(v+1)+'.png', bbox_inches='tight', pad_inches=0, format='png')
