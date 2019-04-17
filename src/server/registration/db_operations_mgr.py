@@ -39,7 +39,9 @@ def create():
     # Create the REGISTRATION table
     try:
         conn.execute('''CREATE TABLE REGISTRATION
-             (ID INT PRIMARY KEY     NOT NULL,
+             (
+             PATID INT PRIMARY KEY     NOT NULL,
+             SUBJECTTYPE    TEXT    NOT NULL
              NAME           TEXT    NOT NULL,
              AGE            INT     NOT NULL,
              DOB            BLOB    NOT NULL,
@@ -70,7 +72,7 @@ def insert(payload):
 
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO REGISTRATION VALUES (?,?,?,?,?,?,?,?,?)', list(payload.values()))
+        cursor.execute('INSERT INTO REGISTRATION VALUES (?,?,?,?,?,?,?,?,?,?)', list(payload.values()))
     except sqlite3.Error as e:
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))

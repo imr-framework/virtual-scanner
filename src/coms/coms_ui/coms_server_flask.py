@@ -25,6 +25,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 import sys
 from flask import Flask, render_template, request, redirect, Response
 import random, json
+import register as reg
 
 # Define the location of template and static folders
 #template_dir = os.path.abspath('../templates')
@@ -117,12 +118,23 @@ def worker():
                 Rx payload from the client
                 TODO: invokes payload
             """
-    # read json + reply
+    # read payload and convert it to dictionary
     payload = request.data
-    # data = request.get_json() #Needs debugging, interesting TODO:
-    print(payload)
+    payload = json.loads(payload.decode('utf8'))
+
+
+    formName = payload.get('formName')
+    # Do registration and save to database
+    if formName == 'reg':
+        del payload['formName']
+        status = reg.consume(payload)
+        payload = reg.reuse(payload)
+        reg_payload = payload #For GT to use for her implementation, TODO: Refine this for integrated implementation
+
     result = ''
     return result
+
+
 
 if __name__ == '__main__':
     # run!

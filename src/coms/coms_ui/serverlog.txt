@@ -1,0 +1,12 @@
+2019-04-17 14:11:24:Creating new database - subject.db
+2019-04-17 14:11:24:Opened database successfully
+2019-04-17 14:11:24:Opened database successfully
+2019-04-17 14:11:24: table REGISTRATION has 10 columns but 9 values were supplied2019-04-17 14:11:24:Inserted subject information to REGISTRATION table successfully
+2019-04-17 14:16:07:Opened database successfully
+2019-04-17 14:16:07: table REGISTRATION has 10 columns but 9 values were supplied2019-04-17 14:16:07:Inserted subject information to REGISTRATION table successfully
+2019-04-17 14:18:47:Opened database successfully
+2019-04-17 14:18:47:Inserted subject information to REGISTRATION table successfully
+2019-04-17 14:20:21:Opened database successfully
+2019-04-17 14:20:21: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 14:20:21:Inserted subject information to REGISTRATION table successfully
+2019-04-17 14:20:21:Opened database successfully
+2019-04-17 14:20:21: near "', '": syntax error

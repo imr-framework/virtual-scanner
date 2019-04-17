@@ -14,35 +14,48 @@
         <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/static/form2Json.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="390">
-              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/coms/coms_socket_arxiv/utest_coms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="19" selection-end-column="82" />
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/utest_coms_ui.py">
+        <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+            <state relative-caret-position="354">
+              <caret line="126" column="42" selection-start-line="126" selection-start-column="42" selection-end-line="126" selection-end-column="42" />
+              <folding>
+                <element signature="e#490#500#0" expanded="true" />
+              </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/registration/db_operations_mgr.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-191">
+              <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/registration/utest_register.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="421">
+              <caret line="64" selection-start-line="64" selection-end-line="64" selection-end-column="28" />
+              <folding>
+                <element signature="e#345#367#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/registration/register.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-371" />
           </provider>
         </entry>
       </file>
@@ -50,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/register.html">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret selection-end-line="19" selection-end-column="10" />
+              <caret selection-end-line="11" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -101,7 +114,6 @@
         <option value="$PROJECT_DIR$/src/coms/coms_server2client.py" />
         <option value="$PROJECT_DIR$/src/coms/coms_client_listener.py" />
         <option value="$PROJECT_DIR$/src/coms/utest_coms.py" />
-        <option value="$PROJECT_DIR$/src/server/registration/db_operations_mgr.py" />
         <option value="$PROJECT_DIR$/src/coms/coms_listener.py" />
         <option value="$PROJECT_DIR$/src/coms/coms_msg.py" />
         <option value="$PROJECT_DIR$/src/coms/Thread_op_mgr.py" />
@@ -124,10 +136,11 @@
         <option value="$PROJECT_DIR$/src/coms/coms_ui/static/styles/form2Json.js" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/templates/index.html" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/json_io.py" />
-        <option value="$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/templates/register.html" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/static/form2Json.js" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/utest_coms_ui.py" />
+        <option value="$PROJECT_DIR$/src/server/registration/db_operations_mgr.py" />
+        <option value="$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py" />
       </list>
     </option>
   </component>
@@ -141,6 +154,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -164,13 +178,32 @@
               <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="coms" type="462c0819:PsiDirectoryNode" />
+              <item name="coms_socket_arxiv" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="coms" type="462c0819:PsiDirectoryNode" />
               <item name="coms_ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="registration" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -206,7 +239,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.utest_coms_ui">
+  <component name="RunManager" selected="Python.coms_server_flask">
     <configuration name="coms_listener" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Virtual-Scanner" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -323,8 +356,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.utest_coms_ui" />
         <item itemvalue="Python.coms_server_flask" />
+        <item itemvalue="Python.utest_coms_ui" />
         <item itemvalue="Python.json_io (1)" />
         <item itemvalue="Python.json_io" />
         <item itemvalue="Python.coms_listener" />
@@ -354,22 +387,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
+    <frame x="17" y="23" width="1663" height="912" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19288728" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19792935" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.29839572" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.41243523" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.297561" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.41219512" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32941177" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32834226" />
+      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32804877" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -391,11 +424,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_client.py" />
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_server.py" />
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_server2client.py" />
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_client_listener.py" />
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_server_listener.py" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_client2server.py" />
     <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -404,62 +432,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/serverlog.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/registration/db_operations_mgr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="79" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/serverlog.txt" />
     <entry file="file://$PROJECT_DIR$/src/coms/Payload_coms.txt" />
-    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/CSS/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-368">
-          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/HTML/acquire.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1475">
-          <caret line="15" column="38" lean-forward="true" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_sender.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_listener.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/json/regdata.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="24" selection-start-column="24" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_sender.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/regdata.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/CSS/main.css" />
+    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/HTML/acquire.html" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_sender.js" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_listener.py" />
+    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/json/regdata.json" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_sender.py" />
+    <entry file="file://$USER_HOME$/Downloads/regdata.json" />
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -468,13 +449,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coms/test_discard/test.html" />
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_listener.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-start-column="2" selection-end-line="17" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_listener.js" />
     <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/JS/coms_sender.js" />
     <entry file="file://$PROJECT_DIR$/src/coms/test_discard/templates/form2Json.js" />
     <entry file="file://$PROJECT_DIR$/src/coms/test_discard/templates/index.html" />
@@ -485,44 +460,14 @@
     <entry file="file://$PROJECT_DIR$/src/coms/test_discard/json_io.py" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/CSS/main.css" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/form2Json.js" />
-    <entry file="file://$USER_HOME$/Downloads/test_discard/json_io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="41" lean-forward="true" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/test_discard/JS/form2Json.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="17" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Downloads/test_discard/json_io.py" />
+    <entry file="file://$USER_HOME$/Downloads/test_discard/JS/form2Json.js" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/includes/_navbar.html" />
-    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/JS/form2Json.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="3" selection-start-line="20" selection-start-column="3" selection-end-line="20" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/JS/form2Json.js" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/static/styles/send2server.js" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/static/styles/form2Json2.js" />
-    <entry file="file://$USER_HOME$/Downloads/test_discard/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/HTML/register.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="2" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Downloads/test_discard/test.html" />
+    <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/HTML/register.html" />
     <entry file="file://$PROJECT_DIR$/../VENV_VS/lib/python3.6/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26535">
@@ -530,23 +475,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/json_io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
-          <folding>
-            <element signature="e#20#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/json_io.py" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/index.html" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/analyze.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -554,48 +484,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/Thread_op_mgr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-331">
-          <caret line="12" column="7" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_msg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="21" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_server_bkp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/utest_coms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="19" selection-start-line="19" selection-end-line="19" selection-end-column="82" />
-          <folding>
-            <element signature="e#440#469#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/Thread_op_mgr.py" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_msg.py" />
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_server_bkp.py" />
+    <entry file="file://$PROJECT_DIR$/src/coms/utest_coms.py" />
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/register.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret selection-end-line="19" selection-end-column="10" />
+          <caret selection-end-line="11" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/static/form2Json.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
-          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
         </state>
       </provider>
     </entry>
@@ -606,17 +509,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/utest_coms_ui.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/registration/serverlog.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/serverlog.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/simulation/bloch/utest_bloch_pulseq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="44" selection-start-line="44" selection-end-line="44" />
+          <folding>
+            <element signature="e#53#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/registration/utest_register.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="64" selection-start-line="64" selection-end-line="64" selection-end-column="28" />
+          <folding>
+            <element signature="e#345#367#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/registration/register.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-371" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/registration/db_operations_mgr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-191">
+          <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="126" column="42" selection-start-line="126" selection-start-column="42" selection-end-line="126" selection-end-column="42" />
+          <folding>
+            <element signature="e#490#500#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
