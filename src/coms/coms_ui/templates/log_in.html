@@ -10,10 +10,24 @@
         width: fit-content;
       }
     </style>
+
+    <!--JQuery-->
+    <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+    <!--JavaScript customized funcitons-->
+    <script type="text/javascript" src="{{url_for('static',filename='log_in_func.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
+
+    <!--Favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+
   </head>
   <body>
     <h1>Log in here:</h1>
-    <form class="" action="/" method="post">
+    <form method="post">
+      <input type="hidden" id="formId" name="formName" value="log-in">
+
       <label>E-mail:
         <input type="email" name="user-name">
       </label>
@@ -21,15 +35,15 @@
 
 
         <label for="opt1">Standard
-          <input id="opt1" type="radio" name="gender" value="Standard" checked >
+          <input class="mode-option" id="opt1" type="radio" name="mode" value="Standard" checked >
         </label>
         <label for="opt2">Advanced
-          <input id="opt2" type="radio" name="gender" value="Advanced" >
+          <input class="mode-option" id="opt2" type="radio" name="mode" value="Advanced" >
         </label>
 
 
 
-      <input type="submit" value="Send">
+      <input id="mode-selection"  type="submit" value="Send">
 
 
 
