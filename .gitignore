@@ -103,8 +103,12 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#database
+# database
 .db
 
 # Work in progress code
 src_working/
+
+# PyCharm idea files
+\.idea/
+/.idea/
