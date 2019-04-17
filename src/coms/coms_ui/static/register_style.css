@@ -1,7 +1,20 @@
+/*CONTAINERS*/
 #mainpanel{
   min-height: 90vh;
+  width: 70vw;
   min-width: 950px;
 }
+#subjectImage-container{
+  width:30vw;
+  position:absolute;
+  right: 0;
+  bottom: 0;
+  height: 90vh;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
 .first-row-header{
   padding-top: 30px;
 }
@@ -23,14 +36,6 @@
   border-width: 2px;
 }
 
-.smallinput2{
-  width: 60px;
-  height: 24px;
-  border-color:black;
-  border-width: 2px;
-
-}
-
 
 
 
@@ -39,11 +44,7 @@
 
 }
 
-.voxsize{
-  padding-top: 20px;
-  line-height:2px;
-  font-size: 0.9rem;
-}
+
 .list-group-item{
   border-color:#2f2f91;
   border-width: 2px;

@@ -26,12 +26,26 @@
 
     <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
+    <!--Manual links-->
+    <!--Bootstrap & JQuery-->
+    <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+    <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+    <!--JQuery-->
+    <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+    <!--JQuery UI-->
+    <script type="text/javascript" src="../static/packages/jQuery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="../static/packages/jQuery-ui/jquery-ui.css">
 
     <!--bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
     <!--CSS-->
     <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
@@ -52,15 +66,14 @@
     /script src="http://wzrd.in/standalone/uuid%2Fv1@latest"></script>-->
 
 
-
   </head>
   <body>
 
     <div id="enclosingjumbo" class="jumbotron">
       <h1>Virtual MR Scanner - Standard Mode</h1>
       <div id="panel-container" class="container">
-        <div class="row" id="panel-row">
-          <div class="col">
+        <!--<div class="row" id="panel-row">
+          <div class="col">-->
 
             <!--Main Panel -->
             <div id="mainpanel" class="jumbotron">
@@ -97,7 +110,8 @@
                           <select id="subjectSelect" class="selector" name="subjecttype">
                             <option selected hidden>Subject</option>
                             <option value="human" disabled>Human</option>
-                            <option id="phantomopt" value="phantom">Phantom</option>
+                            <option id="ISMRM-NIST" class="phantomopt">ISMRM-NIST</option>
+                            <option id="Numerical" class="phantomopt">Numerical</option>
 
                           </select>
 
@@ -245,30 +259,29 @@
                     </div>
                       <div class="row">
                         <div class="col" id="submitButton" >
-                          <input id="reg-form-submit" type="button" class="btn btn-primary" value="Register Subject" onclick="form2Json()">
+                          <input id="reg-form-submit" type="button" class="btn btn-primary submit-form-btn" value="Register Subject" >
 
 
                         </div>
 
                       </div>
 
-
-
-
-
               </form>
             </div>
-          </div>
 
-          <div id="subjectImage" class="col" >
-          </div>
 
-        </div>
+      </div>
+
+          <!--Image Panel-->
+      <div id="subjectImage-container" class="container" >
       </div>
 
 
-
     </div>
+
+
+
+
 
 
 

@@ -21,39 +21,42 @@ Date: 03/22/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-#import os
+# import os
 import sys
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response, session
 import random, json
 
 # Define the location of template and static folders
-#template_dir = os.path.abspath('../templates')
-#static_dir=os.path.abspath('../static')
+# template_dir = os.path.abspath('../templates')
+# static_dir=os.path.abspath('../static')
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+users = []
+app.secret_key='Clave de sesión'
 
-@app.route('/')  # This needs to point to the login screen and then we can use the register link seprately
 
-def home_page():
-    """
+@app.route('/', methods =['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
+def log_in():
 
-         Parameters
-        ----------
-           void
 
-        Returns
-        -------
-           void (status in debug mode if required)
+    if request.method == 'POST':
+        users.append(request.form['user-name'])
+        session['username']= users[-1]
 
-        Performs
-        --------
-            Renders the registration html page on the web
-    """
+        return render_template("home_page.html")
+    else:
+        if 'username' in session  and session['username'] in users:
 
-    
-    return render_template("home_page.html")
+            return render_template("home_page.html")
+        else:
+
+
+            return render_template("log_in.html")
+
+
+
 
 @app.route('/register')  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
@@ -75,6 +78,7 @@ def on_register():
     # serve register template
     return render_template('register.html')
 
+
 @app.route('/acquire')
 def on_acq():
     """
@@ -94,9 +98,9 @@ def on_acq():
     # serve index template
     return render_template('acquire.html')
 
+
 @app.route('/analyze')
 def on_analyze():
-
     return render_template('analyze.html')
 
 
@@ -123,6 +127,7 @@ def worker():
     print(payload)
     result = ''
     return result
+
 
 if __name__ == '__main__':
     # run!

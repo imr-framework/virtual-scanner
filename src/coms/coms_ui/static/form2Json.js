@@ -26,13 +26,15 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 */
 
 //  TODO:generalize form
-function form2Json(){
+$(document).on("click", ".submit-form-btn", function(){
+//function form2Json(){
   var formData= $("form").serializeArray();
   var data2Send={};
+
   $.each(formData, function(i, field){
     data2Send[field.name]=field.value;
   });
-
+console.log(data2Send);
 
   //Alert if any field is empty and prevent submission
   $.each(data2Send,function(i,field){
@@ -74,7 +76,7 @@ if (data2Send["formName"] == "reg"){
 
 
     event.preventDefault();
-	};
+	});
 	// stop link reloading the page
 
 

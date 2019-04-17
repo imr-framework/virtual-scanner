@@ -1,7 +1,7 @@
 /*CONTAINERS*/
 .jumbotron{
   padding:0px;
-  border-radius: 15px;
+  border-radius: 1px;
   margin-bottom: 0;
   padding-top: 15px;
 }
@@ -37,6 +37,9 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+nav{
+  width: 100%
+}
 /*Containers for Acquire and analyze tabs*/
 
 /*HEADERS*/
@@ -55,6 +58,11 @@ h2{
 h3{
   font-size: 1.1rem;
 }
+h4{
+  font-size: 1rem;
+  font-weight: lighter;
+}
+
 
 /*NAVIGATION BAR*/
 .nav-item{
@@ -79,8 +87,18 @@ h3{
 }
 
 /*INPUTS*/
+input{
+  padding-left: 8px;
+  padding-right: 8px;
+}
 .smallinput{
   width: 60px;
+  height: 24px;
+  border-color:black;
+  border-width: 2px;
+}
+.smallest-input{
+  width: 50px;
   height: 24px;
   border-color:black;
   border-width: 2px;
@@ -107,6 +125,9 @@ h3{
 }
 /*LABELS*/
 #first-row-item{
-  margin-top: 1%;
+  margin-top: 1vh;
   width: 100%;
+}
+label{
+  margin-bottom: 1.5vh;
 }

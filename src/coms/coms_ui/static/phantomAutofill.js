@@ -4,7 +4,7 @@ This script autopopulates the input fields when phantom is selected as a subject
 ----------
 
 Author: Marina Manso;
-Date: 03/25/2019
+Date: 04/12/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
@@ -16,7 +16,7 @@ $(document).ready(() => {
 
   /*When selecting phantom the input fields are automatically filled and they
   cannot be changed by the user*/
-  if ($('#phantomopt').is(":selected") == true) {
+  if ($('.phantomopt').is(":selected") == true) {
 
 
     $("#patid").val(1+Math.floor(Math.random() * 9999)); //Random numbers
@@ -25,7 +25,13 @@ $(document).ready(() => {
     /*var randomId = uuidv1(); // -> v1 UUID
     $("#patid").val(randomId);*/
     $("#patid").prop("readonly", true);
-    $("#name").val("ISMRM-NIST");
+
+
+    $("#name").val($(this).val());
+
+    var img_element = "<img src='../static/phantom_pics/" + $(this).val() + ".jpg'/>"
+    $("#subjectImage-container").html(img_element)
+
     $("#name").prop("readonly", true);
     $("#age").val("00");
     $("#age").prop("readonly", true);
@@ -59,14 +65,7 @@ $(document).ready(() => {
     $('#anatomy option:not(:selected)').attr('disabled', true);
 
 
-    //Show a picture of the selected phantom
-    var img = document.createElement("img");
 
-    img.src = "../static/images/ISMRM_NIST.jpg";
-    var src = document.getElementById("subjectImage");
-
-    src.appendChild(img);
-    //$("#subjectImage").html()
   }
 
 });
