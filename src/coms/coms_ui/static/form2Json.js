@@ -27,6 +27,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 
 //  TODO:generalize form
 $(document).on("click", ".submit-form-btn", function(){
+
 //function form2Json(){
   var formData= $("form").serializeArray();
   var data2Send={};
@@ -34,9 +35,10 @@ $(document).on("click", ".submit-form-btn", function(){
   $.each(formData, function(i, field){
     data2Send[field.name]=field.value;
   });
-console.log(data2Send);
+
 
   //Alert if any field is empty and prevent submission
+  /*
   $.each(data2Send,function(i,field){
    if(data2Send[i]==""){
      //Exception for the oz and in fields when metric system is selected
@@ -49,6 +51,7 @@ console.log(data2Send);
      }
    }
   });
+  */
   //Alert if any field is empty and prevent submission
 
 // Code to change the dictionary structure in case of metric or Imperial
