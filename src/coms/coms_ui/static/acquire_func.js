@@ -121,15 +121,15 @@ $(document).on("click", ".menu-item", function(){
   });*/
   //Default parameters
   $("#slices").val(1);
-  $("#slices").prop("readonly", true);
+  //$("#slices").prop("readonly", true);
   $("#Nx").val(16);
-  $("#Nx").prop("readonly", true);
+  //$("#Nx").prop("readonly", true);
   $("#Ny").val(16);
-  $("#Ny").prop("readonly", true);
+  //$("#Ny").prop("readonly", true);
   $("#FOVx").val(240);
-  $("#FOVx").prop("readonly", true);
+  //$("#FOVx").prop("readonly", true);
   $("#FOVy").val(240);
-  $("#FOVy").prop("readonly", true);
+  //$("#FOVy").prop("readonly", true);
 
   voxelSizeCalc();
   /* Add the default ADC bandwidth value
