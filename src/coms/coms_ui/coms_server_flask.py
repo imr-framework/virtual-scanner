@@ -24,10 +24,17 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 #import os
 import sys
 from flask import Flask, render_template, request, redirect, Response, session
-import random, json
+import random, json, os
 import register as reg
 import caller_script_blochsim as bsim
 
+cpath = os.getcwd()
+if(cpath.endswith('Virtual-Scanner')):
+    print('Starting in the right directory')
+else:
+    s = cpath.split('/src')
+    print('Current working directory is set to: '+s[0])
+    os.chdir(s[0])
 
 # Define the location of template and static folders
 #template_dir = os.path.abspath('../templates')

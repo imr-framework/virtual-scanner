@@ -10,20 +10,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/static/form2Json.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="126" column="42" selection-start-line="126" selection-start-column="42" selection-end-line="126" selection-end-column="42" />
+            <state relative-caret-position="294">
+              <caret line="32" column="44" lean-forward="true" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
               <folding>
                 <element signature="e#490#500#0" expanded="true" />
               </folding>
@@ -32,10 +23,43 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/subprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="166">
+              <caret line="1343" selection-start-line="1343" selection-end-line="1343" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/registration/db_operations_mgr.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-191">
-              <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
+            <state relative-caret-position="1042">
+              <caret line="74" column="61" lean-forward="true" selection-start-line="74" selection-start-column="61" selection-end-line="74" selection-end-column="61" />
+              <folding>
+                <element signature="e#536#550#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/simulation/bloch/caller_script_blochsim.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="840">
+              <caret line="56" column="27" selection-start-line="56" selection-start-column="27" selection-end-line="56" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#17#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/simulation/bloch/pulseq_bloch_simulator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="166" column="56" lean-forward="true" selection-start-line="166" selection-start-column="56" selection-end-line="166" selection-end-column="56" />
             </state>
           </provider>
         </entry>
@@ -43,8 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/registration/utest_register.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="64" selection-start-line="64" selection-end-line="64" selection-end-column="28" />
+            <state relative-caret-position="374">
+              <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
               <folding>
                 <element signature="e#345#367#0" expanded="true" />
               </folding>
@@ -55,15 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/registration/register.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-371" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/templates/register.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="11" selection-end-column="14" />
+            <state relative-caret-position="806">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
             </state>
           </provider>
         </entry>
@@ -140,6 +157,7 @@
         <option value="$PROJECT_DIR$/src/coms/coms_ui/static/form2Json.js" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/utest_coms_ui.py" />
         <option value="$PROJECT_DIR$/src/server/registration/db_operations_mgr.py" />
+        <option value="$PROJECT_DIR$/src/server/simulation/bloch/pulseq_bloch_simulator.py" />
         <option value="$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py" />
       </list>
     </option>
@@ -171,26 +189,6 @@
               <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
               <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="coms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="coms" type="462c0819:PsiDirectoryNode" />
-              <item name="coms_socket_arxiv" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="coms" type="462c0819:PsiDirectoryNode" />
-              <item name="coms_ui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -199,6 +197,30 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
               <item name="registration" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="simulation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="simulation" type="462c0819:PsiDirectoryNode" />
+              <item name="bloch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Scanner" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Scanner" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="simulation" type="462c0819:PsiDirectoryNode" />
+              <item name="bloch" type="462c0819:PsiDirectoryNode" />
+              <item name="outputs" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -212,19 +234,19 @@
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/coms/coms_ui" />
-      <recent name="$PROJECT_DIR$/src/coms/coms_ui/static/styles" />
-      <recent name="$PROJECT_DIR$/src/coms/test_discard/templates" />
-      <recent name="$PROJECT_DIR$/src/coms/test_discard/JS" />
-      <recent name="$PROJECT_DIR$/src/coms/test_discard" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/coms/coms_ui/static" />
       <recent name="$PROJECT_DIR$/src/coms/coms_ui/templates" />
       <recent name="$PROJECT_DIR$/src/coms/coms_ui" />
       <recent name="$PROJECT_DIR$/src/coms/test_discard" />
       <recent name="$PROJECT_DIR$/src/coms/test_discard/templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/coms/coms_ui" />
+      <recent name="$PROJECT_DIR$/src/coms/coms_ui/static/styles" />
+      <recent name="$PROJECT_DIR$/src/coms/test_discard/templates" />
+      <recent name="$PROJECT_DIR$/src/coms/test_discard/JS" />
+      <recent name="$PROJECT_DIR$/src/coms/test_discard" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -346,8 +368,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.utest_register" />
-      <item itemvalue="Python.utest_coms" />
       <item itemvalue="Python.coms_listener" />
       <item itemvalue="Python.json_io" />
       <item itemvalue="Python.json_io (1)" />
@@ -387,16 +407,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="17" y="23" width="1663" height="912" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19792935" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19770946" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.297561" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.41219512" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.47272727" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.41139898" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32941177" />
@@ -424,14 +444,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/coms/coms_client2server.py" />
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="310" selection-start-line="310" selection-end-line="310" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/coms/serverlog.txt" />
     <entry file="file://$PROJECT_DIR$/src/coms/Payload_coms.txt" />
     <entry file="file://$PROJECT_DIR$/src/client/GUI_frontend/CSS/main.css" />
@@ -534,8 +546,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/registration/utest_register.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="64" selection-start-line="64" selection-end-line="64" selection-end-column="28" />
+        <state relative-caret-position="374">
+          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
           <folding>
             <element signature="e#345#367#0" expanded="true" />
           </folding>
@@ -544,20 +556,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/registration/register.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-371" />
+        <state relative-caret-position="806">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/simulation/bloch/caller_script_blochsim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="27" selection-start-line="56" selection-start-column="27" selection-end-line="56" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/simulation/bloch/pulseq_bloch_simulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="166" column="56" lean-forward="true" selection-start-line="166" selection-start-column="56" selection-end-line="166" selection-end-column="56" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/registration/db_operations_mgr.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-191">
-          <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
+        <state relative-caret-position="1042">
+          <caret line="74" column="61" lean-forward="true" selection-start-line="74" selection-start-column="61" selection-end-line="74" selection-end-column="61" />
+          <folding>
+            <element signature="e#536#550#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coms/coms_ui/coms_server_flask.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="126" column="42" selection-start-line="126" selection-start-column="42" selection-end-line="126" selection-end-column="42" />
+        <state relative-caret-position="294">
+          <caret line="32" column="44" lean-forward="true" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
           <folding>
             <element signature="e#490#500#0" expanded="true" />
           </folding>

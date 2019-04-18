@@ -26,3 +26,7 @@
 2019-04-17 21:00:37:Inserted subject information to REGISTRATION table successfully
 2019-04-18 10:32:25:Opened database successfully
 2019-04-18 10:32:25:Inserted subject information to REGISTRATION table successfully
+2019-04-18 14:40:03:Opened database successfully
+2019-04-18 14:40:03:Inserted subject information to REGISTRATION table successfully
+2019-04-18 19:13:40:Opened database successfully
+2019-04-18 19:13:40:Inserted subject information to REGISTRATION table successfully
