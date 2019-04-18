@@ -1,0 +1,28 @@
+2019-04-17 20:23:31:Opened database successfully
+2019-04-17 20:24:41: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:24:55:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:28:54:Opened database successfully
+2019-04-17 20:31:00: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:31:15:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:34:49:Opened database successfully
+2019-04-17 20:34:58: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:35:02:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:50:35:Creating new database - subject.db
+2019-04-17 20:50:35:Opened database successfully
+2019-04-17 20:50:35:Opened database successfully
+2019-04-17 20:50:35:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:53:33:Opened database successfully
+2019-04-17 20:53:33: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:53:33:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:55:11:Opened database successfully
+2019-04-17 20:55:11: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:55:11:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:55:34:Opened database successfully
+2019-04-17 20:55:34: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:55:34:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:56:05:Opened database successfully
+2019-04-17 20:56:09: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:56:28:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:57:25:Opened database successfully
+2019-04-17 20:57:25: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 20:57:25:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:57:42:Opened database successfully
+2019-04-17 20:57:42:Inserted subject information to REGISTRATION table successfully
+2019-04-17 20:58:19:Opened database successfully
+2019-04-17 20:58:19:Inserted subject information to REGISTRATION table successfully
+2019-04-17 21:00:37:Opened database successfully
+2019-04-17 21:00:37:Inserted subject information to REGISTRATION table successfully
+2019-04-18 10:32:25:Opened database successfully
+2019-04-18 10:32:25:Inserted subject information to REGISTRATION table successfully

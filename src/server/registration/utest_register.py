@@ -28,15 +28,16 @@ import os
 def create_payload():
     # can make this more random later on, but for now we hardcode
     payload = {
-        "ID": random.randint(1, 1000),
-        "NAME": "Mustang",
-        "AGE": random.randint(4, 100),
-        "DOB": "03/03/1983",  # redundant but useful for an OR situation later
-        "GENDER": "Female",
-        "WEIGHT": random.randint(60, 300),
-        "HEIGHT": random.randint(60, 200),
-        "ORIENTATION": "Head first supine",
-        "ANATOMY": "Brain"
+        "SUBJECTTYPE": "numerical",
+        "patid": 5466,#random.randint(1, 1000)
+        "name": "Numerical",
+        "AGE": 0,#random.randint(4, 100),
+        "DOB": "4/17/2019",  # redundant but useful for an OR situation later
+        "GENDER": "other",
+        "WEIGHT": 3.0,#random.randint(60, 300),
+        "HEIGHT": 20.0,#random.randint(60, 200),
+        "ORIENTATION": "HFS",
+        "ANATOMY": "brain"
 
     }
     return payload
@@ -47,12 +48,13 @@ payload = create_payload()
 
 # check for registering a subject
 status = reg.consume(payload)
-print(status)
+
+
 
 # check for existing subject
 payload = {
-    "ID": 205,
-    # "NAME": "Mustang",
+    "PATID": 5465,
+    #"NAME": "Mustang",
     # "AGE": 45,
     #  "DOB": "03/03/1983", #redundant but useful for an OR situation later
     #  "GENDER": "Female",
@@ -63,5 +65,6 @@ payload = {
 
 }
 payload = reg.reuse(payload)
+print(payload)
 
 # TODO: handle different cases

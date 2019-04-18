@@ -25,7 +25,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 
 import os
 import db_operations_mgr as dbom
-
+db_path = os.path.join("./src/server/registration/", "subject.db")
 
 def consume(payload):
     """
@@ -40,16 +40,18 @@ def consume(payload):
     """
 
     # Check if  database 'subject' and table 'registration' exist, if not create them
-    if (not (os.path.isfile("./subject.db"))):
+    if (not (os.path.isfile(db_path))):
         dbom.create()
 
     # Add current registration payload to subject/registration and return status
     status = dbom.insert(payload)
+    print(status)
     return (status)
+
 
 
 # def check(payload):
 
 def reuse(payload):
-    dbom.query(payload)
-    # return(payload)
+    rows = dbom.query(payload)
+    return rows

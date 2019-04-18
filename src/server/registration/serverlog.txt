@@ -1,3 +1,1 @@
-2019-03-08 13:46:50:Opened database successfully
-2019-03-08 13:46:50:Inserted subject information to REGISTRATION table successfully
-2019-03-08 13:46:50:Opened database successfully
+2019-04-17 20:49:38:Creating new database - subject.db

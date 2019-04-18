@@ -25,7 +25,9 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 
 import sqlite3
 import datetime
+import os
 
+db_path = os.path.join("./src/server/registration/", "subject.db")
 
 def create():
     status = 0  # successful unless caught by exception
@@ -34,14 +36,14 @@ def create():
         'a')
     # Create the subject database
     serverlog.write("%s:Creating new database - subject.db\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    conn = sqlite3.connect('subject.db')
+    conn = sqlite3.connect(db_path)
 
     # Create the REGISTRATION table
     try:
         conn.execute('''CREATE TABLE REGISTRATION
              (
+             SUBJECTTYPE    TEXT    NOT NULL,
              PATID INT PRIMARY KEY     NOT NULL,
-             SUBJECTTYPE    TEXT    NOT NULL
              NAME           TEXT    NOT NULL,
              AGE            INT     NOT NULL,
              DOB            BLOB    NOT NULL,
@@ -63,11 +65,18 @@ def create():
 
 
 def insert(payload):
-    status = 0  # successful unless caught by exceptions
-    conn = sqlite3.connect('subject.db')
     serverlog = open(
         './serverlog.txt',
         'a')
+    status = 0  # successful unless caught by exceptions
+    try:
+        conn = sqlite3.connect(db_path)
+    except sqlite3.Error as e:
+        serverlog.write(str(datetime.datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
+        status = 1
+        print(e)
+
     serverlog.write("%s:Opened database successfully\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     cursor = conn.cursor()
@@ -77,6 +86,7 @@ def insert(payload):
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
         status = 1
+        print(e)
 
     try:
         conn.commit()
@@ -84,6 +94,8 @@ def insert(payload):
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
         status = 1
+        print(e)
+
 
     serverlog.write(
         "%s:Inserted subject information to REGISTRATION table successfully\n" % datetime.datetime.now().strftime(
@@ -93,24 +105,29 @@ def insert(payload):
 
 
 def query(payload):
+    serverlog = open(
+        './serverlog.txt',
+        'a')
     # supports only any 1 key at this time; need to extend this to multiple key value pairs
     status = 0  # successful unless caught by exceptions
     key = str(list(payload.keys()))
     key = key[2:-2]
-    conn = sqlite3.connect('subject.db')
-    serverlog = open(
-        './serverlog.txt',
-        'a')
-    serverlog.write("%s:Opened database successfully\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    try:
+        conn = sqlite3.connect(db_path)
+    except sqlite3.Error as e:
+        serverlog.write("%s:Opened database successfully\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print(e)
 
     cursor = conn.cursor()
     search = ("SELECT * FROM REGISTRATION WHERE " + key + "=?")
+
     try:
         cursor.execute(search, (list(payload.values())))
     except sqlite3.Error as e:
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
         status = 1
+        print(e)
     rows = cursor.fetchall()
-    print(rows)
     return rows
