@@ -154,7 +154,7 @@ if __name__ == '__main__':
         if args.seq_type == 'irse':
             sim_data['seq_info']['ti'] = args.ti
 
-        np.save('sim_data.npy',sim_data) # Allow custom naming later
+        np.save('src/server/simulation/bloch/outputs/sim_slices/sim_data.npy',sim_data) # Allow custom naming later
 
 
 

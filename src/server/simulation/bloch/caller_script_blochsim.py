@@ -36,26 +36,22 @@ def run_blochsim(seqinfo,phtinfo):
     num_slices = seqinfo['slicenum']
 
     # Parse phantom info  Now, just default
-    if phtinfo['subjecttype'] == 'Numerical':
+    if phtinfo == 'Numerical':
         pht_type = 'spherical'
         pht_dim = '3'
         n_ph = '15'
         fov_ph = '0.240'
-        dir_ph = 'z'
-
-    elif phtinfo['subjecttype'] == 'Subject':
-        pht_type = 'spherical'
-        pht_dim = '3'
-        n_ph = phtinfo['age']
-        fov_ph = '0.240'
-        dir_ph = 'z'
+        dir_ph = 'z' # not used for 3D though
 
     else:
-        pht_type = 'spherical'
-        pht_dim = '3'
-        n_ph = '5'
-        fov_ph = '0.240'
-        dir_ph = 'z'
+        print('Phantom type: '+phtinfo+" not supported")
+
+ #   else:
+  #      pht_type = 'spherical'
+   #     pht_dim = '3'
+    #    n_ph = '5'
+     #   fov_ph = '0.240'
+      #  dir_ph = 'z'
 
 
     subprocess.run(['python.exe',
