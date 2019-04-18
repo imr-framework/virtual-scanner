@@ -9,4 +9,43 @@
 2019-04-17 14:20:21:Opened database successfully
 2019-04-17 14:20:21: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 14:20:21:Inserted subject information to REGISTRATION table successfully
 2019-04-17 14:20:21:Opened database successfully
-2019-04-17 14:20:21: near "', '": syntax error
+2019-04-17 14:20:21: near "', '": syntax error2019-04-17 18:33:56:Opened database successfully
+2019-04-17 18:33:56:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:33:56:Opened database successfully
+2019-04-17 18:33:56: near "', '": syntax error2019-04-17 18:35:57:Opened database successfully
+2019-04-17 18:35:57: no such column: ID2019-04-17 18:35:57:Opened database successfully
+2019-04-17 18:35:57:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:36:31:Opened database successfully
+2019-04-17 18:36:31: no such column: ID2019-04-17 18:36:31:Opened database successfully
+2019-04-17 18:36:31: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:36:31:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:36:59:Opened database successfully
+2019-04-17 18:36:59: no such column: ID2019-04-17 18:36:59:Opened database successfully
+2019-04-17 18:36:59: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:36:59:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:38:38:Opened database successfully
+2019-04-17 18:38:38: no such column: ID2019-04-17 18:38:38:Opened database successfully
+2019-04-17 18:38:38: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:38:38:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:39:51:Opened database successfully
+2019-04-17 18:39:51: no such column: ID2019-04-17 18:39:51:Opened database successfully
+2019-04-17 18:39:51: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:39:51:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:42:05:Opened database successfully
+2019-04-17 18:42:05: no such column: ID2019-04-17 18:42:05:Opened database successfully
+2019-04-17 18:42:05: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:42:05:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:42:26:Opened database successfully
+2019-04-17 18:42:26: no such column: ID2019-04-17 18:42:26:Opened database successfully
+2019-04-17 18:42:26: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:42:26:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:42:52:Opened database successfully
+2019-04-17 18:42:52: no such column: ID2019-04-17 18:42:52:Opened database successfully
+2019-04-17 18:42:52: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:42:52:Inserted subject information to REGISTRATION table successfully
+2019-04-17 18:45:16:Opened database successfully
+2019-04-17 18:45:16: no such column: ID2019-04-17 18:45:16:Opened database successfully
+2019-04-17 18:45:16: UNIQUE constraint failed: REGISTRATION.PATID2019-04-17 18:45:16:Inserted subject information to REGISTRATION table successfully
+2019-04-17 19:06:33:Opened database successfully
+2019-04-17 19:08:27: no such table: REGISTRATION2019-04-17 19:12:15:Opened database successfully
+2019-04-17 19:12:15: no such table: REGISTRATION2019-04-17 19:12:15:Opened database successfully
+2019-04-17 19:12:15: no such table: REGISTRATION2019-04-17 19:12:15:Inserted subject information to REGISTRATION table successfully
+2019-04-17 19:13:03:Opened database successfully
+2019-04-17 19:13:03: no such table: REGISTRATION2019-04-17 19:13:03:Opened database successfully
+2019-04-17 19:13:03: no such table: REGISTRATION2019-04-17 19:13:03:Inserted subject information to REGISTRATION table successfully
+2019-04-17 19:26:54:Opened database successfully
+2019-04-17 19:26:54: no such table: REGISTRATION2019-04-17 19:26:54:Opened database successfully
+2019-04-17 19:26:54: no such table: REGISTRATION2019-04-17 19:26:54:Inserted subject information to REGISTRATION table successfully

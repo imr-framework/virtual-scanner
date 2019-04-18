@@ -134,9 +134,20 @@ def worker():
     # Do registration and save to database
     if formName == 'reg':
         del payload['formName']
-        status = reg.consume(payload)
-        payload = reg.reuse(payload)
-        reg_payload = payload #For GT to use for her implementation, TODO: Refine this for integrated implementation
+        pat_id = payload.get('patid')
+        query_dict = {
+            "patid": pat_id,
+        }
+        rows = reg.reuse(query_dict)
+        print((rows))
+
+        if (rows):
+            print('Subject is already registered with PATID: '+pat_id)
+        else:
+            status = reg.consume(payload)
+
+
+
 
     result = ''
     return result
