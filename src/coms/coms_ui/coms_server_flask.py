@@ -26,6 +26,8 @@ import sys
 from flask import Flask, render_template, request, redirect, Response, session
 import random, json
 import register as reg
+import caller_script_blochsim as bsim
+
 
 # Define the location of template and static folders
 #template_dir = os.path.abspath('../templates')
@@ -154,9 +156,10 @@ def worker():
       query_dict = {
           "patid": pat_id,
       }
-      # print(pat_id)
+
       rows = reg.reuse(query_dict)
-      # print(rows)
+      bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0])  # phtinfo just needs to be 1 string
+
 
 
     result = ''

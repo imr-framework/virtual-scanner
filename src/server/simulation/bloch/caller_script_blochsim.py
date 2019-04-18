@@ -54,7 +54,7 @@ def run_blochsim(seqinfo,phtinfo):
       #  dir_ph = 'z'
 
 
-    subprocess.run(['python.exe',
+    subprocess.run(['python', #This is specific to windows
                      #'-m','cProfile','-o','profiling_results', #<- for profiling code
                     os.path.join(os.path.dirname(os.path.realpath(__file__)),'pulseq_bloch_simulator.py'),
                      pht_type,pht_dim,n_ph,fov_ph, # pht_type, dim, Nph, FOVph(m)
