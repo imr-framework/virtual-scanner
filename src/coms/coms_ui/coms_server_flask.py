@@ -134,19 +134,29 @@ def worker():
     # Do registration and save to database
     if formName == 'reg':
         del payload['formName']
+
         pat_id = payload.get('patid')
+        session['patid'] = pat_id
         query_dict = {
             "patid": pat_id,
         }
         rows = reg.reuse(query_dict)
-        print((rows))
+        # print((rows))
+
 
         if (rows):
             print('Subject is already registered with PATID: '+pat_id)
         else:
             status = reg.consume(payload)
 
-
+    if formName == 'acq':
+      pat_id = session['patid']
+      query_dict = {
+          "patid": pat_id,
+      }
+      # print(pat_id)
+      rows = reg.reuse(query_dict)
+      # print(rows)
 
 
     result = ''
