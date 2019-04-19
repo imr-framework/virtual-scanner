@@ -87,9 +87,9 @@ h4{
 }
 
 /*INPUTS*/
-input{
-  padding-left: 8px;
-  padding-right: 8px;
+input[type=number]{
+  padding-left: 8%;
+
 }
 .smallinput{
   width: 60px;
@@ -130,4 +130,12 @@ input{
 }
 label{
   margin-bottom: 1.5vh;
+}
+/*DIALOGS*/
+.dialog{
+  display: none;
+}
+ul.no-bullet{
+  list-style-type: none;
+  padding-left: 0;
 }

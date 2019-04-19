@@ -85,7 +85,7 @@
 
       <!--Sagital-->
       <div id="sagital-container" class="container acquire-container">
-        <p>Sagital View</p>
+        <p>Sagittal View</p>
       </div>
 
       <!--Coronal-->
@@ -131,7 +131,7 @@
 
                   <!--Column 1.1: Parameters: TR,TE,TI,FA-->
                     <div class="col coltype1">
-                      <label class="IRSE-checkbox">IRSE</label>
+                      <label class="IRSE-checkbox">IR</label>
                         <div class="w-100"></div>
                       <label>TR</label>
                        <div class="w-100"></div>
@@ -212,7 +212,7 @@
                           <label>
                             <select class="selector" name="sl-orient">
                               <option value="axial">Axial</option>
-                              <option value="sagital">Sagital</option>
+                              <option value="sagittal">Sagittal</option>
                               <option value="coronal">Coronal</option>
                             </select>
                           </label>
@@ -282,8 +282,8 @@
 
                               <label>
                                 <select id="phase" class="selector" name="ph">
-                                  <option value="x">x</option>
                                   <option value="y">y</option>
+                                  <option value="x">x</option>
                                   <option value="z">z</option>
                                 </select>
                               </label>
@@ -291,7 +291,7 @@
                               <div class="w-100"></div>
 
                               <label>
-                                <input type="number" class="smallest-input" name="bw">
+                                <input id="ADC-bw" type="number" class="smallest-input" name="bw">
                               </label>
                               <label>kHz</label>
 
@@ -441,7 +441,7 @@
 
   <!--Dialog to be opened to add a new sequence-->
   <!-- TODO: style the links  -->
-  <div id="dialog" title="Select a sequence:">
+  <div id="dialog" class="dialog" title="Select a sequence:">
     <ul class="menu no-bullet">
       <li><a class="menu-item" href = "#">Localizer</a></li>
       <li ><a class="menu-item" href = "#">GRE</a></li>

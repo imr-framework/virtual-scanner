@@ -85,3 +85,9 @@ label{
   position:relative;
   bottom:0;
 }
+#subjectSelect{
+  height: auto;
+}
+img{
+  width: 100%;
+}

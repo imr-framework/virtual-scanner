@@ -120,6 +120,13 @@ $(document).on("click", ".menu-item", function(){
     }
   });*/
   //Default parameters
+  $("#TR").val(100);
+  $("#TE").val(20);
+  $("#FA").val(60);
+  $("#thickness").val(16);
+  $("#ADC-bw").val(100);
+
+
   $("#slices").val(1);
   //$("#slices").prop("readonly", true);
   $("#Nx").val(16);
@@ -132,10 +139,9 @@ $(document).on("click", ".menu-item", function(){
   //$("#FOVy").prop("readonly", true);
 
   voxelSizeCalc();
-  /* Add the default ADC bandwidth value
-  $("#ADC-bw").val();
-  $("#ADC-bw").prop("readonly", true);
-  */
+
+  /*Gray-out gap field*/
+  $("#sl-gap").css("background-color","#bfbfbf");
 });
 
 /*Add TI if IRSE is checked and hide it otherwise*/

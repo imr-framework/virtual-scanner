@@ -97,15 +97,9 @@ h4 bold{
 #NandFOV-col{
     max-width: 65%;
 }
-/*DIALOGS*/
-#dialog{
-  display: none;
-}
+
 /*LISTS*/
-ul.no-bullet{
-  list-style-type: none;
-  padding-left: 0;
-}
+
 ul#seq-history-list{
   list-style-type: none;
   padding-left: 0;

@@ -3,51 +3,141 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <style media="screen">
-      form{
-        display: flex;
-        flex-direction:column;
-        width: fit-content;
-      }
-    </style>
+
+    <!--Bootsrap-->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
     <!--JQuery-->
     <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
 
     <!--JavaScript customized funcitons-->
+    <!--
     <script type="text/javascript" src="{{url_for('static',filename='log_in_func.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
-
+    -->
     <!--Favicon -->
     <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='log_in_style.css')}}">
+
+    <!--JQuery customized scripts-->
+    <script type="text/javascript" src="{{url_for('static',filename='log_in_func.js')}}"></script>
 
 
   </head>
   <body>
-    <h1>Log in here:</h1>
-    <form method="post">
-      <input type="hidden" id="formId" name="formName" value="log-in">
+    <div class="container">
 
-      <label>E-mail:
-        <input type="email" name="user-name">
-      </label>
-
-
-
-        <label for="opt1">Standard
-          <input class="mode-option" id="opt1" type="radio" name="mode" value="Standard" checked >
-        </label>
-        <label for="opt2">Advanced
-          <input class="mode-option" id="opt2" type="radio" name="mode" value="Advanced" >
-        </label>
+      <div class="logo-container">
+        <img src="{{url_for('static',filename='logo-blue-white-onlycrown.png')}}" />
+        <h1>Columbia Magnetic Resonance Research Center</h1>
+      </div>
 
 
 
-      <input id="mode-selection"  type="submit" value="Send">
+      <form class="form-container" method="post">
+        <input type="hidden" id="formId" name="formName" value="log-in">
+
+        <h2>Welcome to the MR Virtual Scanner.</h2>
+        <br>
+
+        <div class="row">
+          <div class="changing-div col">
+            <div id="login-section">
+              <br>
+              <h3>Log in:</h3>
+              <br>
+              <div class="row">
+                <div class="col coltype1">
+
+                  <label>E-mail:</label>
+
+                </div>
+                <div class="col coltype2">
+
+                  <label>
+                    <input type="email" class="largeinput" name="user-name">
+                  </label>
+                </div>
+
+              </div>
+              <br>
+            </div>
+
+            <!--Standard About on mouse-over-->
+            <div id="standard-about" class="jumbotron about-container">
+              <p>Standard MR console funcitonalities:</p>
+              <ul>
+                <li>Subject registration</li>
+                <li>Basic sequence acquisition</li>
+                <li>Quantitative analysis</li>
+              </ul>
+              <br>
+            </div>
+
+            <!--Advanced mode About on mouse-over-->
+            <div id="advanced-about" class="jumbotron about-container">
+              <p>In-depth understanding of MR blocks:</p>
+              <ul>
+                <li>Pulse sequence implementation</li>
+                <li>Phantom/Subject models</li>
+                <li>Transmission and reception</li>
+                <li>Recontruction and analysis</li>
+              </ul>
+              <br>
+            </div>
+          </div>
 
 
+          <div class="vertical-line"></div>
 
-    </form>
+          <div class="col">
+            <br>
+            <h3>Please select a mode:</h3>
+            <br>
+            <div class="row">
+              <div class="col coltype1">
+                <label class="standard-tag">Standard</label>
+                <br>
+                <label class="advanced-tag">Advanced</label>
+              </div>
+              <div class="col coltype2">
+                <label class="standard-tag">
+                  <input class="mode-option" id="opt1" type="radio" name="mode" value="Standard" checked >
+                </label>
+
+                <br>
+
+                <label class="advanced-tag">
+                  <input class="mode-option" id="opt2" type="radio" name="mode" value="Advanced" >
+                </label>
+              </div>
+              <br>
+            </div>
+          </div>
+
+        </div>
+
+        <br>
+
+        <button id="mode-selection" type="submit" class="btn btn-primary">Begin Scan</button>
+
+
+      </form>
+
+    </div>
 
 
 
