@@ -112,3 +112,7 @@ src_working/
 # PyCharm idea files
 \.idea/
 /.idea/
+
+serverlog\.txt
+
+src/server/registration/subject\.db

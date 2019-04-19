@@ -10,7 +10,6 @@ import argparse
 import os
 import time
 
-import matplotlib.pyplot as plt
 import numpy as np
 from keras.models import Model
 from keras.models import load_model

@@ -18,9 +18,7 @@ Date: 03/07/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-import register as reg
-import random
-import os
+import src.server.registration.register as reg
 
 
 # os.chdir("./Virtual-Scanner")
@@ -29,13 +27,13 @@ def create_payload():
     # can make this more random later on, but for now we hardcode
     payload = {
         "SUBJECTTYPE": "numerical",
-        "patid": 5466,#random.randint(1, 1000)
+        "patid": 5466,  # random.randint(1, 1000)
         "name": "Numerical",
-        "AGE": 0,#random.randint(4, 100),
+        "AGE": 0,  # random.randint(4, 100),
         "DOB": "4/17/2019",  # redundant but useful for an OR situation later
         "GENDER": "other",
-        "WEIGHT": 3.0,#random.randint(60, 300),
-        "HEIGHT": 20.0,#random.randint(60, 200),
+        "WEIGHT": 3.0,  # random.randint(60, 300),
+        "HEIGHT": 20.0,  # random.randint(60, 200),
         "ORIENTATION": "HFS",
         "ANATOMY": "brain"
 
@@ -49,12 +47,10 @@ payload = create_payload()
 # check for registering a subject
 status = reg.consume(payload)
 
-
-
 # check for existing subject
 payload = {
     "PATID": 5465,
-    #"NAME": "Mustang",
+    # "NAME": "Mustang",
     # "AGE": 45,
     #  "DOB": "03/03/1983", #redundant but useful for an OR situation later
     #  "GENDER": "Female",
