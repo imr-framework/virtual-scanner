@@ -30,6 +30,7 @@ import sqlite3
 db_path = os.path.join("./src/server/registration/", "subject.db")
 
 
+
 def create():
     status = 0  # successful unless caught by exception
     serverlog = open(
