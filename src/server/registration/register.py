@@ -24,8 +24,11 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 """
 
 import os
-import db_operations_mgr as dbom
+
+import src.server.registration.db_operations_mgr as dbom
+
 db_path = os.path.join("./src/server/registration/", "subject.db")
+
 
 def consume(payload):
     """
@@ -47,7 +50,6 @@ def consume(payload):
     status = dbom.insert(payload)
     print(status)
     return (status)
-
 
 
 # def check(payload):

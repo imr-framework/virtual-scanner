@@ -23,11 +23,12 @@ Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
-import sqlite3
 import datetime
 import os
+import sqlite3
 
 db_path = os.path.join("./src/server/registration/", "subject.db")
+
 
 def create():
     status = 0  # successful unless caught by exception
@@ -95,7 +96,6 @@ def insert(payload):
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
         status = 1
         print(e)
-
 
     serverlog.write(
         "%s:Inserted subject information to REGISTRATION table successfully\n" % datetime.datetime.now().strftime(

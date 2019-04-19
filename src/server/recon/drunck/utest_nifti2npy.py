@@ -10,7 +10,7 @@ import unittest
 
 import numpy as np
 
-import nifti2npy
+import src.server.recon.drunck.nifti2npy as nifti2npy
 
 
 class DrunckTest(unittest.TestCase):
