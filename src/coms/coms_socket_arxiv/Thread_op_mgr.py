@@ -21,16 +21,18 @@ Date: 03/11/2019
 Version 0.0
 """
 
+if __name__ == '__main__':
+    import os
+    import sys
 
+    script_path = os.path.abspath(__file__)
+    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
+    sys.path.insert(0, SEARCH_PATH)
 
-
-
-
-
-import socket
 import datetime
-import coms_msg as msg
 from threading import Thread
+
+import src.coms.coms_socket_arxiv.coms_msg as msg
 
 # Update serverlog
 serverlog = open(
@@ -62,12 +64,10 @@ class ClientThread(Thread):
                     self.port) + "\n")
             msg.send(self)  # Send message to client/server
 
-        else:                #elif action == "Rx":
+        else:  # elif action == "Rx":
             serverlog.write(
                 str(datetime.datetime.now().strftime(
                     "%Y-%m-%d %H:%M:%S")) + ":Rx from : " + self.ip + " " + str(
                     self.port) + "\n")
             payload = msg.recv(self.sock)  # Receive payload from client/server
             # process_payload(payload)
-
-

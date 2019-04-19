@@ -20,13 +20,13 @@ Author: Sairam Geethanath
 Date: 03/11/2019
 Version 0.0
 """
-import struct
 import json
+import struct
 
 
 def send(self):  # should conform to the class of class ClientThread(Thread):
     # Prefix each message with a 4-byte length (network byte order)
-    #Need to change the action key to Rx for the receive end to work
+    # Need to change the action key to Rx for the receive end to work
 
     data = self.payload.get("data", 'None')
     load = json.dumps(data)
