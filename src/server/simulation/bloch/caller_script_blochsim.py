@@ -29,8 +29,11 @@ def run_blochsim(seqinfo,phtinfo):
     fov = str(float(seqinfo['FOVx'])*1e-3)
     enc = seqinfo['freq']+seqinfo['ph']+ orient_dict[seqinfo['sl-orient']]
     seq_type = seqinfo['selectedSeq'].lower()
-    if seq_type == 'se' and seqinfo['IRSE'] == 'ON':
-        seq_type = 'irse'
+    if seq_type == 'se' and 'IRSE' in seqinfo.keys():
+        print("IRSE exists")
+        if seqinfo['IRSE'] == 'on':
+            print("irse on")
+            seq_type = 'irse'
     thk = str(float(seqinfo['thck'])*1e-3)
     slice_gap = '0'
     num_slices = seqinfo['slicenum']
@@ -38,7 +41,7 @@ def run_blochsim(seqinfo,phtinfo):
     # Parse phantom info  Now, just default
     if phtinfo == 'Numerical':
         pht_type = 'spherical'
-        pht_dim = '3'
+        pht_dim = '2'
         n_ph = '15'
         fov_ph = '0.240'
         dir_ph = 'z' # not used for 3D though

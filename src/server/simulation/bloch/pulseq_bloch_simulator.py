@@ -12,6 +12,14 @@ from math import pi
 import os
 
 
+
+cpath = os.getcwd()
+if not (cpath.endswith('Virtual-Scanner')):
+    s = cpath.split('src')
+    #print('Current working directory is set to: '+s[0])
+    os.chdir(s[0])
+
+
 GAMMA_BAR = 42.5775e6
 GAMMA = 2*pi*GAMMA_BAR
 
@@ -60,6 +68,7 @@ if __name__ == '__main__':
             myphantom = pht.BrainwebPhantom('brainweb.npy',dsf=8,make2d=True,loc=0,dir='z')
 
     elif args.pht_type == 'spherical':
+        print('Making spherical phantom')
         Rs = args.fov_ph * np.array([0.2, 0.35, 0.45])
         if args.pht_dim == 3:
             myphantom = pht.makeSphericalPhantom(n=args.n_ph, fov=args.fov_ph,
@@ -71,6 +80,7 @@ if __name__ == '__main__':
                                               radii=Rs, dir=args.dir_ph, # TODO
                                               loc=0) # now, 2D phantom is not moved around
                                               #args.slice_loc*np.array(loc_vec_dict[args.enc[2]]))
+
 
     elif args.pht_type == 'cylindrical': #TODO let's make a better phantom with T1, T2, PD varying individually
 
@@ -154,12 +164,15 @@ if __name__ == '__main__':
         if args.seq_type == 'irse':
             sim_data['seq_info']['ti'] = args.ti
 
-        np.save('./src/server/simulation/bloch/outputs/sim_slices/sim_data.npy',sim_data) # Allow custom naming later
+        mypath = './src/server/simulation/bloch/outputs/sim_slices'
+        if not os.path.isdir(mypath):
+            os.makedirs(mypath)
+        np.save(mypath+'/sim_data.npy',sim_data) # TODO Allow custom naming later
 
 
 
         # save images in folder
-        data = np.load('sim_data.npy').all()
+        data = np.load(mypath+'/sim_data.npy').all()
         images = data['image']
 
         for v in range(np.shape(images)[2]):
@@ -168,14 +181,14 @@ if __name__ == '__main__':
             plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
-            mypath = 'src/server/simulation/bloch/outputs/sim_slices'
+            mypath = './src/server/simulation/bloch/outputs/sim_slices'
             if not os.path.isdir(mypath):
                 os.makedirs(mypath)
             plt.savefig(mypath+'/slice_'+str(v+1)+'.png', bbox_inches='tight', pad_inches=0, format='png')
 
 
     # display (comment off later)
-    mydata = np.load('sim_data.npy').all()
+    mydata = np.load('./src/server/simulation/bloch/outputs/sim_slices/sim_data.npy').all()
     image = mydata['image']
     kspace = mydata['kspace']
     Ns = np.shape(image)[2]
