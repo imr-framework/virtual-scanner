@@ -7,15 +7,15 @@ Version 1.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
-import argparse
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pydicom
 from scipy.optimize import curve_fit
-import os
 
 
-def main(dicom_file_path: str, TE: np, TR: np): # TI should be in second
+def main(dicom_file_path: str, TE: np, TR: np):  # TI should be in second
     """
     Return T2 mapping of a series of SE images with variable TE.
 
@@ -81,4 +81,3 @@ def T2_sig_eq(X, a, b, c, d):
     """
     x, y = X
     return a * (1 - np.exp(-y / b)) * np.exp(-x / c) + d
-

@@ -7,15 +7,15 @@ Version 1.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
-import argparse
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pydicom
 from scipy.optimize import curve_fit
-import os
 
 
-def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
+def main(dicom_file_path: str, TI: np, TR: np):  # TI should be in second
     """
     Return T1 mapping of a series of IRSE images with variable TI.
 
@@ -37,7 +37,8 @@ def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
                 lstFilesDCM.append(os.path.join(dirName, filename))
 
     ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
-    image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
+    image_size = (int(ref_image.Rows), int(ref_image.Columns), len(
+        lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
     for filenameDCM in lstFilesDCM:
@@ -52,9 +53,9 @@ def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
             y_data = image_data_final[n2, n3, :]
             n4 = 0
             min_loc = np.argmin(y_data)
-            while n4<min_loc:
+            while n4 < min_loc:
                 y_data[n4] = -y_data[n4]
-                n4 = n4+1
+                n4 = n4 + 1
 
             popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data, p0=(0.97493124058553, 0.538564048808802), bounds=(0, 6))
             T1_map[n2, n3] = popt[1]
@@ -64,6 +65,7 @@ def main(dicom_file_path: str, TI: np, TR: np): # TI should be in second
     plt.show()
 
     return T1_map
+
 
 def T1_sig_eq(X, a, b):
     """
@@ -83,4 +85,3 @@ def T1_sig_eq(X, a, b):
     """
     x, y = X
     return a * (1 - 2 * np.exp(-x / b) + np.exp(-y / b))
-

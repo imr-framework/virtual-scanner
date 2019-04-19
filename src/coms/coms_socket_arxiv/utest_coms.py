@@ -19,9 +19,14 @@ Date: 03/11/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-import utest_register as ureg
-import coms_sender
+if __name__ == '__main__':
+    import os
+    import sys
 
+    script_path = os.path.abspath(__file__)
+    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
+    sys.path.insert(0, SEARCH_PATH)
+import src.server.registration.utest_register as ureg
 
 
 def create_payload(coms_dir):
@@ -42,6 +47,5 @@ def create_payload(coms_dir):
 
 payload = create_payload("Tx")
 coms_sender.exec(payload)
-
 
 # coms_server.coms_server_exec(newthread)
