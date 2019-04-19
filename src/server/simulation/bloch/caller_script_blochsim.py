@@ -30,7 +30,9 @@ def run_blochsim(seqinfo,phtinfo):
     enc = seqinfo['freq']+seqinfo['ph']+ orient_dict[seqinfo['sl-orient']]
     seq_type = seqinfo['selectedSeq'].lower()
     if seq_type == 'se' and 'IRSE' in seqinfo.keys():
+        print("IRSE exists")
         if seqinfo['IRSE'] == 'on':
+            print("irse on")
             seq_type = 'irse'
     thk = str(float(seqinfo['thck'])*1e-3)
     slice_gap = '0'
