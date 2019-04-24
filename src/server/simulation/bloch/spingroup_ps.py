@@ -23,6 +23,7 @@ class SpinGroup:
         self.T2 = pdt1t2[2]
         self.loc = loc
         self.df = df
+        self.signal=[]
 
     def get_m_signal(self):
         """
@@ -39,14 +40,15 @@ class SpinGroup:
         amount of phase change = all 3D gradients combined
 
         """
-        phi = GAMMA*np.sum(np.multiply(self.loc, grad_area))+2*np.pi*self.df*t
+        x,y,z = self.loc
+        phi = GAMMA*(x*grad_area[0]+y*grad_area[1]+z*grad_area[2])+2*np.pi*self.df*t
         C, S = np.cos(phi), np.sin(phi)
         E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
         E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
         A = np.array([[E2*C, E2*S, 0],
                       [-E2*S, E2*C, 0],
                       [0, 0, E1]])
-        self.m = A@self.m + np.array([[0],[0],[1 - E1]])
+        self.m = A@self.m + [[0],[0],[1 - E1]]
 
     def delay(self, t):
         """
@@ -96,32 +98,31 @@ class SpinGroup:
         # grads_shape : 3 x n real array  [tesla/meter]
         # dt: raster time for both shapes [seconds]
         """
+        m = self.m
+        x,y,z = self.loc
         for v in range(len(pulse_shape)):
-            B1x = np.real(pulse_shape[v])
-            B1y = np.imag(pulse_shape[v])
-            glocp = np.sum(np.multiply([grads_shape[0,v],grads_shape[1,v],grads_shape[2,v]],self.loc))
+            B1 = pulse_shape[v]
+            B1x = np.real(B1)
+            B1y = np.imag(B1)
+            glocp = grads_shape[0,v]*x+grads_shape[1,v]*y+grads_shape[2,v]*z
             A = np.array([[0, glocp, B1y],
                           [-glocp, 0, B1x],
                           [B1y, -B1x, 0]])
-            self.m = self.m + dt*GAMMA*A@self.m
+            m = m + dt*GAMMA*A@m
+        self.m = m
 
 
+    def readout(self,dt,n,delay,grad,timing): # Added 4/23/19
+        signal_1D = []
+        self.fpwg(grad[:, 0] * delay, delay)
+        v = 1
+        for q in range(1, len(timing)):
+            if v <= n:
+                signal_1D.append(self.get_m_signal())
+            self.fpwg(grad[:, v] * dt, dt)
+            v += 1
 
-    def readout(self,grads_shape,dt):
-        # Get ADC info
-        n = len(grads_shape)
-        # Get gradient info
-        signal = np.zeros(n,dtype=np.complex_)
-
-        # ADC delay & post-delay not included now - should they be?
-
-        # Readout
-        for p in range(n):
-            signal[p] = self.get_m_signal()
-            self.fpwg(dt*grads_shape[:,p],dt)
-
-        return signal
-
+        self.signal.append(signal_1D)
 
 # Helpers
 def anyrot(v):

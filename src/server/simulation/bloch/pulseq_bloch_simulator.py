@@ -123,11 +123,14 @@ if __name__ == '__main__':
     start_time = time.time()
     loc_ind_list = myphantom.get_list_inds()
 
+    # Get seq info
+    seq_info = blcsim.store_pulseq_commands(myseq)
+
     # Initiate multiprocessing pool
     pool = mp.Pool(mp.cpu_count())
 
     # Multiprocessing simulation
-    results = pool.starmap_async(blcsim.sim_single_spingroup, [(loc_ind, GAMMA_BAR*dBmap(myphantom.get_location(loc_ind)), myphantom, myseq) for loc_ind in loc_ind_list]).get()
+    results = pool.starmap_async(blcsim.sim_single_spingroup, [(loc_ind, GAMMA_BAR*dBmap(myphantom.get_location(loc_ind)), myphantom, seq_info) for loc_ind in loc_ind_list]).get()
     pool.close()
     # Add up signal across all SpinGroups
     raw_signal = np.sum(results,axis=0)

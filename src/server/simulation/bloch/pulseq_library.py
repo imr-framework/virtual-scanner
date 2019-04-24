@@ -16,7 +16,7 @@ GAMMA = 2*pi*GAMMA_BAR
 
 # TODO make these multi-slice sequences, and modify recon in simulator!!!
 
-def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=True):
+def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     """
     Makes a single-slice GRE pulseq sequence
     INPUTS
@@ -94,7 +94,7 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=True):
     return seq
 
 
-def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=True):
+def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False):
     """
     Makes a single-slice IRSE pulseq sequence
     INPUTS
@@ -209,7 +209,7 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=True)
 
 
 
-def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=True):
+def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     """
     Makes a single-slice IRSE pulseq sequence
     INPUTS
