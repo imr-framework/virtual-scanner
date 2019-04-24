@@ -185,6 +185,7 @@ if __name__ == '__main__':
         for v in range(np.shape(images)[2]):
             plt.axis("off")
             fig = plt.imshow(np.absolute(images[:,:,v]))
+            plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
             mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
