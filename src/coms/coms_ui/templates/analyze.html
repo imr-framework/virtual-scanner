@@ -36,6 +36,8 @@
 
     <!--jQuery and JS files-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
     <script type="text/javascript" src="{{url_for('static',filename='analyze_func.js')}}"></script>
 
 
@@ -46,6 +48,7 @@
 
       <h1>Virtual MR Scanner - Standard Mode</h1>
 
+      <!--Images display panel-->
       <div class="images-container">
         <!--Original data-->
         <div id="data-container" class="container analysis-container">
@@ -63,15 +66,17 @@
         </div>
       </div>
 
+      <!--Workspace-->
       <div class="workspace-container">
         <h2>Workspace</h2>
+        <ul class="file-list">
 
+        </ul>
       </div>
 
-      <!--Main Panel-->
+      <!--Analyze main panel-->
       <div id="panel-container" class="container">
-
-        <div id="mainpanel" class="jumbotron">
+        <div id="mainpanel" class="jumbotron container">
 
           <!--Navigation Bar-->
           <nav>
@@ -90,36 +95,36 @@
             </li>
           </nav>
 
-          <form class="analyzeForm" >
+          <!--Load a DICOM file-->
+          <label id="first-row-item" for="fileInput">
+            <input id="file-input-display" class="fileInput" type="text" name="fileInput" placeholder="Choose a DICOM file..."/>
+            <input id="load-btn" class="btn btn-primary" type="button" value="Load" />
 
-            <!--Load a DICOM file-->
-            <label id="first-row-item" for="fileInput">
-              <input id="file-input-display" class="fileInput" type="text" name="fileInput" placeholder="Choose a DICOM file..."/>
-              <input id="load-btn" class="btn btn-primary" type="button" value="Load" onclick="selectFile()"/>
-              <!-- Hidden file input to trigger file choice dialog to open-->
-              <!--Set accept=".dicom" to filter the files and only allow dicom selection-->
-              <input id="file-select" type="file" accept=".jpg">
+            <!-- Hidden file input to trigger file choice dialog to open-->
+            <!--Set accept=".dicom" to filter the files and only allow dicom selection-->
+            <!--<input id="file-select" type="file" accept=".jpg">-->
 
-              <!--Save and reset buttons-->
-              <input class="btn btn-primary btn-align-right" type="button" value="Save"/>
-              <input class="btn btn-primary btn-align-right" type="button" value="Reset"/>
-            </label>
+            <!--Save and reset buttons-->
+            <input class="btn btn-primary btn-align-right" type="button" value="Save"/>
+            <input class="btn btn-primary btn-align-right" type="button" value="Reset"/>
+          </label>
 
-            <!--Sequece selection: currently only SE and IRSE-->
-            <label>Sequence</label>
-            <label class="input-label">
-              <select class="selector" name="seq-choice">
-                <option value="SE">SE</option>
-                <option value="IRSE">IRSE</option>
-              </select>
-            </label>
+          <!--Forms-->
+          <div class="row">
+            <div id="map-gen-col" class="col">
+              <form class="map-gen-Form" >
+                <input type="hidden" id="formId" name="formName" value="ana">
 
+                <!--Sequece selection: currently only SE and IRSE-->
+                <label>Sequence</label>
+                <label class="input-label">
+                  <select id="seq-choice" class="selector" name="seq-choice">
+                    <option value="SE">SE</option>
+                    <option value="IRSE">IRSE</option>
+                  </select>
+                </label>
 
-            <div class="row">
-
-              <!--Column 1 (Map generation): Sequence parameters and model-->
-              <div class="col">
-
+                  <!--Column 1 (Map generation): Sequence parameters and model-->
                 <div class="row">
                   <!--Column 1.1: Sequence parameters-->
                   <div class="col">
@@ -131,98 +136,114 @@
                     <label class="input-label">
                       <input class="smallinput" type="number" name="TR">
                     </label>
-                    <label>s</label>
+                    <label>ms</label>
 
                     <div class="w-100"></div>
 
                     <!--Echo Time (TE): same number as number of images, if T2 map -->
                     <label class="tag-label-small">TE</label>
-                    <label class="input-label">
-                      <input class="largeinput" type="number" name="TE">
+                    <label class="input-label largeinput-label">
+                      <input class="largeinput" type="text" name="TE"  />
                     </label>
-                    <label>s</label>
+                    <label>ms</label>
 
                     <div class="w-100"></div>
 
                     <!--Inversion Time (TI): same number as number of images, if T1 map -->
                     <label class="tag-label-small">TI</label>
-                    <label class="input-label">
-                      <input class="largeinput" type="number" name="TI">
+                    <label class="input-label largeinput-label"">
+                      <input id="TI-input" class="largeinput" type="text" name="TI" readonly>
                     </label>
-                    <label>s</label>
+                    <label>ms</label>
                   </div>
 
                   <!--Column 1.2: Model equation-->
                   <div class="col">
 
                     <h2>Model</h2>
-                    <label class="input-label no-tag">
-                    <label class="input-label">
-                      <input class="largeinput" type="text" name="model-eq">
+
+                    <label class="input-label largeinput-label ">
+
+                      <select class="selector" name="model-eq">
+                        <option value="SE-eq">a(1-e^{-(y/b)})e^{-(x/c)}+d</option>
+
+                        <option value="IRSE-eq">a(1-2e^{-(x/b)}+e^{-(y/b)})</option>
+                      </select>
                     </label>
 
                   </div>
                 </div>
-              <div class="row">
-                <input  class="btn btn-primary analysis-btn" type="button" value="Generate Map"/>
-              </div>
+
+                <!--Button for map generation-->
+                <div class="row">
+                  <input  class="btn btn-primary analysis-btn" type="button" value="Generate Map"/>
+                </div>
+
+
+              </form>
             </div>
 
-              <div class="col">
-
-                <h2 >ROI Analysis</h2>
-
-                <!--Intensity range: Everything inside intensity range will be set to 1, and 0 otherwise. -->
-                <label class="tag-label-large">Intensity Range</label>
-                <label class="input-label">min:
-                  <input class="smallinput" type="number" name="intensity-min">
-                </label>
-                <label class="input-label">max:
-                  <input class="smallinput" type="number" name="intensity-max">
-                </label>
-
-                <div class="w-100"></div>
-
-                <!--Connectivity: Currently only 4 or 8-->
-                <label class="tag-label-large">Connectivity</label>
-                <label class="input-label">
-                  <select class="selector" name="connect-choice">
-                    <option value="4-connect">4</option>
-                    <option value="8-connect">8</option>
-                  </select>
-                </label>
-
-                <div class="w-100"></div>
-
-                <!--Sensitivity: How well can the algorithm detects circles. User should provide a initial guess and the algorithm will refine the values. -->
-                <label class="tag-label-large">Sensitivity</label>
-                <label class="input-label">
-                  <input class="smallinput" type="number" name="sensitivity">
-                </label>
-
-                <div class="w-100"></div>
+            <div id="ROI-ana-col" class="col">
+              <form class="ROI-ana-Form">
+                <input type="hidden" id="formId" name="formName" value="ana">
+                  <label ><p id="skip-a-line"></p></label>
+                  <h2>ROI Analysis</h2>
 
 
-                <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="button" value="Detect Spheres"/>
 
-              </div>
+                  <!--Map type: Choose between T1 or T2 map-->
+                  <label class="tag-label-med">Map Type</label>
+                  <label class="input-label">
+                    <select class="selector" name="map-type">
+                      <option value="t1">T1</option>
+                      <option value="t2">T2</option>
+                    </select>
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--Map size-->
+                  <label class="tag-label-med">Map Size</label>
+                  <label class="input-label">
+                    <input type="number" class="smallinput" name="map-size">
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--Intensity range: Everything inside intensity range will be set to 1, and 0 otherwise. -->
+                  <label class="tag-label-med">Intensity Range</label>
+                  <label class="input-label ">min:
+                    <input class="smallinput" type="number" name="intensity-min">
+                  </label>
+                  <label class="input-label " >max:
+                    <input class="smallinput" type="number" name="intensity-max">
+                  </label>
+
+                  <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="button" value="Detect Spheres"/>
+
+
+
+
+
+              </form>
             </div>
 
+          </div>
 
-          </form>
+        </div><!--Main panel-->
 
-
-        </div>
-
-      </div>
+      </div><!--Panel-container-->
 
 
 
+    </div><!--enclosingjumbo-->
+    <div id="file-select-dialog" class="dialog" title="Select a folder:">
+      <ul class="menu no-bullet">
+        <li><a class="menu-item" href = "#">Simulation Results</a></li>
+        <li ><a class="menu-item" href = "#">Analyze Sample Data</a></li>
 
-
-
+      </ul>
     </div>
-
 
 
   </body>

@@ -15,6 +15,7 @@ h4 bold{
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  background-color: black;
 }
 #enclosingjumbo .images-container{
   position: absolute;
@@ -22,18 +23,25 @@ h4 bold{
   bottom: 35vh;
 }
 .acquire-container{
-  border: 5px solid #003865;
+  /*border: 5px solid #003865;*/
   height: 100%;
   width: 58vh;
   min-width: 58vh;
   text-align: center;
 }
-.acquire-container p{
+.vertical-line {
+  border-left: 2px solid white;
+
+  min-height: 100%;
+  left: 50%;
+
+}
+/*.acquire-container p{
   vertical-align: middle;
   line-height: 58vh;
   font-weight: bold;
   color: #003865;
-}
+}*/
 #seq-panel{
   padding-top: 0.5vh;
   height: 35vh;
@@ -73,6 +81,16 @@ h4 bold{
   padding: 0;
 
 
+}
+.help-link{
+  position: absolute;
+  bottom: 0;
+  right: 16vw;
+  margin-right: 15px;
+}
+#seqparameters{
+  margin-left: 15px;
+  margin-right: 15px;
 }
 /*HEADERS*/
 .voxsize{

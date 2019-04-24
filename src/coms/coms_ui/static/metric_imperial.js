@@ -24,10 +24,10 @@ function metric2Imperial(){
   }
 }
 
-/*Before submission modify the payload to always send weight and height data 
+/*Before submission modify the payload to always send weight and height data
 on metric system*/
 function imperial2metric(data2Send){
-  console.log("Function working")
+  
   if (data2Send["measuresystem"]=="metric"){
     delete data2Send.weight2;
     delete data2Send.height2;

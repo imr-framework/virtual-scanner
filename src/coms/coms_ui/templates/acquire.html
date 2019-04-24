@@ -36,7 +36,7 @@
 
   <!--JQuery UI-->
   <!--
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
   <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
 
   <!--Manual links-->
@@ -51,7 +51,7 @@
 
   <!--JQuery UI-->
   <script type="text/javascript" src="../static/packages/jQuery-ui/jquery-ui.js"></script>
-  <link rel="stylesheet" href="../static/packages/jQuery-ui/jquery-ui.css">
+  <!--<link rel="stylesheet" href="../static/packages/jQuery-ui/jquery-ui.css">-->
 
   <!--JavaScript customized funcitons-->
   <script type="text/javascript" src="{{url_for('static',filename='acquire_func.js')}}"></script>
@@ -80,18 +80,29 @@
       <div id="axial-container"  class="container acquire-container">
 
 
-        <p>Axial View</p>
+        <!--<p>Axial View</p>-->
       </div>
+
+      <div class="vertical-line"></div>
 
       <!--Sagital-->
+
       <div id="sagital-container" class="container acquire-container">
-        <p>Sagittal View</p>
+        <!--<p>Sagittal View</p>-->
       </div>
 
+      <div class="vertical-line"></div>
+
       <!--Coronal-->
+
       <div id="coronal-container" class="container acquire-container">
-        <p>Coronal View</p>
+        <!--<p>Coronal View</p>-->
       </div>
+
+
+      <!--Black containers-->
+
+
     </div>
 
 
@@ -448,6 +459,9 @@
       <li ><a class="menu-item" href = "#">SE</a></li>
     </ul>
   </div>
+
+  <div class="help-link"></div>
+
 </body>
 
 </html>

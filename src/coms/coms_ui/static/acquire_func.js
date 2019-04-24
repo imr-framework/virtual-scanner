@@ -92,18 +92,28 @@ $(document).on("click", ".menu-item", function(){
     if ($(this).is(':checked')) {
       $(".TI-IRSE").show();
       $("#TI").prop("disabled",false);
+      var help_link = "http://www.mriquestions.com/what-is-ir.html"
+
     }
 
     else if ($(this).is(':checked') == false) {
       $(".TI-IRSE").hide();
       $("#TI").prop("disabled",true);
+      var help_link = "http://www.mriquestions.com/se-vs-multi-se-vs-fse.html"
     }
   }
   else {
     $(".IRSE-checkbox").hide();
     $(".TI-IRSE").hide();
     $("#TI").prop("disabled",true);
+
+    if (seq_name == "GRE") {
+      var help_link = "http://www.mriquestions.com/types-of-gre-sequences.html"
+    }
+
   }
+
+  $(".help-link").html("<a href="+help_link+">Q&As in MRI:"+seq_name+"</a>")
 
   var addlistitem_seq_name = "<li><a href='#'>" + seq_name + "</a></li>";
 
@@ -112,27 +122,26 @@ $(document).on("click", ".menu-item", function(){
   $("#seq-history-list").append(addlistitem_seq_name);
 
   $("#dialog").dialog("close");
-  closeDialog();
-  /*$("#dialog").dialog({
-    "close" : function (ui){
-      $( "#enclosingjumbo" ).removeClass( "blur" );
 
-    }
-  });*/
+
   //Default parameters
-  $("#TR").val(100);
-  $("#TE").val(20);
-  $("#FA").val(60);
+
+  $("#TR").val(200);
+  $("#TE").val(10);
+  $("#FA").val(90);
+  $("#Nx").val(15);
+  $("#Ny").val(15);
+
+
+
+
   $("#thickness").val(16);
   $("#ADC-bw").val(100);
 
 
   $("#slices").val(1);
   //$("#slices").prop("readonly", true);
-  $("#Nx").val(16);
-  //$("#Nx").prop("readonly", true);
-  $("#Ny").val(16);
-  //$("#Ny").prop("readonly", true);
+
   $("#FOVx").val(240);
   //$("#FOVx").prop("readonly", true);
   $("#FOVy").val(240);
@@ -159,7 +168,11 @@ $(document).on("change", "#IRSE-check", function(){
 });
 
 /*Blur and dialog opening/clositn effects*/
-function OpenDialog(){
+$(document).on("dialogclose","#dialog",function(){
+  closeDialog();
+});
+
+function openDialog(){
   $( ".enclosingjumbo" ).addClass( "blur" );
   $( "#menu" ).menu();
 }
@@ -167,6 +180,9 @@ function closeDialog(){
   $( "#enclosingjumbo" ).removeClass( "blur" );
 
 }
+
+
+
 
 // TODO: change this to
 //image right-half: slice advance and viceversa
