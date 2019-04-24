@@ -10,7 +10,7 @@ import pulseq_library as psl
 import argparse
 from math import pi
 import os
-
+import datetime
 
 
 cpath = os.getcwd()
@@ -26,6 +26,8 @@ GAMMA = 2*pi*GAMMA_BAR
 if __name__ == '__main__':
     """Parse arguments"""
     parser = argparse.ArgumentParser(description='Bloch simulation parser')
+    # Patient id
+    parser.add_argument('pat_id',type=str,help="Patient ID")
     # Phantom parameters
     parser.add_argument('pht_type',type=str,help="Type of phantom")# {'brainweb','spherical','NIST','default}
     parser.add_argument('pht_dim',type=int,help='Choose phantom to be 2D or 3D') # 2 - 2D, 3 - 3D
@@ -101,7 +103,7 @@ if __name__ == '__main__':
     g = args.slice_gap
     t = args.thk
     slice_locs = np.arange(-(Ns - 1) * (g + t) / 2, Ns * (g + t) / 2, g + t)
-    print(slice_locs)
+    print('Slice locations:',slice_locs)
 
 
     if args.seq_type == 'gre':
@@ -167,47 +169,49 @@ if __name__ == '__main__':
         if args.seq_type == 'irse':
             sim_data['seq_info']['ti'] = args.ti
 
-        mypath = './src/server/simulation/bloch/outputs/sim_slices'
-        if not os.path.isdir(mypath):
-            os.makedirs(mypath)
-        np.save(mypath+'/sim_data.npy',sim_data) # TODO Allow custom naming later
 
-
+        ts = str(datetime.datetime.now())
+        timestamp = ts[0:4]+ts[5:7]+ts[8:10]+ts[11:13]+ts[14:16]+ts[17:19]
+        mypath1 = './src/server/simulation/outputs/'+args.pat_id
+        if not os.path.isdir(mypath1):
+            os.makedirs(mypath1)
+        datapath = mypath1+'/DATA_'+args.seq_type.upper()+'_'+timestamp+'.npy'
+        np.save(datapath,sim_data)
 
         # save images in folder
-        data = np.load(mypath+'/sim_data.npy').all()
+        data = np.load(datapath).all()
         images = data['image']
 
         for v in range(np.shape(images)[2]):
             plt.axis("off")
             fig = plt.imshow(np.absolute(images[:,:,v]))
-            plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
-            mypath = './src/server/simulation/bloch/outputs/sim_slices'
-            if not os.path.isdir(mypath):
-                os.makedirs(mypath)
-            plt.savefig(mypath+'/slice_'+str(v+1)+'.png', bbox_inches='tight', pad_inches=0, format='png')
+            mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
+            if not os.path.isdir(mypath2):
+                os.makedirs(mypath2)
+            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+str(v+1)+'.png'
+            plt.savefig(impath, bbox_inches='tight', pad_inches=0, format='png')
 
 
-    # display (comment off later)
-    mydata = np.load('./src/server/simulation/bloch/outputs/sim_slices/sim_data.npy').all()
-    image = mydata['image']
-    kspace = mydata['kspace']
-    Ns = np.shape(image)[2]
-    a1 = int(np.sqrt(Ns))
-    a2 = int(np.ceil(Ns/a1))
+        # display (comment off later)
+        mydata = np.load(datapath).all()
+        image = mydata['image']
+        kspace = mydata['kspace']
+        Ns = np.shape(image)[2]
+        a1 = int(np.sqrt(Ns))
+        a2 = int(np.ceil(Ns/a1))
 
-    plt.figure(1)
-    for v in range(Ns):
-        plt.subplot(a1,a2,v+1)
-        plt.imshow(np.absolute(kspace[:,:,v]))
-        plt.gray()
+        plt.figure(1)
+        for v in range(Ns):
+            plt.subplot(a1,a2,v+1)
+            plt.imshow(np.absolute(kspace[:,:,v]))
+            plt.gray()
 
-    plt.figure(2)
-    for v in range(Ns):
-        plt.subplot(a1,a2,v+1)
-        plt.imshow(np.absolute(image[:,:,v]))
-        plt.gray()
+        plt.figure(2)
+        for v in range(Ns):
+            plt.subplot(a1,a2,v+1)
+            plt.imshow(np.absolute(image[:,:,v]))
+            plt.gray()
 
-    plt.show()
+        plt.show()

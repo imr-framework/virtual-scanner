@@ -151,7 +151,7 @@ def worker():
             "patid": pat_id,
         }
         rows = reg.reuse(query_dict)
-        # print((rows))
+        # print((rows))d
 
         if (rows):
             print('Subject is already registered with PATID: ' + pat_id)
@@ -165,7 +165,8 @@ def worker():
         }
 
         rows = reg.reuse(query_dict)
-        bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0])  # phtinfo just needs to be 1 string
+        print(rows)
+        bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
 
     result = ''
     return result

@@ -13,7 +13,7 @@ import os
 
 
 # Parse arguments from dictionary (str to str!)
-def run_blochsim(seqinfo,phtinfo):
+def run_blochsim(seqinfo,phtinfo,pat_id):
     # Parse seq info
     orient_dict = {'sagittal':'x','coronal':'y','axial':'z'}
     tr = str(float(seqinfo['TR'])*1e-3)
@@ -60,6 +60,7 @@ def run_blochsim(seqinfo,phtinfo):
     subprocess.run(['python', #This is specific to windows
                      #'-m','cProfile','-o','profiling_results', #<- for profiling code
                     os.path.join(os.path.dirname(os.path.realpath(__file__)),'pulseq_bloch_simulator.py'),
+                     pat_id, # patient id
                      pht_type,pht_dim,n_ph,fov_ph, # pht_type, dim, Nph, FOVph(m)
                      '1','1','1',# PDs (a.u.) - default values
                     '2','1','0.5', # T1s (s) - defualt values

@@ -46,7 +46,7 @@ def run_blochsim(siminfo):
 
     subprocess.run(['python.exe',
                      #'-m','cProfile','-o','profiling_results', #<- for profiling code
-                    'pulseq_bloch_simulator.py',
+                    'pulseq_bloch_simulator.py','11037',
                      pht_type,pht_dim,n_ph,fov_ph, # pht_type, dim, Nph, FOVph(m)
                      '1','1','1',# PDs (a.u.) - default values
                     '2','1','0.5', # T1s (s) - defualt values
