@@ -60,6 +60,22 @@
     <!--<script src="../static/form2Json.js"> </script>-->
     <script src="../static/metric_imperial.js"> </script>
     <script src="../static/phantomAutofill.js"> </script>
+    <script src="../static/register_func.js"> </script>
+
+    <script type="text/javascript">
+      if ('{{ success }}') {
+
+        {% autoescape false %}
+          var success_sentence = '{{ success }}';
+          console.log("works");
+          $(document).ready(function(){
+            $("#success-sentence").show();
+          });
+          console.log("works2");
+        {% endautoescape %}
+      }
+
+    </script>
 
     <!--GUID code-->
     <!--<!-- <!-- FIXME: link not working https://github.com/kelektiv/node-uuid
@@ -274,6 +290,10 @@
 
           <!--Image Panel-->
       <div id="subjectImage-container" class="container" >
+      </div>
+
+      <div class="success-container">
+        <h1 id="success-sentence">Subject successfully registered!</h1>
       </div>
 
 

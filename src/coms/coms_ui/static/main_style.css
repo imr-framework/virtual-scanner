@@ -34,8 +34,8 @@
   /*min-height: 80vh;*/
   /*background-color: #75aadb; Columbia color */
   background-color: #b1c3f2;
-  padding-left: 15px;
-  padding-right: 15px;
+  /*padding-left: 15px;
+  padding-right: 15px;*/
 }
 nav{
   width: 100%
@@ -75,8 +75,8 @@ h4{
   background:#b1c3f2;
   color:black;
 }
-
-/*BUTTONS */
+.nav-item a:hover { color: white !important; }
+/*BUTTONS #002F73*/
 .btn{
   background-color: #5f9bef;
   border-color: #003865;
@@ -87,8 +87,8 @@ h4{
 }
 
 /*INPUTS*/
-input[type=number]{
-  padding-left: 8%;
+input{
+  padding-left: 3px;
 
 }
 .smallinput{
