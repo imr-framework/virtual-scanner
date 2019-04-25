@@ -48,8 +48,7 @@ users = []
 app.secret_key = 'Session_key'
 
 
-@app.route('/', methods=['POST',
-                         'GET'])  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
     if request.method == 'POST':
         users.append(request.form['user-name'])
@@ -86,7 +85,18 @@ def on_register():
     """
 
     # serve register template
-    return render_template('register.html')
+    if (session['username'] == ""):
+
+        return redirect('')
+    else:
+        if 'reg_success' in session:
+            return redirect('register_success')
+        else:
+            return render_template('register.html')
+
+@app.route('/register_success',methods=['POST','GET'])
+def on_register_success():
+    return render_template('register.html', success=session['reg_success'], payload=session['reg_payload'])
 
 
 @app.route('/acquire')
@@ -144,6 +154,10 @@ def worker():
     # Do registration and save to database
     if formName == 'reg':
         del payload['formName']
+
+        if request.method == 'POST':
+            session['reg_success'] = 1
+            session['reg_payload'] = payload
 
         pat_id = payload.get('patid')
         session['patid'] = pat_id
