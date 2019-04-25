@@ -231,49 +231,65 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
 
 
 # Default cylindrical Phantom
-def makeCylindricalPhantom(dim=3,dir='z',n=16,dr=(0,0,0)): # TODO new phantom in the works
-    type_map = {}
-    type_params = {}
-    R = 0.12 # m
-    r = 0.03 # m
-    h = 0.24 # m
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0): # TODO new phantom in the works
+    fov = 0.24
+    R = fov/2 # m
+    r = R/4 # m
+    h = fov # m
     s2 = np.sqrt(2)
     s3 = np.sqrt(3)
+    vsize = fov/n
     centers = [(0,R/2,0.08),(-R*s3/4,-R/4,0.08),(R*s3/4,-R/4,0.08), # PD spheres
                (R/(2*s2),R/(2*s2),0),(-R/(2*s2),R/(2*s2),0),(-R/(2*s2),-R/(2*s2),0),(R/(2*s2),-R/(2*s2),0), # T1 spheres
-               (0,R/2,-0.08),(-R/2,0,-0.08),(0,-R/2,-0.08),(R/2,0,-0.08)] # T1 spheres
-   # type_params = {0:(0.25,0.5,0.01),1:(1,,0.5),2:(1,,0.5),3:(1,,0.5),
-    #            4:(1,2,0.5),5:(1,2,0.5),6:(1,,),7:(1,,0.5),
-     #           8:(),9:(),10:(),11:()}
+               (0,R/2,-0.08),(-R/2,0,-0.08),(0,-R/2,-0.08),(R/2,0,-0.08)] # T2 spheres
+    centers_inds = [(np.array(c)/vsize + (n-1)/2) for c in centers] # TODO conversion
 
+    type_params = {0:(0,1,1), # background
+                   1:(1,0.5,0.1),2:(0.75,0.5,0.1),3:(0.5,0.5,0.1), # PD spheres
+                4:(0.75,1.5,0.1),5:(0.75,0.6,0.1),6:(0.75,0.25,0.1),7:(0.75,0.1,0.1), # T1 spheres
+                8:(0.75,0.5,0.5),9:(0.75,0.5,0.15),10:(0.75,0.5,0.05),11:(0.75,0.5,0.01), # T2 spheres
+                13:(0.25,0.5,0.1)}
 
+    q = (n - 1) / 2
+    p = 'xyz'.index(dir)
+    pht_loc = (0, 0, 0)
 
     if dim == 3:
-        # 3D phantom
-        phantom = 0
+        type_map = np.zeros((n, n, n))
         for x in range(n):
             for y in range(n):
                 for z in range(n):
-  #                  d = vsize * np.linalg.norm(np.array([x, y, z]) - (n - 1) / 2)
-                    for c in range(len(centers)):
-   #                     if d <= radii[k]:
-    #                        type_map[x, y, z] = k + 1
+                    if vsize*np.sqrt((x-q)**2 + (y-q)**2) < R:
+                        type_map[x,y,z] = 13
+                    for k in range(len(centers_inds)):
+                        ci = centers_inds[k]
+                        d = vsize*np.sqrt((x-ci[0])**2+(y-ci[1])**2+(z-ci[2])**2)
+                        if d <= r:
+                            type_map[x, y, z] = k + 1
                             break
-                    type_map[x,y,z] = 0
 
     elif dim == 2:
+        pht_loc = np.roll((loc,0,0),p)
         # 2D phantom
-        if dir == 'z':
-            a = 0
-        elif dir == 'x':
-            a = 1
-        elif dir == 'y':
-            a = 2
+        type_map = np.zeros(np.roll((1,n,n),p))
+        for r1 in range(n):
+            for r2 in range(n):
+                x,y,z = np.roll([q+loc/vsize,r1,r2],p)
+                u,v,w = np.roll((0,r1,r2),p)
+                if vsize*np.sqrt((x-q)**2 + (y-q)**2) < R:
+                    type_map[u,v,w] = 13
+                    for k in range(len(centers_inds)):
+                        ci = centers_inds[k]
+                        d = vsize*np.sqrt((x-ci[0])**2+(y-ci[1])**2+(z-ci[2])**2)
+                        if d <= r:
+                            type_map[u,v,w] = k + 1
+                            break
 
-#        phantom = Phantom(type_map,type_params,vsize,loc)
 
     else:
         raise ValueError('#Dimensions must be 2 or 3')
+
+    phantom = DTTPhantom(type_map, type_params, vsize, loc=pht_loc)
     return phantom
 
 

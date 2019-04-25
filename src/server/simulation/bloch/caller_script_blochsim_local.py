@@ -7,11 +7,6 @@ siminfo = {'formName':'acq','selectedSeq':'GRE','TR':'1000','TE':'500','FA':'90'
 
 
 
-#TR, TE and TI in ms
-#FA in deg
-#slice thickness in mm
-
-
 # Parse arguments from dictionary (str to str!)
 def run_blochsim(siminfo):
     # Parse seq info
@@ -36,7 +31,7 @@ def run_blochsim(siminfo):
     num_slices = siminfo['slicenum']
 
     # Parse phantom info  Now, just default
-    pht_type = 'spherical'
+    pht_type = 'cylindrical'
     n_ph = '15'
     pht_dim = '2'
     fov_ph = '0.240'
@@ -55,7 +50,6 @@ def run_blochsim(siminfo):
                     seq_type, num_slices, thk, slice_gap, # sequence type, #slices, slice thk, slice gap
                     n,fov,enc,# N, FOV(m), enc
                     tr,te,ti,fa,'0'])# TR(s), TE(s), TI(s), FA(deg), type of b0 map (0 for now)
-    # load saved data (reconstruct how? many slices - how is it stored?)
 
 
 if __name__ == "__main__":

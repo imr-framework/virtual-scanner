@@ -17,17 +17,18 @@ if __name__ == '__main__':
     PDs = [1, 1, 1]
     T1s = [2, 1, 0.5]
     T2s = [0.1, 0.15, 0.25]
-    myphantom = pht.makePlanarPhantom(n=Nph,fov=FOVph,T1s=T1s,T2s=T2s,PDs=PDs,radii=Rs)
+    myphantom = pht.makeCylindricalPhantom(dim=2,n=15,dir='z',loc=-0.08)
+#    myphantom = pht.makePlanarPhantom(n=Nph,fov=FOVph,T1s=T1s,T2s=T2s,PDs=PDs,radii=Rs)
 
 
     df = 0 # TODO add intra-spingroup dephasing - make it part of spingroup_ps!
 
-    FOV = FOVph
-    N = Nph
+    FOV = 0.24
+    N = 15
     FA = 90
-    TR = 1
+    TR = 3
     TE = 0.05
-    myseq = psl.make_pulseq_gre(fov=FOV,n=N,thk=FOV/N,fa=FA,tr=TR,te=TE,enc='xyz',write=False)
+    myseq = psl.make_pulseq_gre(fov=FOV,n=N,thk=FOV/N,fa=FA,tr=TR,te=TE,enc='xyz',slice_locs=[-0.08],write=False)
 
 
     # Time the code: Tic
