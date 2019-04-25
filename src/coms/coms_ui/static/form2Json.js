@@ -103,8 +103,12 @@ function redirectResponse(dataIn_json){
 
   switch (form_dict['formName']) {
     case 'reg':
-      window.location = '/register_success'
+      setTimeout(function(){ window.location = '/register' }, 100);
+
       //$(document).ready(autoFillForm(form_dict));
+      break;
+    case 'acq':
+      setTimeout(function(){ window.location = '/acquire_success' }, 1000);
       break;
     default:
 

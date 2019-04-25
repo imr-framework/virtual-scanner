@@ -50,6 +50,7 @@ app.secret_key = 'Session_key'
 
 @app.route('/', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
+    session.clear()
     if request.method == 'POST':
         users.append(request.form['user-name'])
         session['username'] = users[-1]
@@ -67,7 +68,7 @@ def log_in():
             return render_template("log_in.html")
 
 
-@app.route('/register')  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/register',methods =['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
 
@@ -101,22 +102,17 @@ def on_register_success():
 
 @app.route('/acquire')
 def on_acq():
-    """
 
-        Parameters
-        ----------
-               void
-
-         Returns
-        -------
-           void (status in debug mode if required)
-
-        Performs
-        --------
-            Renders the acquisition html page on the web
-        """
-    # serve index template
     return render_template('acquire.html')
+
+@app.route('/acquire_success')
+def on_acquire_success():
+    if 'acq' in session and session['acq'] == 1:
+        return render_template('acquire.html',success=session['acq'],output_im=session['acq_output'])
+    else:
+        return render_template('acquire.html')
+
+
 
 
 @app.route('/analyze')
@@ -129,7 +125,7 @@ def on_recon():
     return render_template('recon.html')
 
 
-@app.route('/receiver', methods=['POST'])
+@app.route('/receiver', methods=['POST','GET'])
 def worker():
     """
 
@@ -153,11 +149,15 @@ def worker():
     formName = payload.get('formName')
     # Do registration and save to database
     if formName == 'reg':
-        del payload['formName']
-
         if request.method == 'POST':
             session['reg_success'] = 1
             session['reg_payload'] = payload
+
+        del payload['formName']
+
+
+
+
 
         pat_id = payload.get('patid')
         session['patid'] = pat_id
@@ -180,7 +180,16 @@ def worker():
 
         rows = reg.reuse(query_dict)
         print(rows)
-        bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+
+        session['acq'] = 0
+        print (session)
+        progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+
+        if progress == 1:
+            session['acq']=1
+            sim_result_path = './src/coms/coms_ui/static/acq/outputs/' + pat_id
+            imgpaths = os.listdir(sim_result_path)
+            session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
 
     result = ''
     return result

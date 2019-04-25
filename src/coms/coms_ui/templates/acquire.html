@@ -64,6 +64,20 @@
   <!--Favicon -->
   <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
+
+
+  <script type="text/javascript">
+    if ('{{ success }}') {
+      {% autoescape false %}
+        var im = {{ output_im }}
+        $(document).ready(function(){
+          $('$axial-container').html('<img src='+im+'>')
+
+        });
+
+      {% endautoescape %}
+    }
+  </script>
 </head>
 <body>
 
@@ -123,7 +137,7 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
             </li>
-          
+
           </nav>
 
           <form id="seqparameters">
