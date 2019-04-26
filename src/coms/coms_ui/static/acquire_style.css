@@ -29,6 +29,9 @@ h4 bold{
   min-width: 58vh;
   text-align: center;
 }
+.acquire-container img{
+  width: 100%;
+}
 .vertical-line {
   border-left: 2px solid white;
 

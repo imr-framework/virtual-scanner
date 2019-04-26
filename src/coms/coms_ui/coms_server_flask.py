@@ -31,6 +31,8 @@ if __name__ == '__main__':
     sys.path.insert(0, SEARCH_PATH)
 
 import json
+import time
+
 
 from flask import Flask, render_template, request, redirect, session
 
@@ -43,6 +45,8 @@ from src.server.simulation.bloch import caller_script_blochsim as bsim
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+
 
 users = []
 app.secret_key = 'Session_key'
@@ -100,19 +104,26 @@ def on_register_success():
     return render_template('register.html', success=session['reg_success'], payload=session['reg_payload'])
 
 
-@app.route('/acquire')
+@app.route('/acquire',methods=['POST','GET'])
 def on_acq():
 
     return render_template('acquire.html')
 
-@app.route('/acquire_success')
+@app.route('/acquire_success', methods=['POST','GET'])
 def on_acquire_success():
-    if 'acq' in session and session['acq'] == 1:
-        return render_template('acquire.html',success=session['acq'],output_im=session['acq_output'])
+    print(session)
+    if 'acq' in session:
+        print("hello")
+        return render_template('acquire.html', success=session['acq'],output_im=session['acq_output'])
     else:
-        return render_template('acquire.html')
+        print("bye")
+        return redirect('acquire')
 
-
+@app.route('/acquire_display', methods=['POST','GET'])
+def on_acquire_display():
+    print(session)
+    if 'acq' in session and session['acq'] == 1:
+        return render_template('acquire.html', success=session['acq'])
 
 
 @app.route('/analyze')
@@ -155,10 +166,6 @@ def worker():
 
         del payload['formName']
 
-
-
-
-
         pat_id = payload.get('patid')
         session['patid'] = pat_id
         query_dict = {
@@ -182,14 +189,21 @@ def worker():
         print(rows)
 
         session['acq'] = 0
-        print (session)
+
+        print(session)
+
+
+        #time.sleep(1)
+
         progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
 
-        if progress == 1:
-            session['acq']=1
-            sim_result_path = './src/coms/coms_ui/static/acq/outputs/' + pat_id
-            imgpaths = os.listdir(sim_result_path)
-            session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
+        if request.method == 'POST' and progress == 1:
+            session['acq'] = 1
+            sim_result_path = '../static/acq/outputs/' + '1030'
+            session['acq_output'] = sim_result_path + '/IM_GRE_20190425175047_1.png'
+            #imgpaths = os.listdir(sim_result_path)
+            #session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
+        print(session)
 
     result = ''
     return result

@@ -100,16 +100,18 @@ if (data2Send["formName"] == "reg"){
 //}
 function redirectResponse(dataIn_json){
   var form_dict = JSON.parse(dataIn_json)
-
+  console.log(form_dict)
   switch (form_dict['formName']) {
     case 'reg':
       setTimeout(function(){ window.location = '/register' }, 100);
 
       //$(document).ready(autoFillForm(form_dict));
       break;
-    case 'acq':
-      setTimeout(function(){ window.location = '/acquire_success' }, 1000);
-      break;
+    /*case 'acq':
+
+      setTimeout(function(){ window.location = '/acquire_success' }, 100);
+
+      break;*/
     default:
 
   }
