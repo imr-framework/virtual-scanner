@@ -147,7 +147,9 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     g_ss180.channel = enc[2]
 
     # Readout gradient & ADC
-    readoutTime = system.grad_raster_time * Nf
+    #readoutTime = system.grad_raster_time * Nf
+    readoutTime = 6.4e-3
+
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
     g_ro = make_trapezoid(kwargs_for_g_ro)
     kwargs_for_adc = {"num_samples": Nf, "system": system, "duration": g_ro.flat_time, "delay": g_ro.rise_time}
@@ -155,7 +157,7 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
 
     # RO rewinder gradient
     kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2,
-                        "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+                        "duration": 2e-3}
 
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
 
@@ -194,7 +196,7 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
                 # Spin echo part
                 seq.add_block(rf, g_ss)  # 90-deg pulse
                 kwargs_for_g_pe_pre = {"channel": enc[1], "system": system, "area": -(Np / 2 - i) * delta_k,
-                                     "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+                                     "duration":2e-3}
                 g_pe_pre = make_trapezoid(kwargs_for_g_pe_pre)  # Phase encoding gradient
                 seq.add_block(g_ro_pre, g_pe_pre, g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
                 seq.add_block(delay1)  # Delay 1: until 180-deg pulse
