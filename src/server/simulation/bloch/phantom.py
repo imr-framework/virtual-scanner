@@ -228,11 +228,36 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
     return DTTPhantom(type_map, type_params, vsize, loc)
 
 
+class SpheresArrayPlanarPhantom(DTTPhantom): # TODO generic 2D sphere array phantom
+    def __init__(self, centers, radii, type_params, fov, n, dir='z',R=0,loc=(0,0,0)):
+        vsize = fov/n
+        type_map = np.zeros((n,n,1))
+        q = (n-1)/2
+        centers_inds = [(np.array(c) / vsize + q) for c in centers]
+        nc = len(centers)
+        for r1 in range(n):
+            for r2 in range(n):
+                if vsize * np.sqrt((r1-q)**2+(r2-q)**2)<R:
+                    type_map[r1,r2,0] = nc + 1
+                for k in range(len(centers_inds)):
+                    ci = centers_inds[k]
+                    d = vsize * np.sqrt((r1 - ci[0]) ** 2 + (r2 - ci[1])**2)
+                    if d <= radii[k]:
+                        type_map[r1,r2,0] = k + 1
+                        break
+        if dir == 'x':
+            type_map = np.swapaxes(type_map, 1, 2)
+            type_map = np.swapaxes(type_map, 0, 1)
+        elif dir == 'y':
+            type_map = np.swapaxes(type_map, 0, 2)
+            type_map = np.swapaxes(type_map, 0, 1)
+
+        super().__init__(type_map, type_params, vsize, loc=loc)
+
 
 
 # Default cylindrical Phantom
-def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0): # TODO new phantom in the works
-    fov = 0.24
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24): # TODO new phantom in the works
     R = fov/2 # m
     r = R/4 # m
     h = fov # m
