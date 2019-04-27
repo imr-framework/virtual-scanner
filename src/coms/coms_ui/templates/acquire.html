@@ -67,11 +67,28 @@
 
 
   <script type="text/javascript">
+
+    var success = '{{ success }}'
+    if (success) {
+      console.log("session acq is defined")
+      if (success == '1'){
+        console.log("session acq is 1")
+      }
+      else{
+        console.log("session acq is 0")
+      }
+    }
+    else{
+      console.log("session acq is not defined")
+    }
+
     if ('{{ success }}') {
       {% autoescape false %}
-        var im = {{ output_im }}
+        //console.log("arrived")
+        var im = '{{ output_im }}'
+        //console.log(im)
         $(document).ready(function(){
-          $('$axial-container').html('<img src='+im+'>')
+          $('#axial-container').html('<img src='+im+'>')
 
         });
 
