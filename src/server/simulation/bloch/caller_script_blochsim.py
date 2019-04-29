@@ -40,11 +40,13 @@ def run_blochsim(seqinfo,phtinfo,pat_id):
 
     # Parse phantom info  Now, just default
     if phtinfo == 'Numerical':
-        pht_type = 'spherical'
+        #pht_type = 'spherical'
+        pht_type = 'cylindrical'
         pht_dim = '2'
         n_ph = '15'
         fov_ph = '0.240'
-        dir_ph = 'z' # not used for 3D though
+        dir_ph = enc[2] # not used for 3D though ## TODO
+
 
     else:
         print('Phantom type: '+phtinfo+" not supported")
@@ -70,5 +72,5 @@ def run_blochsim(seqinfo,phtinfo,pat_id):
                     n,fov,enc,# N, FOV(m), enc
                     tr,te,ti,fa,'0'])# TR(s), TE(s), TI(s), FA(deg), type of b0 map (0 for now)
     # load saved data (reconstruct how? many slices - how is it stored?)
-
+    return 1
 

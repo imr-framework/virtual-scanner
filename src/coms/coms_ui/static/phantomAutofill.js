@@ -28,7 +28,7 @@ $(document).ready(() => {
 
 
     $("#name").val($(this).val());
-  
+
     // TODO: change This
     if ($(this).val() == "ISMRM-NIST") {
       var img_element = "<img src='../static/phantom_pics/" + $(this).val() + ".jpg'/>"
@@ -60,9 +60,9 @@ $(document).ready(() => {
     $("#dob").prop("readonly", true);
     $("#met").prop("checked", true);
     $("#imp").prop("disabled", true);
-    $("#opt3").prop("checked", true);
-    $("#opt2").prop("disabled", true);
-    $("#opt1").prop("disabled", true);
+    $("#other").prop("checked", true);
+    $("#male").prop("disabled", true);
+    $("#female").prop("disabled", true);
     $("#weight").val("3");
     $("#weight").prop("readonly", true);
     $("#height").val("20");

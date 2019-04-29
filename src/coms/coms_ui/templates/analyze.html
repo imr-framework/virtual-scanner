@@ -52,17 +52,21 @@
       <div class="images-container">
         <!--Original data-->
         <div id="data-container" class="container analysis-container">
-          <p>ORIGINAL DATA</p>
+          <!--<p>ORIGINAL DATA</p>-->
         </div>
+
+          <div class="vertical-line"></div>
 
         <!--T1/T2 map-->
         <div id="map-container" class="container analysis-container">
-          <p>T1/T2 MAP</p>
+          <!--<p>T1/T2 MAP</p>-->
         </div>
 
+            <div class="vertical-line"></div>
+            
         <!--ROI analysis results-->
         <div id="roiresults-container" class="container analysis-container">
-          <p>ROI ANALYSIS RESULTS</p>
+          <!--<p>ROI ANALYSIS RESULTS</p>-->
         </div>
       </div>
 
@@ -90,9 +94,7 @@
             <li class="nav-item">
               <a class="nav-link active" href="{{ url_for('on_analyze')}}">Analyze</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="export.html" >Export</a>
-            </li>
+
           </nav>
 
           <!--Load a DICOM file-->

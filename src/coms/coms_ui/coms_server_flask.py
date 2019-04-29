@@ -31,6 +31,8 @@ if __name__ == '__main__':
     sys.path.insert(0, SEARCH_PATH)
 
 import json
+import time
+
 
 from flask import Flask, render_template, request, redirect, session
 
@@ -44,13 +46,15 @@ from src.server.simulation.bloch import caller_script_blochsim as bsim
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+
+
 users = []
 app.secret_key = 'Session_key'
 
 
-@app.route('/', methods=['POST',
-                         'GET'])  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
+    session.clear()
     if request.method == 'POST':
         users.append(request.form['user-name'])
         session['username'] = users[-1]
@@ -68,7 +72,7 @@ def log_in():
             return render_template("log_in.html")
 
 
-@app.route('/register')  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/register',methods =['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
 
@@ -86,27 +90,40 @@ def on_register():
     """
 
     # serve register template
-    return render_template('register.html')
+    if (session['username'] == ""):
+
+        return redirect('')
+    else:
+        if 'reg_success' in session:
+            return redirect('register_success')
+        else:
+            return render_template('register.html')
+
+@app.route('/register_success',methods=['POST','GET'])
+def on_register_success():
+    return render_template('register.html', success=session['reg_success'], payload=session['reg_payload'])
 
 
-@app.route('/acquire')
+@app.route('/acquire',methods=['POST','GET'])
 def on_acq():
-    """
 
-        Parameters
-        ----------
-               void
-
-         Returns
-        -------
-           void (status in debug mode if required)
-
-        Performs
-        --------
-            Renders the acquisition html page on the web
-        """
-    # serve index template
     return render_template('acquire.html')
+
+@app.route('/acquire_success', methods=['POST','GET'])
+def on_acquire_success():
+    print(session)
+    if 'acq' in session:
+        print("hello")
+        return render_template('acquire.html', success=session['acq'],output_im=session['acq_output'])
+    else:
+        print("bye")
+        return redirect('acquire')
+
+@app.route('/acquire_display', methods=['POST','GET'])
+def on_acquire_display():
+    print(session)
+    if 'acq' in session and session['acq'] == 1:
+        return render_template('acquire.html', success=session['acq'])
 
 
 @app.route('/analyze')
@@ -119,7 +136,7 @@ def on_recon():
     return render_template('recon.html')
 
 
-@app.route('/receiver', methods=['POST'])
+@app.route('/receiver', methods=['POST','GET'])
 def worker():
     """
 
@@ -143,6 +160,10 @@ def worker():
     formName = payload.get('formName')
     # Do registration and save to database
     if formName == 'reg':
+        if request.method == 'POST':
+            session['reg_success'] = 1
+            session['reg_payload'] = payload
+
         del payload['formName']
 
         pat_id = payload.get('patid')
@@ -166,7 +187,23 @@ def worker():
 
         rows = reg.reuse(query_dict)
         print(rows)
-        bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+
+        session['acq'] = 0
+
+        print(session)
+
+
+        #time.sleep(1)
+
+        progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+
+        if request.method == 'POST' and progress == 1:
+            session['acq'] = 1
+            sim_result_path = '../static/acq/outputs/' + '1030'
+            session['acq_output'] = sim_result_path + '/IM_GRE_20190425175047_1.png'
+            #imgpaths = os.listdir(sim_result_path)
+            #session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
+        print(session)
 
     result = ''
     return result

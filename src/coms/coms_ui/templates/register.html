@@ -66,12 +66,14 @@
       if ('{{ success }}') {
 
         {% autoescape false %}
-          var success_sentence = '{{ success }}';
-          console.log("works");
+          var payload_dict = {{ payload }}
+
           $(document).ready(function(){
             $("#success-sentence").show();
+            autoFillForm(payload_dict);
+
           });
-          console.log("works2");
+
         {% endautoescape %}
       }
 
@@ -106,9 +108,7 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="export.html" >Export</a>
-                  </li>
+                  
                 </ul>
               </nav>
 
@@ -186,11 +186,11 @@
 
 
                           <label class="radio-inline" >
-                            <input id="opt1" type="radio" name="gender" value="male" checked >
+                            <input id="male" type="radio" name="gender" value="male" checked >
                               <label for="opt1">Male</label>
                             <input class="not-first-radio" id="opt2" type="radio" name="gender" value="female" >
-                              <label for="opt2">Female</label>
-                            <input class="not-first-radio" id="opt3" type="radio" name="gender" value="other">
+                              <label for="female">Female</label>
+                            <input class="not-first-radio" id="other" type="radio" name="gender" value="other">
                               <label for="opt3">Other</label>
                           </label>
 

@@ -83,11 +83,9 @@ if __name__ == '__main__':
                                               loc=0) # now, 2D phantom is not moved around
                                               #args.slice_loc*np.array(loc_vec_dict[args.enc[2]]))
 
-
     elif args.pht_type == 'cylindrical': #TODO let's make a better phantom with T1, T2, PD varying individually
-
-        myphantom = []
-        # myphantom = pht.makeCylindricalPhantom()
+        print("Making cylindrical phantom")
+        myphantom = pht.makeCylindricalPhantom(dim=args.pht_dim, n=args.n_ph, dir=args.dir_ph, loc=0)
 
     elif args.pht_type == 'NIST':
         myphantom = []
@@ -169,9 +167,7 @@ if __name__ == '__main__':
         if args.seq_type == 'irse':
             sim_data['seq_info']['ti'] = args.ti
 
-
-        ts = str(datetime.datetime.now())
-        timestamp = ts[0:4]+ts[5:7]+ts[8:10]+ts[11:13]+ts[14:16]+ts[17:19]
+        timestamp = time.strftime("%Y%m%d%H%M%S")
         mypath1 = './src/server/simulation/outputs/'+args.pat_id
         if not os.path.isdir(mypath1):
             os.makedirs(mypath1)
@@ -182,6 +178,8 @@ if __name__ == '__main__':
         data = np.load(datapath).all()
         images = data['image']
 
+        dir_dict = {'x':'SAGITTAL','y':'CORONAL','z':'AXIAL'}
+
         for v in range(np.shape(images)[2]):
             plt.axis("off")
             fig = plt.imshow(np.absolute(images[:,:,v]))
@@ -191,7 +189,7 @@ if __name__ == '__main__':
             mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
             if not os.path.isdir(mypath2):
                 os.makedirs(mypath2)
-            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+str(v+1)+'.png'
+            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+dir_dict[args.enc[2]]+'_'+str(v+1)+'.png'
             plt.savefig(impath, bbox_inches='tight', pad_inches=0, format='png')
 
 

@@ -72,9 +72,13 @@ if (data2Send["formName"] == "reg"){
         type: 'POST',
         url: '/receiver',
         data: jsonData,
-        success: function(data) { alert('data: ' + data); },
+        success: redirectResponse(jsonData),
+          //window.location = '/register_success'
+          //alert('data: ' + data);
+
         contentType: "application/json",
-        dataType: 'json'
+        //dataType: 'json',
+
     });
 
 
@@ -94,3 +98,26 @@ if (data2Send["formName"] == "reg"){
 //  a.setAttribute('download', filename);
 //  a.click()
 //}
+function redirectResponse(dataIn_json){
+  var form_dict = JSON.parse(dataIn_json)
+  console.log(form_dict)
+  switch (form_dict['formName']) {
+    case 'reg':
+      setTimeout(function(){ window.location = '/register' }, 100);
+
+      //$(document).ready(autoFillForm(form_dict));
+      break;
+    /*case 'acq':
+
+      setTimeout(function(){ window.location = '/acquire_success' }, 100);
+
+      break;*/
+    default:
+
+  }
+
+
+
+
+
+}

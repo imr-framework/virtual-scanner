@@ -64,6 +64,37 @@
   <!--Favicon -->
   <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
+
+
+  <script type="text/javascript">
+
+    var success = '{{ success }}'
+    if (success) {
+      console.log("session acq is defined")
+      if (success == '1'){
+        console.log("session acq is 1")
+      }
+      else{
+        console.log("session acq is 0")
+      }
+    }
+    else{
+      console.log("session acq is not defined")
+    }
+
+    if ('{{ success }}') {
+      {% autoescape false %}
+        //console.log("arrived")
+        var im = '{{ output_im }}'
+        //console.log(im)
+        $(document).ready(function(){
+          $('#axial-container').html('<img src='+im+'>')
+
+        });
+
+      {% endautoescape %}
+    }
+  </script>
 </head>
 <body>
 
@@ -123,9 +154,7 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="export.html" >Export</a>
-            </li>
+
           </nav>
 
           <form id="seqparameters">
