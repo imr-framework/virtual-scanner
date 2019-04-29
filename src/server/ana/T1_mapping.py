@@ -65,8 +65,15 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     # plt.figure()
     # plt.imshow(T1_map, cmap='hot')
     # plt.show()
-    plt.imsave("./src/coms/coms_ui/static/ana/outputs/pat_id/f'original_data_{timestr}.png'", T1_map, cmap='hot')
-    filename = "f'original_data_{timestr}.png"
+
+    mypath='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
+
+    if not os.path.isdir(mypath):
+        os.makedirs(mypath)
+
+    plt.imsave(mypath +'/T1_map' + timestr + '.png', T1_map, cmap='hot')
+    filename = "T1_map" + timestr + ".png"
+
 
     return filename
 
