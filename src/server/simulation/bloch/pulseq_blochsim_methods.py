@@ -189,8 +189,8 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
     duration = 0
     if dt != 0:
         duration = find_precessing_time(blk,dt)
-        grad_timing = np.arange(0,duration+dt,dt) # TODO fix
-        #grad_timing = np.concatenate(([0],np.arange(delay,duration+dt,dt)))
+        #grad_timing = np.arange(0,duration+dt,dt) # TODO fix
+        grad_timing = np.concatenate(([0],np.arange(delay,duration+dt,dt)))
     elif len(timing) != 0:
         duration = timing[-1] - timing[0]
         grad_timing = timing
