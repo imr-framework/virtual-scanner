@@ -206,5 +206,5 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
             plt.axis('off')
             plt.savefig(mypath + '/map_with_ROI' + timestr + '.png', bbox_inches='tight')
 
-
-
+    filename = 'map_with_ROI' + timestr + '.png'
+    return filename
