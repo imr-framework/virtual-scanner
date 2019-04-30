@@ -38,6 +38,8 @@ from flask import Flask, render_template, request, redirect, session
 
 import src.server.registration.register as reg
 from src.server.simulation.bloch import caller_script_blochsim as bsim
+from src.server.ana import T1_mapping as T1_mapping
+from src.server.ana import T2_mapping as T2_mapping
 
 # Define the location of template and static folders
 # template_dir = os.path.abspath('../templates')
@@ -56,8 +58,9 @@ app.secret_key = 'Session_key'
 def log_in():
     session.clear()
     if request.method == 'POST':
-        users.append(request.form['user-name'])
-        session['username'] = users[-1]
+        #users.append(request.form['user-name'])
+        #session['username'] = users[-1]
+        session['username'] = request.form['user-name']
 
         if request.form['mode'] == "Standard":
             return redirect("register")
@@ -111,24 +114,27 @@ def on_acq():
 
 @app.route('/acquire_success', methods=['POST','GET'])
 def on_acquire_success():
-    print(session)
-    if 'acq' in session:
-        print("hello")
-        return render_template('acquire.html', success=session['acq'],output_im=session['acq_output'])
-    else:
-        print("bye")
-        return redirect('acquire')
 
-@app.route('/acquire_display', methods=['POST','GET'])
-def on_acquire_display():
-    print(session)
-    if 'acq' in session and session['acq'] == 1:
-        return render_template('acquire.html', success=session['acq'])
+    if session['acq'] == 1:
+
+        return render_template('acquire.html', success=session['acq'],output_im=session['acq_output'],payload=session['acq_payload'])
+    else:
+
+        return redirect('acquire')
 
 
 @app.route('/analyze')
 def on_analyze():
-    return render_template('analyze.html')
+    if 'ana_load' in session:
+        if 'ana_map' in session:
+
+            return render_template('analyze.html', map_success=session['ana_map'], load_success=session['ana_load'], payload1=session['ana_payload1'], payload2 = session['ana_payload2'])
+        else:
+            return render_template('analyze.html',load_success=session['ana_load'],payload1=session['ana_payload1'])
+
+    else:
+        return render_template('analyze.html')
+
 
 
 @app.route('/recon')
@@ -154,6 +160,111 @@ def worker():
                 TODO: invokes payload
             """
     # read payload and convert it to dictionary
+
+
+    if request.method == 'POST':
+        payload = request.form.to_dict()
+
+
+        #Registration
+        if request.form['formName'] == 'reg':
+
+
+            session['reg_success'] = 1
+            session['reg_payload'] = payload
+
+            del payload['formName']
+            # Right now only doing metric system.
+            del payload['weight2']
+            del payload['height2']
+            del payload['measuresystem']
+
+            pat_id = payload.get('patid')
+            session['patid'] = pat_id
+            query_dict = {
+                "patid": pat_id,
+            }
+            rows = reg.reuse(query_dict)
+            # print((rows))d
+
+            if (rows):
+                print('Subject is already registered with PATID: ' + pat_id)
+            else:
+                status = reg.consume(payload)
+
+            return redirect('register_success')
+
+        #ACQUIRE
+        elif request.form['formName'] == 'acq':
+            print(payload)
+            pat_id = session['patid']
+            query_dict = {
+                "patid": pat_id,
+            }
+
+            rows = reg.reuse(query_dict)
+            print(rows)
+
+            #session['acq'] = 0
+            session['acq_payload'] = payload
+
+            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+            sim_result_path = './src/coms/coms_ui/static/acq/outputs/' + session['patid']
+
+
+            while (os.path.isdir(sim_result_path) is False):
+                pass
+
+            if progress == 1 :
+                session['acq'] = 1
+                im_path_from_template = '../static/acq/outputs/' + session['patid']
+
+                imgpaths = os.listdir(sim_result_path)
+                complete_path = [im_path_from_template + '/'+ iname for iname in imgpaths]
+                #TODO: get all the available images in the folder
+                session['acq_output'] = complete_path[0]
+
+                return redirect('acquire_success')
+
+        elif request.form['formName'] == 'ana':
+            if 'original-data-opt' in payload:
+                if payload['original-data-opt'] == 'T1' :
+                    folder_path = './src/coms/coms_ui/static/ana/inputs/T1_original_data'
+                elif payload['original-data-opt'] == 'T2' :
+                    folder_path = './src/coms/coms_ui/static/ana/inputs/T2_original_data'
+
+                filenames_in_path = os.listdir(folder_path)
+                original_data_path = ['./static/ana/inputs/'+ payload['original-data-opt'] + '_original_data/'+ iname for iname in filenames_in_path]
+
+                payload['data-path'] = original_data_path
+                session['ana_load'] = 1
+                session['ana_payload1'] = payload
+
+            elif 'map-form' in payload:
+
+                session['ana_map'] = 1
+                server_od_path='./src/server/ana/inputs/T1_orig_data'
+                if payload['TI'] == "":
+                    server_od_path = './src/server/ana/inputs/T2_orig_data'
+                    map_name = T2_mapping.main(server_od_path, payload['TR'], payload['TE'], session['patid'])
+                else:
+                    server_od_path = './src/server/ana/inputs/T1_orig_data'
+                    map_name = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
+
+
+
+                payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
+                session['ana_payload2'] = payload
+
+            elif 'roi-form' in payload:
+                print(payload)
+
+            return redirect('analyze')
+
+
+
+
+    """
     payload = request.data
     payload = json.loads(payload.decode('utf8'))
 
@@ -179,7 +290,13 @@ def worker():
         else:
             status = reg.consume(payload)
 
+    """
+    """
     if formName == 'acq':
+
+        print("Arrived")
+        return redirect('register')
+        
         pat_id = session['patid']
         query_dict = {
             "patid": pat_id,
@@ -204,10 +321,10 @@ def worker():
             #imgpaths = os.listdir(sim_result_path)
             #session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
         print(session)
-
+    
     result = ''
     return result
-
+        """
 
 if __name__ == '__main__':
     # run!

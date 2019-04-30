@@ -55,7 +55,7 @@
 
   <!--JavaScript customized funcitons-->
   <script type="text/javascript" src="{{url_for('static',filename='acquire_func.js')}}"></script>
-  <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
+  <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
 
   <!--Customized CSS-->
   <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
@@ -68,7 +68,7 @@
 
   <script type="text/javascript">
 
-    var success = '{{ success }}'
+    /*var success = '{{ success }}'
     if (success) {
       console.log("session acq is defined")
       if (success == '1'){
@@ -80,15 +80,17 @@
     }
     else{
       console.log("session acq is not defined")
-    }
+    }*/
 
     if ('{{ success }}') {
       {% autoescape false %}
         //console.log("arrived")
         var im = '{{ output_im }}'
+        var payload_dict = {{ payload }}
         //console.log(im)
         $(document).ready(function(){
           $('#axial-container').html('<img src='+im+'>')
+          //autoFillForm(payload_dict);
 
         });
 
@@ -157,7 +159,7 @@
 
           </nav>
 
-          <form id="seqparameters">
+          <form id="seqparameters" method="post" action="/receiver">
 
             <input type="hidden" id="formId" name="formName" value="acq">
             <input type="hidden" id="seq-id" name="selectedSeq">
@@ -417,6 +419,7 @@
 
             </div>
 
+
           </form>
 
         </div> <!--Main Panel-->
@@ -425,7 +428,7 @@
 
     <div id="seq-panel" class="container">
       <button id="addseq-btn" type="button" class="btn btn-primary">+</button>
-      <button type="button" class="btn btn-primary submit-form-btn">Run Exam</button>
+      <button type="submit" class="btn btn-primary submit-form-btn">Run Exam</button>
       <!-- TODO: get panel being able to scroll down -->
       <div id="seq-history-panel" class="container">
         <div id="select-seq-sentence" >

@@ -19,7 +19,7 @@ if __name__ == '__main__':
     #PDs = [1, 1, 1]
     #T1s = [2, 1, 0.5]
     #T2s = [0.1, 0.15, 0.25]
-    nn = 7
+    nn = 15
     myphantom = pht.makeCylindricalPhantom(dim=2,n=nn,dir='z',loc=0)
 #    myphantom = pht.makePlanarPhantom(n=Nph,fov=FOVph,T1s=T1s,T2s=T2s,PDs=PDs,radii=Rs)
 
@@ -42,6 +42,8 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # Store seq info
+#    seq_info = blcsim.store_pulseq_commands(myseq)
+
     seq_info = blcsim.store_pulseq_commands(myseq)
     # Get list of locations from phantom
     loc_ind_list = myphantom.get_list_inds()
@@ -52,6 +54,7 @@ if __name__ == '__main__':
 
     # Multiprocessing simulation!
     results = pool.starmap_async(blcsim.sim_single_spingroup, [(loc_ind, df, myphantom, seq_info) for loc_ind in loc_ind_list]).get()
+    #results = pool.starmap_async(blcsim.sim_single_spingroup_new, [(loc_ind, df, myphantom, seq_info) for loc_ind in loc_ind_list]).get()
 
     pool.close()
     # Add up signal across all SpinGroups

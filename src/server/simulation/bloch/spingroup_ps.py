@@ -66,27 +66,7 @@ class SpinGroup:
                       [0, 0, E1]])
         self.m = A@self.m + np.array([[0], [0], [1 - E1]])
 
-    def apply_rf_old(self, pulse_shape, grads_shape, dt):
-        """
-        Applies a RF pulse to the spin group
-        Simulation method: hard-pulse approximation across small time intervals
-        With any gradient
 
-        INPUTS
-        # pulse_shape : 1 x n complex array (B1)[tesla]
-        # grads_shape : 3 x n real array  [tesla/meter]
-        # dt: raster time for both shapes [seconds]
-        """
-
-        b1 = pulse_shape
-        gs = grads_shape
-        loc = self.loc
-        for k in range(len(b1)):
-            bx = np.real(b1[k])
-            by = np.imag(b1[k])
-            bz = np.sum(np.multiply([gs[0,k],gs[1,k],gs[2,k]],loc)) + self.df/GAMMA_BAR
-            be = np.array([bx,by,bz])
-            self.m = anyrot(GAMMA*be*dt)@self.m
 
     def apply_rf(self, pulse_shape, grads_shape, dt):
         """
@@ -111,16 +91,48 @@ class SpinGroup:
             m = m + dt*GAMMA*A@m
         self.m = m
 
+    def apply_rf_old(self, pulse_shape, grads_shape, dt):
+        """
+        Applies a RF pulse to the spin group
+        Simulation method: hard-pulse approximation across small time intervals
+        With any gradient
 
-    def readout(self,dt,n,delay,grad,timing): # Added 4/23/19
+        INPUTS
+        # pulse_shape : 1 x n complex array (B1)[tesla]
+        # grads_shape : 3 x n real array  [tesla/meter]
+        # dt: raster time for both shapes [seconds]
+        """
+
+        b1 = pulse_shape
+        gs = grads_shape
+        loc = self.loc
+        for k in range(len(b1)):
+            bx = np.real(b1[k])
+            by = np.imag(b1[k])
+            bz = np.sum(np.multiply([gs[0, k], gs[1, k], gs[2, k]], loc)) + self.df / GAMMA_BAR
+            be = np.array([bx, by, bz])
+            self.m = anyrot(GAMMA * be * dt) @ self.m
+
+    def readout_old(self,dt,n,delay,grad,timing): # Added 4/23/19
         signal_1D = []
-        self.fpwg(grad[:, 0] * delay, delay)
+        self.fpwg(grad[:,0]*delay, delay)
         v = 1
         for q in range(1, len(timing)):
             if v <= n:
                 signal_1D.append(self.get_m_signal())
-            self.fpwg(grad[:, v] * dt, dt)
+            self.fpwg(grad[:, v]*dt,dt)
             v += 1
+
+        self.signal.append(signal_1D)
+
+    def readout(self,dwell,n,delay,grad,timing): # TODO
+        signal_1D = []
+        # ADC delay
+        self.fpwg(np.trapz(y=grad[:,0:2], x=timing[0:2]), delay)
+        for q in range(1, len(timing)):
+            if q <= n:
+                signal_1D.append(self.get_m_signal())
+            self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
 
         self.signal.append(signal_1D)
 

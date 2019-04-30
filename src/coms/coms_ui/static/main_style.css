@@ -139,3 +139,11 @@ ul.no-bullet{
   list-style-type: none;
   padding-left: 0;
 }
+/*EFFECTS*/
+.blur {
+  -webkit-filter: blur(2.5px);
+  -moz-filter: blur(2.5px);
+  -o-filter: blur(2.5px);
+  -ms-filter: blur(2.5px);
+  filter: blur(2.5px);
+}
