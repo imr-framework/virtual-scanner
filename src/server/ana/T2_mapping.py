@@ -59,9 +59,9 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
             popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 6))
             T2_map[n2, n3] = popt[2]
 
-    plt.figure()
-    plt.imshow(T2_map, cmap='hot')
-    plt.show()
+    # plt.figure()
+    # plt.imshow(T2_map, cmap='hot')
+    # plt.show()
     timestr = time.strftime("%Y%m%d%H%M%S")
 
 
@@ -73,6 +73,7 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     plt.imsave(mypath +'/T2_map' + timestr + '.png', T2_map, cmap='hot')
     filename = "T2_map" + timestr + ".png"
 
+    return filename
 
 def T2_sig_eq(X, a, b, c, d):
     """

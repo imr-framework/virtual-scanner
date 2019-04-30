@@ -33,6 +33,10 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=int, sep=',')
     TI = np.fromstring(TI, dtype=int, sep=',')
+    TR = TR/1000
+    TE = TE / 1000
+    TI = TI / 1000
+
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for filename in fileList:
