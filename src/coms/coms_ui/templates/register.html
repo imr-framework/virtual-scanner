@@ -70,7 +70,20 @@
 
           $(document).ready(function(){
             $("#success-sentence").show();
+            $("#warning-sentence").hide();
             autoFillForm(payload_dict);
+
+          });
+
+        {% endautoescape %}
+      }
+      if ('{{ msg }}') {
+
+        {% autoescape false %}
+
+          $(document).ready(function(){
+            $("#warning-sentence").show();
+
 
           });
 
@@ -294,6 +307,7 @@
 
       <div class="success-container">
         <h1 id="success-sentence">Subject successfully registered!</h1>
+        <h1 id="warning-sentence">Please register first</h1>
       </div>
 
 

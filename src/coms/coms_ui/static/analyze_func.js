@@ -58,7 +58,7 @@ function autoFillForm(dict){
     $("#TI-input").css('background-color','white');
     $("#TI-input").val('21, 100, 200, 400, 800, 1600, 3200');
     $("#model-eq").val('IRSE-eq');
-    $("#map-type").val('t1');
+    $("#map-type").val('T1');
     $("#FOV").val(170);
 
   }
@@ -66,7 +66,7 @@ function autoFillForm(dict){
     $("#seq-choice").val('SE');
     $("#TE").val('12, 22, 42, 62, 102, 152, 202');
     $("#model-eq").val('SE-eq');
-    $("#map-type").val('t2');
+    $("#map-type").val('T2');
     $("#FOV").val(210);
   }
   $('#seq-choice option:not(:selected)').attr('disabled', true);
