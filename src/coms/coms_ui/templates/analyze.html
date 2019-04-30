@@ -24,12 +24,19 @@
   <head>
     <meta charset="utf-8">
     <title>Standard Mode</title>
-
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!--jQuery and JS files-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="{{url_for('static',filename='analyze_func.js')}}"></script>
+
+
 
     <!--CSS-->
     <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
@@ -38,16 +45,15 @@
     <!--Favicon -->
     <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
-    <!--jQuery and JS files-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-    <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
-    <script type="text/javascript" src="{{url_for('static',filename='analyze_func.js')}}"></script>
-
     <!--JS to capture template variables-->
     <script type="text/javascript">
+
+      var load_step = '{{ load_success }}'
+      var map_step = '{{ map_success }}'
+      var roi_step = '{{ roi_path }}'
+
       //First step: load sample original data:
-      if ('{{ load_success }}'){
+      if (typeof(load_step) != 'undefined'){
         {% autoescape false %}
           console.log('load success')
           var payload1_dict = {{ payload1 }}
@@ -58,11 +64,14 @@
 
             //displayImages(payload1_dict['data-path']);
             var im_array = payload1_dict['data-path']
+
             $("#original-data-carousel").show();
 
 
             var i;
+            im_array.sort();
             for (i = 0; i < im_array.length; i++) {
+              console.log(im_array[i])
               if (i == 0) {
                 $('#original-data-carousel .carousel-inner').append('<div class="carousel-item active"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
               }
@@ -76,11 +85,11 @@
         {% endautoescape %}
       }
 
-      //Second step: load the generated map file
-      if ('{{ map_success }}'){
-        {% autoescape false %}
 
-          var payload1_dict = {{ payload1 }};
+      //Second step: load the generated map file
+      if (typeof(map_step) != 'undefined') {
+        {% autoescape false %}
+          var payload1_dict = {{ payload12 }}
           var payload2_dict = {{ payload2 }}
           $(document).ready(function(){
             autoFillForm2(payload1_dict,payload2_dict);
@@ -89,6 +98,20 @@
           });
         {% endautoescape %}
       }
+      /*
+
+      elif (typeof(roi_step) != 'undefined'){
+        {% autoescape false %}
+
+          var path='{{roi_path}}';
+          $(document).ready(function(){
+
+
+            $('#roiresults-container').append('<img class="d-block w-100" src="'+path+'"/>');
+          });
+        {% endautoescape %}
+      }
+      */
 
     </script>
 
@@ -103,17 +126,18 @@
       <div class="images-container">
         <!--Original data-->
         <div id="data-container" class="container analysis-container">
-        <div id="original-data-carousel" class="carousel slide" data-ride="carousel">
+        <div id="original-data-carousel" class="carousel" data-ride="carousel" data-interval="false">
             <div class="carousel-inner">
 
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <a class="carousel-control-prev"  href="#original-data-carousel" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
+
             </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+
+            <a class="carousel-control-next"  href="#original-data-carousel" role="button" data-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
+
             </a>
           </div>
         </div>
@@ -270,8 +294,8 @@
                   <label class="tag-label-med">Map Type</label>
                   <label class="input-label">
                     <select id="map-type" class="selector" name="map-type">
-                      <option value="t1">T1</option>
-                      <option value="t2">T2</option>
+                      <option value="T1">T1</option>
+                      <option value="T2">T2</option>
                     </select>
                   </label>
 
@@ -288,11 +312,11 @@
                   <!--FOV -->
                   <label class="tag-label-med">Field of View</label>
                   <label class="input-label ">
-                    <input id="FOV" class="smallinput" type="number" name="intensity-min">
+                    <input id="FOV" class="smallinput" type="number" name="map-FOV">
                   </label>
                   <label>mm</label>
 
-                  <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="button" value="Detect Spheres" disabled/>
+                  <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="submit" value="Detect Spheres" disabled/>
 
 
 

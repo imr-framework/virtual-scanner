@@ -40,6 +40,7 @@ import src.server.registration.register as reg
 from src.server.simulation.bloch import caller_script_blochsim as bsim
 from src.server.ana import T1_mapping as T1_mapping
 from src.server.ana import T2_mapping as T2_mapping
+from src.server.ana import ROI_analysis as ROI_analysis
 
 # Define the location of template and static folders
 # template_dir = os.path.abspath('../templates')
@@ -97,6 +98,16 @@ def on_register():
 
         return redirect('')
     else:
+        if 'acq' in session and 'reg_success' not in session:
+            session.pop('acq')
+            message = 1
+            return render_template('register.html', msg=message)
+
+        if 'ana_load' in session and 'reg_success' not in session:
+            session.pop('ana_load')
+            message = 1
+            return render_template('register.html', msg=message)
+
         if 'reg_success' in session:
             return redirect('register_success')
         else:
@@ -127,8 +138,10 @@ def on_acquire_success():
 def on_analyze():
     if 'ana_load' in session:
         if 'ana_map' in session:
-
-            return render_template('analyze.html', map_success=session['ana_map'], load_success=session['ana_load'], payload1=session['ana_payload1'], payload2 = session['ana_payload2'])
+            if 'ana_roi' in session:
+                return render_template('analyze.html', roi_path=session['roi_result'])
+            else:
+                return render_template('analyze.html', map_success=session['ana_map'], load_success=session['ana_load'], payload12=session['ana_payload1'], payload2 = session['ana_payload2'])
         else:
             return render_template('analyze.html',load_success=session['ana_load'],payload1=session['ana_payload1'])
 
@@ -196,7 +209,12 @@ def worker():
 
         #ACQUIRE
         elif request.form['formName'] == 'acq':
-            print(payload)
+
+            session['acq'] = 0
+
+            if (("patid" in session) == False):  # Please register first
+                return redirect('register')
+
             pat_id = session['patid']
             query_dict = {
                 "patid": pat_id,
@@ -227,7 +245,16 @@ def worker():
                 return redirect('acquire_success')
 
         elif request.form['formName'] == 'ana':
+
             if 'original-data-opt' in payload:
+
+                session['ana_load'] = 1
+
+
+
+                if (("patid" in session) == False): #Please register first
+                    return redirect('register')
+
                 if payload['original-data-opt'] == 'T1' :
                     folder_path = './src/coms/coms_ui/static/ana/inputs/T1_original_data'
                 elif payload['original-data-opt'] == 'T2' :
@@ -237,13 +264,14 @@ def worker():
                 original_data_path = ['./static/ana/inputs/'+ payload['original-data-opt'] + '_original_data/'+ iname for iname in filenames_in_path]
 
                 payload['data-path'] = original_data_path
-                session['ana_load'] = 1
+
                 session['ana_payload1'] = payload
 
             elif 'map-form' in payload:
 
+
                 session['ana_map'] = 1
-                server_od_path='./src/server/ana/inputs/T1_orig_data'
+
                 if payload['TI'] == "":
                     server_od_path = './src/server/ana/inputs/T2_orig_data'
                     map_name = T2_mapping.main(server_od_path, payload['TR'], payload['TE'], session['patid'])
@@ -256,8 +284,29 @@ def worker():
                 payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
                 session['ana_payload2'] = payload
 
+
             elif 'roi-form' in payload:
+
                 print(payload)
+                payload['map-type'] = 'T1'
+
+                session['ana_roi'] = 1
+
+                if payload['map-type'] == 'T1':
+
+                    dicom_map_path = './src/server/ana/outputs/T1_map'
+
+
+                else:
+
+                    dicom_map_path = './src/server/ana/outputs/T2_map'
+
+                roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'], payload['map-FOV'], session['patid'])
+
+                roi_result_path='../static/ana/outputs/' + session['patid']+'/' + roi_result_filename
+                print (roi_result_path)
+                session['roi_result']= roi_result_path
+                print(session)
 
             return redirect('analyze')
 
