@@ -178,8 +178,6 @@ if __name__ == '__main__':
         data = np.load(datapath).all()
         images = data['image']
 
-        dir_dict = {'x':'SAGITTAL','y':'CORONAL','z':'AXIAL'}
-
         for v in range(np.shape(images)[2]):
             plt.axis("off")
             fig = plt.imshow(np.absolute(images[:,:,v]))
@@ -189,7 +187,7 @@ if __name__ == '__main__':
             mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
             if not os.path.isdir(mypath2):
                 os.makedirs(mypath2)
-            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+dir_dict[args.enc[2]]+'_'+str(v+1)+'.png'
+            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+str(v+1)+'.png'
             plt.savefig(impath, bbox_inches='tight', pad_inches=0, format='png')
 
 

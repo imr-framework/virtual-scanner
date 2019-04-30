@@ -11,23 +11,20 @@ from math import pi
 GAMMA_BAR = 42.5775e6
 GAMMA = 2*pi*GAMMA_BAR
 
-def apply_pulseq_commands(isc,seq_info): # TODO test
+def apply_pulseq_commands(isc,seq_info):
     cmds = seq_info['commands']
     pars = seq_info['params']
     for c in range(len(cmds)):
         cstr = cmds[c]
         cpars = pars[c]
-        if cstr == 'd':
+        if cstr == 'd': # delay
             isc.delay(t=cpars[0])
-        elif cstr == 'p':
+        elif cstr == 'p': # RF pulse
             isc.apply_rf(pulse_shape=cpars[0],grads_shape=cpars[1],dt=cpars[2])
-        elif cstr == 'r':
-            isc.readout(dt=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
-        elif cstr == 'g':
+        elif cstr == 'r': # Readout
+            isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
+        elif cstr == 'g': # free precessiong with gradients
             isc.fpwg(grad_area=cpars[0],t=cpars[1])
-
-
-
 
 def store_pulseq_commands(seq):
     events = seq.block_events
@@ -71,12 +68,12 @@ def store_pulseq_commands(seq):
             dur = find_precessing_time(blk=this_blk,dt=dt_grad)
             seq_params.append([fp_grads_area,dur])
 
-    seq_info = {'commands':commands, 'params':seq_params}
+    seq_info = {'commands':commands, 'params':seq_params,'grad_raster_time':dt_grad}
     return seq_info
 
 
 
-def apply_pulseq(isc,seq):
+def apply_pulseq_old(isc,seq):
     """
     Applies a pulseq Sequence onto a SpinGroup and returns magnetization signals
 
@@ -143,7 +140,7 @@ def apply_pulseq(isc,seq):
 def sim_single_spingroup_old(loc_ind,freq_offset,phantom,seq):
     sgloc = phantom.get_location(loc_ind)
     isc = sg.SpinGroup(loc=sgloc, pdt1t2=phantom.get_params(loc_ind), df=freq_offset)
-    signal = apply_pulseq(isc,seq)
+    signal = apply_pulseq_old(isc,seq)
     return signal
 
 
@@ -152,7 +149,6 @@ def sim_single_spingroup(loc_ind,freq_offset,phantom,seq_info):
     isc = sg.SpinGroup(loc=sgloc,pdt1t2=phantom.get_params(loc_ind),df=freq_offset)
     apply_pulseq_commands(isc,seq_info)
     return isc.signal
-
 
 
 # Helpers
@@ -192,8 +188,9 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
     grad_timing = []
     duration = 0
     if dt != 0:
-        duration = find_precessing_time(blk,dt) #TODO unit conversion makes sense?
-        grad_timing = np.arange(0,duration,dt) if delay == 0 else np.concatenate(([0],np.arange(delay,duration,dt)))
+        duration = find_precessing_time(blk,dt)
+        grad_timing = np.arange(0,duration+dt,dt) # TODO fix
+        #grad_timing = np.concatenate(([0],np.arange(delay,duration+dt,dt)))
     elif len(timing) != 0:
         duration = timing[-1] - timing[0]
         grad_timing = timing
@@ -207,14 +204,14 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
             g_time, g_shape = ([0, g.rise_time, g.rise_time + g.flat_time, g.rise_time + g.flat_time + g.fall_time],
                                [0,g.amplitude/GAMMA_BAR,g.amplitude/GAMMA_BAR,0]) if g.type == 'trap'\
                                else (g.t, g.waveform/GAMMA_BAR)
-
-            # Modified 04/24 : us to s
-            g_time = np.array(g_time) #TODO unit conversion make sense?
+            g_time = np.array(g_time)
             grad.append(np.interp(x=grad_timing,xp=g_time,fp=g_shape))
         else:
             grad.append(np.zeros(np.shape(grad_timing)))
 
     return np.array(grad), grad_timing, duration
+
+
 
 
 def find_precessing_time(blk,dt):
