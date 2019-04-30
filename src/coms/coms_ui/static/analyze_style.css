@@ -24,6 +24,13 @@
   width: 48vh;
   min-width: 48vh;
   text-align: center;
+  padding: 0;
+}
+.analysis-container img{
+  min-width: 100%;
+}
+.carousel{
+  display:none;
 }
 .vertical-line {
   border-left: 2px solid white;
@@ -103,6 +110,9 @@ label{
   background-color: #bfbfbf;
 
 }
+#TR{
+  width: 100px;
+}
 /*BUTTONS*/
 .btn-align-right{
   float: right;
@@ -113,6 +123,10 @@ label{
   margin-left: auto;
   margin-right: auto;
   margin-top: 2%;
+
+}
+#roi-analysis-button{
+  background-color: #bfbfbf;
 
 }
 
@@ -126,4 +140,13 @@ label{
 /*FORMS*/
 .map-gen-Form{
   margin-left: 15px;
+}
+/*MENU*/
+.dialog {
+    overflow: visible;
+    width:auto;
+}
+
+.dialog .menu {
+    overflow: inherit;
 }

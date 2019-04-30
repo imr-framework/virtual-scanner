@@ -69,7 +69,7 @@ function voxelSizeCalc() {
 $(document).on("click", "#addseq-btn", function(){
 
   //$("#sl-gap").val(0);
-  $("#dialog").dialog({
+  $(".dialog").dialog({
     open : function (ui){
       $( "#enclosingjumbo" ).addClass( "blur" );
       $( "#menu" ).menu();
@@ -179,6 +179,20 @@ function openDialog(){
 function closeDialog(){
   $( "#enclosingjumbo" ).removeClass( "blur" );
 
+}
+$(document).on("click", ".submit-form-btn", function(){
+  // TODO: if a seq is not selected abort submission
+  $("#seqparameters")[0].submit();
+});
+
+function autoFillForm(dict){
+  $("#TR").val(dict['TR']);
+  $("#TE").val(dict['TE']);
+  $("#FA").val(dict['FA']);
+  if (dict['TI']){
+    $("#TI").val(dict['TI']);
+  }
+  $("#sl").val(dict['FA']);
 }
 
 

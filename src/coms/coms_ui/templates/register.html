@@ -56,7 +56,7 @@
 
     <!-- TODO: merge functions in one script -->
     <!-- External JS files-->
-    <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
+    <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
     <!--<script src="../static/form2Json.js"> </script>-->
     <script src="../static/metric_imperial.js"> </script>
     <script src="../static/phantomAutofill.js"> </script>
@@ -108,11 +108,11 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
                   </li>
-                  
+
                 </ul>
               </nav>
 
-              <form id="regparameters" >
+              <form id="regparameters" method="post" action="/receiver">
 
                 <input type="hidden" id="formId" name="formName" value="reg">
 
@@ -275,7 +275,7 @@
                     </div>
                       <div class="row">
                         <div class="col" id="submitButton" >
-                          <input id="reg-form-submit" type="button" class="btn btn-primary submit-form-btn" value="Register Subject" >
+                          <input id="reg-form-submit" type="submit" class="btn btn-primary submit-form-btn" value="Register Subject" >
 
 
                         </div>
