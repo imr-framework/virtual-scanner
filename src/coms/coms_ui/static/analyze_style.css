@@ -1,13 +1,12 @@
-/*JUMBOTRON*/
 #mainpanel{
   height: 45vh;
-  min-width: 84vw;
+  min-width: 98vw;
   /* TODO: Set min width  */
 }
 /*CONTAINERS*/
 .images-container{
   height: 48vh;
-  width: 84vw;
+  width: 98vw;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -45,6 +44,7 @@
   font-weight: bold;
   color: #003865;
 }*/
+/*
 .workspace-container{
   width: 16vw;
   border: 2px solid #003865;

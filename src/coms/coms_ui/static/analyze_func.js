@@ -77,32 +77,19 @@ function autoFillForm(dict){
 
 
 }
-function autoFillForm2(dict1,dict2){
-  //$("#file-input-display").val('Virtual Scanner/Analyze/Sample Data/'+dict1['original-data-opt']);
-  //$("#seq-choice").val(dict2['seq-choice']);
+function autoFillForm2(dict2){
+
   $("#TR").val(dict2['TR']);
   $("#TE").val(dict2['TE']);
   $("#TI-input").val(dict2['TI']);
-  //$("#model-eq").val(dict2['model-eq']);
-  //$("#map-size").val(128);
 
-  //if (dict1['original-data-opt'] == 'T1'){
-    //$("#TI-input").css('background-color','white');
-    //$("#map-type").val('t1');
-    //$("#FOV").val(170);
-
-  //}
-  //else if (dict1['original-data-opt'] == 'T2') {
-    //$("#map-type").val('t2');
-    //$("#FOV").val(210);
-  //}
-  //$('#seq-choice option:not(:selected)').attr('disabled', true);
-  //$('#model-eq option:not(:selected)').attr('disabled', true);
-  //$('#map-type option:not(:selected)').attr('disabled', true);
   $('#roi-analysis-button').prop('disabled',false);
   $('#roi-analysis-button').css('background-color','#5f9bef');
 }
-
+function autoFillForm3(dict3){
+  $("#map-size").val(dict3['map-size']);
+  $("#FOV").val(dict3['map-FOV']);
+}
 
 
 
