@@ -33,13 +33,13 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     """
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=float, sep=',')
-    TR = TR/1000
-    TE = TE/1000
+    # TR = TR/1000
+    # TE = TE/1000
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
-        for filename in fileList:
-            if ".dcm" in filename.lower():  # check whether the file's DICOM
-                lstFilesDCM.append(os.path.join(dirName, filename))
+        for filename1 in fileList:
+            if ".dcm" in filename1.lower():  # check whether the file's DICOM
+                lstFilesDCM.append(os.path.join(dirName, filename1))
 
     ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions
@@ -53,27 +53,37 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     image_data_final = np.divide(image_data_final, np.amax(image_data_final))
     T2_map = np.zeros([image_size[0], image_size[1]])
     p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275, 0.915735525189067)  # initial guess for parameters
+
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
             popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 6))
             T2_map[n2, n3] = popt[2]
 
-    # plt.figure()
-    # plt.imshow(T2_map, cmap='hot')
-    # plt.show()
+    T2_map[T2_map > 2] = 2
+    plt.figure()
+    imshowobj = plt.imshow(T2_map, cmap='hot')
+    imshowobj.set_clim(0, 2)
+    plt.show()
+
     timestr = time.strftime("%Y%m%d%H%M%S")
 
 
-    mypath='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
+    mypath1='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
+    mypath2='./src/server/ana/outputs/' + pat_id
 
-    if not os.path.isdir(mypath):
-        os.makedirs(mypath)
+    if not os.path.isdir(mypath1):
+        os.makedirs(mypath1)
 
-    plt.imsave(mypath +'/T2_map' + timestr + '.png', T2_map, cmap='hot')
-    filename = "T2_map" + timestr + ".png"
+    plt.imsave(mypath1 +'/T2_map' + timestr + '.png', T2_map, cmap='hot')
+    filename1 = "T2_map" + timestr + ".png"
 
-    return filename
+    pixel_array = (T2_map/2)*65535
+    ds.PixelData = pixel_array.tostring()
+    ds.save_as(mypath2 +'/T2_map' + timestr +'.dcm')
+
+    return filename1, mypath2
+
 
 def T2_sig_eq(X, a, b, c, d):
     """
