@@ -49,8 +49,8 @@ function voxelSizeCalc() {
   var FOVy = $('#FOVy').val();
   var thck = $("#thickness").val();
 
-  var val1 = Nx/FOVx;
-  var val2 = Ny/FOVy;
+  var val1 = FOVx/Nx;
+  var val2 = FOVy/Ny;
 
   if ((Nx == 0)|| (FOVx == 0)){
     val1 = 0;

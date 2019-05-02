@@ -2,11 +2,81 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Advanced Mode</title>
+
+    <!--favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--Manual links-->
+    <!--Bootstrap & JQuery-->
+    <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+    <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="../static/main_style.css">
+    <link rel="stylesheet" href="../static/advanced_mode_style.css">
+
   </head>
   <body>
+    <div id="gradients-panel" class="jumbotron">
+      <div id="gradients-container">
+        <img src="./static/advanced/gradients.png" >
+      </div>
+      <div id="txrx-container">
+        <img src="./static/advanced/TxRx.png" >
+      </div>
 
-    <h1>recon page</h1>
+      <div id="human-form-container">
+        <img src="./static/advanced/human-form.png" >
+
+      </div>
+      <div id="computer-container">
+        <img src="./static/advanced/computer.png" >
+
+      </div>
+      <div id="run-exam-button">
+        <p>RUN EXPERIMENT</p>
+      </div>
+
+    </div>
+    <div id="enclosingjumbo" class="jumbotron">
+      <h1>Virtual MR Scanner - Advanced Mode</h1>
+      <div id="mainpanel" class="jumbotron">
+        <nav>
+
+          <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link disabled" href="..." >PSD Inspector</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Tx</a>
+              <!--<a class="nav-link" href="acquire.html">Acquire</a>-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Subject</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_rx')}}">Rx</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_recon')}}">Recon</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Analysis</a>
+            </li>
+
+          </ul>
+        </nav>
+
+        
+
+        </div>
+      </div>
+    </div>
+
+
 
 
 
