@@ -134,20 +134,23 @@ def on_acquire_success():
         return redirect('acquire')
 
 
-@app.route('/analyze')
+@app.route('/analyze', methods=['POST','GET'])
 def on_analyze():
     if 'ana_load' in session:
         if 'ana_map' in session:
             if 'ana_roi' in session:
-                return render_template('analyze.html', roi_path=session['roi_result'])
+                return render_template('analyze.html', roi_success=session['ana_roi'],payload3=session['ana_payload3'],map_success=session['ana_map'], load_success=session['ana_load'], payload1=session['ana_payload1'], payload2 = session['ana_payload2'])
             else:
-                return render_template('analyze.html', map_success=session['ana_map'], load_success=session['ana_load'], payload12=session['ana_payload1'], payload2 = session['ana_payload2'])
+                return render_template('analyze.html', map_success=session['ana_map'], load_success=session['ana_load'], payload1=session['ana_payload1'], payload2 = session['ana_payload2'])
         else:
             return render_template('analyze.html',load_success=session['ana_load'],payload1=session['ana_payload1'])
 
     else:
         return render_template('analyze.html')
 
+@app.route('/ana_load_success')
+def on_ana_load_success():
+    return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
 
 
 @app.route('/recon')
@@ -248,9 +251,13 @@ def worker():
 
             if 'original-data-opt' in payload:
 
+                if 'ana_load' in session:
+                    session.pop('ana_load')
+                    session.pop('ana_map')
+                    session.pop('ana_roi')
+
+
                 session['ana_load'] = 1
-
-
 
                 if (("patid" in session) == False): #Please register first
                     return redirect('register')
@@ -267,6 +274,7 @@ def worker():
 
                 session['ana_payload1'] = payload
 
+
             elif 'map-form' in payload:
 
 
@@ -279,8 +287,7 @@ def worker():
                     server_od_path = './src/server/ana/inputs/T1_orig_data'
                     map_name = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
 
-
-
+                #payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
                 payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
                 session['ana_payload2'] = payload
 
@@ -304,9 +311,11 @@ def worker():
                 roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'], payload['map-FOV'], session['patid'])
 
                 roi_result_path='../static/ana/outputs/' + session['patid']+'/' + roi_result_filename
-                print (roi_result_path)
-                session['roi_result']= roi_result_path
-                print(session)
+
+                #roi_result_path = '../static/ana/outputs/292/map_with_ROI20190430142228.png'
+                payload['roi_path']= roi_result_path
+                session['ana_payload3']=payload
+
 
             return redirect('analyze')
 

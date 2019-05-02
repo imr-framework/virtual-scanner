@@ -53,7 +53,7 @@
       var roi_step = '{{ roi_path }}'
 
       //First step: load sample original data:
-      if (typeof(load_step) != 'undefined'){
+      if ('{{ load_success }}'){
         {% autoescape false %}
           console.log('load success')
           var payload1_dict = {{ payload1 }}
@@ -71,7 +71,7 @@
             var i;
             im_array.sort();
             for (i = 0; i < im_array.length; i++) {
-              console.log(im_array[i])
+
               if (i == 0) {
                 $('#original-data-carousel .carousel-inner').append('<div class="carousel-item active"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
               }
@@ -87,33 +87,44 @@
 
 
       //Second step: load the generated map file
-      if (typeof(map_step) != 'undefined') {
+      if ('{{ map_success }}') {
         {% autoescape false %}
-          var payload1_dict = {{ payload12 }}
+        console.log('map success')
+          //var payload1_dict = {{ payload1 }};
           var payload2_dict = {{ payload2 }}
           $(document).ready(function(){
-            autoFillForm2(payload1_dict,payload2_dict);
+            autoFillForm2(payload2_dict);
 
             $('#map-container').append('<img class="d-block w-100" src="'+payload2_dict['map_path']+'"/>');
           });
         {% endautoescape %}
       }
-      /*
 
-      elif (typeof(roi_step) != 'undefined'){
+
+      if ('{{ roi_success }}'){
         {% autoescape false %}
+        console.log('roi success')
 
-          var path='{{roi_path}}';
+          var payload3_dict = {{ payload3 }}
+
           $(document).ready(function(){
 
-
-            $('#roiresults-container').append('<img class="d-block w-100" src="'+path+'"/>');
+            autoFillForm3(payload3_dict);
+            $('#roiresults-container').append('<img class="d-block w-100" src="'+payload3_dict['roi_path']+'"/>');
           });
         {% endautoescape %}
       }
-      */
+
 
     </script>
+
+    <!--MathJax-->
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'>
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+    </script>
+
 
   </head>
   <body>
@@ -161,12 +172,14 @@
       </div>
 
       <!--Workspace-->
+      <!--
       <div class="workspace-container">
         <h2>Workspace</h2>
         <ul class="file-list">
 
         </ul>
       </div>
+      -->
 
       <!--Analyze main panel-->
       <div id="panel-container" class="container">
@@ -263,9 +276,9 @@
                     <label class="input-label largeinput-label ">
 
                       <select id="model-eq" class="selector" name="model-eq">
-                        <option value="SE-eq">a(1-e^{-(y/b)})e^{-(x/c)}+d</option>
+                        <option value="SE-eq">a(1-exp(-y/b)exp(-x/c))+d</option>
 
-                        <option value="IRSE-eq">a(1-2e^{-(x/b)}+e^{-(y/b)})</option>
+                        <option value="IRSE-eq">a(1-2exp(-x/b)+exp(-y/b))</option>
                       </select>
                     </label>
 
