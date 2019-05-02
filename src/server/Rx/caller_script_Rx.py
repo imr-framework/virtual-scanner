@@ -15,9 +15,9 @@ def run_Rx_sim(Rxinfo):
     dt = 1e-9  # Sim.raster time dt = 1 ns
 
     # Read parameters # TODO change according to payload format
-    dw = 2*pi*Rxinfo['df_demod']
-    im_path = './src/server/Rx/'+ Rxinfo['im_name'] + '.png'
-    dsf = Rxinfo['dsf']
+    dw = 2*pi*float(Rxinfo['deltaf'])
+    im_path = './src/server/Rx/'+ Rxinfo['image-or'] + '.png'
+    dsf = int(Rxinfo['DSF'])
 
     # 1. load image
     myimage = imread(im_path)
@@ -117,6 +117,7 @@ def run_Rx_sim(Rxinfo):
     plt.tight_layout()
     signals_plot_path = mypath + 'Rx_signals_'+timestamp+'.png'
     plt.savefig(signals_plot_path,bbox_inches='tight',pad_inches=0,format='png')
+    plt.clf()
 
     # Recon image from Rx signal
     plt.figure(2)
@@ -127,13 +128,14 @@ def run_Rx_sim(Rxinfo):
     fig.axes.get_yaxis().set_visible(False)
     recon_im_path = mypath + 'recon_im_'+timestamp+'.png'
     plt.savefig(recon_im_path,bbox_inches='tight',pad_inches=0,format='png')
+    plt.clf()
 
     return  [signals_plot_path, recon_im_path, im_path]
 
 
 
 if __name__ == "__main__":
-    Rxinfo = {'im_name':'coronal','dsf':1, 'df_demod':0}
+    Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
     a = run_Rx_sim(Rxinfo)
     print(a)
     b = imread(a[2])

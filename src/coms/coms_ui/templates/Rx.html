@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Advanced Mode</title>
+
+    <!--favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--Manual links-->
+    <!--Bootstrap & JQuery-->
+    <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+    <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+    <!--MathJax-->
+
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'>
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+    </script>
+
+    <!--JQuery-->
+    <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+    <!-- External JS files-->
+
+    <script src="../static/rx_func.js"> </script>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="../static/main_style.css">
+    <link rel="stylesheet" href="../static/advanced_mode_style.css">
+
+    <script type="text/javascript">
+      if ('{{ success }}') {
+        {% autoescape false %}
+
+
+          var payload_dict = {{ payload }}
+
+          $(document).ready(function(){
+            console.log(payload_dict)
+            $('#signal-container').html('<img src='+payload_dict['signals_path']+'>')
+            $('#recon-img-container').html('<img src='+payload_dict['recon_path']+'>')
+            autoFillForm(payload_dict);
+
+          });
+
+        {% endautoescape %}
+      }
+
+    </script>
+
+
+  </head>
+  <body>
+    <div id="gradients-panel" class="jumbotron">
+      <div id="gradients-container">
+        <img src="./static/advanced/gradients.png" >
+      </div>
+      <div id="txrx-container">
+        <img src="./static/advanced/TxRx.png" >
+      </div>
+
+      <div id="human-form-container">
+        <img src="./static/advanced/human-form.png" >
+
+      </div>
+      <div id="computer-container">
+        <img src="./static/advanced/computer.png" >
+
+      </div>
+      <div id="run-exam-button">
+        <p>RUN EXPERIMENT</p>
+      </div>
+
+    </div>
+    <div id="enclosingjumbo" class="jumbotron">
+      <h1>Virtual MR Scanner - Advanced Mode</h1>
+      <div id="images-panel" class="jumbotron">
+        <div id="signal-container"  class="container rx-container">
+
+
+
+        </div>
+
+        <div id="vl1" class="vertical-line"></div>
+
+        <div id="recon-img-container"  class="container rx-container">
+
+
+
+        </div>
+
+        <div id="vl2" class="vertical-line"></div>
+
+        <div id="original-img-container"  class="container rx-container">
+          <img id="axial" src="../static/Rx/inputs/axial.png" >
+          <img id="coronal" src="../static/Rx/inputs/coronal.png" >
+          <img id="sagittal" src="../static/Rx/inputs/sagittal.png" >
+
+        </div>
+
+      </div>
+      <div id="mainpanel" class="jumbotron">
+        <nav>
+
+          <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link disabled" href="..." >PSD Inspector</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Tx</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Subject</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_rx')}}">Rx</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_recon')}}">Recon</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Analysis</a>
+            </li>
+
+          </ul>
+        </nav>
+        <form  action="/receiver" method="post">
+          <input type="hidden" id="formId" name="formName" value="rx">
+          <div id="rx-inputs" class="row">
+            <div class="col coltype1">
+              <label>Choose image:</label>
+                <div class="w-100"></div>
+              <label>Downsampling factor (DSF):</label>
+                <div class="w-100"></div>
+              <label>Demodulation freq. offset ($\Delta f$):</label>
+
+            </div>
+            <div class="col coltype2">
+              <label>
+                <select id="orig-im" class="selector" name="image-or">
+                  <option value="axial">Axial</option>
+                  <option value="coronal">Coronal</option>
+                  <option value="sagittal">Sagittal</option>
+                </select>
+              </label>
+                <div class="w-100"></div>
+              <label>
+                <input id="dsf" class="smallinput" type="number" name="DSF" min=1 max=8 value="1">
+              </label>
+              <input id="form-submit-btn" type="submit" class="btn btn-primary" value="Run">
+                <div class="w-100"></div>
+              <label>
+                <input id="deltaf" class="smallinput" type="number" name="deltaf" value="0"> Hz
+              </label>
+            </div>
+            <div class="col coltype1 last-col">
+              <p>B<sub>0</sub>=3 T</p>
+            </div>
+          </div>
+        </form>
+
+
+
+    </div>
+
+  </body>
+</html>

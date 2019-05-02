@@ -41,6 +41,7 @@ from src.server.simulation.bloch import caller_script_blochsim as bsim
 from src.server.ana import T1_mapping as T1_mapping
 from src.server.ana import T2_mapping as T2_mapping
 from src.server.ana import ROI_analysis as ROI_analysis
+from src.server.Rx import caller_script_Rx as Rxfunc
 
 # Define the location of template and static folders
 # template_dir = os.path.abspath('../templates')
@@ -152,6 +153,12 @@ def on_analyze():
 def on_ana_load_success():
     return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
 
+@app.route('/rx',methods=['POST','GET'])
+def on_rx():
+    if 'rx' in session:
+        return render_template('Rx.html',success=session['rx'],payload=session['rx_payload'])
+    else:
+        return render_template('Rx.html')
 
 @app.route('/recon')
 def on_recon():
@@ -247,6 +254,7 @@ def worker():
 
                 return redirect('acquire_success')
 
+        #Analyze
         elif request.form['formName'] == 'ana':
 
             if 'original-data-opt' in payload:
@@ -319,6 +327,17 @@ def worker():
 
             return redirect('analyze')
 
+        #Advance Mode
+        #Rx
+        elif request.form['formName'] == 'rx':
+            print(payload)
+            signals_path, recon_path, orig_im_path=Rxfunc.run_Rx_sim(payload)
+            payload['signals_path']='..'+signals_path[18:]
+            payload['recon_path'] = '..' + recon_path[18:]
+
+            session['rx'] = 1
+            session['rx_payload'] = payload
+            return redirect('rx')
 
 
 
