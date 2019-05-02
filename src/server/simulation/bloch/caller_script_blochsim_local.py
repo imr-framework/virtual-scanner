@@ -2,7 +2,7 @@ import subprocess
 
 
 
-siminfo = {'formName':'acq','selectedSeq':'GRE','TR':'1000','TE':'500','FA':'90',
+siminfo = {'formName':'acq','selectedSeq':'GRE','TR':'1000','TE':'500','FA':'90','TI':'50',
             'sl-orient':'axial','thck':str(240/16),'slicenum':'1','freq':'x','ph':'y','bw':'3','Nx':'15','Ny':'15','FOVx':'240','FOVy':'240'}
 
 

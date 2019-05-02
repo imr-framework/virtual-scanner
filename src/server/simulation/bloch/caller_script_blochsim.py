@@ -45,7 +45,8 @@ def run_blochsim(seqinfo,phtinfo,pat_id):
         pht_dim = '2'
         n_ph = '15'
         fov_ph = '0.240'
-        dir_ph = enc[2] # not used for 3D though ## TODO
+        dir_ph = enc[2]
+        #dir_ph = seqinfo['enc'][2] # not used for 3D though ## TODO
 
 
     else:
@@ -72,5 +73,5 @@ def run_blochsim(seqinfo,phtinfo,pat_id):
                     n,fov,enc,# N, FOV(m), enc
                     tr,te,ti,fa,'0'])# TR(s), TE(s), TI(s), FA(deg), type of b0 map (0 for now)
     # load saved data (reconstruct how? many slices - how is it stored?)
-    return 1
 
+    return 1

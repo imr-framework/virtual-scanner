@@ -187,7 +187,12 @@ if __name__ == '__main__':
             mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
             if not os.path.isdir(mypath2):
                 os.makedirs(mypath2)
-            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+timestamp+'_'+str(v+1)+'.png'
+
+            tiopt = 'ms_TI'+str(round(1e3*args.ti)) if args.seq_type == 'irse' else ''
+            impath = mypath2+'/IM_'+args.seq_type.upper()+'_TR'+str(round(1e3*args.tr))+\
+                    'ms_TE'+str(round(1e3*args.te))+tiopt+\
+                    'ms_FA'+str(round(args.fa))+'_'+timestamp+'_'+str(v+1)+'.png'
+
             plt.savefig(impath, bbox_inches='tight', pad_inches=0, format='png')
 
 
