@@ -197,23 +197,23 @@ if __name__ == '__main__':
 
 
         # display (comment off later)
-        mydata = np.load(datapath).all()
-        image = mydata['image']
-        kspace = mydata['kspace']
-        Ns = np.shape(image)[2]
-        a1 = int(np.sqrt(Ns))
-        a2 = int(np.ceil(Ns/a1))
-
-        plt.figure(1)
-        for v in range(Ns):
-            plt.subplot(a1,a2,v+1)
-            plt.imshow(np.absolute(kspace[:,:,v]))
-            plt.gray()
-
-        plt.figure(2)
-        for v in range(Ns):
-            plt.subplot(a1,a2,v+1)
-            plt.imshow(np.absolute(image[:,:,v]))
-            plt.gray()
-
-        plt.show()
+        # mydata = np.load(datapath).all()
+        # image = mydata['image']
+        # kspace = mydata['kspace']
+        # Ns = np.shape(image)[2]
+        # a1 = int(np.sqrt(Ns))
+        # a2 = int(np.ceil(Ns/a1))
+        #
+        # plt.figure(1)
+        # for v in range(Ns):
+        #     plt.subplot(a1,a2,v+1)
+        #     plt.imshow(np.absolute(kspace[:,:,v]))
+        #     plt.gray()
+        #
+        # plt.figure(2)
+        # for v in range(Ns):
+        #     plt.subplot(a1,a2,v+1)
+        #     plt.imshow(np.absolute(image[:,:,v]))
+        #     plt.gray()
+        #
+        # plt.show()
