@@ -1,4 +1,4 @@
-# Unit test for direct-from-pulseq bloch simulation
+ # Unit test for direct-from-pulseq bloch simulation
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np
@@ -204,16 +204,16 @@ if __name__ == '__main__':
         a1 = int(np.sqrt(Ns))
         a2 = int(np.ceil(Ns/a1))
 
-        plt.figure(1)
-        for v in range(Ns):
-            plt.subplot(a1,a2,v+1)
-            plt.imshow(np.absolute(kspace[:,:,v]))
-            plt.gray()
-
-        plt.figure(2)
-        for v in range(Ns):
-            plt.subplot(a1,a2,v+1)
-            plt.imshow(np.absolute(image[:,:,v]))
-            plt.gray()
-
-        plt.show()
+        # plt.figure(1)
+        # for v in range(Ns):
+        #     plt.subplot(a1,a2,v+1)
+        #     plt.imshow(np.absolute(kspace[:,:,v]))
+        #     plt.gray()
+        #
+        # plt.figure(2)
+        # for v in range(Ns):
+        #     plt.subplot(a1,a2,v+1)
+        #     plt.imshow(np.absolute(image[:,:,v]))
+        #     plt.gray()
+        #
+        # plt.show()
