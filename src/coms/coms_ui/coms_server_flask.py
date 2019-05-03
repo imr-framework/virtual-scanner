@@ -259,10 +259,13 @@ def worker():
 
             if 'original-data-opt' in payload:
 
+
                 if 'ana_load' in session:
                     session.pop('ana_load')
-                    session.pop('ana_map')
-                    session.pop('ana_roi')
+                    if 'ana_map' in session:
+                        session.pop('ana_map')
+                        if 'ana_roi' in session:
+                            session.pop('ana_roi')
 
 
                 session['ana_load'] = 1
@@ -290,12 +293,13 @@ def worker():
 
                 if payload['TI'] == "":
                     server_od_path = './src/server/ana/inputs/T2_orig_data'
-                    map_name = T2_mapping.main(server_od_path, payload['TR'], payload['TE'], session['patid'])
+                    map_name, dicom_path = T2_mapping.main(server_od_path, payload['TR'], payload['TE'], session['patid'])
                 else:
                     server_od_path = './src/server/ana/inputs/T1_orig_data'
-                    map_name = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
+                    map_name, dicom_path = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
 
                 #payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
+                payload['dicom-path'] = dicom_path
                 payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
                 session['ana_payload2'] = payload
 
@@ -307,14 +311,7 @@ def worker():
 
                 session['ana_roi'] = 1
 
-                if payload['map-type'] == 'T1':
-
-                    dicom_map_path = './src/server/ana/outputs/T1_map'
-
-
-                else:
-
-                    dicom_map_path = './src/server/ana/outputs/T2_map'
+                dicom_map_path = session['ana_payload2']['dicom_path']
 
                 roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'], payload['map-FOV'], session['patid'])
 
