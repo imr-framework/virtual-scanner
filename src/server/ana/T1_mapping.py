@@ -33,9 +33,9 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=float, sep=',')
     TI = np.fromstring(TI, dtype=float, sep=',')
-    # TR = TR/1000
-    # TE = TE/1000
-    # TI = TI/1000
+    TR = TR/1000
+    TE = TE/1000
+    TI = TI/1000
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for filename1 in fileList:
@@ -68,10 +68,10 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
 
     T1_map[T1_map > 5] = 5
 
-    plt.figure()
-    imshowobj = plt.imshow(T1_map, cmap='hot')
-    imshowobj.set_clim(0, 5)
-    plt.show()
+    # plt.figure()
+    # imshowobj = plt.imshow(T1_map, cmap='hot')
+    # imshowobj.set_clim(0, 5)
+    # plt.show()
 
     timestr = time.strftime("%Y%m%d%H%M%S")
     mypath1='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
@@ -80,11 +80,15 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     if not os.path.isdir(mypath1):
         os.makedirs(mypath1)
 
-    plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, cmap='hot')
+    if not os.path.isdir(mypath2):
+        os.makedirs(mypath2)
+
+    plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
     filename1 = "T1_map" + timestr + ".png"
 
     pixel_array = (T1_map/5)*65535
-    ds.PixelData = pixel_array.tostring()
+    # ds.pixel_array = pixel_array.astype(np.uint16)
+    ds.PixelData = pixel_array.tobytes()
     ds.save_as(mypath2 +'/T1_map' + timestr +'.dcm')
 
     return filename1, mypath2

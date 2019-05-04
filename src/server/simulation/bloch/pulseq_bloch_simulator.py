@@ -1,4 +1,4 @@
-# Unit test for direct-from-pulseq bloch simulation
+ # Unit test for direct-from-pulseq bloch simulation
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np
