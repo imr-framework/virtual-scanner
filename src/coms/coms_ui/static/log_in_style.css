@@ -5,6 +5,16 @@ body{
   font-family:  'Montserrat', sans-serif;
   line-height: 1.2;
 }
+.logo-image{
+  position: absolute;
+  width: 100%;
+  height: 35%;
+  top: 8%;
+  text-align: center;
+}
+.logo-image img{
+  height: 100%;
+}
 .logo-container{
   position: absolute;
   width:100%;

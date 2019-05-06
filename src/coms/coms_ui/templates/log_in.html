@@ -39,7 +39,9 @@
   </head>
   <body>
 
-
+      <div class="logo-image">
+          <img src="{{url_for('static',filename='virtual_scanner_logo_v1.png')}}" />
+      </div>
       <div class="logo-container">
         <img src="{{url_for('static',filename='logo-blue-white-onlycrown.png')}}" />
         <h1>Columbia Magnetic Resonance Research Center</h1>
@@ -111,6 +113,8 @@
             <div id="standard-about" class="jumbotron about-container">
               <p>Standard user features:</p>
               <ul>
+                <li>Subject registration</li>
+                <li>Basic sequece acquisition</li>
                 <li>T1/T2 mapping (ISMRM/NIST phantom)</li>
 
               </ul>
@@ -122,6 +126,7 @@
               <ul>
                 <li>Sequence and phantom SAR modelling</li>
                 <li>MR Rx chain simulations</li>
+                <br>
 
               </ul>
             </div>
