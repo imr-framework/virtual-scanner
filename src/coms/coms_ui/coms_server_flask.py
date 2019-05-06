@@ -299,7 +299,7 @@ def worker():
                     map_name, dicom_path = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
 
                 #payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
-                payload['dicom-path'] = dicom_path
+                payload['dicom_path'] =dicom_path
                 payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
                 session['ana_payload2'] = payload
 
@@ -310,6 +310,7 @@ def worker():
                 payload['map-type'] = 'T1'
 
                 session['ana_roi'] = 1
+
 
                 dicom_map_path = session['ana_payload2']['dicom_path']
 
