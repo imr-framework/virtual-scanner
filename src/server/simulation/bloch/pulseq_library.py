@@ -2,7 +2,6 @@ from math import pi
 
 import numpy as np
 
-
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.calc_duration import calc_duration
 from pypulseq.make_adc import makeadc
@@ -12,11 +11,12 @@ from pypulseq.make_trap import make_trapezoid
 from pypulseq.opts import Opts
 
 GAMMA_BAR = 42.5775e6
-GAMMA = 2*pi*GAMMA_BAR
+GAMMA = 2 * pi * GAMMA_BAR
+
 
 # TODO make these multi-slice sequences, and modify recon in simulator!!!
 
-def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_gre(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """
     Makes a single-slice GRE pulseq sequence
     INPUTS
@@ -52,7 +52,7 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     # Readout and ADC
     readoutTime = 6.4e-3
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
-    g_ro= make_trapezoid(kwargs_for_g_ro)
+    g_ro = make_trapezoid(kwargs_for_g_ro)
     kwargs_for_adc = {"num_samples": Nf, "duration": g_ro.flat_time, "delay": g_ro.rise_time}
     adc = makeadc(kwargs_for_adc)
     # Readout rewinder
@@ -64,7 +64,7 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     phase_areas = (np.arange(Np) - (Np / 2)) * delta_k
 
     # TE, TR = 10e-3, 1000e-3
-    TE, TR = te,tr
+    TE, TR = te, tr
     delayTE = TE - calc_duration(g_ro_pre) - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
     delayTR = TR - calc_duration(g_ro_pre) - calc_duration(g_ss) - calc_duration(g_ro) - delayTE
     delay1 = make_delay(delayTE)
@@ -84,17 +84,18 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
             g_pe = make_trapezoid(kwargs_for_g_pe)
             seq.add_block(g_ro_pre, g_pe, g_ss_reph)
             seq.add_block(delay1)
-            seq.add_block(g_ro,adc)
+            seq.add_block(g_ro, adc)
             seq.add_block(delay2)
 
     if write:
-        seq.write("gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
-                                                                                               TR * 1000, flip * 180 / pi))
+        seq.write(
+            "gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                         TR * 1000, flip * 180 / pi))
     print('GRE sequence constructed')
     return seq
 
 
-def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_irse(fov, n, thk, fa, tr, te, ti, enc='xyz', slice_locs=None, write=False):
     """
     Makes a single-slice IRSE pulseq sequence
     INPUTS
@@ -126,11 +127,10 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     delta_k = 1 / fov
     kWidth = Nf * delta_k
 
-    TI,TE,TR = ti,te,tr
+    TI, TE, TR = ti, te, tr
 
     if np.shape(TI) == ():
         TI = [TI]
-
 
     # Non-180 pulse
     flip1 = fa * pi / 180
@@ -147,7 +147,7 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     g_ss180.channel = enc[2]
 
     # Readout gradient & ADC
-    #readoutTime = system.grad_raster_time * Nf
+    # readoutTime = system.grad_raster_time * Nf
     readoutTime = 6.4e-3
 
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
@@ -156,8 +156,8 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2,
-                        "duration": 2e-3}
+    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area / 2,
+                           "duration": 2e-3}
 
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
 
@@ -167,13 +167,13 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
 
     # Delays # TODO timing problem!!??
 
-
-    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) / 2 - calc_duration(
+    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(
+        g_ss) / 2 - calc_duration(
         g_ss180) / 2
     delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
     delayTE3 = TR - TE - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
 
-    print('dur rf', calc_duration(rf),'dur gss:' ,calc_duration(g_ss))
+    print('dur rf', calc_duration(rf), 'dur gss:', calc_duration(g_ss))
 
     delay1 = make_delay(delayTE1)
     delay2 = make_delay(delayTE2)
@@ -191,14 +191,16 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
             rf.freq_offset = g_ss.amplitude * locs[u]
             for i in range(Np):
                 # Inversion Recovery part
-                seq.add_block(rf180)# Non-selective at the moment; could be extended to make this selective/adiabatic
-                seq.add_block(make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
+                seq.add_block(rf180)  # Non-selective at the moment; could be extended to make this selective/adiabatic
+                seq.add_block(
+                    make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
                 # Spin echo part
                 seq.add_block(rf, g_ss)  # 90-deg pulse
                 kwargs_for_g_pe_pre = {"channel": enc[1], "system": system, "area": -(Np / 2 - i) * delta_k,
-                                     "duration":2e-3}
+                                       "duration": 2e-3}
                 g_pe_pre = make_trapezoid(kwargs_for_g_pe_pre)  # Phase encoding gradient
-                seq.add_block(g_ro_pre, g_pe_pre, g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
+                seq.add_block(g_ro_pre, g_pe_pre,
+                              g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
                 seq.add_block(delay1)  # Delay 1: until 180-deg pulse
                 seq.add_block(rf180, g_ss180)  # 180 deg pulse for SE
                 seq.add_block(delay2)  # Delay 2: until readout
@@ -207,16 +209,20 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
 
     if write:
         if len(TI) == 1:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TI[0] * 1000, TE * 1000, TR * 1000))
+            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np,
+                                                                                                   TI[0] * 1000,
+                                                                                                   TE * 1000,
+                                                                                                   TR * 1000))
         else:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
+            seq.write(
+                "irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                          TR * 1000))
 
     print('IRSE sequence constructed')
     return seq
 
 
-
-def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_se(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """
     Makes a single-slice IRSE pulseq sequence
     INPUTS
@@ -245,8 +251,7 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     delta_k = 1 / fov
     kWidth = Nf * delta_k
 
-    TE,TR = te,tr
-
+    TE, TR = te, tr
 
     # Non-180 pulse
     flip1 = fa * pi / 180
@@ -254,7 +259,6 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
                        "apodization": 0.5, "time_bw_product": 4}
     rf, g_ss = make_sinc_pulse(kwargs_for_sinc, 2)
     g_ss.channel = enc[2]
-
 
     # 180 pulse
     flip2 = 180 * pi / 180
@@ -264,7 +268,7 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     g_ss180.channel = enc[2]
 
     # Readout gradient & ADC
-#    readoutTime = system.grad_raster_time * Nf
+    #    readoutTime = system.grad_raster_time * Nf
     readoutTime = 6.4e-3
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
     g_ro = make_trapezoid(kwargs_for_g_ro)
@@ -272,9 +276,9 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2,
-                            "duration": 2e-3}
-#                        "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area / 2,
+                           "duration": 2e-3}
+    #                        "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
 
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
 
@@ -283,19 +287,15 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     g_ss_reph = make_trapezoid(kwargs_for_g_ss_reph)
 
     # Delays
-    delayTE1 = (TE - 2*max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
-        g_ss180))/2
-  # delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
-    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180))/2
+    delayTE1 = (TE - 2 * max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
+        g_ss180)) / 2
+    # delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
+    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180)) / 2
     delayTE3 = TR - TE - (calc_duration(g_ss) + calc_duration(g_ro)) / 2
-
-
-
 
     delay1 = make_delay(delayTE1)
     delay2 = make_delay(delayTE2)
     delay3 = make_delay(delayTE3)
-
 
     # Construct sequence
     if slice_locs is None:
@@ -309,10 +309,11 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
         for i in range(Np):
             seq.add_block(rf, g_ss)  # 90-deg pulse
             kwargs_for_g_pe_pre = {"channel": enc[1], "system": system, "area": -(Np / 2 - i) * delta_k,
-                                   "duration":2e-3}
-                                 # "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+                                   "duration": 2e-3}
+            # "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
             g_pe_pre = make_trapezoid(kwargs_for_g_pe_pre)  # Phase encoding gradient
-            seq.add_block(g_ro_pre, g_pe_pre, g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
+            seq.add_block(g_ro_pre, g_pe_pre,
+                          g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
             seq.add_block(delay1)  # Delay 1: until 180-deg pulse
             seq.add_block(rf180, g_ss180)  # 180 deg pulse for SE
             seq.add_block(delay2)  # Delay 2: until readout
@@ -320,9 +321,8 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
             seq.add_block(delay3)  # Delay 3: until next inversion pulse
 
     if write:
-        seq.write("se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
-
+        seq.write(
+            "se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
 
     print('Spin echo sequence constructed')
     return seq
-
