@@ -6,56 +6,36 @@ Date: 03/22/2019
 Version 0.1
 Copyright of the Board of Trustees of  Columbia University in the City of New York.
 """
-import argparse
-import os
-import time
+from pathlib import Path
+from time import time
 
 import numpy as np
-from keras.models import Model
+from PIL import Image
 from keras.models import load_model
 
 
-def __load_test_data(path: str, num_pred: int) -> (np.ndarray, np.ndarray):
-    """
-    Load testing data to perform inference on pre-trained network.
+def __undersample(input_image):
+    low_freq_pc = 0.04
+    reduction_factor = 4
+    size = input_image.shape[1]
+    num_lines = low_freq_pc * size
+    num_lines = int(np.power(2, np.ceil(np.log2(num_lines))))
+    start = int((size - num_lines) / 2)
+    end = int((size + num_lines) / 2)
 
-    Parameters
-    ----------
-    path : str
-        Path to folder containing test data (input.py and ground_truth.py)
-    num_pred : int
-        Number of samples to load to perform inference on.
+    input_kspace = np.fft.fftshift(np.fft.fft2(input_image))
+    aliased_kspace = np.zeros_like(input_kspace)
+    aliased_kspace[0:start:reduction_factor] = input_kspace[0:start:reduction_factor]
+    aliased_kspace[start:end] = input_kspace[start:end]
+    aliased_kspace[end::reduction_factor] = input_kspace[end::reduction_factor]
 
-    Returns
-    -------
-    Two numpy.ndarrays containing aliased test samples and ground truth samples.
-    """
-    x_path = os.path.join(path, 'x.npy')
-    y_path = os.path.join(path, 'y.npy')
-    x_test, y_test = np.load(x_path), np.load(y_path)
-    num_samples = x_test.shape[0]
-    rand_ind = np.random.randint(low=0, high=num_samples, size=num_pred)
+    aliased_image = np.fft.ifft2(np.fft.ifftshift(aliased_kspace))
+    aliased_image = np.abs(aliased_image)
 
-    return np.load(x_path)[rand_ind], np.load(y_path)[rand_ind]
+    return aliased_image, aliased_kspace
 
 
-def __compat_check(model: Model, x_test: np.ndarray):
-    """
-    Check if shape of samples in `x_test` match `model`'s samples.
-
-    Parameters
-    ----------
-    model : keras.models.Model
-        Pre-trained Keras model to perform inference on.
-    x_test : numpy.ndarray
-        ndarray containing aliased test samples.
-    """
-    img_shape = x_test.shape[1:]
-    exp_shape = model.layers[0].input_shape[1:]
-    assert img_shape == exp_shape
-
-
-def __freq_correct(x_test: np.ndarray, y_pred: np.ndarray, reduction_factor: int) -> np.ndarray:
+def __freq_correct(x: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
     """
     Perform low-frequency k-space correction on predicted samples as described in 'Deep learning for undersampled MRI
     reconstruction' by Hyun et. al.
@@ -74,26 +54,32 @@ def __freq_correct(x_test: np.ndarray, y_pred: np.ndarray, reduction_factor: int
     y_pred : numpy.ndarray
         ndarray of frequency-corrected samples of y_pred
     """
-    size = y_pred.shape[1]
-    num_lines = reduction_factor / 100 * size
+
+    low_freq_pc = 0.04
+    reduction_factor = 4
+    size = len(y_pred)
+    num_lines = low_freq_pc * size
     num_lines = int(np.power(2, np.ceil(np.log2(num_lines))))
     start = int((size - num_lines) / 2)
     end = int((size + num_lines) / 2)
-    # print('{}% of {}; {} lines from {} to {}'.format(skip_factor, size, num_lines, start, end))
 
-    ft_x_test = np.fft.fftshift(np.fft.fft2(x_test, axes=(1, 2)), axes=(1, 2))
-    ft_y_predict = np.fft.fftshift(np.fft.fft2(y_pred, axes=(1, 2)), axes=(1, 2))
-    ft_y_predict[:, 0:start:reduction_factor, :] = ft_x_test[:, 0:start:reduction_factor, :]
-    ft_y_predict[:, start:end, :] = ft_x_test[:, start:end, :]
-    ft_y_predict[:, end::reduction_factor, :] = ft_x_test[:, end::reduction_factor, :]
+    if x.dtype == np.complex128:  # Received kspace
+        x_kspace = x
+    else:  # Received image space
+        x_kspace = np.fft.fftshift(np.fft.fft2(x))
 
-    y_pred = np.fft.ifft2(np.fft.ifftshift(ft_y_predict, axes=(1, 2)), axes=(1, 2))
+    y_pred_kspace = np.fft.fftshift(np.fft.fft2(y_pred))
+    y_pred_kspace[0:start:reduction_factor] = x_kspace[0:start:reduction_factor]
+    y_pred_kspace[start:end] = x_kspace[start:end]
+    y_pred_kspace[end::reduction_factor] = x_kspace[end::reduction_factor]
+
+    y_pred = np.fft.ifft2(np.fft.ifftshift(y_pred_kspace))
     y_pred = np.abs(y_pred)
 
     return y_pred
 
 
-def main(model_path: str, test_data_path: str, reduction_factor: int, num_pred: int) -> np.ndarray:
+def main(img_path: str, img_type: str) -> tuple:
     """
     Perform inference on pre-trained network, compute and display time to perform inference and plot results.
 
@@ -110,39 +96,52 @@ def main(model_path: str, test_data_path: str, reduction_factor: int, num_pred: 
 
     Returns
     -------
-    y_pred : numpy.ndarray
+    output_image : numpy.ndarray
         ndarray containing `num_pred` number of reconstructed samples.
     """
-    if num_pred <= 0:
-        raise Exception('ValueError: num_pred should be at least1. You passed: {}'.format(num_pred))
 
-    model = load_model(model_path)  # Load model
-    x_test, y_test = __load_test_data(test_data_path, num_pred)  # Load test data
-    __compat_check(model, x_test)  # Check if expected shape of input and actual shape of test input  match
+    img_path = Path(img_path)
+    if img_path.exists():
+        input_image = Image.open(str(img_path))
+        if input_image.size != (256, 256):
+            input_image = input_image.resize((256, 256))
+        input_image = np.asarray(input_image)[..., 0]
 
-    start = time.time()
-    y_pred = model.predict(x_test)
-    end = time.time()
-    diff = end - start
-    y_pred = __freq_correct(x_test, y_pred, reduction_factor)
+        if img_type == 'GT':
+            aliased_image, aliased_kspace = __undersample(input_image)
+        elif img_type == 'US':
+            aliased_image = input_image
+            aliased_kspace = np.fft.fftshift(np.fft.fft2(aliased_image))
+        else:
+            raise ValueError('Unknown image type')
 
-    print('Inference took {:.3g}s'.format(diff))
+        # Load pre-trained Hyun model and perform inference
+        model = load_model('./assets/model.hdf5')
+        output_image = model.predict(aliased_image[np.newaxis, ..., np.newaxis])
+        output_image = np.squeeze(output_image)
+        output_image = __freq_correct(aliased_kspace, output_image)
 
-    return y_pred
+        t = time()
+
+        # Save aliased input image
+        aliased_filename = f'aliased_{t}.jpg'
+        aliased_image = Image.fromarray(aliased_image).convert('RGB')
+        aliased_image.save(f'../../../coms/coms_ui/static/recon/{aliased_filename}')
+
+        # Save output image
+        output_filename = f'output_{t}.jpg'
+        output_image = Image.fromarray(output_image).convert('RGB')
+        output_image.save(f'../../../coms/coms_ui/static/recon/{output_filename}')
+
+        if img_type == 'GT':  # Save ground truth
+            gt_filename = f'gt_{t}.jpg'
+            input_image = Image.fromarray(input_image).convert('RGB')
+            input_image.save(f'../../../coms/coms_ui/static/recon/{gt_filename}')
+            return gt_filename, aliased_filename, output_filename
+
+        return aliased_filename, output_filename
+    else:
+        raise ValueError('File not found')
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='DRUNCK: Deep-learning Reconstruction of UNdersampled Cartesian K-space data')
-    parser.add_argument('model_path', type=str, help='Path to Keras model saved as .hdf5')
-    parser.add_argument('test_data_path', type=str, help='Path to folder containing input.npy and ground_truth.npy')
-    parser.add_argument('-r', '--reduction_factor', type=int, default=4, help='Undersampling factor')
-    parser.add_argument('-npred', '--num_predictions', type=int, default=3, help='Number of samples to predict')
-    args = parser.parse_args()
-
-    model_path = args.model_path
-    test_data_path = args.test_data_path
-    reduction_factor = args.reduction_factor
-    num_pred = args.num_predictions
-
-    main(model_path, test_data_path, reduction_factor, num_pred)
+# main('/Users/sravan953/Desktop/test.jpg', 'GT')
