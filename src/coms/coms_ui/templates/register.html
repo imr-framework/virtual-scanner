@@ -61,6 +61,7 @@
     <script src="../static/metric_imperial.js"> </script>
     <script src="../static/phantomAutofill.js"> </script>
     <script src="../static/register_func.js"> </script>
+    <script src="../static/log_out_func.js"> </script>
 
     <script type="text/javascript">
       if ('{{ success }}') {
@@ -71,6 +72,8 @@
           $(document).ready(function(){
             $("#success-sentence").show();
             $("#warning-sentence").hide();
+            $("#new-subject").show();
+
             autoFillForm(payload_dict);
 
           });
@@ -102,6 +105,7 @@
 
     <div id="enclosingjumbo" class="jumbotron">
       <h1>Virtual MR Scanner - Standard Mode</h1>
+      <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
       <div id="panel-container" class="container">
         <!--<div class="row" id="panel-row">
           <div class="col">-->
@@ -290,12 +294,18 @@
                         <div class="col" id="submitButton" >
                           <input id="reg-form-submit" type="submit" class="btn btn-primary" value="Register Subject" >
 
-
                         </div>
 
                       </div>
 
               </form>
+
+              <form id="new-subject-form" method="post" action="/receiver" >
+
+                <input type="hidden" id="formId2" name="formName" value="new-reg">
+                <input id="new-subject" type="submit" class="btn btn-primary" value="New Subject" >
+              </form>
+
             </div>
 
 

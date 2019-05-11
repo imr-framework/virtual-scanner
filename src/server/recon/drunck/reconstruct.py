@@ -116,7 +116,7 @@ def main(img_path: str, img_type: str) -> tuple:
             raise ValueError('Unknown image type')
 
         # Load pre-trained Hyun model and perform inference
-        model = load_model('./assets/model.hdf5')
+        model = load_model('./src/server/recon/drunck/assets/model.hdf5')
         output_image = model.predict(aliased_image[np.newaxis, ..., np.newaxis])
         output_image = np.squeeze(output_image)
         output_image = __freq_correct(aliased_kspace, output_image)
@@ -126,17 +126,17 @@ def main(img_path: str, img_type: str) -> tuple:
         # Save aliased input image
         aliased_filename = f'aliased_{t}.jpg'
         aliased_image = Image.fromarray(aliased_image).convert('RGB')
-        aliased_image.save(f'../../../coms/coms_ui/static/recon/{aliased_filename}')
+        aliased_image.save(f'./src/coms/coms_ui/static/recon/outputs/{aliased_filename}')
 
         # Save output image
         output_filename = f'output_{t}.jpg'
         output_image = Image.fromarray(output_image).convert('RGB')
-        output_image.save(f'../../../coms/coms_ui/static/recon/{output_filename}')
+        output_image.save(f'./src/coms/coms_ui/static/recon/outputs/{output_filename}')
 
         if img_type == 'GT':  # Save ground truth
             gt_filename = f'gt_{t}.jpg'
             input_image = Image.fromarray(input_image).convert('RGB')
-            input_image.save(f'../../../coms/coms_ui/static/recon/{gt_filename}')
+            input_image.save(f'./src/coms/coms_ui/static/recon/outputs/{gt_filename}')
             return gt_filename, aliased_filename, output_filename
 
         return aliased_filename, output_filename

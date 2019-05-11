@@ -34,7 +34,8 @@ import json
 import time
 
 
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
+from werkzeug.utils import secure_filename
 
 import src.server.registration.register as reg
 from src.server.simulation.bloch import caller_script_blochsim as bsim
@@ -42,6 +43,12 @@ from src.server.ana import T1_mapping as T1_mapping
 from src.server.ana import T2_mapping as T2_mapping
 from src.server.ana import ROI_analysis as ROI_analysis
 from src.server.Rx import caller_script_Rx as Rxfunc
+from src.server.RF.Tx.SAR_calc import SAR_calc_main as SAR_calc_main
+from src.server.recon.drunck.reconstruct import main
+
+
+UPLOAD_FOLDER = './src/coms/coms_ui/static/user_uploads'
+ALLOWED_EXTENSIONS = set(['seq','jpg'])
 
 # Define the location of template and static folders
 # template_dir = os.path.abspath('../templates')
@@ -49,6 +56,7 @@ from src.server.Rx import caller_script_Rx as Rxfunc
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
@@ -121,18 +129,12 @@ def on_register_success():
 
 @app.route('/acquire',methods=['POST','GET'])
 def on_acq():
-
-    return render_template('acquire.html')
-
-@app.route('/acquire_success', methods=['POST','GET'])
-def on_acquire_success():
-
-    if session['acq'] == 1:
-
-        return render_template('acquire.html', success=session['acq'],output_im=session['acq_output'],payload=session['acq_payload'])
+    if 'acq' in session:
+        return render_template('acquire.html', success=session['acq'], output_im=session['acq_output'],payload=session['acq_payload'])
     else:
+        return render_template('acquire.html')
 
-        return redirect('acquire')
+
 
 
 @app.route('/analyze', methods=['POST','GET'])
@@ -153,6 +155,13 @@ def on_analyze():
 def on_ana_load_success():
     return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
 
+@app.route('/tx',methods=['POST','GET'])
+def on_tx():
+    if 'tx' in session:
+        return render_template('Tx.html', success=session['tx'],payload=session['tx_payload'] )
+    else:
+        return render_template('Tx.html')
+
 @app.route('/rx',methods=['POST','GET'])
 def on_rx():
     if 'rx' in session:
@@ -162,8 +171,14 @@ def on_rx():
 
 @app.route('/recon')
 def on_recon():
-    return render_template('recon.html')
+    if 'recon' in session:
+        return render_template('recon.html',success=session['recon'],payload=session['recon_payload'])
+    else:
+        return render_template('recon.html')
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/receiver', methods=['POST','GET'])
 def worker():
@@ -189,10 +204,11 @@ def worker():
         payload = request.form.to_dict()
 
 
+
         #Registration
         if request.form['formName'] == 'reg':
 
-
+            print(payload)
             session['reg_success'] = 1
             session['reg_payload'] = payload
 
@@ -217,6 +233,10 @@ def worker():
 
             return redirect('register_success')
 
+        elif request.form['formName'] == 'new-reg':
+            session.pop('reg_success')
+            print(payload)
+            return redirect('register')
         #ACQUIRE
         elif request.form['formName'] == 'acq':
 
@@ -252,7 +272,7 @@ def worker():
                 #TODO: get all the available images in the folder
                 session['acq_output'] = complete_path[0]
 
-                return redirect('acquire_success')
+                return redirect('acquire')
 
         #Analyze
         elif request.form['formName'] == 'ana':
@@ -326,6 +346,21 @@ def worker():
             return redirect('analyze')
 
         #Advance Mode
+        #Tx
+        elif request.form['formName'] == 'tx':
+            print(payload)
+            file = request.files['file']
+            if file and allowed_file(file.filename):
+
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                output = SAR_calc_main.payload_process(filename)
+                print(output)
+                session['tx'] = 1
+                output['plot_path'] = '../static/RF/Tx/SAR/SAR1.png'
+                session['tx_payload'] = output
+                return redirect('tx')
         #Rx
         elif request.form['formName'] == 'rx':
             print(payload)
@@ -337,6 +372,28 @@ def worker():
             session['rx_payload'] = payload
             return redirect('rx')
 
+        #recon
+        elif request.form['formName'] == 'recon':
+            file = request.files['file']
+            filename = secure_filename(file.filename)
+
+            input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(input_path)
+
+            out_path_form_template = '../static/recon/outputs/'
+
+            if payload['DL-type'] == "GT":
+                out1,out2,out3 = main(input_path, payload['DL-type'])
+                payload['output'] = [out_path_form_template + out1, out_path_form_template + out2, out_path_form_template + out3]
+            else:
+                out1, out2 = main(input_path, payload['DL-type'])
+                payload['output'] = [out_path_form_template + out1, out_path_form_template + out2]
+
+            session['recon'] = 1
+            session['recon_payload'] = payload
+
+
+            return redirect('recon')
 
 
     """

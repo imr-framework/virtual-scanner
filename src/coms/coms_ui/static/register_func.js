@@ -29,8 +29,9 @@ function autoFillForm(dict){
 
 
   // TODO: show images, gray out inputs and prevent any change
-  $("input").prop("disabled",true);
-  $("input").css("background-color","#bfbfbf");
+  $("input:not(#log-out,#new-subject,#formId2)").prop("disabled",true);
+
+  $("input:not(#log-out,#new-subject)").css("background-color","#bfbfbf");
   $(".selector").css("background-color","#bfbfbf");
 
 }

@@ -100,3 +100,11 @@ img{
   margin-left: 15px;
   margin-right: 15px;
 }
+#new-subject-form{
+  text-align: center;
+}
+#new-subject{
+
+  margin-top: 3vh;
+  display: none;
+}
