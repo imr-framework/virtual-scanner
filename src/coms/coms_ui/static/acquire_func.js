@@ -92,6 +92,7 @@ $(document).on("click", ".menu-item", function(){
     if ($(this).is(':checked')) {
       $(".TI-IRSE").show();
       $("#TI").prop("disabled",false);
+
       var help_link = "http://www.mriquestions.com/what-is-ir.html"
 
     }
@@ -158,6 +159,7 @@ $(document).on("change", "#IRSE-check", function(){
   if ($("#IRSE-check").is(':checked')) {
     $(".TI-IRSE").show();
     $("#TI").prop("disabled",false);
+    $("#TI").val(20);
   }
 
   else if ($("#IRSE-check").is(':checked') == false) {
@@ -192,10 +194,48 @@ function autoFillForm(dict){
   if (dict['TI']){
     $("#TI").val(dict['TI']);
   }
-  $("#sl").val(dict['FA']);
+  $("#sl-orient").val(dict['sl-orient']);
+  $("#thickness").val(dict['thck']);
+  $("#slices").val(dict['slicenum']);
+  $("#sl-gap").prop("disabled",true);
+  $("#sl-gap").css("background-color","#bfbfbf");
+  $("#freq").val(dict['freq']);
+  $("#phase").val(dict['ph']);
+  $("#ADC-bw").val(dict['bw']);
+  $("#Nx").val(dict['Nx']);
+  $("#Ny").val(dict['Ny']);
+  $("#FOVx").val(dict['FOVx']);
+  $("#FOVy").val(dict['FOVy']);
 }
 
+$(document).on("change", "#sl-orient",function(){
+  var val = $(this).val();
 
+  if (val == "axial"){
+    $(".freq#x").prop("disabled",false);
+    $("#freq").val("x");
+    $(".phase#y").prop("disabled",false);
+    $("#phase").val("y");
+    $(".freq:not(#x)").prop("disabled",true);
+    $(".phase:not(#y)").prop("disabled",true);
+  }
+  else if (val == "sagittal") {
+    $(".freq#y").prop("disabled",false);
+    $("#freq").val("y");
+    $(".phase#z").prop("disabled",false);
+    $("#phase").val("z");
+    $(".freq:not(#y)").prop("disabled",true);
+    $(".phase:not(#z)").prop("disabled",true);
+  }
+  else if (val == "coronal") {
+    $(".freq#z").prop("disabled",false);
+    $("#freq").val("z");
+    $(".phase#x").prop("disabled",false);
+    $("#phase").val("x");
+    $(".freq:not(#z)").prop("disabled",true);
+    $(".phase:not(#x)").prop("disabled",true);
+  }
+});
 
 
 // TODO: change this to

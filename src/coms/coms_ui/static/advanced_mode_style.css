@@ -212,3 +212,6 @@ body #gradients-panel{
 #sagittal{
   display: none;
 }
+.highlighted{
+  border: 10px solid red;
+}

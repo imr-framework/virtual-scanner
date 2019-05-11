@@ -2,6 +2,12 @@ $(document).on("change", "#orig-im", function(){
   var im_orient = $(this).val();
   changeOrigIm(im_orient);
 });
+$(document).on("click", "#computer-im",function(){
+  location.href='recon';
+});
+$(document).on("click", "#tx-im",function(){
+  location.href='tx';
+});
 function changeOrigIm(im_orient){
   $("#"+im_orient).show();
   switch (im_orient) {
@@ -22,7 +28,7 @@ function changeOrigIm(im_orient){
   }
 }
 function autoFillForm(dict){
-  
+
   var im_orient = dict['image-or'];
   $("#orig-im").val(im_orient);
   changeOrigIm(im_orient);

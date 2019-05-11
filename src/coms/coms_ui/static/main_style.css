@@ -1,3 +1,10 @@
+/*log-out*/
+#log-out{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+}
 /*CONTAINERS*/
 .jumbotron{
   padding:0px;

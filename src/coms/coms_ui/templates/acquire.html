@@ -56,6 +56,7 @@
   <!--JavaScript customized funcitons-->
   <script type="text/javascript" src="{{url_for('static',filename='acquire_func.js')}}"></script>
   <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
+  <script src="../static/log_out_func.js"> </script>
 
   <!--Customized CSS-->
   <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
@@ -68,29 +69,17 @@
 
   <script type="text/javascript">
 
-    /*var success = '{{ success }}'
-    if (success) {
-      console.log("session acq is defined")
-      if (success == '1'){
-        console.log("session acq is 1")
-      }
-      else{
-        console.log("session acq is 0")
-      }
-    }
-    else{
-      console.log("session acq is not defined")
-    }*/
+
 
     if ('{{ success }}') {
       {% autoescape false %}
-        //console.log("arrived")
+
         var im = '{{ output_im }}'
         var payload_dict = {{ payload }}
-        //console.log(im)
+        console.log(payload_dict)
         $(document).ready(function(){
           $('#axial-container').html('<img src='+im+'>')
-          //autoFillForm(payload_dict);
+          autoFillForm(payload_dict);
 
         });
 
@@ -104,7 +93,7 @@
   <div id="enclosingjumbo" class="jumbotron">
 
     <h1>Virtual MR Scanner - Standard Mode</h1>
-
+    <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
     <!--Acquired images will be displayed in three views: axial, sagital and coronal-->
 
     <div class="images-container">
@@ -252,7 +241,7 @@
                         <!--Column 2.1.2: Fields slice selection parameters -->
                         <div class="col coltype2 ">
                           <label>
-                            <select class="selector" name="sl-orient">
+                            <select id="sl-orient" class="selector" name="sl-orient">
                               <option value="axial">Axial</option>
                               <option value="sagittal">Sagittal</option>
                               <option value="coronal">Coronal</option>
@@ -314,9 +303,9 @@
 
                               <label>
                                 <select id="freq" class="selector" name="freq">
-                                  <option value="x">x</option>
-                                  <option value="y">y</option>
-                                  <option value="z">z</option>
+                                  <option class="freq" id="x" value="x">x</option>
+                                  <option class="freq" id="y" value="y" disabled>y</option>
+                                  <option class="freq" id="z" value="z" disabled>z</option>
                                 </select>
                               </label>
 
@@ -324,9 +313,9 @@
 
                               <label>
                                 <select id="phase" class="selector" name="ph">
-                                  <option value="y">y</option>
-                                  <option value="x">x</option>
-                                  <option value="z">z</option>
+                                  <option class="phase" id="y" value="y">y</option>
+                                  <option class="phase" id="x" value="x" disabled>x</option>
+                                  <option class="phase" id="z" value="z" disabled>z</option>
                                 </select>
                               </label>
 
@@ -486,7 +475,7 @@
   <!-- TODO: style the links  -->
   <div id="dialog" class="dialog" title="Select a sequence:">
     <ul class="menu no-bullet">
-      <li><a class="menu-item" href = "#">Localizer</a></li>
+      <!--<li><a class="menu-item" href = "#">Localizer</a></li>-->
       <li ><a class="menu-item" href = "#">GRE</a></li>
       <li ><a class="menu-item" href = "#">SE</a></li>
     </ul>
