@@ -2,6 +2,8 @@
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import time
 import phantom as pht
