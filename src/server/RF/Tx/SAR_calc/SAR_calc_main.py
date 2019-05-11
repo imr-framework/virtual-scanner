@@ -30,6 +30,7 @@ from scipy import interpolate
 import numpy as np
 import numpy.matlib
 import matplotlib.pyplot as plt
+import time
 
 
 def calc_SAR(Q, I):
@@ -111,7 +112,7 @@ def SARlimscheck(SARwbg_lim_s, SARhg_lim_s, tsec):
         SAR_wbg_sixmin = 'NA'
         SAR_hg_sixmin = 'NA'
         SAR_wbg_sixmin_peak = 'NA'
-        SAR_hg_sixmin_peak ='NA'
+        SAR_hg_sixmin_peak = 'NA'
 
         if (tsec[-1] > 600):
             SAR_hg_sixmin = do_sw_sar(SARhg_lim_s, tsec, 600)
@@ -147,20 +148,22 @@ def payload_process(fname='rad2D.seq'):
     SARwbg, SARhg, t_vec = SARfromseq(fname, Qtmf, Qhmf)
     SARwbg_lim, tsec = SARinterp(SARwbg, t_vec)
     SARhg_lim, tsec = SARinterp(SARhg, t_vec)
-    SAR_wbg_tensec, SAR_wbg_sixmin, SAR_hg_tensec, SAR_hg_sixmin, SAR_wbg_sixmin_peak, SAR_hg_sixmin_peak, SAR_wbg_tensec_peak, SAR_hg_tensec_peak = SARlimscheck(SARwbg_lim, SARhg_lim, tsec)
+    SAR_wbg_tensec, SAR_wbg_sixmin, SAR_hg_tensec, SAR_hg_sixmin, SAR_wbg_sixmin_peak, SAR_hg_sixmin_peak, SAR_wbg_tensec_peak, SAR_hg_tensec_peak = SARlimscheck(
+        SARwbg_lim, SARhg_lim, tsec)
 
-
-
+    imgpath = './src/coms/coms_ui/static/RF/Tx/SAR/'
+    timestamp = time.strftime("%Y%m%d%H%M%S")
+    fname_store = timestamp + "SAR1.png"
     payload = {
+        "filename": fname_store,
         "SAR_wbg_tensec_peak": SAR_wbg_tensec_peak,
         "SAR_wbg_sixmin_peak": SAR_wbg_sixmin_peak,
         "SAR_hg_tensec_peak": SAR_hg_tensec_peak,
         "SAR_hg_sixmin_peak": SAR_hg_sixmin_peak,  # random.randint(4, 100),
     }
     #
-    #print(payload)
+    # print(payload)
     # Display and save figures in hardcoded paths for now
-    imgpath = './src/coms/coms_ui/static/RF/Tx/SAR/'
 
     # Plot 10 sec average SAR
     if (tsec[-1] > 10):
@@ -179,10 +182,9 @@ def payload_process(fname='rad2D.seq'):
 
         ax.legend()
         plt.grid(True)
-        plt.savefig(imgpath + "SAR1.png", bbox_inches='tight', pad_inches=0)
+        plt.savefig(imgpath + fname_store, bbox_inches='tight', pad_inches=0)
         # plt.show()  # Uncomment for local display - will hinder return function is persistent
     print('SAR computation performed')
     return payload
 
-
-payload_process('rad2D.seq')  # uncomment if you want to run this script directly
+# payload_process('rad2D.seq')  # uncomment if you want to run this script directly
