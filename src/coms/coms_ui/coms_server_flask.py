@@ -61,6 +61,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 users = []
+n_acqs = 0
+
+axial_acqs = []
+sagittal_acqs = []
+coronal_acqs = []
 app.secret_key = 'Session_key'
 
 
@@ -130,7 +135,8 @@ def on_register_success():
 @app.route('/acquire',methods=['POST','GET'])
 def on_acq():
     if 'acq' in session:
-        return render_template('acquire.html', success=session['acq'], output_im=session['acq_output'],payload=session['acq_payload'])
+
+        return render_template('acquire.html', success=session['acq'], axial = session['acq_out_axial'] , sagittal = session['acq_out_sagittal'] , coronal = session['acq_out_coronal']  , payload=session['acq_payload'])
     else:
         return render_template('acquire.html')
 
@@ -269,8 +275,15 @@ def worker():
 
                 imgpaths = os.listdir(sim_result_path)
                 complete_path = [im_path_from_template + '/'+ iname for iname in imgpaths]
-                #TODO: get all the available images in the folder
-                session['acq_output'] = complete_path[0]
+                if payload['sl-orient'] == 'axial':
+                    axial_acqs.append(complete_path[0])
+                elif payload['sl-orient'] == 'sagittal':
+                    sagittal_acqs.append(complete_path[0])
+                elif payload['sl-orient'] == 'coronal':
+                    coronal_acqs.append(complete_path[0])
+                session['acq_out_axial'] = axial_acqs
+                session['acq_out_sagittal'] = sagittal_acqs
+                session['acq_out_coronal'] = coronal_acqs
 
                 return redirect('acquire')
 
@@ -353,12 +366,14 @@ def worker():
             if file and allowed_file(file.filename):
 
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                upload_path =os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(upload_path)
+                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename)
 
                 output = SAR_calc_main.payload_process(filename)
-                print(output)
+
                 session['tx'] = 1
-                output['plot_path'] = '../static/RF/Tx/SAR/SAR1.png'
+                output['plot_path'] = '../static/RF/Tx/SAR/'+output['filename']
                 session['tx_payload'] = output
                 return redirect('tx')
         #Rx
