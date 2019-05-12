@@ -102,10 +102,13 @@ def SARlimscheck(SARwbg_lim_s, SARhg_lim_s, tsec):
         SixMinThresh_hg = 3.2
         TenSecThresh_hg = 6.4
 
-        SAR_wbg_tensec = do_sw_sar(SARwbg_lim_s, tsec, 10)  # < 2  SARmax
-        SAR_hg_tensec = do_sw_sar(SARhg_lim_s, tsec, 10)  # < 2 SARmax
-        SAR_wbg_tensec_peak = np.max(SAR_wbg_tensec)
-        SAR_hg_tensec_peak = np.max(SAR_hg_tensec)
+        SARwbg_lim_app = np.concatenate((np.zeros(5), SARwbg_lim_s, np.zeros(5)),axis=0)
+        SARhg_lim_app = np.concatenate((np.zeros(5), SARhg_lim_s, np.zeros(5)),axis=0)
+
+        SAR_wbg_tensec = do_sw_sar(SARwbg_lim_app, tsec, 10)  # < 2  SARmax
+        SAR_hg_tensec = do_sw_sar(SARhg_lim_app, tsec, 10)  # < 2 SARmax
+        SAR_wbg_tensec_peak = np.round(np.max(SAR_wbg_tensec),2)
+        SAR_hg_tensec_peak = np.round(np.max(SAR_hg_tensec),2)
 
         if ((np.max(SAR_wbg_tensec) > TenSecThresh_wbg) or (np.max(SAR_hg_tensec) > TenSecThresh_hg)):
             print('Pulse exceeding 10 second Global SAR limits, increase TR')
@@ -115,10 +118,14 @@ def SARlimscheck(SARwbg_lim_s, SARhg_lim_s, tsec):
         SAR_hg_sixmin_peak = 'NA'
 
         if (tsec[-1] > 600):
-            SAR_hg_sixmin = do_sw_sar(SARhg_lim_s, tsec, 600)
-            SAR_wbg_sixmin = do_sw_sar(SARwbg_lim_s, tsec, 600)
-            SAR_wbg_sixmin_peak = np.max(SAR_wbg_sixmin)
-            SAR_hg_sixmin_peak = np.max(SAR_hg_sixmin)
+
+            SARwbg_lim_app = np.concatenate((np.zeros(300), SARwbg_lim_s, np.zeros(300)),axis=0)
+            SARhg_lim_app = np.concatenate((np.zeros(300), SARhg_lim_s, np.zeros(300)),axis=0)
+
+            SAR_hg_sixmin = do_sw_sar(SARhg_lim_app, tsec, 600)
+            SAR_wbg_sixmin = do_sw_sar(SARwbg_lim_app, tsec, 600)
+            SAR_wbg_sixmin_peak = np.round(np.max(SAR_wbg_sixmin),2)
+            SAR_hg_sixmin_peak = np.round(np.max(SAR_hg_sixmin),2)
 
             if ((np.max(SAR_hg_sixmin) > SixMinThresh_wbg) or (np.max(SAR_hg_sixmin) > SixMinThresh_hg)):
                 print('Pulse exceeding 10 second Global SAR limits, increase TR')
@@ -137,9 +144,10 @@ def SARlimscheck(SARwbg_lim_s, SARhg_lim_s, tsec):
 
 
 def do_sw_sar(SAR, tsec, t):
-    SAR_timeavg = np.zeros(len(tsec))
-    for instant in range(1, (int(tsec[-1]) - int(t))):  # better to go from  -sw / 2: sw / 2
-        SAR_timeavg[instant] = sum(SAR[range(instant, instant + t)]) / t
+    SAR_timeavg = np.zeros(len(tsec)+int(t))
+    for instant in range(int(t/2),int(t/2)+ (int(tsec[-1]))):  # better to go from  -sw / 2: sw / 2
+        SAR_timeavg[instant] = sum(SAR[range(instant - int(t/2), instant + int(t/2) - 1)]) / t
+    SAR_timeavg = SAR_timeavg[int(t/2):int(t/2)+ (int(tsec[-1]))]
     return SAR_timeavg
 
 
@@ -153,7 +161,7 @@ def payload_process(fname='rad2D.seq'):
 
     imgpath = './src/coms/coms_ui/static/RF/Tx/SAR/'
     timestamp = time.strftime("%Y%m%d%H%M%S")
-    fname_store = timestamp + "SAR1.png"
+    fname_store = timestamp + "_SAR1.png"
     payload = {
         "filename": fname_store,
         "SAR_wbg_tensec_peak": SAR_wbg_tensec_peak,
@@ -183,7 +191,7 @@ def payload_process(fname='rad2D.seq'):
         ax.legend()
         plt.grid(True)
         plt.savefig(imgpath + fname_store, bbox_inches='tight', pad_inches=0)
-        # plt.show()  # Uncomment for local display - will hinder return function is persistent
+        #plt.show()  # Uncomment for local display - will hinder return function is persistent
     print('SAR computation performed')
     return payload
 
