@@ -366,10 +366,14 @@ def worker():
             if file and allowed_file(file.filename):
 
                 filename = secure_filename(file.filename)
+
                 upload_path =os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(upload_path)
+
                 timestamp = time.strftime("%Y%m%d%H%M%S")
-                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename + timestamp)
+                filename = filename[:-4] + timestamp + '.seq'
+
+                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename )
 
                 output = SAR_calc_main.payload_process(filename)
 
