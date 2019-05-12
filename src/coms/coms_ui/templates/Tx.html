@@ -26,7 +26,12 @@
           var payload_dict = {{ payload }}
 
           $(document).ready(function(){
-            $('#images-panel').html('<img src='+payload_dict['plot_path']+'>')
+            
+            $('#images-panel').html('<img src='+payload_dict['plot_path']+'>');
+            $('#H10s').html(payload_dict['SAR_hg_tensec_peak']);
+            $('#H6min').html(payload_dict['SAR_hg_sixmin_peak']);
+            $('#WB10s').html(payload_dict['SAR_wbg_tensec_peak']);
+            $('#WB6min').html(payload_dict['SAR_wbg_sixmin_peak']);
 
           });
 
@@ -46,7 +51,7 @@
     <!--Customized JS-->
       <script type="text/javascript" src="../static/tx_func.js"></script>
       <script src="../static/log_out_func.js"> </script>
-    
+
 
   </head>
   <body>
@@ -131,13 +136,13 @@
                 </tr>
                 <tr>
                   <td>Whole body</td>
-                  <td></td>
-                  <td></td>
+                  <td id="WB10s"></td>
+                  <td id="WB6min"></td>
                 </tr>
                 <tr>
                   <td>Head only</td>
-                  <td></td>
-                  <td></td>
+                  <td id="H10s"></td>
+                  <td id="H6min"></td>
                 </tr>
               </table>
             </div>
