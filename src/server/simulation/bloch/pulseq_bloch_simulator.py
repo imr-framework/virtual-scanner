@@ -191,7 +191,7 @@ if __name__ == '__main__':
                 os.makedirs(mypath2)
 
             tiopt = 'ms_TI'+str(round(1e3*args.ti)) if args.seq_type == 'irse' else ''
-            impath = mypath2+'/IM_'+args.seq_type.upper()+'_TR'+str(round(1e3*args.tr))+\
+            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+str(args.enc[2]).upper()+'_TR'+str(round(1e3*args.tr))+\
                     'ms_TE'+str(round(1e3*args.te))+tiopt+\
                     'ms_FA'+str(round(args.fa))+'_'+timestamp+'_'+str(v+1)+'.png'
 
