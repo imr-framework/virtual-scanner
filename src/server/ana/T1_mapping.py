@@ -75,7 +75,7 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
 
     timestr = time.strftime("%Y%m%d%H%M%S")
     mypath1='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
-    mypath2='./src/server/ana/outputs/'+ pat_id
+    mypath2='./src/server/ana/outputs/'+ pat_id +'/T1_map'
 
     if not os.path.isdir(mypath1):
         os.makedirs(mypath1)
@@ -83,12 +83,24 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     if not os.path.isdir(mypath2):
         os.makedirs(mypath2)
 
-    plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
+    plt.figure(frameon=False)
+    plt.imshow(T1_map, cmap='hot')
+    plt.colorbar()
+    plt.axis('off')
+    plt.gca().set_axis_off()
+    plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
+                        hspace=0, wspace=0)
+    plt.margins(0, 0)
+    plt.gca().xaxis.set_major_locator(plt.NullLocator())
+    plt.gca().yaxis.set_major_locator(plt.NullLocator())
+    plt.savefig(mypath1 +'/T1_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
+
+    # plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
     filename1 = "T1_map" + timestr + ".png"
 
     pixel_array = (T1_map/5)*65535
-    # ds.pixel_array = pixel_array.astype(np.uint16)
-    ds.PixelData = pixel_array.tobytes()
+    pixel_array_int = pixel_array.astype(np.uint16)
+    ds.PixelData = pixel_array_int.tostring()
     ds.save_as(mypath2 +'/T1_map' + timestr +'.dcm')
 
     return filename1, mypath2

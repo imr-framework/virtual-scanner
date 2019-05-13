@@ -79,6 +79,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         radius_scale = 0.97
         intensity_range_lb = 0
         intensity_range_ub = 5
+        golden_standard = np.array([1.989, 1.454, 0.9841, 0.706, 0.4967, 0.3515, 0.24713, 0.1753, 0.1259, 0.089, 0.0627, 0.04453, 0.03084, 0.021719])
     if map_type == 'T2':
         max_values = 2  # The maximum value for map should be fixed, any intensity outside that range is meaningless
         sphere_1_ref_mean = 0.5813
@@ -100,6 +101,8 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         radius_scale = 0.95
         intensity_range_lb = 0
         intensity_range_ub = 2
+        golden_standard = np.array([0.5813, 0.4035, 0.2781, 0.19094, 0.13327, 0.09689, 0.06407, 0.04642, 0.03197, 0.02256, 0.015813, 0.011237, 0.007911, 0.005592])
+
     direction_angle_mat[:, 0] = direction_angle_mat[:, 0]/voxel_size
     direction_angle_mat[:, 1] = direction_angle_mat[:, 1]
     lstFilesDCM = []  # create an empty list
@@ -194,18 +197,21 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
 
     # visualize final guess
     for n5 in range(image_size[2]):
-        plt.figure(frameon=False)
+        fig = plt.figure(frameon=False)
         plt.imshow(map_data_final[:, :, n5], cmap='hot')
         ax = plt.gca()
 
         for n6 in range(num_spheres):
             # draw the center of the circle
             circle_plot = plt.Circle((sphere_all_loc_map[n6, 0, n5], sphere_all_loc_map[n6, 1, n5]),
-                                     sphere_all_loc_map[n6, 2, n5], color='b', fill=False)
+                                     sphere_all_loc_map[n6, 2, n5], linewidth=2.5, color='lightgreen', fill=False)
             ax.add_artist(circle_plot)
-            plt.axis('off')
 
-        # plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+        cb = plt.colorbar(ax=ax)
+        # cb.ax.yaxis.set_tick_params(color='white')
+        # # cb.outline.set_edgecolor('black')
+        # fig.patch.set_facecolor('black')
+        plt.axis('off')
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
                         hspace=0, wspace=0)
