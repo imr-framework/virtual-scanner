@@ -63,15 +63,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 users = []
 n_acqs = 0
 
-axial_acqs = []
-sagittal_acqs = []
-coronal_acqs = []
+
 app.secret_key = 'Session_key'
 
 
 @app.route('/', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
     session.clear()
+    session['acq_out_axial'] = []
+    session['acq_out_sagittal'] = []
+    session['acq_out_coronal'] = []
     if request.method == 'POST':
         #users.append(request.form['user-name'])
         #session['username'] = users[-1]
@@ -248,6 +249,7 @@ def worker():
 
             session['acq'] = 0
 
+
             if (("patid" in session) == False):  # Please register first
                 return redirect('register')
 
@@ -276,14 +278,12 @@ def worker():
                 imgpaths = os.listdir(sim_result_path)
                 complete_path = [im_path_from_template + '/'+ iname for iname in imgpaths]
                 if payload['sl-orient'] == 'axial':
-                    axial_acqs.append(complete_path[0])
+                    session['acq_out_axial'].append(complete_path[0])
                 elif payload['sl-orient'] == 'sagittal':
-                    sagittal_acqs.append(complete_path[0])
+                    session['acq_out_sagittal'].append(complete_path[0])
                 elif payload['sl-orient'] == 'coronal':
-                    coronal_acqs.append(complete_path[0])
-                session['acq_out_axial'] = axial_acqs
-                session['acq_out_sagittal'] = sagittal_acqs
-                session['acq_out_coronal'] = coronal_acqs
+                    session['acq_out_coronal'].append(complete_path[0])
+
 
                 return redirect('acquire')
 
@@ -366,9 +366,14 @@ def worker():
             if file and allowed_file(file.filename):
 
                 filename = secure_filename(file.filename)
+
                 upload_path =os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(upload_path)
-                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename)
+
+                timestamp = time.strftime("%Y%m%d%H%M%S")
+                filename = filename[:-4] + timestamp + '.seq'
+
+                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename )
 
                 output = SAR_calc_main.payload_process(filename)
 

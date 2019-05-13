@@ -1,6 +1,8 @@
 # Simulates received MR signal from any image (assuming uniform phase)
 from matplotlib.image import imread
 from math import pi
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os
