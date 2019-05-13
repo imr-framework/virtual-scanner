@@ -25,8 +25,17 @@
   text-align: center;
   padding: 0;
 }
-.analysis-container img{
-  min-width: 100%;
+#original-data-container img{
+  width: 100%;
+
+}
+#map-container img{
+    display:block;
+    height:100%;
+}
+#roiresults-container img{
+    display:block;
+    height:100%;
 }
 .carousel{
   display:none;

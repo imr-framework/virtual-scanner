@@ -198,7 +198,8 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
     # visualize final guess
     for n5 in range(image_size[2]):
         fig = plt.figure(frameon=False)
-        plt.imshow(map_data_final[:, :, n5], cmap='hot')
+        # fig.patch.set_facecolor('black')
+        im = plt.imshow(map_data_final[:, :, n5], cmap='hot')
         ax = plt.gca()
 
         for n6 in range(num_spheres):
@@ -207,11 +208,8 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
                                      sphere_all_loc_map[n6, 2, n5], linewidth=2.5, color='lightgreen', fill=False)
             ax.add_artist(circle_plot)
 
-        cb = plt.colorbar(ax=ax)
-        # cb.ax.yaxis.set_tick_params(color='white')
-        # # cb.outline.set_edgecolor('black')
-        # fig.patch.set_facecolor('black')
-        plt.axis('off')
+        cb = plt.colorbar()
+        cb.set_label('Time (s)')
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
                         hspace=0, wspace=0)
@@ -219,6 +217,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
         plt.savefig(mypath + '/map_with_ROI' + timestr + '.png', bbox_inches='tight', pad_inches = 0)
+        # , facecolor = fig.get_facecolor(), edgecolor = 'none'
 
     filename = 'map_with_ROI' + timestr + '.png'
     return filename

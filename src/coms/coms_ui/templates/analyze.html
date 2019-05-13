@@ -95,7 +95,7 @@
           $(document).ready(function(){
             autoFillForm2(payload2_dict);
 
-            $('#map-container').append('<img class="d-block w-100" src="'+payload2_dict['map_path']+'"/>');
+            $('#map-container').append('<img class="d-block " src="'+payload2_dict['map_path']+'"/>');
           });
         {% endautoescape %}
       }
@@ -110,7 +110,7 @@
           $(document).ready(function(){
 
             autoFillForm3(payload3_dict);
-            $('#roiresults-container').append('<img class="d-block w-100" src="'+payload3_dict['roi_path']+'"/>');
+            $('#roiresults-container').append('<img class="d-block " src="'+payload3_dict['roi_path']+'"/>');
           });
         {% endautoescape %}
       }

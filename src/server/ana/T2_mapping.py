@@ -79,7 +79,8 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
 
     plt.figure(frameon=False)
     plt.imshow(T2_map, cmap='hot')
-    plt.colorbar()
+    cb = plt.colorbar()
+    cb.set_label('Time (s)')
     plt.axis('off')
     plt.gca().set_axis_off()
     plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
