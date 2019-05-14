@@ -277,13 +277,24 @@ def worker():
 
                 imgpaths = os.listdir(sim_result_path)
                 complete_path = [im_path_from_template + '/'+ iname for iname in imgpaths]
-                if payload['sl-orient'] == 'axial':
-                    session['acq_out_axial'].append(complete_path[0])
-                elif payload['sl-orient'] == 'sagittal':
-                    session['acq_out_sagittal'].append(complete_path[0])
-                elif payload['sl-orient'] == 'coronal':
-                    session['acq_out_coronal'].append(complete_path[0])
+                Z_acq = []
+                X_acq = []
+                Y_acq = []
+                for indx in range(len(complete_path)):
 
+                    pos = complete_path[indx].find('_', 30, )+1
+
+                    sl_orientation = complete_path[indx][pos]
+                    if sl_orientation == 'Z':
+                        Z_acq.append(complete_path[indx])
+                    elif sl_orientation == 'X':
+                        X_acq.append(complete_path[indx])
+                    elif sl_orientation == 'Y':
+                        Y_acq.append(complete_path[indx])
+
+                session['acq_out_axial'] = Z_acq
+                session['acq_out_sagittal'] = X_acq
+                session['acq_out_coronal'] = Y_acq
 
                 return redirect('acquire')
 

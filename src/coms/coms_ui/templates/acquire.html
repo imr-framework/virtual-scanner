@@ -76,9 +76,80 @@
 
         var im = '{{ output_im }}'
         var payload_dict = {{ payload }}
-        console.log(payload_dict)
+
+        var axial = {{ axial }}
+        var sagittal = {{ sagittal }}
+        var coronal = {{ coronal }}
         $(document).ready(function(){
-          $('#axial-container').html('<img src='+im+'>')
+
+          if (axial.length >= 1){
+            $("#axial-carousel").show();
+            for (i = 0; i < axial.length; i++) {
+              var seq_type = axial[i].search("IM_");
+              var TRn = axial[i].search("_TR");
+              var TEn = axial[i].search("_TE");
+              var FAn = axial[i].search("_FA");
+              var last_n = axial[i].search("_20");
+              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+axial[i].slice(TRn+3,TEn)+", TE="+axial[i].slice(TEn+3,FAn)+", FA="+axial[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+
+                $('#axial-carousel .carousel-inner').append('<div  class="carousel-item active"><div class="im-title">Axial</div><img id="num'+i +'" class="d-block w-100" src="'+axial[i]+'" title=title></div>');
+
+
+
+              }
+              else{
+                $('#axial-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Axial</div><img id="num'+i +'" class="d-block w-100" src="'+axial[i]+'"></div>');
+
+              }
+
+              $('#axial-carousel .carousel-inner #num'+i).attr("title", title);
+
+            }
+          }
+          if (sagittal.length >= 1){
+
+
+
+            $("#sagittal-carousel").show();
+            for (i = 0; i < sagittal.length; i++) {
+
+              var TRn = sagittal[i].search("_TR");
+              var TEn = sagittal[i].search("_TE");
+              var FAn = sagittal[i].search("_FA");
+              var last_n = sagittal[i].search("_20");
+              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+sagittal[i].slice(TRn+3,TEn)+", TE="+sagittal[i].slice(TEn+3,FAn)+ ", FA="+sagittal[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+                $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
+              }
+              else{
+                $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
+              }
+              $('#sagittal-carousel .carousel-inner img').attr("title", title);
+            }
+          }
+          if (coronal.length >= 1){
+            $("#coronal-carousel").show();
+
+            for (i = 0; i < coronal.length; i++) {
+
+              var TRn = coronal[i].search("_TR");
+              var TEn = coronal[i].search("_TE");
+              var FAn = coronal[i].search("_FA");
+              var last_n = coronal[i].search("_20");
+              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+coronal[i].slice(TRn+3,TEn)+", TE="+coronal[i].slice(TEn+3,FAn)+ ", FA="+coronal[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+                $('#coronal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
+              }
+              else{
+                $('#coronal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
+              }
+              $('#coronal-carousel .carousel-inner img').attr("title", title);
+            }
+          }
           autoFillForm(payload_dict);
 
         });
@@ -100,7 +171,20 @@
       <!--Axial-->
       <!--</input id="axial-slider" class="slider" type="range" min="1" max="4" value="0">-->
       <div id="axial-container"  class="container acquire-container">
+        <div id="axial-carousel" class="carousel" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
 
+            </div>
+            <a class="carousel-control-prev"  href="#axial-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+            </a>
+
+            <a class="carousel-control-next"  href="#axial-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            </a>
+        </div>
 
         <!--<p>Axial View</p>-->
       </div>
@@ -111,6 +195,21 @@
 
       <div id="sagital-container" class="container acquire-container">
         <!--<p>Sagittal View</p>-->
+
+          <div id="sagittal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#sagittal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#sagittal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
       </div>
 
       <div class="vertical-line"></div>
@@ -119,6 +218,21 @@
 
       <div id="coronal-container" class="container acquire-container">
         <!--<p>Coronal View</p>-->
+
+          <div id="coronal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#coronal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#coronal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
       </div>
 
 

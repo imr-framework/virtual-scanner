@@ -159,3 +159,11 @@ label{
 .dialog .menu {
     overflow: inherit;
 }
+.im-title{
+  color: white;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5rem;
+
+}
