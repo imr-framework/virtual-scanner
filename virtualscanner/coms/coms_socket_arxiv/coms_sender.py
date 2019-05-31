@@ -7,7 +7,7 @@ Parameters
 
 Performs
 --------
-    Tx to client
+    tx to client
 
 
 Returns
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 import socket
 
-from src.coms.coms_socket_arxiv.Thread_op_mgr import ClientThread
+from virtualscanner.coms.coms_socket_arxiv.Thread_op_mgr import ClientThread
 
 TCP_IP = 'localhost'
 TCP_PORT = 9001

@@ -6,8 +6,8 @@ Parameters
 
 Performs
 --------
-   Tx to client
-   Rx from client
+   tx to client
+   rx from client
 
 Returns
 -------
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 import datetime
 from threading import Thread
 
-import src.coms.coms_socket_arxiv.coms_msg as msg
+import virtualscanner.coms.coms_socket_arxiv.coms_msg as msg
 
 # Update serverlog
 serverlog = open(
@@ -57,17 +57,17 @@ class ClientThread(Thread):
     def run(self):
         action = self.payload.get("action", 'None')
         print(action)
-        if action == "Tx":
+        if action == "tx":
             serverlog.write(
                 str(datetime.datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S")) + ":Tx to: " + self.ip + " " + str(
+                    "%Y-%m-%d %H:%M:%S")) + ":tx to: " + self.ip + " " + str(
                     self.port) + "\n")
             msg.send(self)  # Send message to client/server
 
-        else:  # elif action == "Rx":
+        else:  # elif action == "rx":
             serverlog.write(
                 str(datetime.datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S")) + ":Rx from : " + self.ip + " " + str(
+                    "%Y-%m-%d %H:%M:%S")) + ":rx from : " + self.ip + " " + str(
                     self.port) + "\n")
             payload = msg.recv(self.sock)  # Receive payload from client/server
             # process_payload(payload)

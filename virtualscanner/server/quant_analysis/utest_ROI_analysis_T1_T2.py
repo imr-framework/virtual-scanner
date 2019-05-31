@@ -6,7 +6,7 @@ Version 1.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
-import src.server.quant_analysis.ROI_analysis as dicomROIanalysis
+import virtualscanner.server.quant_analysis.ROI_analysis as dicomROIanalysis
 
 dicomROIanalysis.main(
     dicom_map_path='C:/Users/qiane/Desktop/Columbia/Research Materials/Programs/Phantom Standard Measurements/ROI Analysis/Data_Manual/T2_SE_map_data',

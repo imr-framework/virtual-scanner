@@ -6,12 +6,12 @@ Parameters
 
 Performs
 --------
-    Transmits (Tx) payload to client(s)
-    Receives (Rx) payload from client(s)
+    Transmits (tx) payload to client(s)
+    Receives (rx) payload from client(s)
 
 Returns
 -------
-    Status of Tx/Rx
+    Status of tx/rx
 
 Unit Test app
 -------------
@@ -64,7 +64,7 @@ def coms_server_exec(payload):
             if action == "Tx2client":
                 serverlog.write(
                     str(datetime.datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S")) + ":Tx to client: " + ip + " " + str(
+                        "%Y-%m-%d %H:%M:%S")) + ":tx to client: " + ip + " " + str(
                         port) + "\n")
                 msg.send(self)  # Send message to client
 

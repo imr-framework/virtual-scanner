@@ -26,26 +26,26 @@ if __name__ == '__main__':
     script_path = os.path.abspath(__file__)
     SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
-import src.server.registration.utest_register as ureg
+import virtualscanner.server.registration.utest_register as ureg
 
 
 def create_payload(coms_dir):
     # can make this more random later on, but for now we hardcode
     data = ureg.create_payload()
-    if coms_dir == "Tx":
+    if coms_dir == "tx":
         payload = {
-            "action": "Tx",
+            "action": "tx",
             "data": data
         }
-    elif coms_dir == "Rx":
+    elif coms_dir == "rx":
         payload = {
-            "action": "Rx",
+            "action": "rx",
             "data": data
         }
     return payload
 
 
-payload = create_payload("Tx")
+payload = create_payload("tx")
 coms_sender.exec(payload)
 
 # coms_server.coms_server_exec(newthread)

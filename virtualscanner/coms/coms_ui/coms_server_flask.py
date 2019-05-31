@@ -10,8 +10,8 @@ Returns
 
 Performs
 --------
-   Tx to client
-   Rx from client
+   tx to client
+   rx from client
 
 Unit Test app
 -------------
@@ -30,21 +30,18 @@ if __name__ == '__main__':
     SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
 
-import json
 import time
 
 
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 
-import src.server.registration.register as reg
-from src.server.simulation.bloch import caller_script_blochsim as bsim
-from src.server.ana import T1_mapping as T1_mapping
-from src.server.ana import T2_mapping as T2_mapping
-from src.server.ana import ROI_analysis as ROI_analysis
-from src.server.Rx import caller_script_Rx as Rxfunc
-from src.server.RF.Tx.SAR_calc import SAR_calc_main as SAR_calc_main
-from src.server.recon.drunck.reconstruct import main
+import virtualscanner.server.registration.register as reg
+from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
+from virtualscanner.server.ana import T2_mapping as T2_mapping, T1_mapping as T1_mapping, ROI_analysis as ROI_analysis
+from virtualscanner.server.rx import caller_script_Rx as Rxfunc
+from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
+from virtualscanner.server.recon.drunck.reconstruct import main
 
 
 UPLOAD_FOLDER = './src/coms/coms_ui/static/user_uploads'
@@ -165,16 +162,16 @@ def on_ana_load_success():
 @app.route('/tx',methods=['POST','GET'])
 def on_tx():
     if 'tx' in session:
-        return render_template('Tx.html', success=session['tx'],payload=session['tx_payload'] )
+        return render_template('tx.html', success=session['tx'],payload=session['tx_payload'] )
     else:
-        return render_template('Tx.html')
+        return render_template('tx.html')
 
 @app.route('/rx',methods=['POST','GET'])
 def on_rx():
     if 'rx' in session:
-        return render_template('Rx.html',success=session['rx'],payload=session['rx_payload'])
+        return render_template('rx.html',success=session['rx'],payload=session['rx_payload'])
     else:
-        return render_template('Rx.html')
+        return render_template('rx.html')
 
 @app.route('/recon')
 def on_recon():
@@ -201,7 +198,7 @@ def worker():
 
             Performs
             --------
-                Rx payload from the client
+                rx payload from the client
                 TODO: invokes payload
             """
     # read payload and convert it to dictionary
@@ -340,7 +337,7 @@ def worker():
                     map_name, dicom_path = T2_mapping.main(server_od_path, payload['TR'], payload['TE'], session['patid'])
                 else:
                     server_od_path = './src/server/ana/inputs/T1_orig_data'
-                    map_name, dicom_path = T1_mapping.main(server_od_path,payload['TR'],payload['TE'],payload['TI'],session['patid'])
+                    map_name, dicom_path = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'], session['patid'])
 
                 #payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
                 payload['dicom_path'] =dicom_path
@@ -370,7 +367,7 @@ def worker():
             return redirect('analyze')
 
         #Advance Mode
-        #Tx
+        #tx
         elif request.form['formName'] == 'tx':
             print(payload)
             file = request.files['file']
@@ -384,15 +381,15 @@ def worker():
                 timestamp = time.strftime("%Y%m%d%H%M%S")
                 filename = filename[:-4] + timestamp + '.seq'
 
-                os.rename(upload_path, "./src/server/RF/Tx/SAR_calc/"+filename )
+                os.rename(upload_path, "./src/server/rf/tx/SAR_calc/"+filename )
 
                 output = SAR_calc_main.payload_process(filename)
 
                 session['tx'] = 1
-                output['plot_path'] = '../static/RF/Tx/SAR/'+output['filename']
+                output['plot_path'] = '../static/rf/tx/SAR/'+output['filename']
                 session['tx_payload'] = output
                 return redirect('tx')
-        #Rx
+        #rx
         elif request.form['formName'] == 'rx':
             print(payload)
             signals_path, recon_path, orig_im_path=Rxfunc.run_Rx_sim(payload)

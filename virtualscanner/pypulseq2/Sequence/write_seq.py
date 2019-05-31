@@ -29,7 +29,7 @@ def write(self, file_name):
                 output_file.write(f'{values[i]:.g}')
 
     output_file.write('# Format of blocks:\n')
-    output_file.write('#  #  D RF  GX  GY  GZ ADC\n')
+    output_file.write('#  #  D rf  GX  GY  GZ ADC\n')
     output_file.write('[BLOCKS]\n')
     id_format_width = '{:' + str(len(str(len(self.block_events)))) + 'd} '
     id_format_str = id_format_width + '{:2d} {:2d} {:3d} {:3d} {:3d} {:2d}\n'
@@ -39,10 +39,10 @@ def write(self, file_name):
     output_file.write('\n')
 
     if len(self.rf_library.keys) != 0:
-        output_file.write('# Format of RF events:\n')
+        output_file.write('# Format of rf events:\n')
         output_file.write('# id amplitude mag_id phase_id delay freq phase\n')
         output_file.write('# ..        Hz   ....     ....    us   Hz   rad\n')
-        output_file.write('[RF]\n')
+        output_file.write('[rf]\n')
         rf_lib_keys = self.rf_library.keys
         # id_format_str = '{:>1.0f} {:>12g} {:>1.0f} {:>1.0f} {:>g} {:>g}\n'
         id_format_str = '{:d} {:12g} {:0g} {:0g} {:g} {:g} {:g}\n'

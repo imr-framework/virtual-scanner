@@ -7,7 +7,7 @@ Parameters
 Performs
 --------
    Listens
-   Rx payload
+   rx payload
    Invokes process_payload
 
 Returns
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 # server2.py
 import socket
 
-import src.coms.coms_socket_arxiv.coms_msg as msg
+import virtualscanner.coms.coms_socket_arxiv.coms_msg as msg
 
 TCP_IP = 'localhost'
 TCP_PORT = 9001

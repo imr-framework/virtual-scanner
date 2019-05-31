@@ -1,13 +1,13 @@
 """
-This script defines Tx and Rx operations
+This script defines tx and rx operations
 Parameters
 ----------
     thread object
 
 Performs
 --------
-   Tx to client
-   Rx from client
+   tx to client
+   rx from client
 
 Returns
 -------
@@ -26,7 +26,7 @@ import struct
 
 def send(self):  # should conform to the class of class ClientThread(Thread):
     # Prefix each message with a 4-byte length (network byte order)
-    # Need to change the action key to Rx for the receive end to work
+    # Need to change the action key to rx for the receive end to work
 
     data = self.payload.get("data", 'None')
     load = json.dumps(data)

@@ -18,7 +18,7 @@ def run_Rx_sim(Rxinfo):
 
     # Read parameters # TODO change according to payload format
     dw = 2*pi*float(Rxinfo['deltaf'])
-    im_path = './src/server/Rx/'+ Rxinfo['image-or'] + '.png'
+    im_path = './src/server/rx/'+ Rxinfo['image-or'] + '.png'
     dsf = int(Rxinfo['DSF'])
 
     # 1. load image
@@ -87,7 +87,7 @@ def run_Rx_sim(Rxinfo):
     im_recon = (np.fft.ifft2(np.fft.fftshift(new_kspace)))
 
     # Save images
-    mypath = './src/coms/coms_ui/static/Rx/outputs/'
+    mypath = './src/coms/coms_ui/static/rx/outputs/'
     if not os.path.isdir(mypath):
         os.makedirs(mypath)
 
@@ -121,7 +121,7 @@ def run_Rx_sim(Rxinfo):
     plt.savefig(signals_plot_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
-    # Recon image from Rx signal
+    # Recon image from rx signal
     plt.figure(2)
     plt.axis("off")
     fig = plt.imshow(np.absolute(im_recon))

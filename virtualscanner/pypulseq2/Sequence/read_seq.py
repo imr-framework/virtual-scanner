@@ -41,7 +41,7 @@ def read(self, path, **kwargs):
                     f'Expected: {self.version_major, self.version_minor, self.version_revision}')
         elif section == '[BLOCKS]':
             self.block_events = read_blocks(input_file)
-        elif section == '[RF]':
+        elif section == '[rf]':
             self.rf_library = read_events(input_file, [1, 1, 1, 1e-6, 1, 1])
         elif section == '[GRAD]':
             self.grad_library = read_events(input_file, [1, 1, 1e-6], 'g', self.grad_library)

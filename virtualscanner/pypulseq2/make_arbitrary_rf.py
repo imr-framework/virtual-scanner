@@ -12,20 +12,20 @@ from pypulseq.opts import Opts
 def make_arbitrary_rf(flip_angle, system=Opts(), signal=0, freq_offset=0, phase_offset=0, time_bw_product=0,
                       bandwidth=0, max_grad=0, max_slew=0, slice_thickness=0, delay=0, use=None):
     """
-    Makes a Holder object for an arbitrary RF pulse Event.
+    Makes a Holder object for an arbitrary rf pulse Event.
 
     Parameters
     ----------
     kwargs : dict
-        Key value mappings of RF Event parameters_params and values.
+        Key value mappings of rf Event parameters_params and values.
     nargout: int
-        Number of output arguments to be returned. Default is 1, only RF Event is returned. Passing any number greater
-        than 1 will return the Gz Event along with the RF Event.
+        Number of output arguments to be returned. Default is 1, only rf Event is returned. Passing any number greater
+        than 1 will return the Gz Event along with the rf Event.
 
     Returns
     -------
     rf : Holder
-        RF Event configured based on supplied kwargs.
+        rf Event configured based on supplied kwargs.
     gz : Holder
         Slice select trapezoidal gradient Event.
     """

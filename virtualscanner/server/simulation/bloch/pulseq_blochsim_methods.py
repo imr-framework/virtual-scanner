@@ -19,7 +19,7 @@ def apply_pulseq_commands(isc,seq_info):
         cpars = pars[c]
         if cstr == 'd': # delay
             isc.delay(t=cpars[0])
-        elif cstr == 'p': # RF pulse
+        elif cstr == 'p': # rf pulse
             isc.apply_rf(pulse_shape=cpars[0],grads_shape=cpars[1],dt=cpars[2])
         elif cstr == 'r': # Readout
             isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
@@ -42,7 +42,7 @@ def store_pulseq_commands(seq):
         if event_row[0] != 0:
             commands += 'd'
             seq_params.append([this_blk['delay'].delay[0]])
-        # Case 2: RF pulse
+        # Case 2: rf pulse
         elif event_row[1] != 0:
             commands += 'p'
             rf_time = np.array(this_blk['rf'].t[0]) - dt_rf
@@ -100,7 +100,7 @@ def apply_pulseq_old(isc,seq):
             delay = this_blk['delay'].delay[0]
             isc.delay(delay)
 
-        # Case 2: RF pulse
+        # Case 2: rf pulse
         elif event_row[1] != 0:
             # Later: add ring down and dead time to be more accurate?
             rf_time = np.array(this_blk['rf'].t[0]) - dt_rf

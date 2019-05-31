@@ -10,8 +10,8 @@ Returns
 
 Performs
 --------
-   Tx to client
-   Rx from client
+   tx to client
+   rx from client
 
 Unit Test app
 -------------
@@ -111,7 +111,7 @@ def worker():
 
             Performs
             --------
-                Rx payload from the client
+                rx payload from the client
                 TODO: invokes payload
             """
     # read json + reply

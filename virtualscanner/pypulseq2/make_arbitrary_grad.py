@@ -12,7 +12,7 @@ def make_arbitrary_grad(channel, waveform, system=Opts(), max_grad=0, max_slew=0
     Parameters
     ----------
     kwargs : dict
-        Key value mappings of RF Event parameters_params and values.
+        Key value mappings of rf Event parameters_params and values.
 
     Returns
     -------

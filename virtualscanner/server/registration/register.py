@@ -25,7 +25,7 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 
 import os
 
-import src.server.registration.db_operations_mgr as dbom
+import virtualscanner.server.registration.db_operations_mgr as dbom
 
 db_path = os.path.join("./src/server/registration/", "subject.db")
 

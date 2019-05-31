@@ -11,8 +11,8 @@ Returns
 
 Performs
 --------
-   Tx to client
-   Rx from client
+   tx to client
+   rx from client
 
 Unit Test app
 -------------

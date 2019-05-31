@@ -13,7 +13,7 @@ if __name__ == '__main__':
     SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
 
-import src.server.quant_analysis.T1_mapping as dicom2mapT1
+import virtualscanner.server.quant_analysis.T1_mapping as dicom2mapT1
 
 '''
 TI = [0.021, 0.1, 0.2, 0.4, 0.8, 1.6, 3.2]

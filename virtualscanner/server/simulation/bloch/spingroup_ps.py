@@ -70,7 +70,7 @@ class SpinGroup:
 
     def apply_rf(self, pulse_shape, grads_shape, dt):
         """
-        Applies a RF pulse to the spin group
+        Applies a rf pulse to the spin group
         Simulation method: numerical integration of Bloch equation with B1 field and arbitrary gradient field
 
         INPUTS
@@ -93,7 +93,7 @@ class SpinGroup:
 
     def apply_rf_old(self, pulse_shape, grads_shape, dt):
         """
-        Applies a RF pulse to the spin group
+        Applies a rf pulse to the spin group
         Simulation method: hard-pulse approximation across small time intervals
         With any gradient
 

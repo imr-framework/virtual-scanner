@@ -18,7 +18,7 @@ Date: 03/07/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
-import src.server.registration.register as reg
+import virtualscanner.server.registration.register as reg
 
 
 # os.chdir("./Virtual-Scanner")
