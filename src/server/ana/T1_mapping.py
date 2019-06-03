@@ -57,11 +57,12 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
-            n4 = 0
-            min_loc = np.argmin(y_data)
-            while n4<min_loc:
-                y_data[n4] = -y_data[n4]
-                n4 = n4+1
+            if 0 not in y_data:
+                n4 = 0
+                min_loc = np.argmin(y_data)
+                while n4<min_loc:
+                    y_data[n4] = -y_data[n4]
+                    n4 = n4+1
 
             popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data, p0=(0.278498218867048, 0.546881519204984, 0.398930085350989), bounds=(0, 6))
             T1_map[n2, n3] = popt[1]

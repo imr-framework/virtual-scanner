@@ -57,8 +57,9 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
-            popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 6))
-            T2_map[n2, n3] = popt[2]
+            if 0 not in y_data:
+                popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 6))
+                T2_map[n2, n3] = popt[2]
 
     T2_map[T2_map > 2] = 2
     # plt.figure()
@@ -93,7 +94,7 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     # plt.imsave(mypath1 +'/T2_map' + timestr + '.png', T2_map, vmin = 0, vmax = 2, cmap='hot')
     filename1 = "T2_map" + timestr + ".png"
 
-    pixel_array = (T2_map/5)*65535
+    pixel_array = (T2_map/2)*65535
     pixel_array_int = pixel_array.astype(np.uint16)
     ds.PixelData = pixel_array_int.tostring()
     ds.save_as(mypath2 +'/T2_map' + timestr +'.dcm')
