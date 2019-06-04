@@ -198,7 +198,6 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
     # visualize final guess
     for n5 in range(image_size[2]):
         fig = plt.figure(frameon=False)
-        # fig.patch.set_facecolor('black')
         im = plt.imshow(map_data_final[:, :, n5], cmap='hot')
         ax = plt.gca()
 

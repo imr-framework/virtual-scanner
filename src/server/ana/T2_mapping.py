@@ -91,7 +91,6 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
     plt.savefig(mypath1 +'/T2_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
 
-    # plt.imsave(mypath1 +'/T2_map' + timestr + '.png', T2_map, vmin = 0, vmax = 2, cmap='hot')
     filename1 = "T2_map" + timestr + ".png"
 
     pixel_array = (T2_map/2)*65535

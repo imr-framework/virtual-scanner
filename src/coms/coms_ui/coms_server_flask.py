@@ -350,13 +350,14 @@ def worker():
 
             elif 'roi-form' in payload:
 
-                print(payload)
-                payload['map-type'] = 'T1'
+                # payload['map-type'] = 'T1'
 
                 session['ana_roi'] = 1
-
-
                 dicom_map_path = session['ana_payload2']['dicom_path']
+                if 'T1' in dicom_map_path:
+                    payload['map-type'] = 'T1'
+                elif 'T2' in dicom_map_path:
+                    payload['map-type'] = 'T2'
 
                 roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'], payload['map-FOV'], session['patid'])
 
