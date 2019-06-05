@@ -94,8 +94,9 @@
           var payload2_dict = {{ payload2 }}
           $(document).ready(function(){
             autoFillForm2(payload2_dict);
+            var map_type=
+            $('#map-container').append('<div class="im-title">'+$("#map-type").val()+ ' mapping </div><img class="d-block " src="'+payload2_dict['map_path']+'"/>');
 
-            $('#map-container').append('<img class="d-block " src="'+payload2_dict['map_path']+'"/>');
           });
         {% endautoescape %}
       }
@@ -118,7 +119,7 @@
 
     </script>
 
-    
+
 
 
   </head>
@@ -334,7 +335,7 @@
             </div>
 
           </div>
-
+          <input type="button" class="btn btn-primary feedback-btn" value="?">
         </div><!--Main panel-->
 
       </div><!--Panel-container-->

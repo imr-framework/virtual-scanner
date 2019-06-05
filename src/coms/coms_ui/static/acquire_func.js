@@ -236,7 +236,9 @@ $(document).on("change", "#sl-orient",function(){
     $(".phase:not(#x)").prop("disabled",true);
   }
 });
-
+$(document).on("click",".feedback-btn",function(){
+  window.open('https://docs.google.com/forms/u/2/d/15kb_3yJE5vYiTZo-N1pTA576atc3tjth58lud1S4MVA/edit?usp=sharing_eip&ts=5cf6c4a7', '_blank');
+});
 
 // TODO: change this to
 //image right-half: slice advance and viceversa
