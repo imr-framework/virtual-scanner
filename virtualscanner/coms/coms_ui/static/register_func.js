@@ -29,9 +29,13 @@ function autoFillForm(dict){
 
 
   // TODO: show images, gray out inputs and prevent any change
-  $("input:not(#log-out,#new-subject,#formId2)").prop("disabled",true);
+  $("input:not(#log-out,#new-subject,#formId2,.feedback-btn)").prop("disabled",true);
 
-  $("input:not(#log-out,#new-subject)").css("background-color","#bfbfbf");
+  $("input:not(#log-out,#new-subject,.feedback-btn)").css("background-color","#bfbfbf");
   $(".selector").css("background-color","#bfbfbf");
 
 }
+
+$(document).on("click",".feedback-btn",function(){
+  window.open('https://docs.google.com/forms/d/1qXr0tWLCkUgDS_ttTvB_86wP0RO4YntILqlM3_kMl9k/edit?ts=5cf6c494', '_blank');
+});

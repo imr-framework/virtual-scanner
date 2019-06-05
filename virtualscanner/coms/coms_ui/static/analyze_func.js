@@ -90,6 +90,9 @@ function autoFillForm3(dict3){
   $("#map-size").val(dict3['map-size']);
   $("#FOV").val(dict3['map-FOV']);
 }
+$(document).on("click",".feedback-btn",function(){
+  window.open('https://docs.google.com/forms/u/2/d/1A7AFgk5hg-94kJwA4hQvl7fK0tC74rjrmW_xRGHOYUY/edit?usp=sharing_eip&ts=5cf6c4b3', '_blank');
+});
 
 
 
