@@ -17,17 +17,19 @@ Returns
 Unit Test app
 -------------
      utest_register
+
 Author: Sairam Geethanath
 Date: 03/06/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
-import os
+from pathlib import Path
 
 import virtualscanner.server.registration.db_operations_mgr as dbom
 
-db_path = os.path.join("./src/server/registration/", "subject.db")
+root = Path(__file__)
+db_path = root.parent / "subject.db"
 
 
 def consume(payload):
@@ -43,13 +45,13 @@ def consume(payload):
     """
 
     # Check if  database 'subject' and table 'registration' exist, if not create them
-    if (not (os.path.isfile(db_path))):
+    if not Path.is_file(db_path):
         dbom.create()
 
     # Add current registration payload to subject/registration and return status
     status = dbom.insert(payload)
     print(status)
-    return (status)
+    return status
 
 
 # def check(payload):
