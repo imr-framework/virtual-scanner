@@ -21,21 +21,29 @@ Date: 03/22/2019
 Version 0.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
+if __name__ == '__main__':
+    import os
+    import sys
 
-import os
+    script_path = os.path.abspath(__file__)
+    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
+    sys.path.insert(0, SEARCH_PATH)
+
 import time
+from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 
-import virtualscanner.server.registration.register as reg
 from virtualscanner.server.ana import T2_mapping as T2_mapping, T1_mapping as T1_mapping, ROI_analysis as ROI_analysis
 from virtualscanner.server.recon.drunck.reconstruct import main
+from virtualscanner.server.registration import register as reg
 from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
 from virtualscanner.server.rx import caller_script_Rx as Rxfunc
 from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
 
-UPLOAD_FOLDER = './src/coms/coms_ui/static/user_uploads'
+UPLOAD_FOLDER = Path(__file__).parent / 'static' / 'user_uploads'
+UPLOAD_FOLDER = UPLOAD_FOLDER.resolve()
 ALLOWED_EXTENSIONS = {'seq', 'jpg'}
 
 # Define the location of template and static folders
@@ -418,68 +426,6 @@ def worker():
             session['recon_payload'] = payload
 
             return redirect('recon')
-
-    """
-    payload = request.data
-    payload = json.loads(payload.decode('utf8'))
-
-    formName = payload.get('formName')
-    # Do registration and save to database
-    if formName == 'reg':
-        if request.method == 'POST':
-            session['reg_success'] = 1
-            session['reg_payload'] = payload
-
-        del payload['formName']
-
-        pat_id = payload.get('patid')
-        session['patid'] = pat_id
-        query_dict = {
-            "patid": pat_id,
-        }
-        rows = reg.reuse(query_dict)
-        # print((rows))d
-
-        if (rows):
-            print('Subject is already registered with PATID: ' + pat_id)
-        else:
-            status = reg.consume(payload)
-
-    """
-    """
-    if formName == 'acq':
-
-        print("Arrived")
-        return redirect('register')
-        
-        pat_id = session['patid']
-        query_dict = {
-            "patid": pat_id,
-        }
-
-        rows = reg.reuse(query_dict)
-        print(rows)
-
-        session['acq'] = 0
-
-        print(session)
-
-
-        #time.sleep(1)
-
-        progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
-
-        if request.method == 'POST' and progress == 1:
-            session['acq'] = 1
-            sim_result_path = '../static/acq/outputs/' + '1030'
-            session['acq_output'] = sim_result_path + '/IM_GRE_20190425175047_1.png'
-            #imgpaths = os.listdir(sim_result_path)
-            #session['acq_output'] = [sim_result_path + '/'+ iname for iname in imgpaths]
-        print(session)
-    
-    result = ''
-    return result
-        """
 
 
 def launch_virtualscanner():
