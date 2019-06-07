@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='virtual-scanner',
-    version='1.0.22',
+    version='1.0.21',
     author='imr-framework',
     author_email='imr.framework2018@gmail.com',
     description='Virtual Scanner educational tool for MRI',
@@ -50,6 +50,7 @@ setuptools.setup(
                       'termcolor==1.1.0',
                       'Werkzeug==0.15.2'],
     license='License :: OSI Approved :: GNU Affero General Public License v3',
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'virtual-scanner = virtualscanner.coms.coms_ui.coms_server_flask:launch_virtualscanner'
