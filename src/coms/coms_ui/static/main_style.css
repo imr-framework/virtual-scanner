@@ -5,6 +5,16 @@
   right: 15px;
 
 }
+.feedback-btn{
+  position: absolute;
+  right:115px;
+  top: 1vh;
+  font-weight: bold;
+  font-size: 150%;
+  padding-top: 0;
+  padding-bottom: 0;
+
+}
 /*CONTAINERS*/
 .jumbotron{
   padding:0px;
@@ -96,15 +106,7 @@ h4{
   margin-right: 10px;
   border-radius: 10px;
 }
-.feedback-btn{
-  position: absolute;
-  left:auto;
-  bottom: 2%;
-  font-weight: bold;
-  font-size: 150%;
-  padding-top: 0;
-  padding-bottom: 0;
-}
+
 /*INPUTS*/
 input{
   padding-left: 3px;

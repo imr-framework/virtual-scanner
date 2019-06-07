@@ -105,6 +105,7 @@
 
     <div id="enclosingjumbo" class="jumbotron">
       <h1>Virtual MR Scanner - Standard Mode</h1>
+      <input type="button" class="btn btn-primary feedback-btn" value="?">
       <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
       <div id="panel-container" class="container">
         <!--<div class="row" id="panel-row">
@@ -143,7 +144,7 @@
                           <select id="subjectSelect" class="selector" name="subjecttype">
                             <option selected hidden>Subject</option>
                             <option value="human" disabled>Human</option>
-                            <option id="ISMRM-NIST" class="phantomopt">ISMRM-NIST</option>
+                            <option id="ISMRM-NIST" class="phantomopt" disabled>ISMRM-NIST</option>
                             <option id="Numerical" class="phantomopt">Numerical</option>
 
                           </select>
@@ -305,7 +306,7 @@
                 <input type="hidden" id="formId2" name="formName" value="new-reg">
                 <input id="new-subject" type="submit" class="btn btn-primary" value="New Subject" >
               </form>
-              <input type="button" class="btn btn-primary feedback-btn" value="?">
+
             </div>
 
 

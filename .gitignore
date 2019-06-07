@@ -116,3 +116,5 @@ src_working/
 serverlog\.txt
 
 src/server/registration/subject\.db
+
+\.DS_Store
