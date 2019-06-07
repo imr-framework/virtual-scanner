@@ -24,21 +24,22 @@ Copyright of the Board of Trustees of  Columbia University in the City of New Yo
 """
 
 import datetime
-import os
 import sqlite3
+from pathlib import Path
 
-db_path = os.path.join("./src/server/registration/", "subject.db")
-
+root = Path(__file__)
+DB_PATH = root.parent / "subject.db"
+DB_PATH = str(DB_PATH.resolve())
+SERVERLOG_PATH = Path(__file__).parent / 'serverlog.txt'
+SERVERLOG_PATH = SERVERLOG_PATH.resolve()
 
 
 def create():
     status = 0  # successful unless caught by exception
-    serverlog = open(
-        './serverlog.txt',
-        'a')
+    serverlog = open(SERVERLOG_PATH.resolve(), 'a')
     # Create the subject database
     serverlog.write("%s:Creating new database - subject.db\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DB_PATH)
 
     # Create the REGISTRATION table
     try:
@@ -58,7 +59,7 @@ def create():
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
         status = 1
-    if (not (status)):
+    if not status:
         serverlog.write("%s:Opened database successfully\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     conn.close()
@@ -67,12 +68,10 @@ def create():
 
 
 def insert(payload):
-    serverlog = open(
-        './serverlog.txt',
-        'a')
+    serverlog = open(SERVERLOG_PATH, 'a')
     status = 0  # successful unless caught by exceptions
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(DB_PATH)
     except sqlite3.Error as e:
         serverlog.write(str(datetime.datetime.now().strftime(
             "%Y-%m-%d %H:%M:%S")) + ": " + str(e))
@@ -106,16 +105,14 @@ def insert(payload):
 
 
 def query(payload):
-    serverlog = open(
-        './serverlog.txt',
-        'a')
+    serverlog = open(SERVERLOG_PATH, 'a')
     # supports only any 1 key at this time; need to extend this to multiple key value pairs
     status = 0  # successful unless caught by exceptions
     key = str(list(payload.keys()))
     key = key[2:-2]
 
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(DB_PATH)
     except sqlite3.Error as e:
         serverlog.write("%s:Opened database successfully\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         print(e)
