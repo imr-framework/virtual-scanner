@@ -170,7 +170,7 @@ if __name__ == '__main__':
             sim_data['seq_info']['ti'] = args.ti
 
         timestamp = time.strftime("%Y%m%d%H%M%S")
-        mypath1 = './src/server/simulation/outputs/'+args.pat_id
+        mypath1 = './virtualscanner/server/simulation/outputs/'+args.pat_id
         if not os.path.isdir(mypath1):
             os.makedirs(mypath1)
         datapath = mypath1+'/DATA_'+args.seq_type.upper()+'_'+timestamp+'.npy'
@@ -186,7 +186,7 @@ if __name__ == '__main__':
             plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
-            mypath2 = './src/coms/coms_ui/static/acq/outputs/'+args.pat_id
+            mypath2 = './virtualscanner/coms/coms_ui/static/acq/outputs/'+args.pat_id
             if not os.path.isdir(mypath2):
                 os.makedirs(mypath2)
 
