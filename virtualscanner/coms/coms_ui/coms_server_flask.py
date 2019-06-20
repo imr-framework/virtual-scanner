@@ -1,36 +1,18 @@
+# Copyright of the Board of Trustees of Columbia University in the City of New York
+
 """
 This script runs the server based on the Flask package and hosts the GUIs on the web
-Parameters
-----------
-    payload,default = None
-
-Returns
--------
-    payload or status on ping from clients
-
-Performs
---------
-   tx to client
-   rx from client
-
-Unit Test app
--------------
-     utest_coms_flask
-Author: Sairam Geethanath , Modified by: Marina Manso Jimeno
-Date: 03/22/2019
-Version 0.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
+
 if __name__ == '__main__':
     import os
     import sys
 
     script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('Virtual-Scanner') + 1]
+    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
 
 import time
-from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
@@ -41,14 +23,14 @@ from virtualscanner.server.registration import register as reg
 from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
 from virtualscanner.server.rx import caller_script_Rx as Rxfunc
 from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
+from virtualscanner.utils import constants
 
-UPLOAD_FOLDER = Path(__file__).parent / 'static' / 'user_uploads'
-UPLOAD_FOLDER = UPLOAD_FOLDER.resolve()
+ROOT_PATH = constants.ROOT_PATH
+UPLOAD_FOLDER = constants.USER_UPLOAD_FOLDER
+SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
+STATIC_ANALYZE_PATH = constants.STATIC_ANALYZE_PATH
+# UPLOAD_FOLDER = UPLOAD_FOLDER.resolve()
 ALLOWED_EXTENSIONS = {'seq', 'jpg'}
-
-# Define the location of template and static folders
-# template_dir = os.path.abspath('../templates')
-# static_dir=os.path.abspath('../static')
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -267,17 +249,18 @@ def worker():
 
             progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],
                                          pat_id=pat_id)  # phtinfo just needs to be 1 string
-            sim_result_path = './src/coms/coms_ui/static/acq/outputs/' + session['patid']
+            sim_result_path = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session['patid']
 
             while (os.path.isdir(sim_result_path) is False):
                 pass
 
             if progress == 1:
                 session['acq'] = 1
-                im_path_from_template = '../static/acq/outputs/' + session['patid']
+                im_path_from_template = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session[
+                    'patid']
 
                 imgpaths = os.listdir(sim_result_path)
-                complete_path = [im_path_from_template + '/' + iname for iname in imgpaths]
+                complete_path = [im_path_from_template / iname for iname in imgpaths]
                 Z_acq = []
                 X_acq = []
                 Y_acq = []
@@ -313,18 +296,18 @@ def worker():
 
                 session['ana_load'] = 1
 
-                if (("patid" in session) == False):  # Please register first
+                if "patid" not in session:  # Please register first
                     return redirect('register')
 
                 if payload['original-data-opt'] == 'T1':
-                    folder_path = './src/coms/coms_ui/static/ana/inputs/T1_original_data'
+                    folder_path = STATIC_ANALYZE_PATH / 'inputs' / 'T1_original_data'
                 elif payload['original-data-opt'] == 'T2':
-                    folder_path = './src/coms/coms_ui/static/ana/inputs/T2_original_data'
+                    folder_path = STATIC_ANALYZE_PATH / 'inputs' / 'T2_original_data'
 
                 filenames_in_path = os.listdir(folder_path)
-                original_data_path = ['./static/ana/inputs/' + payload['original-data-opt'] + '_original_data/' + iname
-                                      for iname in filenames_in_path]
-
+                original_data_path = [
+                    str(STATIC_ANALYZE_PATH / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname) for
+                    iname in filenames_in_path]
                 payload['data-path'] = original_data_path
 
                 session['ana_payload1'] = payload
@@ -335,17 +318,17 @@ def worker():
                 session['ana_map'] = 1
 
                 if payload['TI'] == "":
-                    server_od_path = './src/server/ana/inputs/T2_orig_data'
+                    server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T2_orig_data'
                     map_name, dicom_path = T2_mapping.main(server_od_path, payload['TR'], payload['TE'],
                                                            session['patid'])
                 else:
-                    server_od_path = './src/server/ana/inputs/T1_orig_data'
+                    server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T1_orig_data'
                     map_name, dicom_path = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'],
                                                            session['patid'])
 
                 # payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
                 payload['dicom_path'] = dicom_path
-                payload['map_path'] = '../static/ana/outputs/' + session['patid'] + '/' + map_name
+                payload['map_path'] = STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name
                 session['ana_payload2'] = payload
 
 
@@ -363,9 +346,8 @@ def worker():
                 roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'],
                                                         payload['map-FOV'], session['patid'])
 
-                roi_result_path = '../static/ana/outputs/' + session['patid'] + '/' + roi_result_filename
+                roi_result_path = STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / roi_result_filename
 
-                # roi_result_path = '../static/ana/outputs/292/map_with_ROI20190430142228.png'
                 payload['roi_path'] = roi_result_path
                 session['ana_payload3'] = payload
 
@@ -385,12 +367,13 @@ def worker():
                 timestamp = time.strftime("%Y%m%d%H%M%S")
                 filename = filename[:-4] + timestamp + '.seq'
 
-                os.rename(upload_path, "./src/server/rf/tx/SAR_calc/" + filename)
+                os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / filename)
 
                 output = SAR_calc_main.payload_process(filename)
 
                 session['tx'] = 1
-                output['plot_path'] = '../static/rf/tx/SAR/' + output['filename']
+                output['plot_path'] = constants.COMS_PATH / 'coms_ui' / 'static' / 'rf' / 'tx' / 'SAR' / output[
+                    'filename']
                 session['tx_payload'] = output
                 return redirect('tx')
         # rx
@@ -412,15 +395,15 @@ def worker():
             input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(input_path)
 
-            out_path_form_template = '../static/recon/outputs/'
+            out_path_form_template = constants.COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs'
 
             if payload['DL-type'] == "GT":
                 out1, out2, out3 = main(input_path, payload['DL-type'])
-                payload['output'] = [out_path_form_template + out1, out_path_form_template + out2,
-                                     out_path_form_template + out3]
+                payload['output'] = [out_path_form_template / out1, out_path_form_template / out2,
+                                     out_path_form_template / out3]
             else:
                 out1, out2 = main(input_path, payload['DL-type'])
-                payload['output'] = [out_path_form_template + out1, out_path_form_template + out2]
+                payload['output'] = [out_path_form_template / out1, out_path_form_template / out2]
 
             session['recon'] = 1
             session['recon_payload'] = payload
@@ -433,7 +416,4 @@ def launch_virtualscanner():
 
 
 if __name__ == '__main__':
-    # run!
-    # app.run(host='0.0.0.0', debug=True)
-    # app.run(host='0.0.0.0', debug=True)
     launch_virtualscanner()
