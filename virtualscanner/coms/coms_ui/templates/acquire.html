@@ -298,28 +298,28 @@
                         <div class="w-100"></div>
 
                       <label>
-                        <input id="TR" type="number" class="smallinput" name="TR">
+                        <input id="TR" type="number" min="0" class="smallinput" name="TR">
                       </label>
                       <label>ms</label>
 
                         <div class="w-100"></div>
 
                       <label>
-                        <input id="TE" type="number" class="smallinput" name="TE">
+                        <input id="TE" type="number" min="0" class="smallinput" name="TE">
                       </label>
                       <label>ms</label>
 
                         <div class="w-100"></div>
 
                       <label class="TI-IRSE">
-                        <input id="TI" type="number"  class="smallinput TI-IRSE" name="TI">
+                        <input id="TI" type="number" min="0" class="smallinput TI-IRSE" name="TI">
                       </label>
                       <label class="TI-IRSE">ms</label>
 
                         <div class="w-100"></div>
 
                       <label>
-                        <input id="FA" type="number" class="smallinput" name="FA">
+                        <input id="FA" min="0" max="360" type="number" class="smallinput" name="FA">
                       </label>
                       <label>deg</label>
 
@@ -366,21 +366,21 @@
                             <div class="w-100"></div>
 
                           <label>
-                            <input id="thickness" type="number" class="smallinput" name="thck" >
+                            <input id="thickness" type="number" min="0" class="smallinput" name="thck" >
                           </label>
                           <label>mm</label>
 
                             <div class="w-100"></div>
 
                           <label>
-                            <input id="slices" type="number" class="smallinput" name="slicenum">
+                            <input id="slices" type="number" min="1" class="smallinput" name="slicenum">
                           </label>
 
                             <div class="w-100"></div>
 
                           <!-- TODO: Light gray disabled box -->
                           <label>
-                            <input id="sl-gap" type="number"  class="smallinput"  name="slicegap" disabled>
+                            <input id="sl-gap" type="number" min="0" class="smallinput"  name="slicegap" disabled>
                           </label>
                           <!-- TODO: Decide on % or mm -->
                           <!--<label>%</label>-->
@@ -437,7 +437,7 @@
                               <div class="w-100"></div>
 
                               <label>
-                                <input id="ADC-bw" type="number" class="smallest-input" name="bw">
+                                <input id="ADC-bw" type="number" min="0" class="smallest-input" name="bw">
                               </label>
                               <label>kHz</label>
 
@@ -457,13 +457,13 @@
                                 <div class="w-100"></div>
 
                               <label>
-                                <input  id="Nx" type="number" class="smallest-input" name="Nx" >
+                                <input  id="Nx" type="number" min="0" class="smallest-input" name="Nx" >
                               </label>
 
                                 <div class="w-100"></div>
 
                               <label>
-                                <input  id="Ny" type="number" class="smallest-input"  name="Ny">
+                                <input  id="Ny" type="number"  min="0" class="smallest-input"  name="Ny">
                               </label>
 
                             </div>
