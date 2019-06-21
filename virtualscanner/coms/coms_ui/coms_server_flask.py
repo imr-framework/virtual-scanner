@@ -9,7 +9,7 @@ if __name__ == '__main__':
     import sys
 
     script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
+    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('virtualscanner') + 1] #
     sys.path.insert(0, SEARCH_PATH)
 
 import time
@@ -67,8 +67,7 @@ def log_in():
             return render_template("log_in.html")
 
 
-@app.route('/register', methods=['POST',
-                                 'GET'])  # This needs to point to the login screen and then we can use the register link seprately
+@app.route('/register', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
 
@@ -199,15 +198,20 @@ def worker():
         # Registration
         if request.form['formName'] == 'reg':
 
+            if payload['subjecttype'] == "Subject":
+                return redirect('register')
+
+
             print(payload)
             session['reg_success'] = 1
             session['reg_payload'] = payload
 
             del payload['formName']
-            # Right now only doing metric system.
-            del payload['weight2']
-            del payload['height2']
-            del payload['measuresystem']
+
+            # Right now only doing metric system since only phantom registration is possible. Fix this for future releases.
+            del payload['height-unit']
+            del payload['weight-unit']
+            del payload['inches']
 
             pat_id = payload.get('patid')
             session['patid'] = pat_id
@@ -226,14 +230,14 @@ def worker():
 
         elif request.form['formName'] == 'new-reg':
             session.pop('reg_success')
-            print(payload)
+
             return redirect('register')
         # ACQUIRE
         elif request.form['formName'] == 'acq':
 
             session['acq'] = 0
 
-            if (("patid" in session) == False):  # Please register first
+            if "patid" not in session:  # Please register first
                 return redirect('register')
 
             pat_id = session['patid']
@@ -241,14 +245,13 @@ def worker():
                 "patid": pat_id,
             }
 
-            rows = reg.reuse(query_dict)
+            rows = reg.reuse(query_dict) #
             print(rows)
 
             # session['acq'] = 0
             session['acq_payload'] = payload
 
-            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],
-                                         pat_id=pat_id)  # phtinfo just needs to be 1 string
+            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0], pat_id=pat_id)  # phtinfo just needs to be 1 string
             sim_result_path = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session['patid']
 
             while (os.path.isdir(sim_result_path) is False):
@@ -256,17 +259,17 @@ def worker():
 
             if progress == 1:
                 session['acq'] = 1
-                im_path_from_template = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session[
-                    'patid']
+                im_path_from_template = constants.STATIC_ACQUIRE_PATH / 'outputs' / session['patid']
 
                 imgpaths = os.listdir(sim_result_path)
-                complete_path = [im_path_from_template / iname for iname in imgpaths]
+                complete_path = [str(im_path_from_template / iname) for iname in imgpaths]
                 Z_acq = []
                 X_acq = []
                 Y_acq = []
+
                 for indx in range(len(complete_path)):
 
-                    pos = complete_path[indx].find('_', 30, ) + 1
+                    pos = complete_path[indx].find('_', 30, ) + 1 #
 
                     sl_orientation = complete_path[indx][pos]
                     if sl_orientation == 'Z':
@@ -279,6 +282,7 @@ def worker():
                 session['acq_out_axial'] = Z_acq
                 session['acq_out_sagittal'] = X_acq
                 session['acq_out_coronal'] = Y_acq
+
 
                 return redirect('acquire')
 
@@ -372,16 +376,16 @@ def worker():
                 output = SAR_calc_main.payload_process(filename)
 
                 session['tx'] = 1
-                output['plot_path'] = constants.COMS_PATH / 'coms_ui' / 'static' / 'rf' / 'tx' / 'SAR' / output[
-                    'filename']
+                output['plot_path'] = str(constants.STATIC_RF_PATH/ 'tx' / 'SAR' / output['filename'])
                 session['tx_payload'] = output
                 return redirect('tx')
         # rx
         elif request.form['formName'] == 'rx':
-            print(payload)
-            signals_path, recon_path, orig_im_path = Rxfunc.run_Rx_sim(payload)
-            payload['signals_path'] = '..' + signals_path[18:]
-            payload['recon_path'] = '..' + recon_path[18:]
+
+            signals_filename, recon_filename, orig_im_path = Rxfunc.run_Rx_sim(payload)
+
+            payload['signals_path'] = str(constants.STATIC_RX_PATH / signals_filename)
+            payload['recon_path'] = str(constants.STATIC_RX_PATH / recon_filename)
 
             session['rx'] = 1
             session['rx_payload'] = payload
@@ -395,12 +399,12 @@ def worker():
             input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(input_path)
 
-            out_path_form_template = constants.COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs'
+            out_path_form_template = constants.STATIC_RECON_PATH / 'outputs'
 
             if payload['DL-type'] == "GT":
                 out1, out2, out3 = main(input_path, payload['DL-type'])
-                payload['output'] = [out_path_form_template / out1, out_path_form_template / out2,
-                                     out_path_form_template / out3]
+                payload['output'] = [str(out_path_form_template / out1), str(out_path_form_template / out2),
+                                     str(out_path_form_template / out3)]
             else:
                 out1, out2 = main(input_path, payload['DL-type'])
                 payload['output'] = [out_path_form_template / out1, out_path_form_template / out2]

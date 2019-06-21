@@ -19,7 +19,11 @@ COMS_SIM_OUTPUTS_PATH = COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs'
 
 
 STATIC_ANALYZE_PATH = Path('static') / 'ana'
+STATIC_ACQUIRE_PATH = Path('static') / 'acq'
+STATIC_RF_PATH = Path('static') / 'rf'
+STATIC_RX_PATH = Path('static') / 'Rx' / 'outputs'
+STATIC_RECON_PATH = Path('static') / 'Recon'
 USER_UPLOAD_FOLDER = ROOT_PATH / 'coms' / 'coms_ui' / 'static' / 'user_uploads'
 
-
+RECON_PATH = ROOT_PATH / 'recon'
 
