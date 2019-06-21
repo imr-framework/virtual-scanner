@@ -121,7 +121,9 @@ def run_Rx_sim(Rxinfo):
     plt.plot(np.absolute(new_kspace[ind,:]))
     plt.title('Sampled demod. k-space line')
     plt.tight_layout()
-    signals_plot_path = rx_outputs_path + 'Rx_signals_'+timestamp+'.png'
+
+    signals_plot_filename = 'Rx_signals_' + timestamp + '.png'
+    signals_plot_path = rx_outputs_path + signals_plot_filename
     plt.savefig(signals_plot_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
@@ -132,11 +134,12 @@ def run_Rx_sim(Rxinfo):
     plt.gray()
     fig.axes.get_xaxis().set_visible(False)
     fig.axes.get_yaxis().set_visible(False)
-    recon_im_path = rx_outputs_path + 'recon_im_'+timestamp+'.png'
+    recon_plot_filename = 'recon_im_' + timestamp + '.png'
+    recon_im_path = rx_outputs_path + recon_plot_filename
     plt.savefig(recon_im_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
-    return  [signals_plot_path, recon_im_path, im_path]
+    return  [signals_plot_filename, recon_plot_filename, im_path]
 
 
 
