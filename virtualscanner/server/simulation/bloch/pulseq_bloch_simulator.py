@@ -13,6 +13,9 @@ import argparse
 from math import pi
 import os
 import datetime
+from virtualscanner.utils import constants
+
+
 
 
 cpath = os.getcwd()
@@ -21,6 +24,9 @@ if not (cpath.endswith('Virtual-Scanner')):
     #print('Current working directory is set to: '+s[0])
     os.chdir(s[0])
 
+SERVER_SIM_BLOCH_PATH = constants.SERVER_SIM_BLOCH_PATH
+SERVER_SIM_OUTPUTS_PATH = constants.SERVER_SIM_OUTPUTS_PATH
+COMS_SIM_OUTPUTS_PATH = constants.COMS_SIM_OUTPUTS_PATH
 
 GAMMA_BAR = 42.5775e6
 GAMMA = 2*pi*GAMMA_BAR
@@ -81,11 +87,11 @@ if __name__ == '__main__':
             loc_vec_dict = {'x':(1,0,0),'y':(0,1,0),'z':(0,0,1)}
             myphantom = pht.makePlanarPhantom(n=args.n_ph, fov=args.fov_ph,
                                               T1s=args.T1s, T2s=args.T2s, PDs=args.PDs,
-                                              radii=Rs, dir=args.dir_ph, # TODO
+                                              radii=Rs, dir=args.dir_ph,
                                               loc=0) # now, 2D phantom is not moved around
                                               #args.slice_loc*np.array(loc_vec_dict[args.enc[2]]))
 
-    elif args.pht_type == 'cylindrical': #TODO let's make a better phantom with T1, T2, PD varying individually
+    elif args.pht_type == 'cylindrical':
         print("Making cylindrical phantom")
         myphantom = pht.makeCylindricalPhantom(dim=args.pht_dim, n=args.n_ph, dir=args.dir_ph, loc=0)
 
@@ -97,7 +103,7 @@ if __name__ == '__main__':
         raise ValueError("Phantom type non-existent!")
 
 
-    # Slice locations # TODO multislice thing
+    # Slice locations
 
     Ns = args.num_slices
     g = args.slice_gap
@@ -143,7 +149,6 @@ if __name__ == '__main__':
 
 
     # Recon and save
-    # TODO refine recon, data and image saving, etc.
     # 1. Find image dimension
     # 2. Recon all images
     # 3. store: (a) raw data (b) recon data (c) images (optional) (d) info: slice loc, TI (for now)
@@ -170,10 +175,13 @@ if __name__ == '__main__':
             sim_data['seq_info']['ti'] = args.ti
 
         timestamp = time.strftime("%Y%m%d%H%M%S")
-        mypath1 = './virtualscanner/server/simulation/outputs/'+args.pat_id
-        if not os.path.isdir(mypath1):
-            os.makedirs(mypath1)
-        datapath = mypath1+'/DATA_'+args.seq_type.upper()+'_'+timestamp+'.npy'
+
+#        sim_data_patid_path = './virtualscanner/server/simulation/outputs/'+args.pat_id
+        sim_data_patid_path = SERVER_SIM_OUTPUTS_PATH / args.pat_id
+        if not os.path.isdir(sim_data_patid_path):
+            os.makedirs(sim_data_patid_path)
+        # TODO change 1 - does it work?
+        datapath = str(sim_data_patid_path) +'/DATA_'+args.seq_type.upper()+'_'+timestamp+'.npy'
         np.save(datapath,sim_data)
 
         # save images in folder
@@ -186,12 +194,14 @@ if __name__ == '__main__':
             plt.gray()
             fig.axes.get_xaxis().set_visible(False)
             fig.axes.get_yaxis().set_visible(False)
-            mypath2 = './virtualscanner/coms/coms_ui/static/acq/outputs/'+args.pat_id
-            if not os.path.isdir(mypath2):
-                os.makedirs(mypath2)
+            #TODO change 2 - does it work?
+            coms_image_patid_path = COMS_SIM_OUTPUTS_PATH / args.pat_id
+            #mypath2 = './virtualscanner/coms/coms_ui/static/acq/outputs/'+args.pat_id
+            if not os.path.isdir(coms_image_patid_path):
+                os.makedirs(coms_image_patid_path)
 
             tiopt = 'ms_TI'+str(round(1e3*args.ti)) if args.seq_type == 'irse' else ''
-            impath = mypath2+'/IM_'+args.seq_type.upper()+'_'+str(args.enc[2]).upper()+'_TR'+str(round(1e3*args.tr))+\
+            impath = str(coms_image_patid_path)+'/IM_'+args.seq_type.upper()+'_'+str(args.enc[2]).upper()+'_TR'+str(round(1e3*args.tr))+\
                     'ms_TE'+str(round(1e3*args.te))+tiopt+\
                     'ms_FA'+str(round(args.fa))+'_'+timestamp+'_'+str(v+1)+'.png'
 

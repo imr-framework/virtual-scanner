@@ -1,6 +1,8 @@
 import subprocess
 import numpy as np
 import os
+from virtualscanner.utils import constants
+
 
 #n = 5
 #siminfo = {'pht_type':'spherical', 'pht_dim': '3', 'n_ph':str(n), 'fov_ph': '0.256', 'dir_ph':'z',
@@ -11,6 +13,8 @@ import os
 #FA in deg
 #slice thickness in mm
 
+
+SERVER_SIM_BLOCH_PATH = constants.SERVER_SIM_BLOCH_PATH
 
 # Parse arguments from dictionary (str to str!)
 def run_blochsim(seqinfo,phtinfo,pat_id):
@@ -62,7 +66,10 @@ def run_blochsim(seqinfo,phtinfo,pat_id):
 
     subprocess.run(['python', #This is specific to windows
                      #'-m','cProfile','-o','profiling_results', #<- for profiling code
-                    os.path.join(os.path.dirname(os.path.realpath(__file__)),'pulseq_bloch_simulator.py'),
+
+                    #os.path.join(os.path.dirname(os.path.realpath(__file__)),'pulseq_bloch_simulator.py'),
+                    str(SERVER_SIM_BLOCH_PATH / 'pulseq_bloch_simulator.py'),
+
                      pat_id, # patient id
                      pht_type,pht_dim,n_ph,fov_ph, # pht_type, dim, Nph, FOVph(m)
                      '1','1','1',# PDs (a.u.) - default values
