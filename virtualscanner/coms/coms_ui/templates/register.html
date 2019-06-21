@@ -58,7 +58,7 @@
     <!-- External JS files-->
     <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
     <!--<script src="../static/form2Json.js"> </script>-->
-    <script src="../static/metric_imperial.js"> </script>
+    
     <script src="../static/phantomAutofill.js"> </script>
     <script src="../static/register_func.js"> </script>
     <script src="../static/log_out_func.js"> </script>
@@ -166,8 +166,7 @@
 
                           <label for="">Gender</label>
                             <div class="w-100"></div>
-                          <label for="">Measuring System</label>
-                            <div class="w-100"></div>
+
                           <label for="">Weight</label>
                             <div class="w-100"></div>
                           <label for="">Height</label>
@@ -204,43 +203,41 @@
 
 
                           <label class="radio-inline" >
-                            <input id="male" type="radio" name="gender" value="male" checked >
+                            <input class="gender" id="male" type="radio" name="gender" value="male" checked >
                               <label for="opt1">Male</label>
-                            <input class="not-first-radio" id="opt2" type="radio" name="gender" value="female" >
+                            <input class="not-first-radio gender" id="female" type="radio" name="gender" value="female" >
                               <label for="female">Female</label>
-                            <input class="not-first-radio" id="other" type="radio" name="gender" value="other">
+                            <input class="not-first-radio gender" id="other" type="radio" name="gender" value="other">
                               <label for="opt3">Other</label>
                           </label>
 
                             <div class="w-100"></div>
 
-                          <label class="radio-inline">
-                            <input id="met" type="radio" name="measuresystem" value="metric" onclick="metric2Imperial()" checked >
-                              <label for="met">Metric</label>
-                            <input class="not-first-radio" id="imp" type="radio" name="measuresystem" value="imperial" onclick="metric2Imperial()" >
-                              <label for="imp">Imperial</label>
-                          </label>
 
-                          <div class="w-100"></div>
 
                           <div class="row">
                             <div class="col coltype2">
                               <input id="weight" type="number" class="smallinput" name="weight"  >
-                              <label id="weightlabel" for="weight">kg</label>
+                              <label id="weightlabel" for="weight">
+                                <select id="weight-unit" class="selector" name="weight-unit">
+                                  <option value="kg">kg</option>
+                                  <option value="lbs">lbs</option>
+                                </select>
+                              </label>
 
                                 <div class="w-100"></div>
 
                               <input  id="height" type="number" class="smallinput" name="height"  >
-                              <label id="heightlabel" for="height">cm</label>
+                              <label id="heightlabel" for="height">
+                                <select id="height-unit" class="selector" name="height-unit">
+                                  <option value="cm">cm</option>
+                                  <option value="ft">ft</option>
+                                </select>
+                                <input id="in-input" type="number" class="smallinput extra-field" name="inches"  >
+                                <label class="extra-field">in</label>
+                              </label>
                             </div>
-                            <div id="extraImpFields" class="col coltype2" >
-                              <input id="weight2" type="number" class="smallinput" name="weight2"  >
-                              <label id="weightlabel2" for="weight2">oz</label>
 
-                                <div class="w-100"></div>
-                              <input id="height2" type="number" class="smallinput" name="height2"  >
-                              <label id="heightlabel2" for="height2">in</label>
-                            </div>
 
                           </div>
 
