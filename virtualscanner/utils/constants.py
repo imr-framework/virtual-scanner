@@ -6,6 +6,20 @@ COMS_PATH = ROOT_PATH / 'coms'
 RECON_PATH = ROOT_PATH / 'recon'
 SERVER_ANALYZE_PATH = COMS_PATH / 'server' / 'ana'
 SERVER_PATH = ROOT_PATH / 'server'
+
+# GT
+SERVER_SIM_BLOCH_PATH = SERVER_PATH / 'simulation'/ 'bloch'
+SERVER_SIM_OUTPUTS_PATH = SERVER_PATH / 'simulation' / 'outputs'
+SERVER_RX_PATH = SERVER_PATH / 'rx'
+COMS_RX_OUTPUTS_PATH = COMS_PATH / 'coms_ui' / 'static' / 'Rx' / 'outputs'
+COMS_RX_INPUTS_PATH = COMS_PATH / 'coms_ui' / 'static' / 'Rx' / 'inputs'
+COMS_SIM_OUTPUTS_PATH = COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs'
+
+#
+
+
 STATIC_ANALYZE_PATH = Path('static') / 'ana'
 USER_UPLOAD_FOLDER = ROOT_PATH / 'coms' / 'coms_ui' / 'static' / 'user_uploads'
+
+
 

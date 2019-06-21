@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
+from virtualscanner.utils import constants
+
+COMS_RX_INPUTS_PATH = constants.COMS_RX_INPUTS_PATH
+COMS_RX_OUTPUTS_PATH = constants.COMS_RX_OUTPUTS_PATH
 
 def run_Rx_sim(Rxinfo):
     B0 = 3  # Tesla
@@ -16,9 +20,9 @@ def run_Rx_sim(Rxinfo):
     dwell = 1 / bw_adc
     dt = 1e-9  # Sim.raster time dt = 1 ns
 
-    # Read parameters # TODO change according to payload format
+    # Read parameters
     dw = 2*pi*float(Rxinfo['deltaf'])
-    im_path = './src/server/rx/'+ Rxinfo['image-or'] + '.png'
+    im_path = str(COMS_RX_INPUTS_PATH) + '/' + Rxinfo['image-or'] + '.png'
     dsf = int(Rxinfo['DSF'])
 
     # 1. load image
@@ -87,9 +91,9 @@ def run_Rx_sim(Rxinfo):
     im_recon = (np.fft.ifft2(np.fft.fftshift(new_kspace)))
 
     # Save images
-    mypath = './src/coms/coms_ui/static/rx/outputs/'
-    if not os.path.isdir(mypath):
-        os.makedirs(mypath)
+    rx_outputs_path = str(COMS_RX_OUTPUTS_PATH) + '/'
+    if not os.path.isdir(rx_outputs_path):
+        os.makedirs(rx_outputs_path)
 
     # Plot signals at different stages & save
     #ind = round(Np/2)
@@ -117,7 +121,9 @@ def run_Rx_sim(Rxinfo):
     plt.plot(np.absolute(new_kspace[ind,:]))
     plt.title('Sampled demod. k-space line')
     plt.tight_layout()
-    signals_plot_path = mypath + 'Rx_signals_'+timestamp+'.png'
+
+    signals_plot_filename = 'Rx_signals_' + timestamp + '.png'
+    signals_plot_path = rx_outputs_path + signals_plot_filename
     plt.savefig(signals_plot_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
@@ -128,11 +134,12 @@ def run_Rx_sim(Rxinfo):
     plt.gray()
     fig.axes.get_xaxis().set_visible(False)
     fig.axes.get_yaxis().set_visible(False)
-    recon_im_path = mypath + 'recon_im_'+timestamp+'.png'
+    recon_plot_filename = 'recon_im_' + timestamp + '.png'
+    recon_im_path = rx_outputs_path + recon_plot_filename
     plt.savefig(recon_im_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
-    return  [signals_plot_path, recon_im_path, im_path]
+    return  [signals_plot_filename, recon_plot_filename, im_path]
 
 
 

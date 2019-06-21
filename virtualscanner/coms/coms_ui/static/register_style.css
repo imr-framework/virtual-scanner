@@ -108,3 +108,9 @@ img{
   margin-top: 3vh;
   display: none;
 }
+#in-input{
+  margin-left: 1vw;
+}
+.extra-field{
+  display: none;
+}
