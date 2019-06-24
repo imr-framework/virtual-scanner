@@ -206,6 +206,8 @@ function autoFillForm(dict){
   $("#Ny").val(dict['Ny']);
   $("#FOVx").val(dict['FOVx']);
   $("#FOVy").val(dict['FOVy']);
+  $("#select-seq-sentence").hide();
+  $("#seq-history-list").append(dict['selectedSeq']);
 }
 
 $(document).on("change", "#sl-orient",function(){
@@ -238,6 +240,10 @@ $(document).on("change", "#sl-orient",function(){
 });
 $(document).on("click",".feedback-btn",function(){
   window.open('https://docs.google.com/forms/u/2/d/15kb_3yJE5vYiTZo-N1pTA576atc3tjth58lud1S4MVA/edit?usp=sharing_eip&ts=5cf6c4a7', '_blank');
+});
+$(document).on("change","#TR",function(){
+  console.log("hola")
+  $("#TE").attr("max",$(this).val());
 });
 
 // TODO: change this to

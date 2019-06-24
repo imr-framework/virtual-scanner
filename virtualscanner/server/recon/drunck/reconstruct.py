@@ -1,17 +1,16 @@
-"""
-Perform inference on pre-trained Keras model.
+# Copyright of the Board of Trustees of  Columbia University in the City of New York.
 
-Author: Keerthi Sravan Ravi
-Date: 03/22/2019
-Version 0.1
-Copyright of the Board of Trustees of  Columbia University in the City of New York.
-"""
 from pathlib import Path
 from time import time
 
 import numpy as np
 from PIL import Image
 from keras.models import load_model
+
+from virtualscanner.utils import constants
+
+COMS_PATH = constants.COMS_PATH
+RECON_PATH = constants.RECON_PATH
 
 
 def __undersample(input_image):
@@ -116,7 +115,8 @@ def main(img_path: str, img_type: str) -> tuple:
             raise ValueError('Unknown image type')
 
         # Load pre-trained Hyun model and perform inference
-        model = load_model('./src/server/recon/drunck/assets/model.hdf5')
+        model = load_model(str(RECON_PATH / 'drunck' / 'assets' / 'model.hdf5'))
+        # model = load_model('./src/server/recon/drunck/assets/model.hdf5')
         output_image = model.predict(aliased_image[np.newaxis, ..., np.newaxis])
         output_image = np.squeeze(output_image)
         output_image = __freq_correct(aliased_kspace, output_image)
@@ -126,22 +126,22 @@ def main(img_path: str, img_type: str) -> tuple:
         # Save aliased input image
         aliased_filename = f'aliased_{t}.jpg'
         aliased_image = Image.fromarray(aliased_image).convert('RGB')
-        aliased_image.save(f'./src/coms/coms_ui/static/recon/outputs/{aliased_filename}')
+        aliased_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / aliased_filename)
+        # aliased_image.save(f'./src/coms/coms_ui/static/recon/outputs/{aliased_filename}')
 
         # Save output image
         output_filename = f'output_{t}.jpg'
         output_image = Image.fromarray(output_image).convert('RGB')
-        output_image.save(f'./src/coms/coms_ui/static/recon/outputs/{output_filename}')
+        output_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / output_filename)
+        # output_image.save(f'./src/coms/coms_ui/static/recon/outputs/{output_filename}')
 
         if img_type == 'GT':  # Save ground truth
             gt_filename = f'gt_{t}.jpg'
             input_image = Image.fromarray(input_image).convert('RGB')
-            input_image.save(f'./src/coms/coms_ui/static/recon/outputs/{gt_filename}')
+            input_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / gt_filename)
+            # input_image.save(f'./src/coms/coms_ui/static/recon/outputs/{gt_filename}')
             return gt_filename, aliased_filename, output_filename
 
         return aliased_filename, output_filename
     else:
         raise ValueError('File not found')
-
-
-# main('/Users/sravan953/Desktop/test.jpg', 'GT')
