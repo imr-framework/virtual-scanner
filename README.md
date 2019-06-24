@@ -1,6 +1,5 @@
 # Virtual Scanner
-Virtual Scanner is an end-to-end hybrid MR simulator/console designed to be:
-easily accessible, modular, and supported by open-source standards. 
+Virtual Scanner is an end-to-end hybrid MR simulator/console designed to be easily accessible, modular, and supported by open-source standards. 
 
 The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/).
 
@@ -11,7 +10,7 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 The Register page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now. 
 
 ### Acquire
-The Acquire page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing balls with different T1, T2, and PD values. 
+The Acquire page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values. 
 
 ### Analyze
 The Analyze page allows the user to load a series of data acquired for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect circles on the maps, a common feature of real MR phantoms.
