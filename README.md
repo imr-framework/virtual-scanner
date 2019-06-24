@@ -21,8 +21,7 @@ The Tx page allows one to calculate and plot SAR from pulseq .seq files.
 *This feature is under development.*
 
 ### Rx (RF Receive)
-The Rx page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate.
-*This feature is under development.*
+The Rx page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. *This feature is under development.*
 
 ### PSD Inspector
 The Pulse Sequence Diagram (PSD) Inspector allows you to load MR pulse sequences in the pulseq .seq format and visualize them.  
@@ -32,7 +31,7 @@ The Pulse Sequence Diagram (PSD) Inspector allows you to load MR pulse sequences
 *This feature is under development.*
 
 ### Reconstruction
-The recon page allows experimenting with different reconstruction methods, including Cartesian, non-Cartesian, and deep learning (link to DRUNK) options.
+The recon page allows experimenting with different reconstruction methods, including Cartesian, non-Cartesian, and deep learning options.
 *This feature is under development.*
 
 ## References
