@@ -30,11 +30,11 @@ The Pulse Sequence Diagram (PSD) Inspector allows you to load MR pulse sequences
 *This feature is under development.*
 
 ### Phantom Viewer
-*This feature is under development*
+*This feature is under development.*
 
 ### Reconstruction
 The recon page allows experimenting with different reconstruction methods, including Cartesian, non-Cartesian, and deep learning (link to DRUNK) options.
-*This feature is under development*
+*This feature is under development.*
 
 ## References
 
