@@ -4,7 +4,8 @@ ROOT_PATH = Path(__file__).parent.parent
 
 COMS_PATH = ROOT_PATH / 'coms'
 RECON_PATH = ROOT_PATH / 'recon'
-SERVER_ANALYZE_PATH = COMS_PATH / 'server' / 'ana'
+SERVER_ANALYZE_PATH = ROOT_PATH / 'server' / 'ana'  # modified by EQ to fix ana bug
+COMS_ANALYZE_PATH =  COMS_PATH / 'coms_ui'  # modified by EQ to fix ana bug
 SERVER_PATH = ROOT_PATH / 'server'
 
 # GT

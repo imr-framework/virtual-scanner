@@ -330,9 +330,10 @@ def worker():
                     map_name, dicom_path = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'],
                                                            session['patid'])
 
-                # payload['map_path'] = '../static/ana/outputs/292/T1_map20190430142214.png'
-                payload['dicom_path'] = dicom_path
-                payload['map_path'] = STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name
+                payload['dicom_path'] = str(dicom_path)
+                # payload['map_path'] = str(constants.COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / session['patid'] / map_name)
+                payload['map_path'] = str(
+                    constants.STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name)
                 session['ana_payload2'] = payload
 
 
@@ -352,7 +353,7 @@ def worker():
 
                 roi_result_path = STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / roi_result_filename
 
-                payload['roi_path'] = roi_result_path
+                payload['roi_path'] = str(roi_result_path)
                 session['ana_payload3'] = payload
 
             return redirect('analyze')

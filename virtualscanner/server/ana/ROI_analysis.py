@@ -15,7 +15,9 @@ import os
 import cv2
 import numpy.matlib
 import time
+from virtualscanner.utils import constants
 
+COMS_ANALYZE_PATH = constants.COMS_ANALYZE_PATH
 
 def circle_analysis(circles, map_size):
     """
@@ -190,7 +192,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         sphere_all_loc_map[:, 2, n3] = np.squeeze(np.matlib.repmat(circles_all[0, 2], num_spheres, 1))
 
     timestr = time.strftime("%Y%m%d%H%M%S")
-    mypath = './src/coms/coms_ui/static/ana/outputs/' + pat_id
+    mypath=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
 
     if not os.path.isdir(mypath):
             os.makedirs(mypath)
@@ -215,7 +217,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         plt.margins(0, 0)
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
-        plt.savefig(mypath + '/map_with_ROI' + timestr + '.png', bbox_inches='tight', pad_inches = 0)
+        plt.savefig(str(mypath) + '/map_with_ROI' + timestr + '.png', bbox_inches='tight', pad_inches = 0)
         # , facecolor = fig.get_facecolor(), edgecolor = 'none'
 
     filename = 'map_with_ROI' + timestr + '.png'

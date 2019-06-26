@@ -14,7 +14,10 @@ import pydicom
 from scipy.optimize import curve_fit
 import os
 import time
+from virtualscanner.utils import constants
 
+SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
+COMS_ANALYZE_PATH = constants.COMS_ANALYZE_PATH
 
 def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI should be in second
     """
@@ -56,6 +59,8 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
 
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
+    # for n2 in range(0, 32):
+    #     for n3 in range(0, 32):
             y_data = image_data_final[n2, n3, :]
             if 0 not in y_data:
                 n4 = 0
@@ -75,8 +80,8 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     # plt.show()
 
     timestr = time.strftime("%Y%m%d%H%M%S")
-    mypath1='./src/coms/coms_ui/static/ana/outputs/'+ pat_id
-    mypath2='./src/server/ana/outputs/'+ pat_id +'/T1_map'
+    mypath1=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
+    mypath2=SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T1_map'
 
     if not os.path.isdir(mypath1):
         os.makedirs(mypath1)
@@ -95,7 +100,7 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     plt.margins(0, 0)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    plt.savefig(mypath1 +'/T1_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(str(mypath1) +'/T1_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
 
     # plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
     filename1 = "T1_map" + timestr + ".png"
@@ -103,7 +108,7 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     pixel_array = (T1_map/5)*65535
     pixel_array_int = pixel_array.astype(np.uint16)
     ds.PixelData = pixel_array_int.tostring()
-    ds.save_as(mypath2 +'/T1_map' + timestr +'.dcm')
+    ds.save_as(str(mypath2) +'/T1_map' + timestr +'.dcm')
 
     return filename1, mypath2
 
