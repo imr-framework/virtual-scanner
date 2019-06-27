@@ -1,4 +1,8 @@
-# Virtual Scanner
+<p align="center"> <a>
+    <img title="Virtual Scanner Logo" src="https://github.com/imr-framework/imr-framework.github.io/blob/master/img/portfolio/virtual-scanner.png" width="225">
+  </a></p>
+<h1 align="center"> Virtual Scanner </h1> <br>
+
 Virtual Scanner is an end-to-end hybrid MR simulator/console designed to be easily accessible, modular, and supported by open-source standards. 
 
 The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/).
