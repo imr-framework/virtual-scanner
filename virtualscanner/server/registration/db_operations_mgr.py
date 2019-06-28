@@ -6,20 +6,20 @@ import sqlite3
 from pathlib import Path
 
 """
-1. This function inserts an entry into the database subject and table REGISTRATION
-|2. Creates database 'subject.db' with table 'REGISTRATION' if it does not exist locally
-|3. Inserts the keys and values required for REGISTRATION table
+#. This function inserts an entry into the database subject and table REGISTRATION
+#. Creates database 'subject.db' with table 'REGISTRATION' if it does not exist locally
+#. Inserts the keys and values required for REGISTRATION table
 
 Parameters
 ----------
-    payload : dict 
-        registration information
+payload : dict 
+    registration information
 
 Returns
 -------
-    status: int
-      0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
-      1: fail
+status: int
+    0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
+    1: fail
 
 """
 
@@ -37,9 +37,9 @@ def create():
 
     Returns
     -------
-        status: int
-          0: successful creation of the database and table
-          1: fail
+    status: int
+        0: successful creation of the database and table
+        1: fail
 
     """
 
@@ -81,14 +81,14 @@ def insert(payload):
 
     Parameters
     ----------
-        payload: dict
-            Information as per the REGISTRATION TABLE fields for the new subject to be inserted
+    payload: dict
+        Information as per the REGISTRATION TABLE fields for the new subject to be inserted
 
     Returns
     -------
-        status: int
-          0: successful insertion of the row
-          1: fail
+    status: int
+        0: successful insertion of the row
+        1: fail
 
     """
 
@@ -134,13 +134,13 @@ def query(payload):
 
         Parameters
         ----------
-            payload: dict
-                Information as per the REGISTRATION TABLE fields for the new subject to be inserted
+        payload: dict
+            Information as per the REGISTRATION TABLE fields for the new subject to be inserted
 
         Returns
         -------
-            rows: dict
-             rows from the RESGISTRATION table that match the query criteria
+        rows: dict
+            rows from the RESGISTRATION table that match the query criteria
 
     """
 

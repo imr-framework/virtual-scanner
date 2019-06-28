@@ -2,28 +2,26 @@
 # Script to manage registration functions including checking for redundancy
 
 from pathlib import Path
+
 import virtualscanner.server.registration.db_operations_mgr as dbom
 
-
 """
-1. This script registers a subject
-|2.Creates a database if it does not exist
-|3.Appends registration data
+#. This script registers a subject
+#. Creates a database if it does not exist
+#. Appends registration data
 
 Parameters
 ----------
-    payload: dict
+    payload : dict
         all fields required in the REGISTRATION table
 
 Returns
 -------
-    status: int
-    0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
-    1: fail
+    status : int
+        0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
+        1: fail
 
 """
-
-
 
 root = Path(__file__)
 db_path = root.parent / "subject.db"
@@ -31,18 +29,18 @@ db_path = root.parent / "subject.db"
 
 def consume(payload):
     """
-    1.This definition processes a payload
-    |2.Creates a database if it does not exist
-    |3.Appends registration data
+    #. This definition processes a payload
+    #. Creates a database if it does not exist
+    #. Appends registration data
 
     Parameters
     ----------
-        payload: dict
-            all fields required in the REGISTRATION table
+    payload: dict
+        all fields required in the REGISTRATION table
 
     Returns
     -------
-        status: int
+    status: int
         0: successful creation of the database (if required) and insertion of one row
         1: fail
 
@@ -62,20 +60,20 @@ def consume(payload):
 
 def reuse(payload):
     """
-        This definition queries if the subject is already registered
+    This definition queries if the subject is already registered
 
 
         Parameters
         ----------
-            payload: dict
-                all fields required in the REGISTRATION table
+        payload: dict
+            all fields required in the REGISTRATION table
 
         Returns
         -------
             rows: dict
-            row of the REGISTRATION table that match the subject being registered
-            a null value indicates a new subject
-            non null value(s) indicate matching subjects
-        """
+                row of the REGISTRATION table that match the subject being registered
+                a null value indicates a new subject
+                non null value(s) indicate matching subjects
+    """
     rows = dbom.query(payload)
     return rows

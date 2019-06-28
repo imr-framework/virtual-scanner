@@ -5,15 +5,15 @@
 import virtualscanner.server.registration.register as reg
 
 """
-1. This script unit tests the subject registration
-|2. tests multiple cases of the registration implementation
+#. This script unit tests the subject registration
+#. tests multiple cases of the registration implementation
 
 
 Returns
 -------
     status: int
-    0: tests passed
-    1: fail
+        0: tests passed
+        1: fail
 """
 
 # os.chdir("./Virtual-Scanner")
@@ -24,7 +24,7 @@ def create_payload():
 
     Returns
     -------
-        payload: dict
+    payload: dict
         all fields required by the REGISTRATION table in subject.db
     """
     # can make this more random later on, but for now we hardcode
