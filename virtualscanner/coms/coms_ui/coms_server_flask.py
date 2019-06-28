@@ -465,8 +465,7 @@ def worker():
                 upload_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(upload_path)
 
-                timestamp = time.strftime("%Y%m%d%H%M%S")
-                filename = filename[:-4] + timestamp + '.seq'
+                filename = filename[:-4] + '.seq'
 
                 os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / filename)
 
