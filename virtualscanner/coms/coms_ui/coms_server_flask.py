@@ -1,8 +1,6 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
+# This script runs the server based on the Flask package and hosts the GUIs on the web
 
-"""
-This script runs the server based on the Flask package and hosts the GUIs on the web
-"""
 
 if __name__ == '__main__':
     import os
@@ -45,6 +43,19 @@ app.secret_key = 'Session_key'
 @app.route('/', methods=['POST',
                          'GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
+    """
+    Renders the log-in html page on the web and requests user log-in information (e-mail) and choice of user mode (Standard/Advanced)
+
+    Returns
+    -------
+    AppContext
+        | Redirects to register page if user-name exists and Standard mode is selected
+        |    OR
+        | Redirects to recon page if user-name exists and Advanced mode is selected
+        |    OR
+        | Renders log-in template
+
+    """
     session.clear()
     session['acq_out_axial'] = []
     session['acq_out_sagittal'] = []
@@ -53,65 +64,86 @@ def log_in():
         # users.append(request.form['user-name'])
         # session['username'] = users[-1]
         session['username'] = request.form['user-name']
-
+        if session['username'] == "":
+            return render_template("log_in.html")
         if request.form['mode'] == "Standard":
             return redirect("register")
         else:
             return redirect("recon")
     else:
-        if 'username' in session and session['username'] in users:
-
-            return render_template("log_in.html")
-        else:
-
-            return render_template("log_in.html")
+        return render_template("log_in.html")
 
 
 @app.route('/register', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def on_register():
     """
+    Renders the registration html page on the web
 
-         Parameters
-        ----------
-           void
+    Returns
+    -------
+    AppContext
+        | Renders register page
+        |    OR
+        | Redirects to register success page if registration occurs
 
-        Returns
-        -------
-           void (status in debug mode if required)
-
-        Performs
-        --------
-            Renders the registration html page on the web
     """
+    if 'acq' in session and 'reg_success' not in session:
+        session.pop('acq')
+        message = 1
+        return render_template('register.html', msg=message)
 
-    # serve register template
-    if (session['username'] == ""):
+    if 'ana_load' in session and 'reg_success' not in session:
+        session.pop('ana_load')
+        message = 1
+        return render_template('register.html', msg=message)
 
-        return redirect('')
+    if 'reg_success' in session:
+        return redirect('register_success')
     else:
-        if 'acq' in session and 'reg_success' not in session:
-            session.pop('acq')
-            message = 1
-            return render_template('register.html', msg=message)
-
-        if 'ana_load' in session and 'reg_success' not in session:
-            session.pop('ana_load')
-            message = 1
-            return render_template('register.html', msg=message)
-
-        if 'reg_success' in session:
-            return redirect('register_success')
-        else:
-            return render_template('register.html')
+        return render_template('register.html')
 
 
 @app.route('/register_success', methods=['POST', 'GET'])
 def on_register_success():
+    """
+    Renders the registration html page on the web with a success message when registration occurs
+
+    Returns
+    -------
+    AppContext
+        | Renders register page with registration success message
+        | May also pass variables:
+        | success : int
+        |    Either 1 or 0 depending on registration success
+        | payload : dict
+        |    Form inputted values sent back to display together with template
+
+    """
     return render_template('register.html', success=session['reg_success'], payload=session['reg_payload'])
 
 
 @app.route('/acquire', methods=['POST', 'GET'])
 def on_acq():
+    """
+    Renders the acquire html page on the web
+
+    Returns
+    -------
+    AppContext
+        | Renders acquire template
+        | May also pass variables:
+        | success : int
+        |    Either 1 or 0 depending on acquisition success
+        | axial : list
+        |    File names for generated axial images
+        | sagittal : list
+        |    File names for generated sagittal images
+        | coronal : list
+        |    File names for generated coronal images
+        | payload : dict
+        |    Form inputted values sent back to display together with template
+
+    """
     if 'acq' in session:
 
         return render_template('acquire.html', success=session['acq'], axial=session['acq_out_axial'],
@@ -123,6 +155,20 @@ def on_acq():
 
 @app.route('/analyze', methods=['POST', 'GET'])
 def on_analyze():
+    """
+    Renders the analyze html page on the web
+
+    Returns
+    -------
+    AppContext
+        | Renders analyze template
+        | May also pass variables:
+        | roi_success/map_success/load_success : int
+        |   Either 1 or 0 depending on analyze steps success
+        | payload1/payload2/payload3 : dict
+        |   Form inputted values and output results sent back to display together with template
+
+    """
     if 'ana_load' in session:
         if 'ana_map' in session:
             if 'ana_roi' in session:
@@ -139,13 +185,27 @@ def on_analyze():
         return render_template('analyze.html')
 
 
-@app.route('/ana_load_success')
-def on_ana_load_success():
-    return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
+#@app.route('/ana_load_success')
+#def on_ana_load_success():
+#    return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
 
 
 @app.route('/tx', methods=['POST', 'GET'])
 def on_tx():
+    """
+    Renders the tx html page on the web
+
+    Returns
+    -------
+    AppContext
+        | Renders tx template
+        | May also pass variables:
+        | success : int
+        |   Either 1 or 0 depending on tx success
+        | payload : dict
+        |   Form inputted values and output results sent back to display together with template
+
+    """
     if 'tx' in session:
         return render_template('tx.html', success=session['tx'], payload=session['tx_payload'])
     else:
@@ -154,14 +214,42 @@ def on_tx():
 
 @app.route('/rx', methods=['POST', 'GET'])
 def on_rx():
+    """
+    Renders the rx html page on the web
+
+    Returns
+    -------
+    AppContext
+        | Renders rx template
+        | May also pass variables:
+        | success : int
+        |   Either 1 or 0 depending on rx success
+        | payload : dict
+        |   Form inputted values and output results sent back to display together with template
+
+    """
     if 'rx' in session:
         return render_template('rx.html', success=session['rx'], payload=session['rx_payload'])
     else:
         return render_template('rx.html')
 
 
-@app.route('/recon')
+@app.route('/recon', methods=['POST', 'GET'])
 def on_recon():
+    """
+    Renders the recon html page on the web
+
+    Returns
+    -------
+    AppContext
+        | Renders recon template
+        | May also pass variables:
+        | success : int
+        |   Either 1 or 0 depending on recon success
+        | payload : dict
+        |   Form inputted values and output results sent back to display together with template
+
+    """
     if 'recon' in session:
         return render_template('recon.html', success=session['recon'], payload=session['recon_payload'])
     else:
@@ -169,6 +257,20 @@ def on_recon():
 
 
 def allowed_file(filename):
+    """
+    Checks that the file extension is within the application allowed extensions
+
+    Parameters
+    ----------
+    filename : str
+        | Uploaded file name
+
+    Returns
+    -------
+    bool
+        | allowed or not allowed extension
+
+    """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -176,20 +278,14 @@ def allowed_file(filename):
 @app.route('/receiver', methods=['POST', 'GET'])
 def worker():
     """
+    Receives form inputs from the templates and applies the server methods
 
-            Parameters
-            ----------
-                   void
+     Returns
+    -------
+    AppContext
+        | Either renders templates or redirects to other templates
 
-             Returns
-            -------
-               payload
-
-            Performs
-            --------
-                rx payload from the client
-                TODO: invokes payload
-            """
+    """
     # read payload and convert it to dictionary
 
     if request.method == 'POST':
@@ -417,6 +513,9 @@ def worker():
 
 
 def launch_virtualscanner():
+    """
+    Runs the server in the specified machine's local network address
+    """
     app.run(host='0.0.0.0', debug=True)
 
 
