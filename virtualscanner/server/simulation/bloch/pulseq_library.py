@@ -1,5 +1,7 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Library for generating pulseq sequences
+"""
+Library for generating pulseq sequences: GRE, SE, IRSE, EPI
+"""
 
 from math import pi, sqrt, ceil, floor
 

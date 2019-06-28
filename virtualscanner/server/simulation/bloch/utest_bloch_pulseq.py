@@ -1,6 +1,9 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Unit test for bloch simulation
 # For conventionally 2D encoded (i.e. Cartesian; one readout line per phase encode) pulseq sequences
+"""
+Unit test for bloch simulation on GRE, SE, and IRSE sequences (2D Cartesian, line-by-line, rectangular trajectory)
+Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.
+"""
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np

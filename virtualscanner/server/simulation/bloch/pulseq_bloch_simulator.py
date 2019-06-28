@@ -1,6 +1,15 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Main simulator program called by caller_script_blochsim.py
 
+"""Main Bloch simulation script
+
+This script is called by run_blochsim() with command line arguments to execute a particular simulation request,
+including the construction of a phantom, a pulseq sequence, parallel simulation, reconstruction, and data & image output
+
+Notes
+-----
+See beginning of the main section for explanations of the command line arguments (line 41-71)
+
+"""
 import pulseq_blochsim_methods as blcsim
 import numpy as np
 import matplotlib
@@ -15,16 +24,6 @@ from math import pi
 import os
 from virtualscanner.utils import constants
 
-"""Main Bloch simulation script
-
-This script is called by run_blochsim() with command line arguments to execute a particular simulation request,
-including the construction of a phantom, a pulseq sequence, parallel simulation, reconstruction, and data & image output
-
-Notes
------
-See beginning of the main section for explanations of the command line arguments (line 44-72)
-
-"""
 
 cpath = os.getcwd()
 if not (cpath.endswith('Virtual-Scanner')):

@@ -1,5 +1,6 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Methods to help Bloch simulation from pulseq format
+"""Methods to help Bloch simulation from pulseq objects
+"""
 
 import numpy as np
 import numpy.matlib as npm

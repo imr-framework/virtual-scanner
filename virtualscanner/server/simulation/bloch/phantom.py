@@ -1,4 +1,7 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
+"""
+Numerical phantom generation and access
+"""
 
 import numpy as np
 import scipy.signal as ss
@@ -37,20 +40,6 @@ class Phantom:
         1D array of all y locations in phantom
     Zs : numpy.ndarray
         1D array of all z locations in phantom
-
-    Methods
-    -------
-    get_location(indx)
-        Returns (x,y,z) physical location in meters at given indices
-    get_shape()
-        Returns the phantom's matrix size
-    get_params(indx)
-        Returns PD, T1, and T2 at given indices
-    get_list_locs()
-        Returns a flattened 1D array of all location vectors [(x1,y1,z1),...,(xk,yk,zk)]
-    get_list_inds()
-        Returns a flattened 1D array of all indices in phantom [(u1,v1,w1),...,(uk,vk,wk)]
-
 
     """
     def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,loc=(0,0,0)):
@@ -189,11 +178,7 @@ class DTTPhantom(Phantom):
 
 
 class BrainwebPhantom(Phantom):
-    """Brainweb brain phantom
-
-    Notes
-    -----
-    This phantom is in development.
+    """This phantom is in development.
 
     """
 
@@ -275,6 +260,63 @@ class BrainwebPhantom(Phantom):
         T2map = np.clip(T2map,a_min=0,a_max=None)
 
         super().__init__(T1map,T2map,PDmap,dr,dBmap)
+
+
+class SpheresArrayPlanarPhantom(DTTPhantom):
+    """2D phantom extracted from a cylinder containing spheres
+
+    Regardless of dir, this will be an axial slice of a cylinder
+    That is, the plane is constructed as a z-slice and then re-indexed to lie in the x or y plane
+    The centers of spheres will correspond to locations before re-indexing
+
+    Parameters
+    ----------
+    centers : list or array_like
+        List of 3D physical locations of the spheres' centers
+    radii : list or array_like
+        List of radii for the spheres
+    type_params : dict
+        Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)
+    fov : float
+        Field of view (isotropic)
+    n : int
+        Matrix size
+    dir : str, optional {'z','x','y'}
+        Orientation of plane; default is z
+    R : float, optional
+        Cylinder's cross-section radius; default is half of fov
+    loc : tuple, optional
+        Overall location (x,y,z) of phantom from isocenter in meters
+        Default is (0,0,0)
+
+
+    """
+    def __init__(self, centers, radii, type_params, fov, n, dir='z',R=0,loc=(0,0,0)):
+        if R == 0:
+            R = fov/2
+        vsize = fov/n
+        type_map = np.zeros((n,n,1))
+        q = (n-1)/2
+        centers_inds = [(np.array(c) / vsize + q) for c in centers]
+        nc = len(centers)
+        for r1 in range(n):
+            for r2 in range(n):
+                if vsize * np.sqrt((r1-q)**2+(r2-q)**2)<R:
+                    type_map[r1,r2,0] = nc + 1
+                for k in range(len(centers_inds)):
+                    ci = centers_inds[k]
+                    d = vsize * np.sqrt((r1 - ci[0]) ** 2 + (r2 - ci[1])**2)
+                    if d <= radii[k]:
+                        type_map[r1,r2,0] = k + 1
+                        break
+        if dir == 'x':
+            type_map = np.swapaxes(type_map, 1, 2)
+            type_map = np.swapaxes(type_map, 0, 1)
+        elif dir == 'y':
+            type_map = np.swapaxes(type_map, 0, 2)
+            type_map = np.swapaxes(type_map, 0, 1)
+
+        super().__init__(type_map, type_params, vsize, loc=loc)
 
 
 def makeSphericalPhantom(n,fov,T1s,T2s,PDs,radii,loc=(0,0,0)):
@@ -379,63 +421,6 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
         type_map = np.swapaxes(type_map,0,1)
 
     return DTTPhantom(type_map, type_params, vsize, loc)
-
-
-class SpheresArrayPlanarPhantom(DTTPhantom):
-    """2D phantom extracted from a cylinder containing spheres
-
-    Regardless of dir, this will be an axial slice of a cylinder
-    That is, the plane is constructed as a z-slice and then re-indexed to lie in the x or y plane
-    The centers of spheres will correspond to locations before re-indexing
-
-    Parameters
-    ----------
-    centers : list or array_like
-        List of 3D physical locations of the spheres' centers
-    radii : list or array_like
-        List of radii for the spheres
-    type_params : dict
-        Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)
-    fov : float
-        Field of view (isotropic)
-    n : int
-        Matrix size
-    dir : str, optional {'z','x','y'}
-        Orientation of plane; default is z
-    R : float, optional
-        Cylinder's cross-section radius; default is half of fov
-    loc : tuple, optional
-        Overall location (x,y,z) of phantom from isocenter in meters
-        Default is (0,0,0)
-
-
-    """
-    def __init__(self, centers, radii, type_params, fov, n, dir='z',R=0,loc=(0,0,0)):
-        if R == 0:
-            R = fov/2
-        vsize = fov/n
-        type_map = np.zeros((n,n,1))
-        q = (n-1)/2
-        centers_inds = [(np.array(c) / vsize + q) for c in centers]
-        nc = len(centers)
-        for r1 in range(n):
-            for r2 in range(n):
-                if vsize * np.sqrt((r1-q)**2+(r2-q)**2)<R:
-                    type_map[r1,r2,0] = nc + 1
-                for k in range(len(centers_inds)):
-                    ci = centers_inds[k]
-                    d = vsize * np.sqrt((r1 - ci[0]) ** 2 + (r2 - ci[1])**2)
-                    if d <= radii[k]:
-                        type_map[r1,r2,0] = k + 1
-                        break
-        if dir == 'x':
-            type_map = np.swapaxes(type_map, 1, 2)
-            type_map = np.swapaxes(type_map, 0, 1)
-        elif dir == 'y':
-            type_map = np.swapaxes(type_map, 0, 2)
-            type_map = np.swapaxes(type_map, 0, 1)
-
-        super().__init__(type_map, type_params, vsize, loc=loc)
 
 
 def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):

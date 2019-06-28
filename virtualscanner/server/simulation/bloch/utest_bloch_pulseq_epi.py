@@ -1,5 +1,9 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Unit test for bloch simulation on pulseq EPI sequence (2D Cartesian, rectangular trajectory)
+"""
+Unit test for bloch simulation on pulseq EPI sequence (2D Cartesian, rectangular trajectory)
+Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.
+"""
+
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np
