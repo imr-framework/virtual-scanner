@@ -1,31 +1,27 @@
-"""
-This function inserts an entry into the database subject and table REGISTRATION
-Parameters
-----------
-    payload
-
-Performs
---------
-    Creates database 'subject.db' with table 'REGISTRATION' if it does not exist locally
-    Inserts the keys and values required for REGISTRATION table
-
-
-Returns
--------
-    status - 0: successfull 1: fail
-
-Unit Test app
--------------
-     utest_register
-Author: Sairam Geethanath
-Date: 03/07/2019
-Version 0.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
-"""
+# Copyright of the Board of Trustees of Columbia University in the City of New York
+# Script to manage database operations related to subject registration
 
 import datetime
 import sqlite3
 from pathlib import Path
+
+"""
+1. This function inserts an entry into the database subject and table REGISTRATION
+|2. Creates database 'subject.db' with table 'REGISTRATION' if it does not exist locally
+|3. Inserts the keys and values required for REGISTRATION table
+
+Parameters
+----------
+    payload : dict 
+        registration information
+
+Returns
+-------
+    status: int
+      0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
+      1: fail
+
+"""
 
 root = Path(__file__)
 DB_PATH = root.parent / "subject.db"
@@ -35,6 +31,18 @@ SERVERLOG_PATH = SERVERLOG_PATH.resolve()
 
 
 def create():
+    """
+    This function creates a database with the required fields in the REGISTRATION table
+
+
+    Returns
+    -------
+        status: int
+          0: successful creation of the database and table
+          1: fail
+
+    """
+
     status = 0  # successful unless caught by exception
     serverlog = open(SERVERLOG_PATH.resolve(), 'a')
     # Create the subject database
@@ -68,6 +76,22 @@ def create():
 
 
 def insert(payload):
+    """
+    This function inserts a new row for a registered subject in the REGISTRATION table
+
+    Parameters
+    ----------
+        payload: dict
+            Information as per the REGISTRATION TABLE fields for the new subject to be inserted
+
+    Returns
+    -------
+        status: int
+          0: successful insertion of the row
+          1: fail
+
+    """
+
     serverlog = open(SERVERLOG_PATH, 'a')
     status = 0  # successful unless caught by exceptions
     try:
@@ -105,6 +129,21 @@ def insert(payload):
 
 
 def query(payload):
+    """
+        This function queries the REGISTRATION table for existing subject information
+
+        Parameters
+        ----------
+            payload: dict
+                Information as per the REGISTRATION TABLE fields for the new subject to be inserted
+
+        Returns
+        -------
+            rows: dict
+             rows from the RESGISTRATION table that match the query criteria
+
+    """
+
     serverlog = open(SERVERLOG_PATH, 'a')
     # supports only any 1 key at this time; need to extend this to multiple key value pairs
     status = 0  # successful unless caught by exceptions

@@ -1,29 +1,32 @@
-"""
-This script unit tests the subject registration
-Parameters
-----------
-    void
+# Copyright of the Board of Trustees of Columbia University in the City of New York
+# Unit test Script to check for registration functions independently
 
-Performs
---------
-    tests multiple cases of the registration implementation
+
+import virtualscanner.server.registration.register as reg
+
+"""
+1. This script unit tests the subject registration
+|2. tests multiple cases of the registration implementation
 
 
 Returns
 -------
-    status - type int
-
-Author: Sairam Geethanath
-Date: 03/07/2019
-Version 0.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
+    status: int
+    0: tests passed
+    1: fail
 """
-import virtualscanner.server.registration.register as reg
-
 
 # os.chdir("./Virtual-Scanner")
 
 def create_payload():
+    """
+    This definition creates a test payload
+
+    Returns
+    -------
+        payload: dict
+        all fields required by the REGISTRATION table in subject.db
+    """
     # can make this more random later on, but for now we hardcode
     payload = {
         "SUBJECTTYPE": "numerical",
