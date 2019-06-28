@@ -17,7 +17,7 @@ import numpy.matlib
 import time
 from virtualscanner.utils import constants
 
-COMS_ANALYZE_PATH = constants.COMS_ANALYZE_PATH
+COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 def circle_analysis(circles, map_size):
     """

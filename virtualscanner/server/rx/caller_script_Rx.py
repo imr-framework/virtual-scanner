@@ -9,8 +9,8 @@ import os
 import time
 from virtualscanner.utils import constants
 
-COMS_RX_INPUTS_PATH = constants.COMS_RX_INPUTS_PATH
-COMS_RX_OUTPUTS_PATH = constants.COMS_RX_OUTPUTS_PATH
+COMS_RX_INPUTS_PATH = constants.COMS_UI_STATIC_RX_INPUT_PATH
+COMS_RX_OUTPUTS_PATH = constants.COMS_UI_STATIC_RX_OUTPUT_PATH
 
 def run_Rx_sim(Rxinfo):
     """Runs MR receive chain simulation

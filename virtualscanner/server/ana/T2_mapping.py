@@ -17,7 +17,7 @@ import time
 from virtualscanner.utils import constants
 
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
-COMS_ANALYZE_PATH = constants.COMS_ANALYZE_PATH
+COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     """

@@ -24,9 +24,9 @@ from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsi
 from virtualscanner.utils import constants
 
 ROOT_PATH = constants.ROOT_PATH
-UPLOAD_FOLDER = constants.USER_UPLOAD_FOLDER
+UPLOAD_FOLDER = constants.COMS_UI_STATIC_USER_UPLOAD_PATH
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
-STATIC_ANALYZE_PATH = constants.STATIC_ANALYZE_PATH
+STATIC_ANALYZE_PATH = constants.COMS_UI_STATIC_ANALYZE_PATH
 # UPLOAD_FOLDER = UPLOAD_FOLDER.resolve()
 ALLOWED_EXTENSIONS = {'seq', 'jpg'}
 
@@ -355,7 +355,7 @@ def worker():
 
             if progress == 1:
                 session['acq'] = 1
-                im_path_from_template = constants.STATIC_ACQUIRE_PATH / 'outputs' / session['patid']
+                im_path_from_template = constants.COMS_UI_STATIC_ACQUIRE_PATH / 'outputs' / session['patid']
 
                 imgpaths = os.listdir(sim_result_path)
                 complete_path = [str(im_path_from_template / iname) for iname in imgpaths]
@@ -429,7 +429,7 @@ def worker():
                 payload['dicom_path'] = str(dicom_path)
                 # payload['map_path'] = str(constants.COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / session['patid'] / map_name)
                 payload['map_path'] = str(
-                    constants.STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name)
+                    constants.COMS_UI_STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name)
                 session['ana_payload2'] = payload
 
 
@@ -473,7 +473,7 @@ def worker():
                 output = SAR_calc_main.payload_process(filename)
 
                 session['tx'] = 1
-                output['plot_path'] = str(constants.STATIC_RF_PATH/ 'tx' / 'SAR' / output['filename'])
+                output['plot_path'] = str(constants.COMS_UI_STATIC_RF_PATH / 'tx' / 'SAR' / output['filename'])
                 session['tx_payload'] = output
                 return redirect('tx')
         # rx
@@ -481,8 +481,8 @@ def worker():
 
             signals_filename, recon_filename, orig_im_path = Rxfunc.run_Rx_sim(payload)
 
-            payload['signals_path'] = str(constants.STATIC_RX_PATH / signals_filename)
-            payload['recon_path'] = str(constants.STATIC_RX_PATH / recon_filename)
+            payload['signals_path'] = str(constants.COMS_UI_STATIC_RX_PATH / signals_filename)
+            payload['recon_path'] = str(constants.COMS_UI_STATIC_RX_PATH / recon_filename)
 
             session['rx'] = 1
             session['rx_payload'] = payload
@@ -496,7 +496,7 @@ def worker():
             input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(input_path)
 
-            out_path_form_template = constants.STATIC_RECON_PATH / 'outputs'
+            out_path_form_template = constants.COMS_UI_STATIC_RECON_PATH / 'outputs'
 
             if payload['DL-type'] == "GT":
                 out1, out2, out3 = main(input_path, payload['DL-type'])
