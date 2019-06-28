@@ -11,7 +11,7 @@ setuptools.setup(
     description='Virtual Scanner educational tool for MRI',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/imr-framework/Virtual-Scanner',
+    url='https://github.com/imr-framework/virtual-scanner',
     packages=setuptools.find_packages(),
     install_requires=['absl-py==0.7.1',
                       'astor==0.7.1',
@@ -53,7 +53,7 @@ setuptools.setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'virtual-scanner = virtualscanner.coms.coms_ui.coms_server_flask:launch_virtualscanner'
+            'virtualscanner = virtualscanner.coms.coms_ui.coms_server_flask:launch_virtualscanner'
         ]
     },
 )
