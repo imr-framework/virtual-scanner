@@ -467,7 +467,7 @@ def worker():
 
                 filename = filename[:-4] + '.seq'
 
-                os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / filename)
+                os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
 
                 output = SAR_calc_main.payload_process(filename)
 
