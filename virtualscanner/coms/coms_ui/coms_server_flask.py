@@ -280,10 +280,10 @@ def worker():
     """
     Receives form inputs from the templates and applies the server methods
 
-     Returns
+    Returns
     -------
     AppContext
-        | Either renders templates or redirects to other templates
+        Either renders templates or redirects to other templates
 
     """
     # read payload and convert it to dictionary
