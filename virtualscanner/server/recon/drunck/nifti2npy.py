@@ -1,13 +1,8 @@
-"""
-Convert NIFTI data to `numpy.ndarray` and undersample data.
+# Copyright of the Board of Trustees of Columbia University in the City of New York.
 
-Author: Keerthi Sravan Ravi
-Date: 03/22/2019
-Version 0.1
-Copyright of the Board of Trustees of  Columbia University in the City of New York.
-"""
 import argparse
 import os
+from pathlib import Path
 
 import PIL
 import matplotlib.pyplot as plt
@@ -15,7 +10,7 @@ import nibabel as nib
 import numpy as np
 
 
-def load_dataset_from_nifti(nifti_path: str, img_size: int = 128) -> np.ndarray:
+def load_dataset_from_nifti(nifti_path: Path, img_size: int = 128) -> np.ndarray:
     """
     Make dataset by reading NIFTI files from `nifti_path` and resizing each image to `img_size`x`img_size`.
 
@@ -23,8 +18,8 @@ def load_dataset_from_nifti(nifti_path: str, img_size: int = 128) -> np.ndarray:
     ----------
     nifti_path : str
         Path to folder containing NIFTI files.
-    img_size : int
-        Desired size of images in dataset. Images read from NIFTI files will be resized.
+    img_size : int, optional
+        Desired size of images in dataset. Images read from NIFTI files will be resized. Default value is `128`.
 
     Returns
     -------
@@ -43,7 +38,7 @@ def load_dataset_from_nifti(nifti_path: str, img_size: int = 128) -> np.ndarray:
     for file in filenames:
         if not file.endswith('DS_Store'):
             counter = counter + 1
-            n = nib.load(os.path.join(nifti_path, file))  # Load NIFTI
+            n = nib.load(str(nifti_path / file))  # Load NIFTI
             vol = n.get_data()[:, :, slice_min:slice_max + 1]  # Get image
             print('File {}/{}, shape: {}'.format(counter, num_files, vol.shape))
 
@@ -52,6 +47,7 @@ def load_dataset_from_nifti(nifti_path: str, img_size: int = 128) -> np.ndarray:
                 img = np.array(PIL.Image.fromarray(img).resize((img_size, img_size)))
                 img = img[np.newaxis, :, :, np.newaxis]
                 dataset = np.append(dataset, img, axis=0)
+
     print(dataset.shape, dataset.dtype)
     print('\n')
     return dataset
@@ -176,7 +172,7 @@ def plot(dataset: np.ndarray, ft_dataset: np.ndarray, dataset_undersampled: np.n
     plt.show()
 
 
-def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarray, save_path: str):
+def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarray, save_path: Path):
     """
     Save `file1` and `file2` to disk as `filename1` and `filename2 at `save_path`.
 
@@ -193,15 +189,15 @@ def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarr
     save_path : str
         Path to save ndarray files to.
     """
-    print('Saving to {}...'.format(os.path.join(save_path)), end='')
-    path = os.path.join(save_path, filename1)
+    print(f'Saving to {save_path}...', end='')
+    path = save_path / filename1
     np.save(path, file1)
-    path = os.path.join(save_path, filename2)
+    path = save_path / filename2
     np.save(path, file2)
     print(' Done.\n')
 
 
-def main(nifti_path: str, img_size: int, low_freq_pc: float, save_path: str, reduction_factor: int,
+def main(nifti_path: Path, img_size: int, low_freq_pc: float, save_path: Path, reduction_factor: int,
          plot_flag: bool = True):
     """
     1. Load NIFTI data as `numpy.ndarray` and resize each image to `img_size`x`img_size`.
@@ -220,21 +216,22 @@ def main(nifti_path: str, img_size: int, low_freq_pc: float, save_path: str, red
         Path to save ndarray files.
     reduction_factor : int
         Undersampling factor.
-    plot_flag : bool
+    plot_flag : bool, optional
         Boolean flag to plot `img_ind` sample of dataset, undersampled dataset and corresponding k-space.
+        Default value is `True`.
     """
-    if save_path is not str() and not os.path.exists(save_path):
-        os.makedirs(os.path.abspath(save_path))
+    if not save_path.exists():
+        Path.mkdir(save_path, parents=True)
 
     dataset = load_dataset_from_nifti(nifti_path=nifti_path, img_size=img_size)
+    dataset = dataset.transpose((0, 2, 1, 3))
     dataset = normalise_dataset(dataset=dataset)
     result = undersample(dataset=dataset, low_freq_pc=low_freq_pc, reduction_factor=reduction_factor)
     ft_dataset, dataset_undersampled, ft_dataset_undersampled = result
     dataset_undersampled = np.abs(dataset_undersampled)
     dataset_undersampled = normalise_dataset(dataset=dataset_undersampled)
 
-    if save_path is not str():
-        save2disk(filename1='x.npy', file1=dataset_undersampled, filename2='y', file2=dataset, save_path=save_path)
+    save2disk(filename1='x.npy', file1=dataset_undersampled, filename2='y', file2=dataset, save_path=save_path)
     if plot_flag:
         plot(dataset=dataset, ft_dataset=ft_dataset, dataset_undersampled=dataset_undersampled,
              ft_dataset_undersampled=ft_dataset_undersampled, img_ind=123)
@@ -246,18 +243,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='DRUNCK: Deep-learning Reconstruction of UNdersampled Cartesian K-space data')
     parser.add_argument('nifti_path', type=str, help='Path to folder containing NIFTI files')
+    parser.add_argument('save_path', type=str, help='Path to save converted .npy files')
     parser.add_argument('img_size', type=int, help='Desired image size')
     parser.add_argument('low_frequency', type=float, help='Percentage of low-frequency k-space to add')
-    parser.add_argument('-s', '--save_path', type=str, default=str(), help='Path to save converted .npy files')
     parser.add_argument('-r', '--reduction_factor', type=int, default=4, help='Undersampling factor')
     parser.add_argument('-p', '--plot', type=bool, default=True,
                         help='Plot one random dataset, undersampled dataset and corresponding k-space sample')
-    args = parser.parse_args()
+    args = parser.parse_args(
+        ["/Users/sravan953/Documents/NYU/Sem 4/Thesis/Code/data/nifti/test", '/Users/sravan953/', '256', '0.04'])
 
-    nifti_path = args.nifti_path
+    nifti_path = Path(args.nifti_path)
     img_size = args.img_size
     low_freq_pc = args.low_frequency
-    save_path = args.save_path
+    save_path = Path(args.save_path)
     reduction_factor = args.reduction_factor
     plot_flag = args.plot
 

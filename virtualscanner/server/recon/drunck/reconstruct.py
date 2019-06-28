@@ -10,7 +10,8 @@ from keras.models import load_model
 from virtualscanner.utils import constants
 
 COMS_PATH = constants.COMS_PATH
-RECON_PATH = constants.RECON_PATH
+RECON_ASSETS_PATH = constants.RECON_ASSETS_PATH
+RECON_STATIC_SAVE_PATH = COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs'
 
 
 def __undersample(input_image):
@@ -104,7 +105,7 @@ def main(img_path: str, img_type: str) -> tuple:
         input_image = Image.open(str(img_path))
         if input_image.size != (256, 256):
             input_image = input_image.resize((256, 256))
-        input_image = np.asarray(input_image)[..., 0]
+        input_image = np.asarray(input_image)
 
         if img_type == 'GT':
             aliased_image, aliased_kspace = __undersample(input_image)
@@ -115,31 +116,31 @@ def main(img_path: str, img_type: str) -> tuple:
             raise ValueError('Unknown image type')
 
         # Load pre-trained Hyun model and perform inference
-        model = load_model(str(RECON_PATH / 'drunck' / 'assets' / 'model.hdf5'))
-        # model = load_model('./src/server/recon/drunck/assets/model.hdf5')
+        model = load_model(str(RECON_ASSETS_PATH / 'model.hdf5'))
         output_image = model.predict(aliased_image[np.newaxis, ..., np.newaxis])
         output_image = np.squeeze(output_image)
         output_image = __freq_correct(aliased_kspace, output_image)
 
         t = time()
 
+        # Create save folder if it does not exist
+        if not RECON_STATIC_SAVE_PATH.exists():
+            RECON_STATIC_SAVE_PATH.mkdir(parents=False)
+
         # Save aliased input image
         aliased_filename = f'aliased_{t}.jpg'
         aliased_image = Image.fromarray(aliased_image).convert('RGB')
-        aliased_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / aliased_filename)
-        # aliased_image.save(f'./src/coms/coms_ui/static/recon/outputs/{aliased_filename}')
+        aliased_image.save(RECON_STATIC_SAVE_PATH / aliased_filename)
 
         # Save output image
         output_filename = f'output_{t}.jpg'
         output_image = Image.fromarray(output_image).convert('RGB')
-        output_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / output_filename)
-        # output_image.save(f'./src/coms/coms_ui/static/recon/outputs/{output_filename}')
+        output_image.save(RECON_STATIC_SAVE_PATH / output_filename)
 
         if img_type == 'GT':  # Save ground truth
             gt_filename = f'gt_{t}.jpg'
             input_image = Image.fromarray(input_image).convert('RGB')
-            input_image.save(COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs' / gt_filename)
-            # input_image.save(f'./src/coms/coms_ui/static/recon/outputs/{gt_filename}')
+            input_image.save(RECON_STATIC_SAVE_PATH / gt_filename)
             return gt_filename, aliased_filename, output_filename
 
         return aliased_filename, output_filename
