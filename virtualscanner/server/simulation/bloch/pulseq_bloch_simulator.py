@@ -1,4 +1,5 @@
- # Unit test for direct-from-pulseq bloch simulation
+# Copyright of the Board of Trustees of Columbia University in the City of New York
+# Main simulator program called by caller_script_blochsim.py
 
 import pulseq_blochsim_methods as blcsim
 import numpy as np
@@ -12,16 +13,22 @@ import pulseq_library as psl
 import argparse
 from math import pi
 import os
-import datetime
 from virtualscanner.utils import constants
 
+"""Main Bloch simulation script
 
+This script is called by run_blochsim() with command line arguments to execute a particular simulation request,
+including the construction of a phantom, a pulseq sequence, parallel simulation, reconstruction, and data & image output
 
+Notes
+-----
+See beginning of the main section for explanations of the command line arguments (line 44-72)
+
+"""
 
 cpath = os.getcwd()
 if not (cpath.endswith('Virtual-Scanner')):
     s = cpath.split('src')
-    #print('Current working directory is set to: '+s[0])
     os.chdir(s[0])
 
 SERVER_SIM_BLOCH_PATH = constants.SERVER_SIM_BLOCH_PATH
@@ -32,7 +39,6 @@ GAMMA_BAR = 42.5775e6
 GAMMA = 2*pi*GAMMA_BAR
 
 if __name__ == '__main__':
-    """Parse arguments"""
     parser = argparse.ArgumentParser(description='Bloch simulation parser')
     # Patient id
     parser.add_argument('pat_id',type=str,help="Patient ID")
@@ -64,10 +70,8 @@ if __name__ == '__main__':
 
     ## Extra
     parser.add_argument('b0map',type=int,help="Type of dB0 map") #0 -none; 1- linear; 2- quadratic
-
     args = parser.parse_args()
     print(args)
-
 
     # Make phantom
     myphantom = 0
@@ -104,7 +108,6 @@ if __name__ == '__main__':
 
 
     # Slice locations
-
     Ns = args.num_slices
     g = args.slice_gap
     t = args.thk
@@ -148,12 +151,6 @@ if __name__ == '__main__':
     print("Time used: %s seconds" % (time.time()-start_time))
 
 
-    # Recon and save
-    # 1. Find image dimension
-    # 2. Recon all images
-    # 3. store: (a) raw data (b) recon data (c) images (optional) (d) info: slice loc, TI (for now)
-    #                                                            in general, varying TR, TE, etc. should be stored (how?)
-
     # Recon
     if args.seq_type in ['se','gre','irse']: # Cartesian recon
         N = args.n
@@ -176,7 +173,6 @@ if __name__ == '__main__':
 
         timestamp = time.strftime("%Y%m%d%H%M%S")
 
-#        sim_data_patid_path = './virtualscanner/server/simulation/outputs/'+args.pat_id
         sim_data_patid_path = SERVER_SIM_OUTPUTS_PATH / args.pat_id
         if not os.path.isdir(sim_data_patid_path):
             os.makedirs(sim_data_patid_path)
@@ -196,7 +192,6 @@ if __name__ == '__main__':
             fig.axes.get_yaxis().set_visible(False)
             #TODO change 2 - does it work?
             coms_image_patid_path = COMS_SIM_OUTPUTS_PATH / args.pat_id
-            #mypath2 = './virtualscanner/coms/coms_ui/static/acq/outputs/'+args.pat_id
             if not os.path.isdir(coms_image_patid_path):
                 os.makedirs(coms_image_patid_path)
 
@@ -207,25 +202,3 @@ if __name__ == '__main__':
 
             plt.savefig(impath, bbox_inches='tight', pad_inches=0, format='png')
 
-
-        # display (comment off later)
-        # mydata = np.load(datapath).all()
-        # image = mydata['image']
-        # kspace = mydata['kspace']
-        # Ns = np.shape(image)[2]
-        # a1 = int(np.sqrt(Ns))
-        # a2 = int(np.ceil(Ns/a1))
-        #
-        # plt.figure(1)
-        # for v in range(Ns):
-        #     plt.subplot(a1,a2,v+1)
-        #     plt.imshow(np.absolute(kspace[:,:,v]))
-        #     plt.gray()
-        #
-        # plt.figure(2)
-        # for v in range(Ns):
-        #     plt.subplot(a1,a2,v+1)
-        #     plt.imshow(np.absolute(image[:,:,v]))
-        #     plt.gray()
-        #
-        # plt.show()

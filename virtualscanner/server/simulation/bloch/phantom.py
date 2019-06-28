@@ -1,9 +1,58 @@
-# Phantom (i.e. 3D subject model with T1,T2,PD,df maps) functionalities
+# Copyright of the Board of Trustees of Columbia University in the City of New York
 
 import numpy as np
 import scipy.signal as ss
 
 class Phantom:
+    """Generic numerical phantom for MRI simulations
+
+    The phantom is mainly defined by three matrices of T1, T2, and PD values, respectively.
+    At the moment, each index in the matrix corresponds to a single spin group.
+    The overall physical size is determined by vsize; phantom voxels must be isotropic.
+
+    Parameters
+    ----------
+    T1map : numpy.ndarray
+        Matrix of T1 values in seconds
+    T2map : numpy.ndarray
+        Matrix of T2 values in seconds
+    PDmap : numpy.ndarray
+        Matrix PD values between 0 and 1
+    vsize : float
+        Voxel size in meters (isotropic)
+    dBmap : numpy.ndarray, optional
+        Matrix of B0 magnetic field variation across phantom
+        The default is 0 and means no variation
+    loc : tuple, optional
+        Overall location of phantom in meters; default is (0,0,0)
+
+    Attributes
+    ----------
+    fov : numpy.ndarray
+        [fov_x, fov_y, fov_z]
+        1 x 3 array of fields-of-view in x, y, and z directions
+    Xs : numpy.ndarray
+        1D array of all x locations in phantom
+    Ys : numpy.ndarray
+        1D array of all y locations in phantom
+    Zs : numpy.ndarray
+        1D array of all z locations in phantom
+
+    Methods
+    -------
+    get_location(indx)
+        Returns (x,y,z) physical location in meters at given indices
+    get_shape()
+        Returns the phantom's matrix size
+    get_params(indx)
+        Returns PD, T1, and T2 at given indices
+    get_list_locs()
+        Returns a flattened 1D array of all location vectors [(x1,y1,z1),...,(xk,yk,zk)]
+    get_list_inds()
+        Returns a flattened 1D array of all indices in phantom [(u1,v1,w1),...,(uk,vk,wk)]
+
+
+    """
     def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,loc=(0,0,0)):
         self.T1map = T1map
         self.T2map = T2map
@@ -23,31 +72,58 @@ class Phantom:
         self.Ys = self.loc[1]+np.arange(-self.fov[1] / 2 + vsize / 2, self.fov[1] / 2, vsize)
         self.Zs = self.loc[2]+np.arange(-self.fov[2] / 2 + vsize / 2, self.fov[2] / 2, vsize)
 
-    def get_location(self,inds):
-        return self.Xs[inds[0]], self.Ys[inds[1]], self.Zs[inds[2]]
+    def get_location(self,indx):
+        """Returns (x,y,z) physical location in meters at given indices
 
-    def get_fov(self):
-        return self.fov
+        Parameters
+        ----------
+        indx : tuple or array_like
+            (ind1, ind2, ind3)
+            Index for querying
 
-    def get_vsize(self):
-        return self.vsize
+        Returns
+        -------
+        x, y, z : float
+            physical location corresponding to index
 
-    def get_T1map(self):
-        return self.T1map
-
-    def get_T2map(self):
-        return self.T2map
-
-    def get_PDmap(self):
-        return self.PDmap
+        """
+        return self.Xs[indx[0]], self.Ys[indx[1]], self.Zs[indx[2]]
 
     def get_shape(self):
+        """Returns the phantom's matrix size
+
+        Returns
+        -------
+        shape : tuple
+            The matrix size in three dimensions
+
+        """
         return np.shape(self.PDmap)
 
     def get_params(self,indx):
+        """Returns PD, T1, and T2 at given indices
+
+        Parameters
+        ----------
+        indx : tuple
+            Index for querying
+
+        Returns
+        -------
+        PD, T1, T2 : float
+            Tissue parameters corresponding to the queried index
+
+        """
         return self.PDmap[indx],self.T1map[indx],self.T2map[indx]
 
     def get_list_locs(self):
+        """Returns a flattened 1D array of all location vectors [(x1,y1,z1),...,(xk,yk,zk)]
+
+        Returns
+        -------
+        list_locs : list
+
+        """
         list_locs = []
         for x in self.Xs:
             for y in self.Ys:
@@ -56,6 +132,13 @@ class Phantom:
         return list_locs
 
     def get_list_inds(self):
+        """Returns a flattened 1D array of all indices in phantom [(u1,v1,w1),...,(uk,vk,wk)]
+
+        Returns
+        -------
+        list_inds : list
+
+        """
         list_inds = []
         sh = self.get_shape()
         for u in range(sh[0]):
@@ -66,18 +149,30 @@ class Phantom:
 
 
 class DTTPhantom(Phantom):
+    """Discrete tissue type phantom
+
+    Phantom constructed from a finite set of tissue types and their parameters
+
+    Parameters
+    ----------
+    type_map : numpy.ndarray
+        Matrix of integers that map to tissue types
+    type_params : dict
+        Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)
+    vsize : float
+        Voxel size in meters (isotropic)
+    dBmap : numpy.ndarray, optional
+        Matrix of B0 magnetic field variation across phantom
+        The default is 0 and means no variation
+    loc : tuple, optional
+        Overall location of phantom; default is (0,0,0)
+
     """
-    Discrete tissue type phantom
-    """
+
     def __init__(self,type_map,type_params,vsize,dBmap=0,loc=(0,0,0)):
-        """
-        Makes a discrete-tissue type phantom
-        :param type_map: 3D array of natural numbers
-        :param type_params: dict. (type number)->(PD,T1,T2)
-        :param dBmap: 3D array of dB s
-        """
-        self._type_map = type_map
-        self._type_params = type_params
+        print(type(type_map))
+        self.type_map = type_map
+        self.type_params = type_params
         T1map = np.ones(np.shape(type_map))
         T2map = np.ones(np.shape(type_map))
         PDmap = np.zeros(np.shape(type_map))
@@ -94,6 +189,14 @@ class DTTPhantom(Phantom):
 
 
 class BrainwebPhantom(Phantom):
+    """Brainweb brain phantom
+
+    Notes
+    -----
+    This phantom is in development.
+
+    """
+
     def __init__(self, filename,dsf=1,make2d=False,loc=0,dir='z',dBmap=0):
         dsf = int(np.absolute(dsf))
         bw_data = np.load(filename).all()
@@ -174,10 +277,32 @@ class BrainwebPhantom(Phantom):
         super().__init__(T1map,T2map,PDmap,dr,dBmap)
 
 
-
 def makeSphericalPhantom(n,fov,T1s,T2s,PDs,radii,loc=(0,0,0)):
-    """
-    Make a simple spherical phantom with layers
+    """Make a spherical phantom with concentric layers
+
+    Parameters
+    ----------
+    n : int
+        Matrix size of phantom (isotropic)
+    fov : float
+        Field of view of phantom (isotropic)
+    T1s : numpy.ndarray or list
+        List of T1s in seconds for the layers, going outward
+    T2s : numpy.ndarray or list
+        List of T2s in seconds for the layers, going outward
+    PDs : numpy.ndarray or list
+        List of PDs between 0 and 1 for the layers, going outward
+    radii : numpy.ndarray
+        List of radii that define the layers
+        Note that the radii are expected to go from smallest to largest
+        If not, they will be sorted first without sorting the parameters
+    loc : tuple, optional
+        Overall (x,y,z) location of phantom; default is (0,0,0)
+
+    Returns
+    -------
+    phantom : DTTPhantom
+
     """
     radii = np.sort(radii)
     m = np.shape(radii)[0]
@@ -201,6 +326,34 @@ def makeSphericalPhantom(n,fov,T1s,T2s,PDs,radii,loc=(0,0,0)):
 
 
 def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
+    """Make a circular 2D phantom with concentric layers
+
+    Parameters
+    ----------
+    n : int
+        Matrix size of phantom (isotropic)
+    fov : float
+        Field of view of phantom (isotropic)
+    T1s : numpy.ndarray or list
+        List of T1s in seconds for the layers, going outward
+    T2s : numpy.ndarray or list
+        List of T2s in seconds for the layers, going outward
+    PDs : numpy.ndarray or list
+        List of PDs between 0 and 1 for the layers, going outward
+    radii : numpy.ndarray
+        List of radii that define the layers
+        Note that the radii are expected to go from smallest to largest
+        If not, they will be sorted first without sorting the parameters
+    dir : str, optional {'z','x','y'}
+         Orientation of the plane; default is z, axial
+    loc : tuple, optional
+        Overall (x,y,z) location of phantom; default is (0,0,0)
+
+    Returns
+    -------
+    phantom : DTTPhantom
+
+    """
     radii = np.sort(radii)
     m = np.shape(radii)[0]
     vsize = fov / n
@@ -228,8 +381,38 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
     return DTTPhantom(type_map, type_params, vsize, loc)
 
 
-class SpheresArrayPlanarPhantom(DTTPhantom): # TODO generic 2D sphere array phantom
+class SpheresArrayPlanarPhantom(DTTPhantom):
+    """2D phantom extracted from a cylinder containing spheres
+
+    Regardless of dir, this will be an axial slice of a cylinder
+    That is, the plane is constructed as a z-slice and then re-indexed to lie in the x or y plane
+    The centers of spheres will correspond to locations before re-indexing
+
+    Parameters
+    ----------
+    centers : list or array_like
+        List of 3D physical locations of the spheres' centers
+    radii : list or array_like
+        List of radii for the spheres
+    type_params : dict
+        Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)
+    fov : float
+        Field of view (isotropic)
+    n : int
+        Matrix size
+    dir : str, optional {'z','x','y'}
+        Orientation of plane; default is z
+    R : float, optional
+        Cylinder's cross-section radius; default is half of fov
+    loc : tuple, optional
+        Overall location (x,y,z) of phantom from isocenter in meters
+        Default is (0,0,0)
+
+
+    """
     def __init__(self, centers, radii, type_params, fov, n, dir='z',R=0,loc=(0,0,0)):
+        if R == 0:
+            R = fov/2
         vsize = fov/n
         type_map = np.zeros((n,n,1))
         q = (n-1)/2
@@ -255,9 +438,29 @@ class SpheresArrayPlanarPhantom(DTTPhantom): # TODO generic 2D sphere array phan
         super().__init__(type_map, type_params, vsize, loc=loc)
 
 
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
+    """Makes a cylindrical phantom with fixed geometry and T1, T2, PD but variable resolution and overall size
 
-# Default cylindrical Phantom
-def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24): # TODO new phantom in the works
+    The cylinder's diameter is the same as its height; three layers of spheres represent T1, T2, and PD variation.
+
+    Parameters
+    ----------
+    dim : int, optional {2,3}
+         Dimension of phantom created
+    n : int
+        Number of spin groups in each dimension; default is 16
+    dir : str, optional {'z', 'x', 'y'}
+        Direction (norm) of plane in the case of 2D phantom
+    loc : float, optional
+        Location of plane relative to isocenter; default is 0
+    fov : float, optional
+        Physical length for both diameter and height of cylinder
+
+    Returns
+    -------
+    phantom : DTTPhantom
+
+    """
     R = fov/2 # m
     r = R/4 # m
     h = fov # m
@@ -267,7 +470,7 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24): # TODO new phanto
     centers = [(0,R/2,0.08),(-R*s3/4,-R/4,0.08),(R*s3/4,-R/4,0.08), # PD spheres
                (R/(2*s2),R/(2*s2),0),(-R/(2*s2),R/(2*s2),0),(-R/(2*s2),-R/(2*s2),0),(R/(2*s2),-R/(2*s2),0), # T1 spheres
                (0,R/2,-0.08),(-R/2,0,-0.08),(0,-R/2,-0.08),(R/2,0,-0.08)] # T2 spheres
-    centers_inds = [(np.array(c)/vsize + (n-1)/2) for c in centers] # TODO conversion
+    centers_inds = [(np.array(c)/vsize + (n-1)/2) for c in centers]
 
     type_params = {0:(0,1,1), # background
                    1:(1,0.5,0.1),2:(0.75,0.5,0.1),3:(0.5,0.5,0.1), # PD spheres

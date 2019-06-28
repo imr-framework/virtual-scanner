@@ -13,6 +13,30 @@ COMS_RX_INPUTS_PATH = constants.COMS_RX_INPUTS_PATH
 COMS_RX_OUTPUTS_PATH = constants.COMS_RX_OUTPUTS_PATH
 
 def run_Rx_sim(Rxinfo):
+    """Runs MR receive chain simulation
+
+    Receive chain is simulated by modulating k-space from an axial, coronal, or sagittal brain image,
+    and then demodulating using selected demod. frequency and sampling at selected down-sampling factor (dsf).
+
+    Parameters
+    ----------
+    Rxinfo : dict
+        Dictionary of parameters used to run Rx simulation
+        {'deltaf': demod_frequency,
+         'image-or': image_orientation,
+         'DSF': downsampling_factor}
+
+    Returns
+    -------
+    signals_plot_filename : str
+        File name for plot of time-domain signals (.png format)
+    recon_plot_filename : str
+        File name for image reconstructed from demodulated & sampled signals (.png format)
+    im_path : str
+        Path of image used for generating artificial k-space
+    -------
+    """
+
     B0 = 3  # Tesla
     GAMMA_BAR = 42.5775e6
     w0 = B0 * GAMMA_BAR * 2 * pi
@@ -97,7 +121,7 @@ def run_Rx_sim(Rxinfo):
 
     # Plot signals at different stages & save
     #ind = round(Np/2)
-    ind = -1
+    ind = -1 # using the last line
     plt.figure(1)
     plt.tight_layout()
     plt.subplot(411)
@@ -139,12 +163,11 @@ def run_Rx_sim(Rxinfo):
     plt.savefig(recon_im_path,bbox_inches='tight',pad_inches=0,format='png')
     plt.clf()
 
-    return  [signals_plot_filename, recon_plot_filename, im_path]
+    return signals_plot_filename, recon_plot_filename, im_path
 
 
-
-if __name__ == "__main__":
-    Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
-    a = run_Rx_sim(Rxinfo)
-    print(a)
-    b = imread(a[2])
+#if __name__ == "__main__":
+ #   Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
+  #  a = run_Rx_sim(Rxinfo)
+   # print(a)
+    #b = imread(a[2])
