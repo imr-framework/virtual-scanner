@@ -2,8 +2,8 @@
 This script does T1 mapping of dicom images
 
 Author: Enlin Qian
-Date: 04/29/2019
-Version 2.0
+Date: 06/27/2019
+Version 3.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
@@ -19,20 +19,34 @@ from virtualscanner.utils import constants
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 COMS_ANALYZE_PATH = constants.COMS_ANALYZE_PATH
 
+
 def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI should be in second
+
     """
-    Return T1 mapping of a series of IRSE images with variable TI.
+    Curve fitting a series of IRSE images with respect to variable TI values to generate a T1 map.
 
     Parameters
     ----------
-    dicom_file_path: folder path where all dicom files are
-    TI: TI values used in IRSE experiments
-    TR: TR values used in IRSE experiments, should be constant
+    dicom_file_path : path
+        path of folder where dicom files reside
+    TR : str
+        TR value used in IRSE experiments (unit in milliseconds, should be constant)
+    TI : str
+        TI values used in IRSE experiments (unit in milliseconds)
+    TE : str
+        TE value used in IRSE experiments (unit in milliseconds, should be constant)
+    pat_id : str
+        primary key in REGISTRATION table
 
     Returns
     -------
-    T1_map: T1 map generated based on input images and TI TR values
+    png_map_name : str
+        file name of T1_map in png format
+    dicom_map_path : str
+        path of T1_map in dicom format
+
     """
+
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=float, sep=',')
     TI = np.fromstring(TI, dtype=float, sep=',')
@@ -41,9 +55,9 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     TI = TI/1000
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
-        for filename1 in fileList:
-            if ".dcm" in filename1.lower():  # check whether the file's DICOM
-                lstFilesDCM.append(os.path.join(dirName, filename1))
+        for png_map_name in fileList:
+            if ".dcm" in png_map_name.lower():  # check whether the file's DICOM
+                lstFilesDCM.append(os.path.join(dirName, png_map_name))
 
     ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
@@ -80,14 +94,14 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     # plt.show()
 
     timestr = time.strftime("%Y%m%d%H%M%S")
-    mypath1=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
-    mypath2=SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T1_map'
+    png_map_path=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
+    dicom_map_path=SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T1_map'
 
-    if not os.path.isdir(mypath1):
-        os.makedirs(mypath1)
+    if not os.path.isdir(png_map_path):
+        os.makedirs(png_map_path)
 
-    if not os.path.isdir(mypath2):
-        os.makedirs(mypath2)
+    if not os.path.isdir(dicom_map_path):
+        os.makedirs(dicom_map_path)
 
     plt.figure(frameon=False)
     plt.imshow(T1_map, cmap='hot')
@@ -100,17 +114,17 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     plt.margins(0, 0)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    plt.savefig(str(mypath1) +'/T1_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(str(png_map_path) +'/T1_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
 
-    # plt.imsave(mypath1 +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
-    filename1 = "T1_map" + timestr + ".png"
+    # plt.imsave(png_map_path +'/T1_map' + timestr + '.png', T1_map, vmin = 0, vmax = 5, cmap='hot')
+    png_map_name = "T1_map" + timestr + ".png"
 
     pixel_array = (T1_map/5)*65535
     pixel_array_int = pixel_array.astype(np.uint16)
     ds.PixelData = pixel_array_int.tostring()
-    ds.save_as(str(mypath2) +'/T1_map' + timestr +'.dcm')
+    ds.save_as(str(dicom_map_path) +'/T1_map' + timestr +'.dcm')
 
-    return filename1, mypath2
+    return png_map_name, dicom_map_path
 
 def T1_sig_eq(X, a, b, c):
     """
