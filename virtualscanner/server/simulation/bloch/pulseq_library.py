@@ -3,17 +3,15 @@
 Library for generating pulseq sequences: GRE, SE, IRSE, EPI
 """
 
+import copy
 from math import pi, sqrt, ceil, floor
 
 import numpy as np
-import copy
-
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.calc_duration import calc_duration
 from pypulseq.make_adc import makeadc
 from pypulseq.make_delay import make_delay
 from pypulseq.make_sinc import make_sinc_pulse
-from pypulseq.make_block import make_block_pulse
 from pypulseq.make_trap import make_trapezoid
 from pypulseq.opts import Opts
 

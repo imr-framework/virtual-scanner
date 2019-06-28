@@ -1,8 +1,7 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
 
 import subprocess
-import numpy as np
-import os
+
 from virtualscanner.utils import constants
 
 SERVER_SIM_BLOCH_PATH = constants.SERVER_SIM_BLOCH_PATH
