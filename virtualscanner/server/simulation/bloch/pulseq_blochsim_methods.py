@@ -1,15 +1,16 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-"""Methods to help Bloch simulation from pulseq objects
+"""
+Methods to help Bloch simulation from pulseq objects
 """
 
 import numpy as np
 import numpy.matlib as npm
 import matplotlib.pyplot as plt
 import time
-import phantom as pht
+import virtualscanner.server.simulation.bloch.phantom as pht
 import multiprocessing as mp
-import spingroup_ps as sg
-import pulseq_library as psl
+import virtualscanner.server.simulation.bloch.spingroup_ps as sg
+import virtualscanner.server.simulation.bloch.pulseq_library as psl
 from math import pi
 
 GAMMA_BAR = 42.5775e6

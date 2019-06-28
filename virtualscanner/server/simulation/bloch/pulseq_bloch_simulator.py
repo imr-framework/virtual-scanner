@@ -10,15 +10,15 @@ Notes
 See beginning of the main section for explanations of the command line arguments (line 41-71)
 
 """
-import pulseq_blochsim_methods as blcsim
+import virtualscanner.server.simulation.bloch.pulseq_blochsim_methods as blcsim
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import time
-import phantom as pht
+import virtualscanner.server.simulation.bloch.phantom as pht
 import multiprocessing as mp
-import pulseq_library as psl
+import virtualscanner.server.simulation.bloch.pulseq_library as psl
 import argparse
 from math import pi
 import os

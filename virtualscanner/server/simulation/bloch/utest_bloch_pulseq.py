@@ -5,16 +5,15 @@ Unit test for bloch simulation on GRE, SE, and IRSE sequences (2D Cartesian, lin
 Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.
 """
 
-import pulseq_blochsim_methods as blcsim
-import numpy as np
-import matplotlib.pyplot as plt
-import time
-import phantom as pht
 import multiprocessing as mp
-import pulseq_library as psl
-from pypulseq.Sequence.sequence import Sequence
-from math import pi
+import time
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+import virtualscanner.server.simulation.bloch.phantom as pht
+import virtualscanner.server.simulation.bloch.pulseq_blochsim_methods as blcsim
+import virtualscanner.server.simulation.bloch.pulseq_library as psl
 
 if __name__ == '__main__':
     # Make a phantom
