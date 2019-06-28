@@ -1,7 +1,9 @@
 # Simulates received MR signal from any image (assuming uniform phase)
-from matplotlib.image import imread
 from math import pi
+
 import matplotlib
+from matplotlib.image import imread
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -21,10 +23,8 @@ def run_Rx_sim(Rxinfo):
     Parameters
     ----------
     Rxinfo : dict
-        Dictionary of parameters used to run Rx simulation
-        {'deltaf': demod_frequency,
-         'image-or': image_orientation,
-         'DSF': downsampling_factor}
+        | Dictionary of parameters used to run Rx simulation
+        | {'deltaf': demod_frequency, 'image-or': image_orientation, 'DSF': downsampling_factor}
 
     Returns
     -------
@@ -34,7 +34,8 @@ def run_Rx_sim(Rxinfo):
         File name for image reconstructed from demodulated & sampled signals (.png format)
     im_path : str
         Path of image used for generating artificial k-space
-    -------
+
+
     """
 
     B0 = 3  # Tesla
