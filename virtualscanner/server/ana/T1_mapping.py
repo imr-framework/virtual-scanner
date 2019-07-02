@@ -20,8 +20,6 @@ SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 
-
-
 def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI should be in second
 
     """
@@ -129,22 +127,27 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     return png_map_name, dicom_map_path
 
 def T1_sig_eq(X, a, b, c):
+
     """
     Generate an exponential function for curve fitting
 
     Parameters
     ----------
-    x: independent variables
-    y: independent variables
-    a: curve fitting parameters
-    b: curve fitting parameters
-    c: curve fitting parameters
+    X :
+        independent variable
+    a :
+        curve fitting parameters
+    b :
+        curve fitting parameters
+    c :
+        curve fitting parameters
 
     Returns
     -------
-    exponential function used for T1 curve fitting
+    exponential function used for T2 curve fitting
 
     """
+
     x, y = X
     return a * (1 - 2 * np.exp(-x / b) + np.exp(-y / b)) + c
 

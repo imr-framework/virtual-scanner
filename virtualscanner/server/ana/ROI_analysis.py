@@ -2,8 +2,8 @@
 This script does ROI analysis of dicom maps of ISMRM-NIST phantom
 
 Author: Enlin Qian
-Date: 04/08/2019
-Version 1.0
+Date: 07/02/2019
+Version 2.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
@@ -19,19 +19,25 @@ from virtualscanner.utils import constants
 
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
+
 def circle_analysis(circles, map_size):
+
     """
     Return locations of pixels inside a circle
 
     Parameters
     ----------
-    circles: 1x3 matrix (center_x, center_y, radius)
-    map_size: size of map, for example, 256 means the size of map is 256x256
+    circles : matrix
+        1x3 matrix (center_x, center_y, radius)
+    map_size : int
+        size of parameter map, for example, 256 means the size of map is 256x256
 
     Returns
     -------
-    sphere_map: binary map where pixels inside the circle is true and outside of the circle is false
+    sphere_map : matrix
+        binary map where pixels inside the circle is true and outside of the circle is false
     """
+
     X, Y = np.meshgrid(np.arange(map_size), np.arange(map_size))
     distance_map = np.sqrt(np.square(X - circles[0]) + np.square(Y - circles[1]))
     sphere_map = distance_map <= circles[2]
@@ -40,21 +46,31 @@ def circle_analysis(circles, map_size):
 
 def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: str):  # lb: lower bound, ub: upper bound, fov: should be in mm
     """
-    Return ROI analysis of a ISMRM/NIST phantom
+    Return ROI analysis of a ISMRM/NIST phantom, all 14 spheres are detected.
 
     Parameters
     ----------
-    dicom_map_path: folder path where all dicom maps are
-    map_type: specify if it is a T1 or T2 map (used to restore original intensity)
-    intensity_range: intensity range of desired ROIs, pixels out of this range will be set to 0
-    map_size: size of map, for example, 128 means the size of map is 128x128
+    dicom_map_path : path
+        path of folder where dicom files reside
+    map_type : str
+        type of map (T1 or T2)
+    map_size : str
+        size of map, for example, 128 means the size of map is 128x128
+    fov : str
+        field of view used in experiments
+    pat_id : str
+        primary key in REGISTRATION table
 
     Returns
     -------
-    centers: centers and radii for all spheres in sphere number order
-    sphere_mean: mean values for all spheres in sphere number order
-    sphere_std: std for all spheres in sphere number order
+    centers : matrix
+        centers and radii for all spheres in sphere number order
+    sphere_mean : matrix
+        mean values for all spheres in sphere number order
+    sphere_std : matrix
+        std for all spheres in sphere number order
     """
+
     map_size = np.ndarray.item(np.fromstring(map_size, dtype=int, sep=','))
     fov = np.ndarray.item(np.fromstring(fov, dtype=int, sep=','))
     num_spheres = 14
@@ -154,17 +170,17 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         map_data_final_gray = map_data_final_gray.astype(np.uint8)  # open cv requires uint8 grayscale images
         circles = cv2.HoughCircles(map_data_final_gray, cv2.HOUGH_GRADIENT, dp=1, minDist=13,
                                    param1=150, param2=6, minRadius=5, maxRadius=7)  # initial guess of spheres
-        # # visualize the original guess
-        # plt.figure()
-        # plt.imshow(map_data_final[:, :, 0], cmap='hot')
-        # ax = plt.gca()
-        #
-        # for n6 in range(circles.shape[1]):
-        #     # draw the center of the circle
-        #     circle_plot = plt.Circle((circles[0, n6, 0], circles[0, n6, 1]),
-        #                              circles[0, n6, 2], color='b', fill=False)
-        #     ax.add_artist(circle_plot)
-        # plt.show()
+        # visualize the original guess
+        plt.figure()
+        plt.imshow(map_data_final[:, :, 0], cmap='hot')
+        ax = plt.gca()
+
+        for n6 in range(circles.shape[1]):
+            # draw the center of the circle
+            circle_plot = plt.Circle((circles[0, n6, 0], circles[0, n6, 1]),
+                                     circles[0, n6, 2], color='b', fill=False)
+            ax.add_artist(circle_plot)
+        plt.show()
 
         circles_all = circles[0, :, :]
         circles_all[:, 2] = np.squeeze(radius_scale * np.matlib.repmat(np.amin(circles[0, :, 2]), circles.shape[1],

@@ -2,8 +2,8 @@
 This script does T2 mapping of dicom images
 
 Author: Enlin Qian
-Date: 04/29/2019
-Version 2.0
+Date: 06/27/2019
+Version 3.0
 Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
 
@@ -19,30 +19,40 @@ from virtualscanner.utils import constants
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
+
 def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
+
     """
-    Return T2 mapping of a series of SE images with variable TE.
+    Curve fitting a series of SE images with respect to variable TE values to generate a T2 map.
 
     Parameters
     ----------
-    dicom_file_path: folder path where all dicom files are
-    TE: TI values used in SE experiments
-    TR: TR values used in SE experiments, should be constant
+    dicom_file_path : path
+        path of folder where dicom files reside
+    TR : str
+        TR value used in SE experiments (unit in milliseconds, should be constant)
+    TE : str
+        TE value used in SE experiments (unit in milliseconds)
+    pat_id : str
+        primary key in REGISTRATION table
 
     Returns
     -------
-    T2_map: T2 map generated based on input images and TE TR values
-
+    png_map_name : str
+        file name of T2_map in png format
+    dicom_map_path : str
+        path of T2_map in dicom format
     """
+
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=float, sep=',')
     TR = TR/1000
     TE = TE/1000
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
-        for filename1 in fileList:
-            if ".dcm" in filename1.lower():  # check whether the file's DICOM
-                lstFilesDCM.append(os.path.join(dirName, filename1))
+        for png_map_name in fileList:
+            if ".dcm" in png_map_name.lower():  # check whether the file's DICOM
+                lstFilesDCM.append(os.path.join(dirName, png_map_name))
 
     ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions
@@ -55,8 +65,8 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
 
     image_data_final = np.divide(image_data_final, np.amax(image_data_final))
     T2_map = np.zeros([image_size[0], image_size[1]])
-    p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275, 0.915735525189067)  # initial guess for parameters
-
+    # p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275, 0.915735525189067)  # initial guess for parameters
+    p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275)  # initial guess for parameters
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
             y_data = image_data_final[n2, n3, :]
@@ -71,13 +81,13 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     # plt.show()
 
     timestr = time.strftime("%Y%m%d%H%M%S")
-    mypath1=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
-    mypath2=SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T2_map'
+    png_map_path = COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
+    dicom_map_path = SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T2_map'
 
-    if not os.path.isdir(mypath1):
-        os.makedirs(mypath1)
-    if not os.path.isdir(mypath2):
-        os.makedirs(mypath2)
+    if not os.path.isdir(png_map_path):
+        os.makedirs(png_map_path)
+    if not os.path.isdir(dicom_map_path):
+        os.makedirs(dicom_map_path)
 
     plt.figure(frameon=False)
     plt.imshow(T2_map, cmap='hot')
@@ -90,36 +100,39 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     plt.margins(0, 0)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    plt.savefig(str(mypath1) +'/T2_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(str(png_map_path) +'/T2_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
 
-    filename1 = "T2_map" + timestr + ".png"
+    png_map_name = "T2_map" + timestr + ".png"
 
     pixel_array = (T2_map/2)*65535
     pixel_array_int = pixel_array.astype(np.uint16)
     ds.PixelData = pixel_array_int.tostring()
-    ds.save_as(str(mypath2) +'/T2_map' + timestr +'.dcm')
+    ds.save_as(str(dicom_map_path) +'/T2_map' + timestr +'.dcm')
 
-    return filename1, mypath2
+    return png_map_name, dicom_map_path
 
 
-def T2_sig_eq(X, a, b, c, d):
+def T2_sig_eq(X, a, b, c):
+
     """
     Generate an exponential function for curve fitting
 
     Parameters
     ----------
-    x: independent variables
-    y: independent variables
-    a: curve fitting parameters
-    b: curve fitting parameters
-    c: curve fitting parameters
-    d: curve fitting parameters
+    X :
+        independent variable
+    a :
+        curve fitting parameters
+    b :
+        curve fitting parameters
+    c :
+        curve fitting parameters
 
     Returns
     -------
     exponential function used for T2 curve fitting
 
     """
-    x, y = X
-    return a * (1 - np.exp(-y / b)) * np.exp(-x / c) + d
 
+    x, y = X
+    return a * (1 - np.exp(-y / b)) * np.exp(-x / c)
