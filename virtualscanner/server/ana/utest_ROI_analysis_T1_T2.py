@@ -1,10 +1,4 @@
-"""
-This script is a unit test script for testing ROI analysis of T1 and T2 maps
-Author: Enlin Qian
-Date: 04/02/2019
-Version 1.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
-"""
+# Copyright of the Board of Trustees of  Columbia University in the City of New York
 
 import virtualscanner.server.ana.ROI_analysis as dicomROIanalysis
 from virtualscanner.utils import constants

@@ -1,4 +1,5 @@
-# Simulates received MR signal from any image (assuming uniform phase)
+# Copyright of the Board of Trustees of Columbia University in the City of New York
+
 from math import pi
 
 import matplotlib
@@ -14,8 +15,10 @@ from virtualscanner.utils import constants
 COMS_RX_INPUTS_PATH = constants.COMS_UI_STATIC_RX_INPUT_PATH
 COMS_RX_OUTPUTS_PATH = constants.COMS_UI_STATIC_RX_OUTPUT_PATH
 
+
 def run_Rx_sim(Rxinfo):
-    """Runs MR receive chain simulation
+    """
+    Runs MR receive chain simulation
 
     Receive chain is simulated by modulating k-space from an axial, coronal, or sagittal brain image,
     and then demodulating using selected demod. frequency and sampling at selected down-sampling factor (dsf).
@@ -34,10 +37,7 @@ def run_Rx_sim(Rxinfo):
         File name for image reconstructed from demodulated & sampled signals (.png format)
     im_path : str
         Path of image used for generating artificial k-space
-
-
     """
-
     B0 = 3  # Tesla
     GAMMA_BAR = 42.5775e6
     w0 = B0 * GAMMA_BAR * 2 * pi
@@ -46,7 +46,7 @@ def run_Rx_sim(Rxinfo):
     dt = 1e-9  # Sim.raster time dt = 1 ns
 
     # Read parameters
-    dw = 2*pi*float(Rxinfo['deltaf'])
+    dw = 2 * pi * float(Rxinfo['deltaf'])
     im_path = str(COMS_RX_INPUTS_PATH) + '/' + Rxinfo['image-or'] + '.png'
     dsf = int(Rxinfo['DSF'])
 
@@ -75,7 +75,6 @@ def run_Rx_sim(Rxinfo):
 
         kline_mod = np.multiply(kline_os, cf)  # modulate
         klines.append(kline_mod)
-
 
     ## Demodulation: multiply by cos/sin and then LPF
     dmf_rc = np.sin((w0 + dw) * tmodel)
@@ -108,7 +107,7 @@ def run_Rx_sim(Rxinfo):
 
     # Zero insertion for downsampled cases
     if dsf > 1:
-        new_kspace_with_zeros = np.zeros((np.shape(new_kspace)[0], dsf * np.shape(new_kspace)[1]),dtype=complex)
+        new_kspace_with_zeros = np.zeros((np.shape(new_kspace)[0], dsf * np.shape(new_kspace)[1]), dtype=complex)
         new_kspace_with_zeros[:, 0::dsf] = new_kspace
         new_kspace = new_kspace_with_zeros
 
@@ -121,14 +120,14 @@ def run_Rx_sim(Rxinfo):
         os.makedirs(rx_outputs_path)
 
     # Plot signals at different stages & save
-    #ind = round(Np/2)
-    ind = -1 # using the last line
+    # ind = round(Np/2)
+    ind = -1  # using the last line
     plt.figure(1)
     plt.tight_layout()
     plt.subplot(411)
     plt.xticks([])
     plt.yticks([])
-    plt.plot(np.absolute(kspace[ind,:]))
+    plt.plot(np.absolute(kspace[ind, :]))
     plt.title('Original k-space line')
     plt.subplot(412)
     plt.xticks([])
@@ -143,13 +142,13 @@ def run_Rx_sim(Rxinfo):
     plt.subplot(414)
     plt.xticks([])
     plt.yticks([])
-    plt.plot(np.absolute(new_kspace[ind,:]))
+    plt.plot(np.absolute(new_kspace[ind, :]))
     plt.title('Sampled demod. k-space line')
     plt.tight_layout()
 
     signals_plot_filename = 'Rx_signals_' + timestamp + '.png'
     signals_plot_path = rx_outputs_path + signals_plot_filename
-    plt.savefig(signals_plot_path,bbox_inches='tight',pad_inches=0,format='png')
+    plt.savefig(signals_plot_path, bbox_inches='tight', pad_inches=0, format='png')
     plt.clf()
 
     # Recon image from rx signal
@@ -161,14 +160,13 @@ def run_Rx_sim(Rxinfo):
     fig.axes.get_yaxis().set_visible(False)
     recon_plot_filename = 'recon_im_' + timestamp + '.png'
     recon_im_path = rx_outputs_path + recon_plot_filename
-    plt.savefig(recon_im_path,bbox_inches='tight',pad_inches=0,format='png')
+    plt.savefig(recon_im_path, bbox_inches='tight', pad_inches=0, format='png')
     plt.clf()
 
     return signals_plot_filename, recon_plot_filename, im_path
 
-
-#if __name__ == "__main__":
- #   Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
-  #  a = run_Rx_sim(Rxinfo)
-   # print(a)
-    #b = imread(a[2])
+# if __name__ == "__main__":
+#   Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
+#  a = run_Rx_sim(Rxinfo)
+# print(a)
+# b = imread(a[2])

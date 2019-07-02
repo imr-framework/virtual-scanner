@@ -1,5 +1,4 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# This script runs the server based on the Flask package and hosts the GUIs on the web
 
 
 if __name__ == '__main__':
@@ -7,10 +6,8 @@ if __name__ == '__main__':
     import sys
 
     script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('virtualscanner') + 1] #
+    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtualscanner') + 1]  #
     sys.path.insert(0, SEARCH_PATH)
-
-import time
 
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
@@ -27,7 +24,6 @@ ROOT_PATH = constants.ROOT_PATH
 UPLOAD_FOLDER = constants.COMS_UI_STATIC_USER_UPLOAD_PATH
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 STATIC_ANALYZE_PATH = constants.COMS_UI_STATIC_ANALYZE_PATH
-# UPLOAD_FOLDER = UPLOAD_FOLDER.resolve()
 ALLOWED_EXTENSIONS = {'seq', 'jpg'}
 
 app = Flask(__name__)
@@ -44,7 +40,8 @@ app.secret_key = 'Session_key'
                          'GET'])  # This needs to point to the login screen and then we can use the register link seprately
 def log_in():
     """
-    Renders the log-in html page on the web and requests user log-in information (e-mail) and choice of user mode (Standard/Advanced)
+    Renders the log-in html page on the web and requests user log-in information (e-mail) and choice of user mode
+    (Standard/Advanced).
 
     Returns
     -------
@@ -54,7 +51,6 @@ def log_in():
         | Redirects to recon page if user-name exists and Advanced mode is selected
         |    OR
         | Renders log-in template
-
     """
     session.clear()
     session['acq_out_axial'] = []
@@ -74,10 +70,11 @@ def log_in():
         return render_template("log_in.html")
 
 
-@app.route('/register', methods=['POST','GET'])  # This needs to point to the login screen and then we can use the register link seprately
+# This needs to point to the login screen and then we can use the register link separately
+@app.route('/register', methods=['POST', 'GET'])
 def on_register():
     """
-    Renders the registration html page on the web
+    Renders the registration html page on the web.
 
     Returns
     -------
@@ -106,7 +103,7 @@ def on_register():
 @app.route('/register_success', methods=['POST', 'GET'])
 def on_register_success():
     """
-    Renders the registration html page on the web with a success message when registration occurs
+    Renders the registration html page on the web with a success message when registration occurs.
 
     Returns
     -------
@@ -125,7 +122,7 @@ def on_register_success():
 @app.route('/acquire', methods=['POST', 'GET'])
 def on_acq():
     """
-    Renders the acquire html page on the web
+    Renders the acquire html page on the web.
 
     Returns
     -------
@@ -142,7 +139,6 @@ def on_acq():
         |    File names for generated coronal images
         | payload : dict
         |    Form inputted values sent back to display together with template
-
     """
     if 'acq' in session:
 
@@ -156,7 +152,7 @@ def on_acq():
 @app.route('/analyze', methods=['POST', 'GET'])
 def on_analyze():
     """
-    Renders the analyze html page on the web
+    Renders the analyze html page on the web.
 
     Returns
     -------
@@ -167,7 +163,6 @@ def on_analyze():
         |   Either 1 or 0 depending on analyze steps success
         | payload1/payload2/payload3 : dict
         |   Form inputted values and output results sent back to display together with template
-
     """
     if 'ana_load' in session:
         if 'ana_map' in session:
@@ -185,15 +180,10 @@ def on_analyze():
         return render_template('analyze.html')
 
 
-#@app.route('/ana_load_success')
-#def on_ana_load_success():
-#    return render_template('analyze.html', load_success=session['ana_load'], payload1=session['ana_payload1'])
-
-
 @app.route('/tx', methods=['POST', 'GET'])
 def on_tx():
     """
-    Renders the tx html page on the web
+    Renders the tx html page on the web.
 
     Returns
     -------
@@ -204,7 +194,6 @@ def on_tx():
         |   Either 1 or 0 depending on tx success
         | payload : dict
         |   Form inputted values and output results sent back to display together with template
-
     """
     if 'tx' in session:
         return render_template('tx.html', success=session['tx'], payload=session['tx_payload'])
@@ -215,7 +204,7 @@ def on_tx():
 @app.route('/rx', methods=['POST', 'GET'])
 def on_rx():
     """
-    Renders the rx html page on the web
+    Renders the rx html page on the web.
 
     Returns
     -------
@@ -226,7 +215,6 @@ def on_rx():
         |   Either 1 or 0 depending on rx success
         | payload : dict
         |   Form inputted values and output results sent back to display together with template
-
     """
     if 'rx' in session:
         return render_template('rx.html', success=session['rx'], payload=session['rx_payload'])
@@ -237,7 +225,7 @@ def on_rx():
 @app.route('/recon', methods=['POST', 'GET'])
 def on_recon():
     """
-    Renders the recon html page on the web
+    Renders the recon html page on the web.
 
     Returns
     -------
@@ -248,7 +236,6 @@ def on_recon():
         |   Either 1 or 0 depending on recon success
         | payload : dict
         |   Form inputted values and output results sent back to display together with template
-
     """
     if 'recon' in session:
         return render_template('recon.html', success=session['recon'], payload=session['recon_payload'])
@@ -258,18 +245,17 @@ def on_recon():
 
 def allowed_file(filename):
     """
-    Checks that the file extension is within the application allowed extensions
+    Checks that the file extension is within the application allowed extensions.
 
     Parameters
     ----------
     filename : str
-        | Uploaded file name
+        Uploaded file name
 
     Returns
     -------
     bool
-        | allowed or not allowed extension
-
+        Allowed or not allowed extension
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -278,13 +264,12 @@ def allowed_file(filename):
 @app.route('/receiver', methods=['POST', 'GET'])
 def worker():
     """
-    Receives form inputs from the templates and applies the server methods
+    Receives form inputs from the templates and applies the server methods.
 
     Returns
     -------
     AppContext
         Either renders templates or redirects to other templates
-
     """
     # read payload and convert it to dictionary
 
@@ -297,14 +282,13 @@ def worker():
             if payload['subjecttype'] == "Subject":
                 return redirect('register')
 
-
             print(payload)
             session['reg_success'] = 1
             session['reg_payload'] = payload
 
             del payload['formName']
 
-            # Right now only doing metric system since only phantom registration is possible. Fix this for future releases.
+            # Currently only metric system since only phantom registration is possible. Fix this for future releases.
             del payload['height-unit']
             del payload['weight-unit']
             del payload['inches']
@@ -341,13 +325,14 @@ def worker():
                 "patid": pat_id,
             }
 
-            rows = reg.reuse(query_dict) #
+            rows = reg.reuse(query_dict)  #
             print(rows)
 
             # session['acq'] = 0
             session['acq_payload'] = payload
 
-            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0], pat_id=pat_id)  # phtinfo just needs to be 1 string
+            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],
+                                         pat_id=pat_id)  # phtinfo just needs to be 1 string
             sim_result_path = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session['patid']
 
             while (os.path.isdir(sim_result_path) is False):
@@ -365,7 +350,7 @@ def worker():
 
                 for indx in range(len(complete_path)):
 
-                    pos = complete_path[indx].find('_', 30, ) + 1 #
+                    pos = complete_path[indx].find('_', 30, ) + 1  #
 
                     sl_orientation = complete_path[indx][pos]
                     if sl_orientation == 'Z':
@@ -378,7 +363,6 @@ def worker():
                 session['acq_out_axial'] = Z_acq
                 session['acq_out_sagittal'] = X_acq
                 session['acq_out_coronal'] = Y_acq
-
 
                 return redirect('acquire')
 
@@ -427,7 +411,6 @@ def worker():
                                                            session['patid'])
 
                 payload['dicom_path'] = str(dicom_path)
-                # payload['map_path'] = str(constants.COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / session['patid'] / map_name)
                 payload['map_path'] = str(
                     constants.COMS_UI_STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name)
                 session['ana_payload2'] = payload
@@ -513,7 +496,7 @@ def worker():
 
 def launch_virtualscanner():
     """
-    Runs the server in the specified machine's local network address
+    Runs the server in the specified machine's local network address.
     """
     app.run(host='0.0.0.0', debug=True)
 

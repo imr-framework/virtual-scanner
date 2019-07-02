@@ -15,6 +15,21 @@ RECON_STATIC_SAVE_PATH = COMS_PATH / 'coms_ui' / 'static' / 'recon' / 'outputs'
 
 
 def __undersample(input_image):
+    """
+    Undersamples `input_image` by a factorof 4 and adds 4% low-frequency k-space components.
+
+    Paramters
+    ---------
+    input_image : numpy.ndarray
+        Input image to be undersampled.
+
+    Returns
+    -------
+    aliased_image : numpy.ndarray
+        Undersampled image.
+    aliased_kspace : numpy.ndarray
+        K-space of undersampled image.
+    """
     low_freq_pc = 0.04
     reduction_factor = 4
     size = input_image.shape[1]

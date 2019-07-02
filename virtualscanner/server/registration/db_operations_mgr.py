@@ -1,5 +1,4 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Script to manage database operations related to subject registration
 
 import datetime
 import sqlite3
@@ -13,14 +12,13 @@ from pathlib import Path
 Parameters
 ----------
 payload : dict 
-    registration information
+    Registration information
 
 Returns
 -------
-status: int
-    0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
-    1: fail
-
+status : int
+    | 0: successful creation of the database/insertion of a row in the REGISTRATION table/query of existing entry 
+    | 1: fail
 """
 
 root = Path(__file__)
@@ -32,14 +30,13 @@ SERVERLOG_PATH = SERVERLOG_PATH.resolve()
 
 def create():
     """
-    This function creates a database with the required fields in the REGISTRATION table
-
+    This function creates a database with the required fields in the REGISTRATION table.
 
     Returns
     -------
-    status: int
-        0: successful creation of the database and table
-        1: fail
+    status : int
+        | 0: successful creation of the database and table
+        | 1: fail
 
     """
 
@@ -77,18 +74,18 @@ def create():
 
 def insert(payload):
     """
-    This function inserts a new row for a registered subject in the REGISTRATION table
+    This function inserts a new row for a registered subject in the REGISTRATION table.
 
     Parameters
     ----------
-    payload: dict
+    payload : dict
         Information as per the REGISTRATION TABLE fields for the new subject to be inserted
 
     Returns
     -------
-    status: int
-        0: successful insertion of the row
-        1: fail
+    status : int
+        | 0: successful insertion of the row
+        | 1: fail
 
     """
 
@@ -130,16 +127,16 @@ def insert(payload):
 
 def query(payload):
     """
-        This function queries the REGISTRATION table for existing subject information
+        This function queries the REGISTRATION table for existing subject information.
 
         Parameters
         ----------
-        payload: dict
+        payload : dict
             Information as per the REGISTRATION TABLE fields for the new subject to be inserted
 
         Returns
         -------
-        rows: dict
+        rows : dict
             rows from the RESGISTRATION table that match the query criteria
 
     """

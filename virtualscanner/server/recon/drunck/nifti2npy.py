@@ -12,7 +12,7 @@ import numpy as np
 
 def load_dataset_from_nifti(nifti_path: Path, img_size: int = 128) -> np.ndarray:
     """
-    Make dataset by reading NIFTI files from `nifti_path` and resizing each image to `img_size`x`img_size`.
+    Make dataset by reading NIFTI files from `nifti_path` and resizing each image to `img_size` x `img_size`.
 
     Parameters
     ----------
@@ -174,7 +174,7 @@ def plot(dataset: np.ndarray, ft_dataset: np.ndarray, dataset_undersampled: np.n
 
 def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarray, save_path: Path):
     """
-    Save `file1` and `file2` to disk as `filename1` and `filename2 at `save_path`.
+    Save `file1` and `file2` to disk as `filename1` and `filename2` at `save_path`.
 
     Parameters
     ----------
@@ -200,7 +200,7 @@ def save2disk(filename1: str, file1: np.ndarray, filename2: str, file2: np.ndarr
 def main(nifti_path: Path, img_size: int, low_freq_pc: float, save_path: Path, reduction_factor: int,
          plot_flag: bool = True):
     """
-    1. Load NIFTI data as `numpy.ndarray` and resize each image to `img_size`x`img_size`.
+    1. Load NIFTI data as `numpy.ndarray` and resize each image to `img_size` x `img_size`.
     2. Undersample by `skip_factor` and add `low_freq_pc` low-frequency k-space values.
     3. Save files to disk.
 

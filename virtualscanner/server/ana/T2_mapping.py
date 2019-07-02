@@ -1,19 +1,13 @@
-"""
-This script does T2 mapping of dicom images
-"""
-
-# Author: Enlin Qian
-# Date: 06/27/2019
-# Version 3.0
 # Copyright of the Board of Trustees of  Columbia University in the City of New York
 
-import argparse
+import os
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pydicom
 from scipy.optimize import curve_fit
-import os
-import time
+
 from virtualscanner.utils import constants
 
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
@@ -21,33 +15,31 @@ COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 
 def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
-
     """
     Curve fitting a series of SE images with respect to variable TE values to generate a T2 map.
 
     Parameters
     ----------
-        |dicom_file_path : path
-        |path of folder where dicom files reside
-        |TR : str
-        |TR value used in SE experiments (unit in milliseconds, should be constant)
-        |TE : str
-        |TE value used in SE experiments (unit in milliseconds)
-        |pat_id : str
-        |primary key in REGISTRATION table
+    dicom_file_path : path
+        Path of folder where dicom files reside
+    TR : str
+        TR value used in SE experiments (unit in milliseconds, should be constant)
+    TE : str
+        TE value used in SE experiments (unit in milliseconds)
+    pat_id : str
+        primary key in REGISTRATION table
 
     Returns
     -------
-        |png_map_name : str
-        |file name of T2_map in png format
-        |dicom_map_path : str
-        |path of T2_map in dicom format
+    png_map_name : str
+        File name of T2 map in png format
+    dicom_map_path : str
+        Path of T2 map in dicom format
     """
-
     TR = np.fromstring(TR, dtype=int, sep=',')
     TE = np.fromstring(TE, dtype=float, sep=',')
-    TR = TR/1000
-    TE = TE/1000
+    TR = TR / 1000
+    TE = TE / 1000
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for png_map_name in fileList:
@@ -100,38 +92,37 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     plt.margins(0, 0)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    plt.savefig(str(png_map_path) +'/T2_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(str(png_map_path) + '/T2_map' + timestr + '.png', bbox_inches='tight', pad_inches=0)
 
     png_map_name = "T2_map" + timestr + ".png"
 
-    pixel_array = (T2_map/2)*65535
+    pixel_array = (T2_map / 2) * 65535
     pixel_array_int = pixel_array.astype(np.uint16)
     ds.PixelData = pixel_array_int.tostring()
-    ds.save_as(str(dicom_map_path) +'/T2_map' + timestr +'.dcm')
+    ds.save_as(str(dicom_map_path) + '/T2_map' + timestr + '.dcm')
 
     return png_map_name, dicom_map_path
 
 
 def T2_sig_eq(X, a, b, c):
-
     """
-    Generate an exponential function for curve fitting
+    Generate an exponential function for curve fitting.
 
     Parameters
     ----------
-        |X :
-        |independent variable
-        |a :
-        |curve fitting parameters
-        |b :
-        |curve fitting parameters
-        |c :
-        |curve fitting parameters
+    X : float
+        Independent variable
+    a : float
+        Curve fitting parameters
+    b : float
+        Curve fitting parameters
+    c : float
+        Curve fitting parameters
 
     Returns
     -------
-        |exponential function used for T2 curve fitting
-
+    float
+        Exponential function used for T2 curve fitting
     """
 
     x, y = X

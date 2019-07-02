@@ -1,10 +1,4 @@
-"""
-This script is a unit test script for testing T1 and T2 mapping
-Author: Enlin Qian
-Date: 03/12/2019
-Version 0.0
-Copyright of the Board of Trustees of Columbia University in the City of New York
-"""
+# Copyright of the Board of Trustees of Columbia University in the City of New York
 
 import virtualscanner.server.ana.T1_mapping as dicom2mapT1
 import virtualscanner.server.ana.T2_mapping as dicom2mapT2
@@ -34,5 +28,3 @@ if __name__ == '__main__':
         TE='0.012, 0.022, 0.042, 0.062, 0.102, 0.152, 0.202',
         pat_id='9306'
     )
-
-

@@ -1,5 +1,4 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# Script to manage registration functions including checking for redundancy
 
 from pathlib import Path
 
@@ -56,24 +55,21 @@ def consume(payload):
     return status
 
 
-# def check(payload):
-
 def reuse(payload):
     """
     This definition queries if the subject is already registered
 
+    Parameters
+    ----------
+    payload : dict
+        All fields required in the REGISTRATION table
 
-        Parameters
-        ----------
-        payload: dict
-            all fields required in the REGISTRATION table
-
-        Returns
-        -------
-            rows: dict
-                row of the REGISTRATION table that match the subject being registered
-                a null value indicates a new subject
-                non null value(s) indicate matching subjects
+    Returns
+    -------
+    rows : dict
+        row of the REGISTRATION table that match the subject being registered
+        a null value indicates a new subject
+        non null value(s) indicate matching subjects
     """
     rows = dbom.query(payload)
     return rows

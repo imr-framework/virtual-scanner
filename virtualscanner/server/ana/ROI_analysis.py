@@ -1,41 +1,34 @@
-"""
-This script does ROI analysis of dicom maps of ISMRM-NIST phantom
-"""
-# Author: Enlin Qian
-# Date: 07/02/2019
-# Version 2.0
-# Copyright of the Board of Trustees of  Columbia University in the City of New York
+# Copyright of the Board of Trustees of Columbia University in the City of New York
 
+import os
+import time
 
-import argparse
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import pydicom
-import os
-import cv2
 import numpy.matlib
-import time
+import pydicom
+
 from virtualscanner.utils import constants
 
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 
 def circle_analysis(circles, map_size):
-
     """
-    Return locations of pixels inside a circle
+    Return locations of pixels inside a circle.
 
     Parameters
     ----------
-        |circles : matrix
-        |1x3 matrix (center_x, center_y, radius)
-        |map_size : int
-        |size of parameter map, for example, 256 means the size of map is 256x256
+    circles : numpy.ndarray
+        1x3 matrix (center_x, center_y, radius)
+    map_size : int
+        size of parameter map, for example, 256 means the size of map is 256x256
 
     Returns
     -------
-        |sphere_map : matrix
-        |binary map where pixels inside the circle is true and outside of the circle is false
+    sphere_map : matrix
+        Binary map where pixels inside the circle is true and outside of the circle is false
     """
 
     X, Y = np.meshgrid(np.arange(map_size), np.arange(map_size))
@@ -44,37 +37,38 @@ def circle_analysis(circles, map_size):
     return sphere_map
 
 
-def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: str):  # lb: lower bound, ub: upper bound, fov: should be in mm
+def main(dicom_map_path: str, map_type: str, map_size: str, fov: str,
+         pat_id: str):  # lb: lower bound, ub: upper bound, fov: should be in mm
     """
     Return ROI analysis of a ISMRM/NIST phantom, all 14 spheres are detected.
 
     Parameters
     ----------
-        |dicom_map_path : path
-        |path of folder where dicom files reside
-        |map_type : str
-        |type of map (T1 or T2)
-        |map_size : str
-        |size of map, for example, 128 means the size of map is 128x128
-        |fov : str
-        |field of view used in experiments
-        |pat_id : str
-        |primary key in REGISTRATION table
+    dicom_map_path : path
+        Path of folder where dicom files reside
+    map_type : str
+        Type of map (T1 or T2)
+    map_size : str
+        Size of map, for example, 128 means the size of map is 128x128
+    fov : str
+        Field of view used in experiments
+    pat_id : str
+        Primary key in REGISTRATION table
 
     Returns
     -------
-        |centers : matrix
-        |centers and radii for all spheres in sphere number order
-        |sphere_mean : matrix
-        |mean values for all spheres in sphere number order
-        |sphere_std : matrix
-        |std for all spheres in sphere number order
+    centers : matrix
+        Centers and radii for all spheres in sphere number order
+    sphere_mean : matrix
+        Mean values for all spheres in sphere number order
+    sphere_std : matrix
+        Std for all spheres in sphere number order
     """
 
     map_size = np.ndarray.item(np.fromstring(map_size, dtype=int, sep=','))
     fov = np.ndarray.item(np.fromstring(fov, dtype=int, sep=','))
     num_spheres = 14
-    voxel_size = fov/map_size  # unit should be mm/voxel
+    voxel_size = fov / map_size  # unit should be mm/voxel
     sphere_all_loc_template = np.zeros([num_spheres, 2])
     if map_type == 'T1':
         max_values = 5
@@ -97,7 +91,9 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         radius_scale = 0.97
         intensity_range_lb = 0
         intensity_range_ub = 5
-        golden_standard = np.array([1.989, 1.454, 0.9841, 0.706, 0.4967, 0.3515, 0.24713, 0.1753, 0.1259, 0.089, 0.0627, 0.04453, 0.03084, 0.021719])
+        golden_standard = np.array(
+            [1.989, 1.454, 0.9841, 0.706, 0.4967, 0.3515, 0.24713, 0.1753, 0.1259, 0.089, 0.0627, 0.04453, 0.03084,
+             0.021719])
     if map_type == 'T2':
         max_values = 2  # The maximum value for map should be fixed, any intensity outside that range is meaningless
         sphere_1_ref_mean = 0.5813
@@ -114,14 +110,17 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
                                         [voxel_size * 22.2754, 33.1854],
                                         [voxel_size * 21.9875, -33.0284],
                                         [voxel_size * 44.7193, 15.213],
-                                        [voxel_size * 44.2191, -16.2861]])  # matrix with distance and angle for each sphere respect to sphere 1
+                                        [voxel_size * 44.2191,
+                                         -16.2861]])  # matrix with distance and angle for each sphere respect to sphere 1
         sphere_all_loc_template[0, 0:2] = np.squeeze(np.array([[64.1242, 33.5806]]))
         radius_scale = 0.95
         intensity_range_lb = 0
         intensity_range_ub = 2
-        golden_standard = np.array([0.5813, 0.4035, 0.2781, 0.19094, 0.13327, 0.09689, 0.06407, 0.04642, 0.03197, 0.02256, 0.015813, 0.011237, 0.007911, 0.005592])
+        golden_standard = np.array(
+            [0.5813, 0.4035, 0.2781, 0.19094, 0.13327, 0.09689, 0.06407, 0.04642, 0.03197, 0.02256, 0.015813, 0.011237,
+             0.007911, 0.005592])
 
-    direction_angle_mat[:, 0] = direction_angle_mat[:, 0]/voxel_size
+    direction_angle_mat[:, 0] = direction_angle_mat[:, 0] / voxel_size
     direction_angle_mat[:, 1] = direction_angle_mat[:, 1]
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_map_path):
@@ -184,7 +183,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
 
         circles_all = circles[0, :, :]
         circles_all[:, 2] = np.squeeze(radius_scale * np.matlib.repmat(np.amin(circles[0, :, 2]), circles.shape[1],
-                                                              1))  # use smallest radius for calculating means
+                                                                       1))  # use smallest radius for calculating means
         circles_mean = np.zeros([circles.shape[1], 1])
 
         for n4 in range(circles.shape[
@@ -208,10 +207,10 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         sphere_all_loc_map[:, 2, n3] = np.squeeze(np.matlib.repmat(circles_all[0, 2], num_spheres, 1))
 
     timestr = time.strftime("%Y%m%d%H%M%S")
-    mypath=COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
+    mypath = COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
 
     if not os.path.isdir(mypath):
-            os.makedirs(mypath)
+        os.makedirs(mypath)
 
     # visualize final guess
     for n5 in range(image_size[2]):
@@ -229,11 +228,11 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
         cb.set_label('Time (s)')
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
-                        hspace=0, wspace=0)
+                            hspace=0, wspace=0)
         plt.margins(0, 0)
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
-        plt.savefig(str(mypath) + '/map_with_ROI' + timestr + '.png', bbox_inches='tight', pad_inches = 0)
+        plt.savefig(str(mypath) + '/map_with_ROI' + timestr + '.png', bbox_inches='tight', pad_inches=0)
         # , facecolor = fig.get_facecolor(), edgecolor = 'none'
 
     filename = 'map_with_ROI' + timestr + '.png'
