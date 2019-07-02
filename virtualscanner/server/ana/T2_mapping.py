@@ -1,11 +1,11 @@
 """
 This script does T2 mapping of dicom images
-
-Author: Enlin Qian
-Date: 06/27/2019
-Version 3.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
+
+# Author: Enlin Qian
+# Date: 06/27/2019
+# Version 3.0
+# Copyright of the Board of Trustees of  Columbia University in the City of New York
 
 import argparse
 import matplotlib.pyplot as plt
@@ -27,21 +27,21 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
 
     Parameters
     ----------
-    dicom_file_path : path
-        path of folder where dicom files reside
-    TR : str
-        TR value used in SE experiments (unit in milliseconds, should be constant)
-    TE : str
-        TE value used in SE experiments (unit in milliseconds)
-    pat_id : str
-        primary key in REGISTRATION table
+        |dicom_file_path : path
+        |path of folder where dicom files reside
+        |TR : str
+        |TR value used in SE experiments (unit in milliseconds, should be constant)
+        |TE : str
+        |TE value used in SE experiments (unit in milliseconds)
+        |pat_id : str
+        |primary key in REGISTRATION table
 
     Returns
     -------
-    png_map_name : str
-        file name of T2_map in png format
-    dicom_map_path : str
-        path of T2_map in dicom format
+        |png_map_name : str
+        |file name of T2_map in png format
+        |dicom_map_path : str
+        |path of T2_map in dicom format
     """
 
     TR = np.fromstring(TR, dtype=int, sep=',')
@@ -119,18 +119,18 @@ def T2_sig_eq(X, a, b, c):
 
     Parameters
     ----------
-    X :
-        independent variable
-    a :
-        curve fitting parameters
-    b :
-        curve fitting parameters
-    c :
-        curve fitting parameters
+        |X :
+        |independent variable
+        |a :
+        |curve fitting parameters
+        |b :
+        |curve fitting parameters
+        |c :
+        |curve fitting parameters
 
     Returns
     -------
-    exponential function used for T2 curve fitting
+        |exponential function used for T2 curve fitting
 
     """
 

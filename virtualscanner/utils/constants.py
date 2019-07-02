@@ -22,7 +22,7 @@ SERVER_PATH = ROOT_PATH / 'server'
 # server.ana
 
 # server.quant_analysis
-SERVER_ANALYZE_PATH = COMS_PATH / 'server' / 'ana'
+SERVER_ANALYZE_PATH = SERVER_PATH / 'ana'
 
 # server.recon
 RECON_PATH = ROOT_PATH / 'server' / 'recon'

@@ -1,11 +1,11 @@
 """
 This script does ROI analysis of dicom maps of ISMRM-NIST phantom
-
-Author: Enlin Qian
-Date: 07/02/2019
-Version 2.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York
 """
+# Author: Enlin Qian
+# Date: 07/02/2019
+# Version 2.0
+# Copyright of the Board of Trustees of  Columbia University in the City of New York
+
 
 import argparse
 import matplotlib.pyplot as plt
@@ -27,15 +27,15 @@ def circle_analysis(circles, map_size):
 
     Parameters
     ----------
-    circles : matrix
-        1x3 matrix (center_x, center_y, radius)
-    map_size : int
-        size of parameter map, for example, 256 means the size of map is 256x256
+        |circles : matrix
+        |1x3 matrix (center_x, center_y, radius)
+        |map_size : int
+        |size of parameter map, for example, 256 means the size of map is 256x256
 
     Returns
     -------
-    sphere_map : matrix
-        binary map where pixels inside the circle is true and outside of the circle is false
+        |sphere_map : matrix
+        |binary map where pixels inside the circle is true and outside of the circle is false
     """
 
     X, Y = np.meshgrid(np.arange(map_size), np.arange(map_size))
@@ -50,25 +50,25 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str, pat_id: st
 
     Parameters
     ----------
-    dicom_map_path : path
-        path of folder where dicom files reside
-    map_type : str
-        type of map (T1 or T2)
-    map_size : str
-        size of map, for example, 128 means the size of map is 128x128
-    fov : str
-        field of view used in experiments
-    pat_id : str
-        primary key in REGISTRATION table
+        |dicom_map_path : path
+        |path of folder where dicom files reside
+        |map_type : str
+        |type of map (T1 or T2)
+        |map_size : str
+        |size of map, for example, 128 means the size of map is 128x128
+        |fov : str
+        |field of view used in experiments
+        |pat_id : str
+        |primary key in REGISTRATION table
 
     Returns
     -------
-    centers : matrix
-        centers and radii for all spheres in sphere number order
-    sphere_mean : matrix
-        mean values for all spheres in sphere number order
-    sphere_std : matrix
-        std for all spheres in sphere number order
+        |centers : matrix
+        |centers and radii for all spheres in sphere number order
+        |sphere_mean : matrix
+        |mean values for all spheres in sphere number order
+        |sphere_std : matrix
+        |std for all spheres in sphere number order
     """
 
     map_size = np.ndarray.item(np.fromstring(map_size, dtype=int, sep=','))
