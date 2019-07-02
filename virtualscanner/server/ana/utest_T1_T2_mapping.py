@@ -21,7 +21,6 @@ if __name__ == '__main__':
         pat_id='9306'
     )
 
-if __name__ == '__main__':
     T2_map = dicom2mapT2.main(
         dicom_file_path=SERVER_T2_INPUT_PATH,
         TR='10, 10, 10, 10, 10, 10, 10',
