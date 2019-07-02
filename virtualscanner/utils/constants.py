@@ -35,7 +35,7 @@ RF_SAR_STATIC_IMG_PATH = COMS_UI_PATH / 'static' / 'RF' / 'tx' / 'SAR/'
 RF_SAR_PATH = SERVER_PATH / 'rf' / 'tx' / 'SAR_calc'
 
 # server.rx
-RX_PATH = SERVER_PATH / 'rx'
+RX_PATH = SERVER_PATH / 'RF' / 'rx'
 
 # server.simulation
 SERVER_SIM_BLOCH_PATH = SERVER_PATH / 'simulation' / 'bloch'
