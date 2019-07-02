@@ -16,7 +16,7 @@ from virtualscanner.server.ana import T2_mapping as T2_mapping, T1_mapping as T1
 from virtualscanner.server.recon.drunck.reconstruct import main
 from virtualscanner.server.registration import register as reg
 from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
-from virtualscanner.server.rx import caller_script_Rx as Rxfunc
+from virtualscanner.server.rf.rx import caller_script_Rx as Rxfunc
 from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
 from virtualscanner.utils import constants
 
