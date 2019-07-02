@@ -20,16 +20,16 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
 
     Parameters
     ----------
-        |dicom_file_path : path
-        |path of folder where dicom files reside
-        |TR : str
-        |TR value used in IRSE experiments (unit in milliseconds, should be constant)
-        |TI : str
-        |TI values used in IRSE experiments (unit in milliseconds)
-        |TE : str
-        |TE value used in IRSE experiments (unit in milliseconds, should be constant)
-        |pat_id : str
-        |primary key in REGISTRATION table
+    dicom_file_path : path
+        Path of folder where dicom files reside
+    TR : str
+        TR value used in IRSE experiments (unit in milliseconds, should be constant)
+    TI : str
+        TI values used in IRSE experiments (unit in milliseconds)
+    TE : str
+        TE value used in IRSE experiments (unit in milliseconds, should be constant)
+    pat_id : str
+        Primary key in REGISTRATION table
 
     Returns
     -------
