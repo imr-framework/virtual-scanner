@@ -27,7 +27,7 @@ def circle_analysis(circles, map_size):
 
     Returns
     -------
-    sphere_map : matrix
+    sphere_map : numpy.ndarray
         Binary map where pixels inside the circle is true and outside of the circle is false
     """
 
@@ -57,11 +57,11 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str,
 
     Returns
     -------
-    centers : matrix
+    centers : numpy.ndarray
         Centers and radii for all spheres in sphere number order
-    sphere_mean : matrix
+    sphere_mean : numpy.ndarray
         Mean values for all spheres in sphere number order
-    sphere_std : matrix
+    sphere_std : numpy.ndarray
         Std for all spheres in sphere number order
     """
 
