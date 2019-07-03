@@ -9,6 +9,14 @@ The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](h
 
 Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allows users to perform virtual scans and conduct basic analysis; in Advanced Mode, modular simulation/analysis of the entire MR signal chain may be performed.  
 
+## Quick Start
+First, clone the repository. Make sure you have all packages listed in requirements.txt installed in your Virtual Environment.
+
+Then, run coms_server_flask.py to start the browser GUI and follow the generated link to access it. Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
+
+Alternatively, you can read the API documentation (link) and run the Python test scripts in each module with more options available than allowed on the GUI.
+
+
 ## Standard Mode
 ### Register
 The Register page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now. 
