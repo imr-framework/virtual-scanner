@@ -44,6 +44,12 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     TR = TR / 1000
     TE = TE / 1000
     TI = TI / 1000
+    fov = 170
+    map_size = 128
+    voxel_size = fov / map_size  # unit should be mm/voxel
+    phantom_radius = 101.72  # unit in mm
+    centers = np.array([[map_size / 2, map_size / 2]])
+
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for png_map_name in fileList:
@@ -67,8 +73,9 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
         for n3 in range(image_size[1]):
             # for n2 in range(0, 32):
             #     for n3 in range(0, 32):
+            dist_to_center = np.sqrt((n2-centers[0, 0]) ** 2+(n3-centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
-            if 0 not in y_data:
+            if dist_to_center < phantom_radius:
                 n4 = 0
                 min_loc = np.argmin(y_data)
                 while n4 < min_loc:

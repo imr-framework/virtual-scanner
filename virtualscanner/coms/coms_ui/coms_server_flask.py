@@ -6,7 +6,7 @@ if __name__ == '__main__':
     import sys
 
     script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtualscanner') + 1]  #
+    SEARCH_PATH = script_path[:script_path.index('Virtual-Scanner') + len('virtualscanner') + 1]  #
     sys.path.insert(0, SEARCH_PATH)
 
 from flask import Flask, render_template, request, redirect, session

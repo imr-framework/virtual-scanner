@@ -40,6 +40,12 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     TE = np.fromstring(TE, dtype=float, sep=',')
     TR = TR / 1000
     TE = TE / 1000
+    fov = 210
+    map_size = 128
+    voxel_size = fov / map_size  # unit should be mm/voxel
+    phantom_radius = 101.72  # unit in mm
+    centers = np.array([[map_size / 2, map_size / 2]])
+
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_file_path):
         for png_map_name in fileList:
@@ -61,9 +67,10 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275)  # initial guess for parameters
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
+            dist_to_center = np.sqrt((n2-centers[0, 0]) ** 2+(n3-centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
-            if 0 not in y_data:
-                popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 6))
+            if dist_to_center < phantom_radius:
+                popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 2))
                 T2_map[n2, n3] = popt[2]
 
     T2_map[T2_map > 2] = 2
