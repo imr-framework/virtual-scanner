@@ -26,6 +26,7 @@ ROOT_PATH = constants.ROOT_PATH
 UPLOAD_FOLDER = constants.COMS_UI_STATIC_USER_UPLOAD_PATH
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 STATIC_ANALYZE_PATH = constants.COMS_UI_STATIC_ANALYZE_PATH
+
 ALLOWED_EXTENSIONS = {'seq', 'jpg'}
 
 app = Flask(__name__)
@@ -342,7 +343,9 @@ def worker():
 
             if progress == 1:
                 session['acq'] = 1
-                im_path_from_template = constants.COMS_UI_STATIC_ACQUIRE_PATH / 'outputs' / session['patid']
+
+                STATIC_ACQUIRE_PATH_REL = constants.COMS_UI_STATIC_ACQUIRE_PATH.relative_to(CURRENT_PATH)
+                im_path_from_template = STATIC_ACQUIRE_PATH_REL / 'outputs' / session['patid']
 
                 imgpaths = os.listdir(sim_result_path)
                 complete_path = [str(im_path_from_template / iname) for iname in imgpaths]
@@ -391,7 +394,7 @@ def worker():
                     folder_path = STATIC_ANALYZE_PATH / 'inputs' / 'T2_original_data'
 
                 filenames_in_path = os.listdir(folder_path)
-                STATIC_ANALYZE_PATH_REL = STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
+                STATIC_ANALYZE_PATH_REL = constants.COMS_UI_STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 original_data_path = [
                     str(STATIC_ANALYZE_PATH_REL / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname) for
                     iname in filenames_in_path]
@@ -401,7 +404,7 @@ def worker():
 
 
             elif 'map-form' in payload:
-
+                STATIC_ANALYZE_PATH_REL = constants.COMS_UI_STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 session['ana_map'] = 1
 
                 if payload['TI'] == "":
@@ -414,15 +417,14 @@ def worker():
                                                            session['patid'])
 
                 payload['dicom_path'] = str(dicom_path)
-                payload['map_path'] = str(
-                    constants.COMS_UI_STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / map_name)
+                payload['map_path'] = str( STATIC_ANALYZE_PATH_REL / 'outputs' / session['patid'] / map_name)
                 session['ana_payload2'] = payload
 
 
             elif 'roi-form' in payload:
 
                 # payload['map-type'] = 'T1'
-
+                STATIC_ANALYZE_PATH_REL = constants.COMS_UI_STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 session['ana_roi'] = 1
                 dicom_map_path = session['ana_payload2']['dicom_path']
                 if 'T1' in dicom_map_path:
@@ -433,7 +435,7 @@ def worker():
                 roi_result_filename = ROI_analysis.main(dicom_map_path, payload['map-type'], payload['map-size'],
                                                         payload['map-FOV'], session['patid'])
 
-                roi_result_path = STATIC_ANALYZE_PATH / 'outputs' / session['patid'] / roi_result_filename
+                roi_result_path = STATIC_ANALYZE_PATH_REL / 'outputs' / session['patid'] / roi_result_filename
 
                 payload['roi_path'] = str(roi_result_path)
                 session['ana_payload3'] = payload
@@ -458,7 +460,8 @@ def worker():
                 output = SAR_calc_main.payload_process(filename)
 
                 session['tx'] = 1
-                output['plot_path'] = str(constants.COMS_UI_STATIC_RF_PATH / 'tx' / 'SAR' / output['filename'])
+                STATIC_RFTX_PATH_REL = constants.COMS_UI_STATIC_RFTX_PATH.relative_to(CURRENT_PATH)
+                output['plot_path'] = str(STATIC_RFTX_PATH_REL/ 'SAR' / output['filename'])
                 session['tx_payload'] = output
                 return redirect('tx')
         # rx
@@ -466,8 +469,10 @@ def worker():
 
             signals_filename, recon_filename, orig_im_path = Rxfunc.run_Rx_sim(payload)
 
-            payload['signals_path'] = str(constants.COMS_UI_STATIC_RX_PATH / signals_filename)
-            payload['recon_path'] = str(constants.COMS_UI_STATIC_RX_PATH / recon_filename)
+            COMS_UI_STATIC_RFRX_PATH_REL = constants.COMS_UI_STATIC_RX_OUTPUT_PATH.relative_to(CURRENT_PATH)
+
+            payload['signals_path'] = str(COMS_UI_STATIC_RFRX_PATH_REL / signals_filename)
+            payload['recon_path'] = str(COMS_UI_STATIC_RFRX_PATH_REL / recon_filename)
 
             session['rx'] = 1
             session['rx_payload'] = payload
@@ -481,7 +486,8 @@ def worker():
             input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(input_path)
 
-            out_path_form_template = constants.COMS_UI_STATIC_RECON_PATH / 'outputs'
+            STATIC_RECON_PATH_REL = constants.COMS_UI_STATIC_RECON_PATH.relative_to(CURRENT_PATH)
+            out_path_form_template = STATIC_RECON_PATH_REL / 'outputs'
 
             if payload['DL-type'] == "GT":
                 out1, out2, out3 = main(input_path, payload['DL-type'])
