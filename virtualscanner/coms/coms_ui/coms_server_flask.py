@@ -19,7 +19,9 @@ from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
 from virtualscanner.server.rf.rx import caller_script_Rx as Rxfunc
 from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
 from virtualscanner.utils import constants
+from pathlib import Path
 
+CURRENT_PATH = Path(__file__).parent
 ROOT_PATH = constants.ROOT_PATH
 UPLOAD_FOLDER = constants.COMS_UI_STATIC_USER_UPLOAD_PATH
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
@@ -389,8 +391,9 @@ def worker():
                     folder_path = STATIC_ANALYZE_PATH / 'inputs' / 'T2_original_data'
 
                 filenames_in_path = os.listdir(folder_path)
+                STATIC_ANALYZE_PATH_REL = STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 original_data_path = [
-                    str(STATIC_ANALYZE_PATH / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname) for
+                    str(STATIC_ANALYZE_PATH_REL / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname) for
                     iname in filenames_in_path]
                 payload['data-path'] = original_data_path
 
