@@ -18,33 +18,20 @@ Alternatively, you can read the API documentation (link) and run the Python test
 
 
 ## Standard Mode
-### Register
-The Register page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now. 
+* The **Register** page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now. 
 
-### Acquire
-The Acquire page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values. 
+* The **Acquire** page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values. 
 
-### Analyze
-The Analyze page allows the user to load a series of data acquired for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect circles on the maps, a common feature of real MR phantoms.
+* The **Analyze** page allows the user to load a series of data acquired for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect circles on the maps, a common feature of real MR phantoms.
 
 ## Advanced Mode
-### Tx (RF Transmit)
-The Tx page allows one to calculate and plot SAR from pulseq .seq files.
+* The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files.
 *This feature is under development.*
 
-### Rx (RF Receive)
-The Rx page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. *This feature is under development.*
-
-### PSD Inspector
-The Pulse Sequence Diagram (PSD) Inspector allows you to load MR pulse sequences in the pulseq .seq format and visualize them.  
+* The **Rx** (RF receive) page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. 
 *This feature is under development.*
 
-### Phantom Viewer
-*This feature is under development.*
-
-### Reconstruction
-The recon page allows experimenting with different reconstruction methods, including Cartesian, non-Cartesian, and deep learning options.
-*This feature is under development.*
+* Other features, including phantom and sequence viewers and reconstruction methods, are in active development. 
 
 ## References
 
