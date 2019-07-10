@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.rf.tx.SAR_calc &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server.rf.rx" href="virtualscanner.server.rf.rx.html" />
+    <link rel="prev" title="virtualscanner.server.rf.tx" href="virtualscanner.server.rf.tx.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.rx.html" title="virtualscanner.server.rf.rx"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.tx.html" title="virtualscanner.server.rf.tx"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.rf.html" >virtualscanner.server.rf</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="virtualscanner.server.rf.tx.html" accesskey="U">virtualscanner.server.rf.tx</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-rf-tx-sar-calc">
+<h1>virtualscanner.server.rf.tx.SAR_calc<a class="headerlink" href="#virtualscanner-server-rf-tx-sar-calc" title="Permalink to this headline">¶</a></h1>
+<p>Calculate Specific Absorption Rate (SAR) from a Pulseq sequence</p>
+<div class="section" id="module-virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main">
+<span id="sar-calc-main-py"></span><h2>SAR_calc_main.py<a class="headerlink" href="#module-virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>This script computes the global head and body Specific Absoprtion Rate (SAR) values based on the Visible HUman Male model</p></li>
+<li><p>This assumes an eight channel multi-transmit system with a scaled B1+</p></li>
+<li><p>IEC checks on SAR resulting from a given sequence file</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">param fname</dt>
+<dd class="field-odd"><p>Requires coms_server_flask to be running before the unit test is run (i.e.: run coms_server_flask.py first)</p>
+</dd>
+<dt class="field-even">type fname</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p><strong>payload</strong> –</p>
+<ul class="simple">
+<li><p>Contains the Q-matrix, GSAR head and body for now</p></li>
+<li><p>Will include local SAR based on discussions related to ongoing project</p></li>
+</ul>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARfromseq">
+<code class="sig-name descname">SARfromseq</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">Qtmf</em>, <em class="sig-param">Qhmf</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARfromseq" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition computes the global whole body and head only SAR values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<em>str</em>) – </p></li>
+<li><p><strong>Qtmf</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>Qhmf</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>SARwbg_vec</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SARhg_vec</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>t_vec</strong> (<em>numpy.ndarray</em>) – contains the Q-matrix, GSAR head and body for now</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARinterp">
+<code class="sig-name descname">SARinterp</code><span class="sig-paren">(</span><em class="sig-param">SAR</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARinterp" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition interpolates the SAR values for one second resolution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SAR</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>t</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>SARinterp</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>tsec</strong> (<em>numpy.ndarray</em>) – Interpolated values of SAR for a temporal resolution of 1 second</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARlimscheck">
+<code class="sig-name descname">SARlimscheck</code><span class="sig-paren">(</span><em class="sig-param">SARwbg_lim_s</em>, <em class="sig-param">SARhg_lim_s</em>, <em class="sig-param">tsec</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.SARlimscheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition checks for SAR violations as compared to IEC 10 second and 6 minute averages;
+it returns SAR values that are interpolated for the fixed IEC time intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SARwbg_lim_s</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>SARhg_lim_s</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>tsec</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>SAR_wbg_tensec</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_wbg_sixmin</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_hg_tensec</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_hg_sixmin</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_wbg_sixmin_peak</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_hg_sixmin_peak</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_wbg_tensec_peak</strong> (<em>numpy.ndarray</em>)</p></li>
+<li><p><strong>SAR_hg_tensec_peak</strong> (<em>numpy.ndarray</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.calc_SAR">
+<code class="sig-name descname">calc_SAR</code><span class="sig-paren">(</span><em class="sig-param">Q</em>, <em class="sig-param">I</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.calc_SAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition computes the SAR output for a given Q matrix and I current values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>I</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>SAR</strong> – contains the SAR value for a particular Q matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.do_sw_sar">
+<code class="sig-name descname">do_sw_sar</code><span class="sig-paren">(</span><em class="sig-param">SAR</em>, <em class="sig-param">tsec</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.do_sw_sar" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition computes a sliding window average of SAR values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SAR</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>tsec</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>t</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>SAR_timeavag</strong> – Sliding window time average of SAR values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.loadQ">
+<code class="sig-name descname">loadQ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.loadQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition loads the Q matrix that is precomputed based on the VHM model for 8 channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>Qtmf, Qhmf</strong> – Contains the Q-matrix, GSAR head and body for now</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.payload_process">
+<code class="sig-name descname">payload_process</code><span class="sig-paren">(</span><em class="sig-param">fname='rad2D.seq'</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main.payload_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition processes the seq file to compute Global SAR values for head and whole body over the specified time averages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em><em>, </em><em>optional</em>) – Default is rad2.seq</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>payload</strong> – SAR graph figure filename, peak SAR values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.rf.tx.SAR_calc.utest_SAR_calc">
+<span id="utest-sar-calc-py"></span><h2>utest_SAR_calc.py<a class="headerlink" href="#module-virtualscanner.server.rf.tx.SAR_calc.utest_SAR_calc" title="Permalink to this headline">¶</a></h2>
+<p>This script unit tests the SAR calculation</p>
+<dl class="field-list simple">
+<dt class="field-odd">param .seq</dt>
+<dd class="field-odd"><p>Default is ‘rad2D.seq’</p>
+</dd>
+<dt class="field-even">type .seq</dt>
+<dd class="field-even"><p>str, optional</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p><strong>status</strong> – 0: tests passed
+1: fail</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.rf.tx.SAR_calc</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main">SAR_calc_main.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.rf.tx.SAR_calc.utest_SAR_calc">utest_SAR_calc.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.rf.tx.html"
+                        title="previous chapter">virtualscanner.server.rf.tx</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.rf.rx.html"
+                        title="next chapter">virtualscanner.server.rf.rx</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.rf.tx.SAR_calc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.rx.html" title="virtualscanner.server.rf.rx"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.tx.html" title="virtualscanner.server.rf.tx"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.rf.html" >virtualscanner.server.rf</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="virtualscanner.server.rf.tx.html" >virtualscanner.server.rf.tx</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

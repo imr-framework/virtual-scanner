@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.recon.drunck &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server.registration" href="virtualscanner.server.registration.html" />
+    <link rel="prev" title="virtualscanner.server.recon" href="virtualscanner.server.recon.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.registration.html" title="virtualscanner.server.registration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.html" title="virtualscanner.server.recon"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.recon.html" accesskey="U">virtualscanner.server.recon</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-recon-drunck">
+<h1>virtualscanner.server.recon.drunck<a class="headerlink" href="#virtualscanner-server-recon-drunck" title="Permalink to this headline">¶</a></h1>
+<p>Deep learning Reconstruction of Undersampled Cartesian K-space (DRUNCK) is a convolutional neural network that reconstructs 4x undersampled Cartesian acquisitions.
+Front end integration coming soon!</p>
+<div class="section" id="module-virtualscanner.server.recon.drunck.nifti2npy">
+<span id="nifti2npy-py"></span><h2>nifti2npy.py<a class="headerlink" href="#module-virtualscanner.server.recon.drunck.nifti2npy" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.load_dataset_from_nifti">
+<code class="sig-name descname">load_dataset_from_nifti</code><span class="sig-paren">(</span><em class="sig-param">nifti_path: pathlib.Path</em>, <em class="sig-param">img_size: int = 128</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.load_dataset_from_nifti" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make dataset by reading NIFTI files from <cite>nifti_path</cite> and resizing each image to <cite>img_size</cite> x <cite>img_size</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nifti_path</strong> (<em>str</em>) – Path to folder containing NIFTI files.</p></li>
+<li><p><strong>img_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Desired size of images in dataset. Images read from NIFTI files will be resized. Default value is <cite>128</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dataset</strong> – ndarray of images converted from NIFTI files.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">nifti_path: pathlib.Path</em>, <em class="sig-param">img_size: int</em>, <em class="sig-param">low_freq_pc: float</em>, <em class="sig-param">save_path: pathlib.Path</em>, <em class="sig-param">reduction_factor: int</em>, <em class="sig-param">plot_flag: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.main" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li><p>Load NIFTI data as <cite>numpy.ndarray</cite> and resize each image to <cite>img_size</cite> x <cite>img_size</cite>.</p></li>
+<li><p>Undersample by <cite>skip_factor</cite> and add <cite>low_freq_pc</cite> low-frequency k-space values.</p></li>
+<li><p>Save files to disk.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nifti_path</strong> (<em>str</em>) – Path to folder containing NIFTI files.</p></li>
+<li><p><strong>img_size</strong> (<em>int</em>) – Desired size of images in dataset. Images read from NIFTI files will be resized.</p></li>
+<li><p><strong>low_freq_pc</strong> (<em>float</em>) – Percentage of low-frequency fully-sampled k-space values to add to undersampled k-space.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Path to save ndarray files.</p></li>
+<li><p><strong>reduction_factor</strong> (<em>int</em>) – Undersampling factor.</p></li>
+<li><p><strong>plot_flag</strong> (<em>bool</em><em>, </em><em>optional</em>) – Boolean flag to plot <cite>img_ind</cite> sample of dataset, undersampled dataset and corresponding k-space.
+Default value is <cite>True</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.normalise_dataset">
+<code class="sig-name descname">normalise_dataset</code><span class="sig-paren">(</span><em class="sig-param">dataset: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.normalise_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalised <cite>dataset</cite> to [0, 1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>numpy.ndarray</em>) – ndarray of dataset samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>normalised_dataset</strong> – ndarray of <cite>dataset</cite> normalised to [0, 1].</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">dataset: numpy.ndarray</em>, <em class="sig-param">ft_dataset: numpy.ndarray</em>, <em class="sig-param">dataset_undersampled: numpy.ndarray</em>, <em class="sig-param">ft_dataset_undersampled: numpy.ndarray</em>, <em class="sig-param">img_ind: int</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot fully-sampled and under-sampled data sample at <cite>img_ind</cite> position with corresponding k-space data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>numpy.ndarray</em>) – ndarray of dataset samples.</p></li>
+<li><p><strong>ft_dataset</strong> (<em>numpy.ndarray</em>) – ndarray of Fourier Transform of <cite>dataset</cite>.</p></li>
+<li><p><strong>dataset_undersampled</strong> (<em>numpy.ndarray</em>) – ndarray of undersampled <cite>dataset</cite>.</p></li>
+<li><p><strong>ft_dataset_undersampled</strong> (<em>numpy.ndarray</em>) – Fourier Transform of <cite>dataset_undersampled</cite>.</p></li>
+<li><p><strong>img_ind</strong> (<em>int</em>) – Index of data sample to plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.save2disk">
+<code class="sig-name descname">save2disk</code><span class="sig-paren">(</span><em class="sig-param">filename1: str</em>, <em class="sig-param">file1: numpy.ndarray</em>, <em class="sig-param">filename2: str</em>, <em class="sig-param">file2: numpy.ndarray</em>, <em class="sig-param">save_path: pathlib.Path</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.save2disk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save <cite>file1</cite> and <cite>file2</cite> to disk as <cite>filename1</cite> and <cite>filename2</cite> at <cite>save_path</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename1</strong> (<em>str</em>) – Filename of <cite>file1</cite>.</p></li>
+<li><p><strong>file1</strong> (<em>numpy.ndarray</em>) – ndarray to be saved to disk.</p></li>
+<li><p><strong>filename2</strong> (<em>str</em>) – Filename of <cite>file2</cite>.</p></li>
+<li><p><strong>file2</strong> (<em>numpy.ndarray</em>) – ndarray to be saved to disk.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Path to save ndarray files to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.nifti2npy.undersample">
+<code class="sig-name descname">undersample</code><span class="sig-paren">(</span><em class="sig-param">dataset: numpy.ndarray</em>, <em class="sig-param">low_freq_pc: float</em>, <em class="sig-param">reduction_factor: int) -&gt; (&lt;class 'numpy.ndarray'&gt;</em>, <em class="sig-param">&lt;class 'numpy.ndarray'&gt;</em>, <em class="sig-param">&lt;class 'numpy.ndarray'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.nifti2npy.undersample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undersample <cite>dataset</cite> as follows:
+1. Obtain <cite>ft_dataset</cite> - Fourier Transform of <cite>dataset</cite>
+2. Obtain <cite>ft_dataset_undersampled</cite> - undersample of <cite>ft_dataset</cite>
+3. Add <cite>low_freq_pc</cite> low-frequency k-space components from <cite>ft_dataset</cite> to <cite>ft_dataset_undersampled</cite>.
+4. Obtain <cite>dataset_undersampled</cite> - Inverse Fourier Transform of <cite>ft_dataset_undersampled</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>numpy.ndarray</em>) – ndarray of dataset samples.</p></li>
+<li><p><strong>low_freq_pc</strong> (<em>float</em>) – Percentage of low-frequency fully-sampled k-space values to add to undersampled k-space.</p></li>
+<li><p><strong>reduction_factor</strong> (<em>int</em>) – Undersampling factor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ft_dataset</strong> (<em>numpy.ndarray</em>) – ndarray of Fourier Transform of <cite>dataset</cite>.</p></li>
+<li><p><strong>dataset_undersampled</strong> (<em>numpy.ndarray</em>) – ndarray of undersampled <cite>dataset</cite>.</p></li>
+<li><p><strong>ft_dataset_undersampled</strong> (<em>numpy.ndarray</em>) – Fourier Transform of <cite>dataset_undersampled</cite>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.recon.drunck.reconstruct">
+<span id="reconstruct-py"></span><h2>reconstruct.py<a class="headerlink" href="#module-virtualscanner.server.recon.drunck.reconstruct" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.recon.drunck.reconstruct.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">img_path: str</em>, <em class="sig-param">img_type: str</em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#virtualscanner.server.recon.drunck.reconstruct.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform inference on pre-trained network, compute and display time to perform inference and plot results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> (<em>keras.models.Model</em>) – Path to load pre-trained Keras model.</p></li>
+<li><p><strong>test_data_path</strong> (<em>str</em>) – Path to folder containing input.npy and ground_truth.npy.</p></li>
+<li><p><strong>reduction_factor</strong> (<em>int</em>) – Undersampling factor of the dataset that the model was pre-trained on.</p></li>
+<li><p><strong>num_pred</strong> (<em>int</em>) – Number of test samples to perform inference on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output_image</strong> – ndarray containing <cite>num_pred</cite> number of reconstructed samples.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.recon.drunck.utest_reconstruct">
+<span id="utest-reconstruct-py"></span><h2>utest_reconstruct.py<a class="headerlink" href="#module-virtualscanner.server.recon.drunck.utest_reconstruct" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="virtualscanner.server.recon.drunck.utest_reconstruct.MyTestCase">
+<em class="property">class </em><code class="sig-name descname">MyTestCase</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.utest_reconstruct.MyTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="virtualscanner.server.recon.drunck.utest_reconstruct.MyTestCase.test_drunck_recon">
+<code class="sig-name descname">test_drunck_recon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.recon.drunck.utest_reconstruct.MyTestCase.test_drunck_recon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test DRUNCK reconstruction of a 256x256 undersampled image.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.recon.drunck</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.recon.drunck.nifti2npy">nifti2npy.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.recon.drunck.reconstruct">reconstruct.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.recon.drunck.utest_reconstruct">utest_reconstruct.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.recon.html"
+                        title="previous chapter">virtualscanner.server.recon</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.registration.html"
+                        title="next chapter">virtualscanner.server.registration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.recon.drunck.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.registration.html" title="virtualscanner.server.registration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.html" title="virtualscanner.server.recon"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.recon.html" >virtualscanner.server.recon</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

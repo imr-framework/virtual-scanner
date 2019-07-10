@@ -1,0 +1,1167 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.simulation.bloch &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.utils" href="virtualscanner.utils.html" />
+    <link rel="prev" title="virtualscanner.server.simulation" href="virtualscanner.server.simulation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.utils.html" title="virtualscanner.utils"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.simulation.html" title="virtualscanner.server.simulation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.simulation.html" accesskey="U">virtualscanner.server.simulation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-simulation-bloch">
+<h1>virtualscanner.server.simulation.bloch<a class="headerlink" href="#virtualscanner-server-simulation-bloch" title="Permalink to this headline">¶</a></h1>
+<p>Numerical MR signal simulation based on the Bloch equation</p>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.caller_script_blochsim">
+<span id="caller-script-blochsim-py"></span><h2>caller_script_blochsim.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.caller_script_blochsim" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.caller_script_blochsim.run_blochsim">
+<code class="sig-name descname">run_blochsim</code><span class="sig-paren">(</span><em class="sig-param">seqinfo</em>, <em class="sig-param">phtinfo</em>, <em class="sig-param">pat_id</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.caller_script_blochsim.run_blochsim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Caller function that runs Bloch simulation</p>
+<p>This function parses parameters for the requested simulation
+and then executes the main simulation script, pulseq_bloch_simulator.py,
+passing on the parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seqinfo</strong> (<em>dict</em>) – Acquire page payload</p></li>
+<li><p><strong>phtinfo</strong> (<em>dict</em>) – Register page payload</p></li>
+<li><p><strong>pat_id</strong> (<em>str</em>) – Patient ID of current session</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>num</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int=1</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.phantom">
+<span id="phantom-py"></span><h2>phantom.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.phantom" title="Permalink to this headline">¶</a></h2>
+<p>Numerical phantom generation and access</p>
+<dl class="class">
+<dt id="virtualscanner.server.simulation.bloch.phantom.BrainwebPhantom">
+<em class="property">class </em><code class="sig-name descname">BrainwebPhantom</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">dsf=1</em>, <em class="sig-param">make2d=False</em>, <em class="sig-param">loc=0</em>, <em class="sig-param">dir='z'</em>, <em class="sig-param">dBmap=0</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.BrainwebPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.Phantom" title="virtualscanner.server.simulation.bloch.phantom.Phantom"><code class="xref py py-class docutils literal notranslate"><span class="pre">virtualscanner.server.simulation.bloch.phantom.Phantom</span></code></a></p>
+<p>This phantom is in development.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="virtualscanner.server.simulation.bloch.phantom.DTTPhantom">
+<em class="property">class </em><code class="sig-name descname">DTTPhantom</code><span class="sig-paren">(</span><em class="sig-param">type_map</em>, <em class="sig-param">type_params</em>, <em class="sig-param">vsize</em>, <em class="sig-param">dBmap=0</em>, <em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.DTTPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.Phantom" title="virtualscanner.server.simulation.bloch.phantom.Phantom"><code class="xref py py-class docutils literal notranslate"><span class="pre">virtualscanner.server.simulation.bloch.phantom.Phantom</span></code></a></p>
+<p>Discrete tissue type phantom</p>
+<p>Phantom constructed from a finite set of tissue types and their parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_map</strong> (<em>numpy.ndarray</em>) – Matrix of integers that map to tissue types</p></li>
+<li><p><strong>type_params</strong> (<em>dict</em>) – Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)</p></li>
+<li><p><strong>vsize</strong> (<em>float</em>) – Voxel size in meters (isotropic)</p></li>
+<li><p><strong>dBmap</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Matrix of B0 magnetic field variation across phantom
+The default is 0 and means no variation</p></li>
+<li><p><strong>loc</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Overall location of phantom; default is (0,0,0)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom">
+<em class="property">class </em><code class="sig-name descname">Phantom</code><span class="sig-paren">(</span><em class="sig-param">T1map</em>, <em class="sig-param">T2map</em>, <em class="sig-param">PDmap</em>, <em class="sig-param">vsize</em>, <em class="sig-param">dBmap=0</em>, <em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generic numerical phantom for MRI simulations</p>
+<p>The phantom is mainly defined by three matrices of T1, T2, and PD values, respectively.
+At the moment, each index in the matrix corresponds to a single spin group.
+The overall physical size is determined by vsize; phantom voxels must be isotropic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T1map</strong> (<em>numpy.ndarray</em>) – Matrix of T1 values in seconds</p></li>
+<li><p><strong>T2map</strong> (<em>numpy.ndarray</em>) – Matrix of T2 values in seconds</p></li>
+<li><p><strong>PDmap</strong> (<em>numpy.ndarray</em>) – Matrix PD values between 0 and 1</p></li>
+<li><p><strong>vsize</strong> (<em>float</em>) – Voxel size in meters (isotropic)</p></li>
+<li><p><strong>dBmap</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Matrix of B0 magnetic field variation across phantom
+The default is 0 and means no variation</p></li>
+<li><p><strong>loc</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Overall location of phantom in meters; default is (0,0,0)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.fov">
+<code class="sig-name descname">fov</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>[fov_x, fov_y, fov_z]
+1 x 3 array of fields-of-view in x, y, and z directions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.Xs">
+<code class="sig-name descname">Xs</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.Xs" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D array of all x locations in phantom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.Ys">
+<code class="sig-name descname">Ys</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.Ys" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D array of all y locations in phantom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.Zs">
+<code class="sig-name descname">Zs</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.Zs" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D array of all z locations in phantom</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.get_list_inds">
+<code class="sig-name descname">get_list_inds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.get_list_inds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a flattened 1D array of all indices in phantom [(u1,v1,w1),…,(uk,vk,wk)]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>list_inds</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.get_list_locs">
+<code class="sig-name descname">get_list_locs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.get_list_locs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a flattened 1D array of all location vectors [(x1,y1,z1),…,(xk,yk,zk)]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>list_locs</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.get_location">
+<code class="sig-name descname">get_location</code><span class="sig-paren">(</span><em class="sig-param">indx</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.get_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns (x,y,z) physical location in meters at given indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>indx</strong> (<em>tuple</em><em> or </em><em>array_like</em>) – (ind1, ind2, ind3)
+Index for querying</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>x, y, z</strong> – physical location corresponding to index</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param">indx</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns PD, T1, and T2 at given indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>indx</strong> (<em>tuple</em>) – Index for querying</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>PD, T1, T2</strong> – Tissue parameters corresponding to the queried index</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.phantom.Phantom.get_shape">
+<code class="sig-name descname">get_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.Phantom.get_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the phantom’s matrix size</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>shape</strong> – The matrix size in three dimensions</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="virtualscanner.server.simulation.bloch.phantom.SpheresArrayPlanarPhantom">
+<em class="property">class </em><code class="sig-name descname">SpheresArrayPlanarPhantom</code><span class="sig-paren">(</span><em class="sig-param">centers</em>, <em class="sig-param">radii</em>, <em class="sig-param">type_params</em>, <em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">dir='z'</em>, <em class="sig-param">R=0</em>, <em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.SpheresArrayPlanarPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.DTTPhantom" title="virtualscanner.server.simulation.bloch.phantom.DTTPhantom"><code class="xref py py-class docutils literal notranslate"><span class="pre">virtualscanner.server.simulation.bloch.phantom.DTTPhantom</span></code></a></p>
+<p>2D phantom extracted from a cylinder containing spheres</p>
+<p>Regardless of dir, this will be an axial slice of a cylinder
+That is, the plane is constructed as a z-slice and then re-indexed to lie in the x or y plane
+The centers of spheres will correspond to locations before re-indexing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>centers</strong> (<em>list</em><em> or </em><em>array_like</em>) – List of 3D physical locations of the spheres’ centers</p></li>
+<li><p><strong>radii</strong> (<em>list</em><em> or </em><em>array_like</em>) – List of radii for the spheres</p></li>
+<li><p><strong>type_params</strong> (<em>dict</em>) – Dictionary that maps tissue type number to tissue type parameters (PD,T1,T2)</p></li>
+<li><p><strong>fov</strong> (<em>float</em>) – Field of view (isotropic)</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size</p></li>
+<li><p><strong>dir</strong> (<em>str</em><em>, </em><em>optional {'z'</em><em>,</em><em>'x'</em><em>,</em><em>'y'}</em>) – Orientation of plane; default is z</p></li>
+<li><p><strong>R</strong> (<em>float</em><em>, </em><em>optional</em>) – Cylinder’s cross-section radius; default is half of fov</p></li>
+<li><p><strong>loc</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Overall location (x,y,z) of phantom from isocenter in meters
+Default is (0,0,0)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.phantom.makeCylindricalPhantom">
+<code class="sig-name descname">makeCylindricalPhantom</code><span class="sig-paren">(</span><em class="sig-param">dim=2</em>, <em class="sig-param">n=16</em>, <em class="sig-param">dir='z'</em>, <em class="sig-param">loc=0</em>, <em class="sig-param">fov=0.24</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.makeCylindricalPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a cylindrical phantom with fixed geometry and T1, T2, PD but variable resolution and overall size</p>
+<p>The cylinder’s diameter is the same as its height; three layers of spheres represent T1, T2, and PD variation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<em>int</em><em>, </em><em>optional {2</em><em>,</em><em>3}</em>) – Dimension of phantom created</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of spin groups in each dimension; default is 16</p></li>
+<li><p><strong>dir</strong> (<em>str</em><em>, </em><em>optional {'z'</em><em>, </em><em>'x'</em><em>, </em><em>'y'}</em>) – Direction (norm) of plane in the case of 2D phantom</p></li>
+<li><p><strong>loc</strong> (<em>float</em><em>, </em><em>optional</em>) – Location of plane relative to isocenter; default is 0</p></li>
+<li><p><strong>fov</strong> (<em>float</em><em>, </em><em>optional</em>) – Physical length for both diameter and height of cylinder</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>phantom</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.DTTPhantom" title="virtualscanner.server.simulation.bloch.phantom.DTTPhantom">DTTPhantom</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.phantom.makePlanarPhantom">
+<code class="sig-name descname">makePlanarPhantom</code><span class="sig-paren">(</span><em class="sig-param">n</em>, <em class="sig-param">fov</em>, <em class="sig-param">T1s</em>, <em class="sig-param">T2s</em>, <em class="sig-param">PDs</em>, <em class="sig-param">radii</em>, <em class="sig-param">dir='z'</em>, <em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.makePlanarPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a circular 2D phantom with concentric layers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size of phantom (isotropic)</p></li>
+<li><p><strong>fov</strong> (<em>float</em>) – Field of view of phantom (isotropic)</p></li>
+<li><p><strong>T1s</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of T1s in seconds for the layers, going outward</p></li>
+<li><p><strong>T2s</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of T2s in seconds for the layers, going outward</p></li>
+<li><p><strong>PDs</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of PDs between 0 and 1 for the layers, going outward</p></li>
+<li><p><strong>radii</strong> (<em>numpy.ndarray</em>) – List of radii that define the layers
+Note that the radii are expected to go from smallest to largest
+If not, they will be sorted first without sorting the parameters</p></li>
+<li><p><strong>dir</strong> (<em>str</em><em>, </em><em>optional {'z'</em><em>,</em><em>'x'</em><em>,</em><em>'y'}</em>) – Orientation of the plane; default is z, axial</p></li>
+<li><p><strong>loc</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Overall (x,y,z) location of phantom; default is (0,0,0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>phantom</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.DTTPhantom" title="virtualscanner.server.simulation.bloch.phantom.DTTPhantom">DTTPhantom</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.phantom.makeSphericalPhantom">
+<code class="sig-name descname">makeSphericalPhantom</code><span class="sig-paren">(</span><em class="sig-param">n</em>, <em class="sig-param">fov</em>, <em class="sig-param">T1s</em>, <em class="sig-param">T2s</em>, <em class="sig-param">PDs</em>, <em class="sig-param">radii</em>, <em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.phantom.makeSphericalPhantom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a spherical phantom with concentric layers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size of phantom (isotropic)</p></li>
+<li><p><strong>fov</strong> (<em>float</em>) – Field of view of phantom (isotropic)</p></li>
+<li><p><strong>T1s</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of T1s in seconds for the layers, going outward</p></li>
+<li><p><strong>T2s</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of T2s in seconds for the layers, going outward</p></li>
+<li><p><strong>PDs</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em>) – List of PDs between 0 and 1 for the layers, going outward</p></li>
+<li><p><strong>radii</strong> (<em>numpy.ndarray</em>) – List of radii that define the layers
+Note that the radii are expected to go from smallest to largest
+If not, they will be sorted first without sorting the parameters</p></li>
+<li><p><strong>loc</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Overall (x,y,z) location of phantom; default is (0,0,0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>phantom</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.DTTPhantom" title="virtualscanner.server.simulation.bloch.phantom.DTTPhantom">DTTPhantom</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.pulseq_bloch_simulator">
+<span id="pulseq-bloch-simulator-py"></span><h2>pulseq_bloch_simulator.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.pulseq_bloch_simulator" title="Permalink to this headline">¶</a></h2>
+<p>Main Bloch simulation script</p>
+<p>This script is called by run_blochsim() with command line arguments to execute a particular simulation request,
+including the construction of a phantom, a pulseq sequence, parallel simulation, reconstruction, and data &amp; image output</p>
+<p class="rubric">Notes</p>
+<p>See beginning of the main section for explanations of the command line arguments (line 41-71)</p>
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.pulseq_blochsim_methods">
+<span id="pulseq-blochsim-methods-py"></span><h2>pulseq_blochsim_methods.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.pulseq_blochsim_methods" title="Permalink to this headline">¶</a></h2>
+<p>Methods to help Bloch simulation from pulseq objects</p>
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.apply_pulseq_commands">
+<code class="sig-name descname">apply_pulseq_commands</code><span class="sig-paren">(</span><em class="sig-param">isc</em>, <em class="sig-param">seq_info</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.apply_pulseq_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imposes sequence commands on a single spin group</p>
+<p>This is the key simulation function that goes through the commands and applies each to the spin group</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isc</strong> (<a class="reference internal" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup" title="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup"><em>SpinGroup</em></a>) – The affected spin group</p></li>
+<li><p><strong>seq_info</strong> (<em>dict</em>) – Commands generated by store_pulseq_commands() from a pulseq object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.apply_pulseq_old">
+<code class="sig-name descname">apply_pulseq_old</code><span class="sig-paren">(</span><em class="sig-param">isc</em>, <em class="sig-param">seq</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.apply_pulseq_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated function for applying a seq on a spin group and retrieving the signal</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.combine_gradient_areas">
+<code class="sig-name descname">combine_gradient_areas</code><span class="sig-paren">(</span><em class="sig-param">blk</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.combine_gradient_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that combines gradient areas in a pulseq block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>blk</strong> (<em>dict</em>) – Pulseq block obtained from seq.get_block()</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>grad_areas</strong> – [Gx_area, Gy_area, Gz_area]
+Gradient areas converted into units of seconds*Tesla/meter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.combine_gradients">
+<code class="sig-name descname">combine_gradients</code><span class="sig-paren">(</span><em class="sig-param">blk</em>, <em class="sig-param">dt=0</em>, <em class="sig-param">timing=()</em>, <em class="sig-param">delay=0</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.combine_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that merges multiple gradients into a format for simulation</p>
+<p>Interpolate x, y, and z gradients starting from time 0
+at dt intervals, for as long as the longest gradient lasts
+and combine them into a 3 x N array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blk</strong> (<em>dict</em>) – Pulseq block obtained from seq.get_block()</p></li>
+<li><p><strong>dt</strong> (<em>float</em><em>, </em><em>optional</em>) – Raster time used in interpolating gradients, in seconds
+Default is 0 - in this case, timing is supposed to be inputted</p></li>
+<li><p><strong>timing</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Time points at which gradients are interpolated, in seconds
+Default is () - in this case, dt is supposed to be inputted</p></li>
+<li><p><strong>delay</strong> (<em>float</em><em>, </em><em>optional</em>) – Adds an additional time interval in seconds at the beginning of the interpolation
+Default is 0; when nonzero it is only used in ADC sampling to realize ADC delay</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>grad</strong> (<em>numpy.ndarray</em>) – Gradient shape in Tesla/meter</p></li>
+<li><p><strong>grad_timing</strong> (<em>numpy.ndarray</em>) – Gradient timing in seconds</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – Duration of input block in seconds</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Only input one argument between dt and timing and not the other</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.find_precessing_time">
+<code class="sig-name descname">find_precessing_time</code><span class="sig-paren">(</span><em class="sig-param">blk</em>, <em class="sig-param">dt</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.find_precessing_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that finds and returns longest duration among Gx, Gy, and Gz for use in SpinGroup.fpwg()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blk</strong> (<em>dict</em>) – Pulseq Block obtained from seq.get_block()</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Gradient raster time for calculating duration of only arbitrary gradients (‘grad’ instead of ‘trap’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>max_time</strong> – Maximum gradient time, in seconds, among the three gradients Gx, Gy, and Gz</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.get_dB0_map">
+<code class="sig-name descname">get_dB0_map</code><span class="sig-paren">(</span><em class="sig-param">maptype=0</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.get_dB0_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a predefined B0 map for simulating effects of B0 inhomogeneity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maptype</strong> (<em>int</em>) – Index for retrieving a map.
+1 - linear map (center out)
+2 - quadratic map (center out)
+Others - uniform map</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dB0_map</strong> – This function takes location (x,y,z) as a single parameter and returns delta B0 in Tesla</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.sim_single_spingroup">
+<code class="sig-name descname">sim_single_spingroup</code><span class="sig-paren">(</span><em class="sig-param">loc_ind</em>, <em class="sig-param">freq_offset</em>, <em class="sig-param">phantom</em>, <em class="sig-param">seq_info</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.sim_single_spingroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for applying a seq on a spin group and retrieving the signal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loc_ind</strong> (<em>tuple</em>) – Index in phantom of the specific spin group</p></li>
+<li><p><strong>freq_offset</strong> (<em>float</em>) – Off-resonance in Hertz</p></li>
+<li><p><strong>phantom</strong> (<a class="reference internal" href="#virtualscanner.server.simulation.bloch.phantom.Phantom" title="virtualscanner.server.simulation.bloch.phantom.Phantom"><em>Phantom</em></a>) – Phantom where spin group is located</p></li>
+<li><p><strong>seq_info</strong> (<em>dict</em>) – Commands generated by store_pulseq_commands() from a pulseq object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>signal</strong> – Complex signal consisting of all readouts stored in the SpinGroup object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.sim_single_spingroup_old">
+<code class="sig-name descname">sim_single_spingroup_old</code><span class="sig-paren">(</span><em class="sig-param">loc_ind</em>, <em class="sig-param">freq_offset</em>, <em class="sig-param">phantom</em>, <em class="sig-param">seq</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.sim_single_spingroup_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated function for applying a seq on a spin group and retrieving the signal</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.store_pulseq_commands">
+<code class="sig-name descname">store_pulseq_commands</code><span class="sig-paren">(</span><em class="sig-param">seq</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_blochsim_methods.store_pulseq_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts seq file into set of commands for more efficient simulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seq</strong> (<em>Sequence</em>) – Pulseq object to parse from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq_info</strong> – Pulseq commands used by apply_pulseq_commands()</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.pulseq_library">
+<span id="pulseq-library-py"></span><h2>pulseq_library.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.pulseq_library" title="Permalink to this headline">¶</a></h2>
+<p>Library for generating pulseq sequences: GRE, SE, IRSE, EPI</p>
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.combine_trap_grad_xyz">
+<code class="sig-name descname">combine_trap_grad_xyz</code><span class="sig-paren">(</span><em class="sig-param">gradients</em>, <em class="sig-param">system</em>, <em class="sig-param">dur</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.combine_trap_grad_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that merges multiple gradients</p>
+<p>A list of gradients are combined into one set of 3 oblique gradients (Gx, Gy, Gz) with equivalent areas
+Note that the waveforms are not preserved : the outputs will always be trapezoidal gradients</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gradients</strong> (<em>list</em>) – List of gradients to be combined; there can be any number of x, y, or z gradients</p></li>
+<li><p><strong>system</strong> (<em>Opts</em>) – Pulseq object that indicates system constraints for gradient parameters</p></li>
+<li><p><strong>dur</strong> (<em>float</em>) – Duration of the output oblique gradients</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>gtx, gty, gtz</strong> – Oblique pulseq gradients with equivalent areas to all input gradients combined</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Gradient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_oblique_gradients">
+<code class="sig-name descname">make_oblique_gradients</code><span class="sig-paren">(</span><em class="sig-param">gradient</em>, <em class="sig-param">unit_grad</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_oblique_gradients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to make oblique gradients</p>
+<p>(Gx, Gy, Gz) are generated from a single orthogonal gradient
+and a direction indicated by unit vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gradient</strong> (<em>Gradient</em>) – Pulseq gradient object</p></li>
+<li><p><strong>unit_grad</strong> (<em>array_like</em>) – Length-3 unit vector indicating direction of resulting oblique gradient</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ngx, ngy, ngz</strong> – Oblique gradients in x, y, and z directions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Gradient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_epi_oblique">
+<code class="sig-name descname">make_pulseq_epi_oblique</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">echo_type='se'</em>, <em class="sig-param">n_shots=1</em>, <em class="sig-param">seg_type='blocked'</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_epi_oblique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes an Echo Planar Imaging (EPI) sequence in any plane</p>
+<p>2D oblique multi-slice EPI pulse sequence with Cartesian encoding
+Oblique means that each of slice-selection, phase encoding, and frequency encoding
+can point in any specified direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>array_like</em>) – Isotropic field-of-view, or length-2 list [fov_readout, fov_phase], in meters</p></li>
+<li><p><strong>n</strong> (<em>array_like</em>) – Isotropic matrix size, or length-2 list [n_readout, n_phase]</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em> or </em><em>array_like</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+- Use str with any permutation of x, y, and z to obtain orthogonal slices
+e.g. The default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y
+- Use list to indicate vectors in the encoding directions for oblique slices
+They should be perpendicular to each other, but not necessarily unit vectors
+e.g. [(2,1,0),(-1,2,0),(0,0,1)] rotates the two in-plane encoding directions for an axial slice</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>echo_type</strong> (<em>str</em><em>, </em><em>optional {'se'</em><em>,</em><em>'gre'}</em>) – Type of echo generated
+se (default) - spin echo (an 180 deg pulse is used)
+gre - gradient echo</p></li>
+<li><p><strong>n_shots</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of shots used to encode each slicel; default is 1</p></li>
+<li><p><strong>seg_type</strong> (<em>str</em><em>, </em><em>optional {'blocked'</em><em>,</em><em>'interleaved'}</em>) – Method to divide up k-space in the case of n_shots &gt; 1; default is ‘blocked’
+‘blocked’ - each shot covers a rectangle, with no overlap between shots
+‘interleaved’ - each shot samples the full k-space but with wider phase steps</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>seq</strong> (<em>Sequence</em>) – Pulse sequence as a Pulseq object</p></li>
+<li><p><strong>ro_dirs</strong> (<em>numpy.ndarray</em>) – List of 0s and 1s indicating direction of readout
+0 - left to right
+1 - right to left (needs to be reversed at recon)</p></li>
+<li><p><strong>ro_order</strong> (<em>numpy.ndarray</em>) – Order in which to re-arrange the readout lines
+It is [] for blocked acquisition (retain original order)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_gre">
+<code class="sig-name descname">make_pulseq_gre</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_gre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a gradient-echo sequence</p>
+<p>2D orthogonal multi-slice gradient-echo pulse sequence with Cartesian encoding
+Orthogonal means that each of slice-selection, phase encoding, and frequency encoding
+aligns with the x, y, or z directions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>float</em>) – Field-of-view in meters (isotropic)</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size (isotropic)</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+Default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_gre_oblique">
+<code class="sig-name descname">make_pulseq_gre_oblique</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_gre_oblique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a gradient-echo sequence in any plane</p>
+<p>2D oblique multi-slice gradient-echo pulse sequence with Cartesian encoding
+Oblique means that each of slice-selection, phase encoding, and frequency encoding
+can point in any specified direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>array_like</em>) – Isotropic field-of-view, or length-2 list [fov_readout, fov_phase], in meters</p></li>
+<li><p><strong>n</strong> (<em>array_like</em>) – Isotropic matrix size, or length-2 list [n_readout, n_phase]</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em> or </em><em>array_like</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+- Use str with any permutation of x, y, and z to obtain orthogonal slices
+e.g. The default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y
+- Use list to indicate vectors in the encoding directions for oblique slices
+They should be perpendicular to each other, but not necessarily unit vectors
+e.g. [(2,1,0),(-1,2,0),(0,0,1)] rotates the two in-plane encoding directions for an axial slice</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_irse">
+<code class="sig-name descname">make_pulseq_irse</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">ti</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_irse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes an Inversion Recovery Spin Echo (IRSE) sequence</p>
+<p>2D orthogonal multi-slice IRSE pulse sequence with Cartesian encoding
+Orthogonal means that each of slice-selection, phase encoding, and frequency encoding
+aligns with the x, y, or z directions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>float</em>) – Field-of-view in meters (isotropic)</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size (isotropic)</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>ti</strong> (<em>float</em>) – Inversion time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+Default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_irse_oblique">
+<code class="sig-name descname">make_pulseq_irse_oblique</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">ti</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_irse_oblique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes an Inversion Recovery Spin Echo (IRSE) sequence in any plane</p>
+<p>2D oblique multi-slice IRSE pulse sequence with Cartesian encoding
+Oblique means that each of slice-selection, phase encoding, and frequency encoding
+can point in any specified direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>array_like</em>) – Isotropic field-of-view, or length-2 list [fov_readout, fov_phase], in meters</p></li>
+<li><p><strong>n</strong> (<em>array_like</em>) – Isotropic matrix size, or length-2 list [n_readout, n_phase]</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>ti</strong> (<em>float</em>) – Inversion time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em> or </em><em>array_like</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+- Use str with any permutation of x, y, and z to obtain orthogonal slices
+e.g. The default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y
+- Use list to indicate vectors in the encoding directions for oblique slices
+They should be perpendicular to each other, but not necessarily unit vectors
+e.g. [(2,1,0),(-1,2,0),(0,0,1)] rotates the two in-plane encoding directions for an axial slice</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_se">
+<code class="sig-name descname">make_pulseq_se</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_se" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a Spin Echo (SE) sequence</p>
+<p>2D orthogonal multi-slice Spin-Echo pulse sequence with Cartesian encoding
+Orthogonal means that each of slice-selection, phase encoding, and frequency encoding
+aligns with the x, y, or z directions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>float</em>) – Field-of-view in meters (isotropic)</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Matrix size (isotropic)</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+Default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_se_oblique">
+<code class="sig-name descname">make_pulseq_se_oblique</code><span class="sig-paren">(</span><em class="sig-param">fov</em>, <em class="sig-param">n</em>, <em class="sig-param">thk</em>, <em class="sig-param">fa</em>, <em class="sig-param">tr</em>, <em class="sig-param">te</em>, <em class="sig-param">enc='xyz'</em>, <em class="sig-param">slice_locs=None</em>, <em class="sig-param">write=False</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.make_pulseq_se_oblique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a Spin Echo (SE) sequence in any plane</p>
+<p>2D oblique multi-slice Spin-Echo pulse sequence with Cartesian encoding
+Oblique means that each of slice-selection, phase encoding, and frequency encoding
+can point in any specified direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov</strong> (<em>array_like</em>) – Isotropic field-of-view, or length-2 list [fov_readout, fov_phase], in meters</p></li>
+<li><p><strong>n</strong> (<em>array_like</em>) – Isotropic matrix size, or length-2 list [n_readout, n_phase]</p></li>
+<li><p><strong>thk</strong> (<em>float</em>) – Slice thickness in meters</p></li>
+<li><p><strong>fa</strong> (<em>float</em>) – Flip angle in degrees</p></li>
+<li><p><strong>tr</strong> (<em>float</em>) – Repetition time in seconds</p></li>
+<li><p><strong>te</strong> (<em>float</em>) – Echo time in seconds</p></li>
+<li><p><strong>enc</strong> (<em>str</em><em> or </em><em>array_like</em><em>, </em><em>optional</em>) – Spatial encoding directions
+1st - readout; 2nd - phase encoding; 3rd - slice select
+- Use str with any permutation of x, y, and z to obtain orthogonal slices
+e.g. The default ‘xyz’ means axial(z) slice with readout in x and phase encoding in y
+- Use list to indicate vectors in the encoding directions for oblique slices
+They should be perpendicular to each other, but not necessarily unit vectors
+e.g. [(2,1,0),(-1,2,0),(0,0,1)] rotates the two in-plane encoding directions for an axial slice</p></li>
+<li><p><strong>slice_locs</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Slice locations from isocenter in meters
+Default is None which means a single slice at the center</p></li>
+<li><p><strong>write</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write seq into file; default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>seq</strong> – Pulse sequence as a Pulseq object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.modify_gradient">
+<code class="sig-name descname">modify_gradient</code><span class="sig-paren">(</span><em class="sig-param">gradient</em>, <em class="sig-param">scale</em>, <em class="sig-param">channel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.modify_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to modify the strength and channel of an existing gradient</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gradient</strong> (<em>Gradient</em>) – Pulseq gradient object to be modified</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Scalar to multiply the gradient strength by</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional {None</em><em>, </em><em>'x'</em><em>,</em><em>'y'</em><em>,</em><em>'z'}</em>) – Channel to switch gradient into
+Default is None which keeps the original channel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.pulseq_library.parse_enc">
+<code class="sig-name descname">parse_enc</code><span class="sig-paren">(</span><em class="sig-param">enc</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.pulseq_library.parse_enc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function for decoding enc parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>enc</strong> (<em>str</em><em> or </em><em>array_like</em>) – Inputted encoding scheme to parse</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ug_fe</strong> (<em>numpy.ndarray</em>) – Length-3 vector of readout direction</p></li>
+<li><p><strong>ug_pe</strong> (<em>numpy.ndarray</em>) – Length-3 vector of phase encoding direction</p></li>
+<li><p><strong>ug_ss</strong> (<em>numpy.ndarray</em>) – Length-3 vector of slice selecting direction</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.spingroup_ps">
+<span id="spingroup-ps-py"></span><h2>spingroup_ps.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.spingroup_ps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup">
+<em class="property">class </em><code class="sig-name descname">SpinGroup</code><span class="sig-paren">(</span><em class="sig-param">loc=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">pdt1t2=(1</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">df=0</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Basic magnetization unit for Bloch simulation</p>
+<p>A SpinGroup has a defined location, relaxation times, proton density, and off-resonance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loc</strong> (<em>tuple，optional</em>) – (x,y,z)
+Location from isocenter in meters; default is (0,0,0)</p></li>
+<li><p><strong>pdt1t2</strong> (<em>tuple</em><em>, </em><em>optional</em>) – (PD,T1,T2)
+Proton density between 0 and 1
+T1, T2 in seconds; if zero it signifies no relaxation
+Default is PD = 1 and T1, T2 = 0</p></li>
+<li><p><strong>df</strong> (<em>float</em><em>, </em><em>optional</em>) – Off-resonance in Hertz; default is 0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.m">
+<code class="sig-name descname">m</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.m" title="Permalink to this definition">¶</a></dt>
+<dd><p>[[Mx],[My],[Mz]]
+3 x 1 array of magnetization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.PD">
+<code class="sig-name descname">PD</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.PD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proton density between 0 and 1 that scales the signal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.T1">
+<code class="sig-name descname">T1</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.T1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Longitudinal relaxation time in seconds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.T2">
+<code class="sig-name descname">T2</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.T2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transverse relaxation time in seconds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.loc">
+<code class="sig-name descname">loc</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.loc" title="Permalink to this definition">¶</a></dt>
+<dd><p>(x,y,z)
+Location of spin group from isocenter in meters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.df">
+<code class="sig-name descname">df</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Off-resonance in Hertz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.signal">
+<code class="sig-name descname">signal</code><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complex signal produced from this spin group; only generated by self.readout()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.apply_rf">
+<code class="sig-name descname">apply_rf</code><span class="sig-paren">(</span><em class="sig-param">pulse_shape</em>, <em class="sig-param">grads_shape</em>, <em class="sig-param">dt</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.apply_rf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies an RF pulse</p>
+<p>Euler’s method numerical integration of Bloch equation
+with both B1(RF) field and gradient field</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pulse_shape</strong> – 1 x n complex array (B1)[tesla]</p></li>
+<li><p><strong>grads_shape</strong> – 3 x n real array  [tesla/meter]</p></li>
+<li><p><strong>dt</strong> – raster time for both shapes [seconds]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.delay">
+<code class="sig-name descname">delay</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies a time passage to the spin group</p>
+<p>The spin group free-precesses with only T1, T2 effects (no RF, no gradients).
+This function changes self.m and has no output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Delay interval in seconds</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.fpwg">
+<code class="sig-name descname">fpwg</code><span class="sig-paren">(</span><em class="sig-param">grad_area</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.fpwg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply only gradients to the spin group</p>
+<p>The spin group precesses with gradients applied.
+This function changes self.m and has no output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grad_area</strong> (<em>numpy.ndarray</em>) – [Gx_area, Gy_area, Gz_area]
+Total area under Gx, Gy, and Gz in seconds*Tesla/meter</p></li>
+<li><p><strong>t</strong> (<em>float</em>) – Total time of precession in seconds</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.get_m_signal">
+<code class="sig-name descname">get_m_signal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.get_m_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets spin group’s transverse magnetization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>m_signal</strong> – Single complex number representing transverse magnetization
+Real part      = Mx
+Imaginary part = My</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.readout">
+<code class="sig-name descname">readout</code><span class="sig-paren">(</span><em class="sig-param">dwell</em>, <em class="sig-param">n</em>, <em class="sig-param">delay</em>, <em class="sig-param">grad</em>, <em class="sig-param">timing</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.SpinGroup.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>ADC sampling for single spin group</p>
+<p>Samples spin group’s magnetization while playing an arbitrary gradient
+This data is then stored in self.signal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dwell</strong> (<em>float</em>) – Constant sampling interval in seconds</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of samples</p></li>
+<li><p><strong>delay</strong> (<em>float</em>) – Delay of the first point sampled relative to beginning of gradient waveform</p></li>
+<li><p><strong>grad</strong> (<em>numpy.ndarray</em>) – 2D array with shape 3 x m (i.e. m samples of the 3D gradient (Gx, Gy, Gz))
+Arbitrary gradient waveform in Tesla/meter</p></li>
+<li><p><strong>timing</strong> (<em>numpy.ndarray</em>) – 1D array with length m
+Timing of gradient waveform</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.simulation.bloch.spingroup_ps.anyrot">
+<code class="sig-name descname">anyrot</code><span class="sig-paren">(</span><em class="sig-param">v</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.simulation.bloch.spingroup_ps.anyrot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method that generates rotational matrix from Rodrigues’s formula</p>
+<p>Rodrigue’s formula gives a 3 x 3 matrix for arbitrary rotational axis and angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>tuple</em>) – (vx, vy, vz)
+3D angular rotation vector in Cartesian space
+whose direction is the rotational axis and whose length the angle rotated in radians</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>R</strong> – 3 x 3 rotational matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq">
+<span id="utest-bloch-pulseq-py"></span><h2>utest_bloch_pulseq.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq" title="Permalink to this headline">¶</a></h2>
+<p>Unit test for bloch simulation on GRE, SE, and IRSE sequences (2D Cartesian, line-by-line, rectangular trajectory)
+Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.</p>
+</div>
+<div class="section" id="module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq_epi">
+<span id="utest-bloch-pulseq-epi-py"></span><h2>utest_bloch_pulseq_epi.py<a class="headerlink" href="#module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq_epi" title="Permalink to this headline">¶</a></h2>
+<p>Unit test for bloch simulation on pulseq EPI sequence (2D Cartesian, rectangular trajectory)
+Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.simulation.bloch</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.caller_script_blochsim">caller_script_blochsim.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.phantom">phantom.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.pulseq_bloch_simulator">pulseq_bloch_simulator.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.pulseq_blochsim_methods">pulseq_blochsim_methods.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.pulseq_library">pulseq_library.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.spingroup_ps">spingroup_ps.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq">utest_bloch_pulseq.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.simulation.bloch.utest_bloch_pulseq_epi">utest_bloch_pulseq_epi.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.simulation.html"
+                        title="previous chapter">virtualscanner.server.simulation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.utils.html"
+                        title="next chapter">virtualscanner.utils</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.simulation.bloch.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.utils.html" title="virtualscanner.utils"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.simulation.html" title="virtualscanner.server.simulation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.simulation.html" >virtualscanner.server.simulation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

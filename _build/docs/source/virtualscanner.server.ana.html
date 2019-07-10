@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.ana &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server.recon" href="virtualscanner.server.recon.html" />
+    <link rel="prev" title="virtualscanner.server" href="virtualscanner.server.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.html" title="virtualscanner.server.recon"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.html" title="virtualscanner.server"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" accesskey="U">virtualscanner.server</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-ana">
+<h1>virtualscanner.server.ana<a class="headerlink" href="#virtualscanner-server-ana" title="Permalink to this headline">¶</a></h1>
+<p>Analyze page: run T1 and T2 mapping and ROI analysis</p>
+<div class="section" id="module-virtualscanner.server.ana.ROI_analysis">
+<span id="roi-analysis-py"></span><h2>ROI_analysis.py<a class="headerlink" href="#module-virtualscanner.server.ana.ROI_analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.ana.ROI_analysis.circle_analysis">
+<code class="sig-name descname">circle_analysis</code><span class="sig-paren">(</span><em class="sig-param">circles</em>, <em class="sig-param">map_size</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.ROI_analysis.circle_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return locations of pixels inside a circle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circles</strong> (<em>numpy.ndarray</em>) – 1x3 matrix (center_x, center_y, radius)</p></li>
+<li><p><strong>map_size</strong> (<em>int</em>) – size of parameter map, for example, 256 means the size of map is 256x256</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sphere_map</strong> – Binary map where pixels inside the circle is true and outside of the circle is false</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.ana.ROI_analysis.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">dicom_map_path: str</em>, <em class="sig-param">map_type: str</em>, <em class="sig-param">map_size: str</em>, <em class="sig-param">fov: str</em>, <em class="sig-param">pat_id: str</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.ROI_analysis.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return ROI analysis of a ISMRM/NIST phantom, all 14 spheres are detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dicom_map_path</strong> (<em>path</em>) – Path of folder where dicom files reside</p></li>
+<li><p><strong>map_type</strong> (<em>str</em>) – Type of map (T1 or T2)</p></li>
+<li><p><strong>map_size</strong> (<em>str</em>) – Size of map, for example, 128 means the size of map is 128x128</p></li>
+<li><p><strong>fov</strong> (<em>str</em>) – Field of view used in experiments</p></li>
+<li><p><strong>pat_id</strong> (<em>str</em>) – Primary key in REGISTRATION table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>centers</strong> (<em>numpy.ndarray</em>) – Centers and radii for all spheres in sphere number order</p></li>
+<li><p><strong>sphere_mean</strong> (<em>numpy.ndarray</em>) – Mean values for all spheres in sphere number order</p></li>
+<li><p><strong>sphere_std</strong> (<em>numpy.ndarray</em>) – Std for all spheres in sphere number order</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.ana.T1_mapping">
+<span id="t1-mapping-py"></span><h2>T1_mapping.py<a class="headerlink" href="#module-virtualscanner.server.ana.T1_mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.ana.T1_mapping.T1_sig_eq">
+<code class="sig-name descname">T1_sig_eq</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">a</em>, <em class="sig-param">b</em>, <em class="sig-param">c</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.T1_mapping.T1_sig_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an exponential function for curve fitting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>float</em>) – Independent variable</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+<li><p><strong>c</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Exponential function used for T1 curve fitting</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.ana.T1_mapping.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">dicom_file_path: str</em>, <em class="sig-param">TR: str</em>, <em class="sig-param">TE: str</em>, <em class="sig-param">TI: str</em>, <em class="sig-param">pat_id: str</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.T1_mapping.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Curve fitting a series of IRSE images with respect to variable TI values to generate a T1 map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dicom_file_path</strong> (<em>path</em>) – Path of folder where dicom files reside</p></li>
+<li><p><strong>TR</strong> (<em>str</em>) – TR value used in IRSE experiments (unit in milliseconds, should be constant)</p></li>
+<li><p><strong>TI</strong> (<em>str</em>) – TI values used in IRSE experiments (unit in milliseconds)</p></li>
+<li><p><strong>TE</strong> (<em>str</em>) – TE value used in IRSE experiments (unit in milliseconds, should be constant)</p></li>
+<li><p><strong>pat_id</strong> (<em>str</em>) – Primary key in REGISTRATION table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>png_map_name</strong> (<em>str</em>) – file name of T1_map in png format</p></li>
+<li><p><strong>dicom_map_path</strong> (<em>str</em>) – path of T1_map in dicom format</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.ana.T2_mapping">
+<span id="t2-mapping-py"></span><h2>T2_mapping.py<a class="headerlink" href="#module-virtualscanner.server.ana.T2_mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.ana.T2_mapping.T2_sig_eq">
+<code class="sig-name descname">T2_sig_eq</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">a</em>, <em class="sig-param">b</em>, <em class="sig-param">c</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.T2_mapping.T2_sig_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an exponential function for curve fitting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>float</em>) – Independent variable</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+<li><p><strong>c</strong> (<em>float</em>) – Curve fitting parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Exponential function used for T2 curve fitting</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.ana.T2_mapping.main">
+<code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">dicom_file_path: str</em>, <em class="sig-param">TR: str</em>, <em class="sig-param">TE: str</em>, <em class="sig-param">pat_id: str</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.T2_mapping.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Curve fitting a series of SE images with respect to variable TE values to generate a T2 map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dicom_file_path</strong> (<em>path</em>) – Path of folder where dicom files reside</p></li>
+<li><p><strong>TR</strong> (<em>str</em>) – TR value used in SE experiments (unit in milliseconds, should be constant)</p></li>
+<li><p><strong>TE</strong> (<em>str</em>) – TE value used in SE experiments (unit in milliseconds)</p></li>
+<li><p><strong>pat_id</strong> (<em>str</em>) – primary key in REGISTRATION table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>png_map_name</strong> (<em>str</em>) – File name of T2 map in png format</p></li>
+<li><p><strong>dicom_map_path</strong> (<em>str</em>) – Path of T2 map in dicom format</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.ana.utest_ROI_analysis_T1_T2">
+<span id="utest-roi-analysis-t1-t2-py"></span><h2>utest_ROI_analysis_T1_T2.py<a class="headerlink" href="#module-virtualscanner.server.ana.utest_ROI_analysis_T1_T2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase">
+<em class="property">class </em><code class="sig-name descname">MyTestCase</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase.test_T1_ROI_analysis">
+<code class="sig-name descname">test_T1_ROI_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase.test_T1_ROI_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test ROI analysis of T1 map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase.test_T2_ROI_analysis">
+<code class="sig-name descname">test_T2_ROI_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_ROI_analysis_T1_T2.MyTestCase.test_T2_ROI_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test ROI analysis of T2 map.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.ana.utest_T1_T2_mapping">
+<span id="utest-t1-t2-mapping-py"></span><h2>utest_T1_T2_mapping.py<a class="headerlink" href="#module-virtualscanner.server.ana.utest_T1_T2_mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase">
+<em class="property">class </em><code class="sig-name descname">MyTestCase</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase.test_T1_mapping">
+<code class="sig-name descname">test_T1_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase.test_T1_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test T1 mapping from IRSE experiments with 7 different TI values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase.test_T2_mapping">
+<code class="sig-name descname">test_T2_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.ana.utest_T1_T2_mapping.MyTestCase.test_T2_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unit test T2 mapping from SE experiments with 7 different TE values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.ana</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.ana.ROI_analysis">ROI_analysis.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.ana.T1_mapping">T1_mapping.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.ana.T2_mapping">T2_mapping.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.ana.utest_ROI_analysis_T1_T2">utest_ROI_analysis_T1_T2.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.ana.utest_T1_T2_mapping">utest_T1_T2_mapping.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.html"
+                        title="previous chapter">virtualscanner.server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.recon.html"
+                        title="next chapter">virtualscanner.server.recon</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.ana.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.html" title="virtualscanner.server.recon"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.html" title="virtualscanner.server"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>
