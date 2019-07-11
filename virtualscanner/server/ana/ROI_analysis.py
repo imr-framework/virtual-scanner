@@ -2,6 +2,10 @@
 
 import os
 import time
+from pathlib import Path
+
+from skimage.transform import hough_circle, hough_circle_peaks
+from skimage.feature import canny
 
 import cv2
 import matplotlib.pyplot as plt
@@ -37,8 +41,8 @@ def circle_analysis(circles, map_size):
     return sphere_map
 
 
-def main(dicom_map_path: str, map_type: str, map_size: str, fov: str,
-         pat_id: str):  # lb: lower bound, ub: upper bound, fov: should be in mm
+def main(dicom_map_path: Path, map_type: str, map_size: str, fov: str,
+         pat_id: str):  # fov: should be in mm
     """
     Return ROI analysis of a ISMRM/NIST phantom, all 14 spheres are detected.
 
@@ -88,7 +92,7 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str,
                                         [voxel_size * 55.5667, 14.9729],
                                         [voxel_size * 55.0918, -16.4091]])
         sphere_all_loc_template[0, 0:2] = np.squeeze(np.array([[64.8397, 26.1065]]))
-        radius_scale = 0.97
+        radius_scale = 0.8
         intensity_range_lb = 0
         intensity_range_ub = 5
         golden_standard = np.array(
@@ -167,8 +171,16 @@ def main(dicom_map_path: str, map_type: str, map_size: str, fov: str,
         map_data_final_gray = np.divide(map_data_final_gray, np.amax(map_data_final_gray))
         map_data_final_gray = np.multiply(map_data_final_gray, 255)  # conversion to grayscale for open cv operations
         map_data_final_gray = map_data_final_gray.astype(np.uint8)  # open cv requires uint8 grayscale images
-        circles = cv2.HoughCircles(map_data_final_gray, cv2.HOUGH_GRADIENT, dp=1, minDist=13,
-                                   param1=150, param2=6, minRadius=5, maxRadius=7)  # initial guess of spheres
+
+        # circles = cv2.HoughCircles(map_data_final_gray, cv2.HOUGH_GRADIENT, dp=1, minDist=13,
+        #                            param1=150, param2=6, minRadius=5, maxRadius=7)  # initial guess of spheres
+        edges = canny(map_data_final_gray, sigma=3, low_threshold=10, high_threshold=50)
+        hough_radii = np.arange(5, 8, 0.1)
+        hough_res = hough_circle(edges, hough_radii)
+        accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii, min_xdistance=13, min_ydistance=13,
+                                                   total_num_peaks=14)
+        circles = np.zeros([1, 14, 3])
+        circles[0, :, :] = np.concatenate((cx[:, np.newaxis], cy[:, np.newaxis], radii[:, np.newaxis]), axis=1)
         # visualize the original guess
         plt.figure()
         plt.imshow(map_data_final[:, :, 0], cmap='hot')
