@@ -2,6 +2,7 @@
 
 import os
 import time
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +15,7 @@ SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 
-def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI should be in second
+def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI should be in second
     """
     Curve fitting a series of IRSE images with respect to variable TI values to generate a T1 map.
 
@@ -50,19 +51,14 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
     phantom_radius = 101.72  # unit in mm
     centers = np.array([[map_size / 2, map_size / 2]])
 
-    lstFilesDCM = []  # create an empty list
-    for dirName, subdirList, fileList in os.walk(dicom_file_path):
-        for png_map_name in fileList:
-            if ".dcm" in png_map_name.lower():  # check whether the file's DICOM
-                lstFilesDCM.append(os.path.join(dirName, png_map_name))
-
-    ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
+    lstFilesDCM = sorted(list(dicom_file_path.glob('*.dcm')))
+    ref_image = pydicom.read_file(str(lstFilesDCM[0]))  # Get ref file
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(
         lstFilesDCM))  # Load dimensions based on the number of rows, columns, and slices (along the Z axis)
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
     for filenameDCM in lstFilesDCM:
-        ds = pydicom.read_file(filenameDCM)  # read the file
+        ds = pydicom.read_file(str(filenameDCM))  # read the file
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data (uint16)
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
@@ -73,7 +69,7 @@ def main(dicom_file_path: str, TR: str, TE: str, TI: str, pat_id: str):  # TI sh
         for n3 in range(image_size[1]):
             # for n2 in range(0, 32):
             #     for n3 in range(0, 32):
-            dist_to_center = np.sqrt((n2-centers[0, 0]) ** 2+(n3-centers[0, 1]) ** 2) * voxel_size
+            dist_to_center = np.sqrt((n2 - centers[0, 0]) ** 2 + (n3 - centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
             if dist_to_center < phantom_radius:
                 n4 = 0

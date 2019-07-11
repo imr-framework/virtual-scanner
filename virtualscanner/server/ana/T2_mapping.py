@@ -2,6 +2,7 @@
 
 import os
 import time
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +15,7 @@ SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 COMS_ANALYZE_PATH = constants.COMS_UI_PATH
 
 
-def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
+def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
     """
     Curve fitting a series of SE images with respect to variable TE values to generate a T2 map.
 
@@ -46,18 +47,13 @@ def main(dicom_file_path: str, TR: str, TE: str, pat_id: str):
     phantom_radius = 101.72  # unit in mm
     centers = np.array([[map_size / 2, map_size / 2]])
 
-    lstFilesDCM = []  # create an empty list
-    for dirName, subdirList, fileList in os.walk(dicom_file_path):
-        for png_map_name in fileList:
-            if ".dcm" in png_map_name.lower():  # check whether the file's DICOM
-                lstFilesDCM.append(os.path.join(dirName, png_map_name))
-
-    ref_image = pydicom.read_file(lstFilesDCM[0])  # Get ref file
+    lstFilesDCM = sorted(list(dicom_file_path.glob('*.dcm')))  # create an empty list
+    ref_image = pydicom.read_file(str(lstFilesDCM[0]))  # Get ref file
     image_size = (int(ref_image.Rows), int(ref_image.Columns), len(lstFilesDCM))  # Load dimensions
     image_data_final = np.zeros(image_size, dtype=ref_image.pixel_array.dtype)
 
     for filenameDCM in lstFilesDCM:
-        ds = pydicom.read_file(filenameDCM)  # read the file, data type is uint16 (0~65535)
+        ds = pydicom.read_file(str(filenameDCM))  # read the file, data type is uint16 (0~65535)
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
