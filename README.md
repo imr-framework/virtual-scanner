@@ -12,7 +12,7 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 ## Quick Start
 First, clone the repository. Make sure you have all packages listed in requirements.txt installed in your Virtual Environment.
 
-Then, run coms_server_flask.py to start the browser GUI and follow the generated link to access it. Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
+Then, run [`coms_server_flask.py`](https://github.com/imr-framework/virtual-scanner/blob/ISMRM2019/virtualscanner/coms/coms_ui/coms_server_flask.py) to start the browser GUI and follow the generated link to access it. Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
 
 Alternatively, you can read the API documentation (link) and run the Python test scripts in each module with more options available than allowed on the GUI.
 
