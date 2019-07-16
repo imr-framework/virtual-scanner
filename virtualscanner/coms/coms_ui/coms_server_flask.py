@@ -454,9 +454,13 @@ def worker():
                 file.save(upload_path)
 
                 filename = filename[:-4] + '.seq'
+                
+                if(filename != 'rad2d.seq'):
+                    if(os.path.isfile(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)):
+                        os.remove(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
+                    os.rename(upload_path,dest)
 
-                if(os.path.isfile(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)):
-                    os.remove(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
+                
 
                 os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
 
