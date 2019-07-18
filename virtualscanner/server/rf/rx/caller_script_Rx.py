@@ -165,8 +165,9 @@ def run_Rx_sim(Rxinfo):
 
     return signals_plot_filename, recon_plot_filename, im_path
 
-# if __name__ == "__main__":
-#   Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
-#  a = run_Rx_sim(Rxinfo)
-# print(a)
-# b = imread(a[2])
+if __name__ == "__main__":
+   Rxinfo = {'image-or':'coronal','DSF':1, 'deltaf':0}
+   signals_filename,recon_filename,im_path = run_Rx_sim(Rxinfo)
+   print('Signal plot is stored in: ' + signals_filename)
+   print('Reconstructed image is stored in: ' + recon_filename)
+
