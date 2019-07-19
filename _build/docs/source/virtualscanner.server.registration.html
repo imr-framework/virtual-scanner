@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.registration &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server.rf" href="virtualscanner.server.rf.html" />
+    <link rel="prev" title="virtualscanner.server.recon.drunck" href="virtualscanner.server.recon.drunck.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.html" title="virtualscanner.server.rf"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.drunck.html" title="virtualscanner.server.recon.drunck"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" accesskey="U">virtualscanner.server</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-registration">
+<h1>virtualscanner.server.registration<a class="headerlink" href="#virtualscanner-server-registration" title="Permalink to this headline">¶</a></h1>
+<p>Register page: log phantom/subject information</p>
+<div class="section" id="module-virtualscanner.server.registration.db_operations_mgr">
+<span id="db-operations-mgr-py"></span><h2>db_operations_mgr.py<a class="headerlink" href="#module-virtualscanner.server.registration.db_operations_mgr" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.registration.db_operations_mgr.create">
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.db_operations_mgr.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a database with the required fields in the REGISTRATION table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>status</strong> – | 0: successful creation of the database and table
+| 1: fail</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.registration.db_operations_mgr.insert">
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">payload</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.db_operations_mgr.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function inserts a new row for a registered subject in the REGISTRATION table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>) – Information as per the REGISTRATION TABLE fields for the new subject to be inserted</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> – | 0: successful insertion of the row
+| 1: fail</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.registration.db_operations_mgr.query">
+<code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param">payload</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.db_operations_mgr.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function queries the REGISTRATION table for existing subject information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>) – Information as per the REGISTRATION TABLE fields for the new subject to be inserted</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rows</strong> – rows from the RESGISTRATION table that match the query criteria</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.registration.register">
+<span id="register-py"></span><h2>register.py<a class="headerlink" href="#module-virtualscanner.server.registration.register" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.registration.register.consume">
+<code class="sig-name descname">consume</code><span class="sig-paren">(</span><em class="sig-param">payload</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.register.consume" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li><p>This definition processes a payload</p></li>
+<li><p>Creates a database if it does not exist</p></li>
+<li><p>Appends registration data</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>) – all fields required in the REGISTRATION table</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> – 0: successful creation of the database (if required) and insertion of one row
+1: fail</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.server.registration.register.reuse">
+<code class="sig-name descname">reuse</code><span class="sig-paren">(</span><em class="sig-param">payload</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.register.reuse" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition queries if the subject is already registered</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>) – All fields required in the REGISTRATION table</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rows</strong> – row of the REGISTRATION table that match the subject being registered
+a null value indicates a new subject
+non null value(s) indicate matching subjects</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.server.registration.utest_register">
+<span id="utest-register-py"></span><h2>utest_register.py<a class="headerlink" href="#module-virtualscanner.server.registration.utest_register" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.registration.utest_register.create_payload">
+<code class="sig-name descname">create_payload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.registration.utest_register.create_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>This definition creates a test payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>payload</strong> – All fields required by the REGISTRATION table in subject.db</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.registration</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.registration.db_operations_mgr">db_operations_mgr.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.registration.register">register.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.server.registration.utest_register">utest_register.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.recon.drunck.html"
+                        title="previous chapter">virtualscanner.server.recon.drunck</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.rf.html"
+                        title="next chapter">virtualscanner.server.rf</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.registration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.html" title="virtualscanner.server.rf"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.recon.drunck.html" title="virtualscanner.server.recon.drunck"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

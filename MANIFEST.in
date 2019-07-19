@@ -1,0 +1,8 @@
+# Include front-end assets
+recursive-include virtualscanner/coms/coms_ui *.*
+
+# DRUNCK Recon
+# Exclude Keras model
+global-exclude virtualscanner/server/recon/drunck/assets *.hdf5
+# Include unit test assets
+include virtualscanner/server/recon/drunck/assets *.jpg

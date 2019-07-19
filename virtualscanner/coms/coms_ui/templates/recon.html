@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Advanced Mode</title>
+
+    <!--favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--Manual links-->
+    <!--Bootstrap & JQuery-->
+    <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+    <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+    <!--JQuery-->
+    <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="../static/main_style.css">
+    <link rel="stylesheet" href="../static/advanced_mode_style.css">
+    <link rel="stylesheet" href="../static/recon_style.css">
+
+    <!--Customized JS-->
+      <script type="text/javascript" src="../static/recon_func.js"></script>
+      <script src="../static/log_out_func.js"> </script>
+      <script type="text/javascript">
+        if ('{{ success }}') {
+          {% autoescape false %}
+
+
+            var payload_dict = {{ payload }}
+
+            $(document).ready(function(){
+
+              if (payload_dict['output'].length == 3){
+                $("#us-dl-type").hide();
+                $("#gt-dl-type").show();
+                $(".im-title").show();
+
+                $("#gt-container").append("<img src=" + payload_dict['output'][0] + ">")
+                $("#input-img-container").append("<img src=" + payload_dict['output'][1] + ">")
+                $("#recon-img-container").append("<img src=" + payload_dict['output'][2] + ">")
+              }
+              else{
+                $("#gt-dl-type").hide();
+                $("#us-dl-type").show();
+                $(".im-title").show();
+                $("#us-img-container").append("<img src=" + payload_dict['output'][0] + ">")
+                $("#recon2-img-container").append("<img src=" + payload_dict['output'][1] + ">")
+              }
+
+              autoFillForm(payload_dict);
+            });
+
+          {% endautoescape %}
+        }
+        $(document).ready(function(){
+          $("#computer-im").addClass("highlighted");
+        });
+      </script>
+
+  </head>
+  <body>
+    <div id="gradients-panel" class="jumbotron">
+      <div id="gradients-container">
+        <img src="./static/advanced/gradients.png" >
+      </div>
+      <div id="txrx-container">
+        <img id="tx-im" src="./static/advanced/Tx.png" >
+        <img  id="rx-im" src="./static/advanced/Rx.png" >
+      </div>
+
+      <div id="human-form-container">
+        <img src="./static/advanced/human-form.png" >
+
+      </div>
+      <div id="computer-container" >
+        <img id="computer-im" src="./static/advanced/computer.png" >
+
+      </div>
+      <div id="run-exam-button">
+        <p>RUN EXPERIMENT</p>
+      </div>
+
+    </div>
+    <div id="enclosingjumbo" class="jumbotron">
+      <h1>Virtual MR Scanner - Advanced Mode</h1>
+      <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
+      <div id="images-panel" class="jumbotron">
+        <div id="gt-dl-type">
+          <div id="gt-container"  class="container rec-container">
+          <div class="im-title">Ground Truth Image</div></div>
+          <div id="vl1" class="vertical-line"></div>
+          <div id="input-img-container"  class="container rec-container">
+          <div class="im-title">Aliased Image</div></div>
+          <div id="vl2" class="vertical-line"></div>
+          <div id="recon-img-container"  class="container rec-container">
+          <div class="im-title">Reconstructed Image</div></div>
+        </div>
+        <div id="us-dl-type">
+          <div id="us-img-container"  class="container rec2-container">
+          <div class="im-title">Undersampled Image</div></div>
+
+          <div id="vl3" class="vertical-line"></div>
+          <div id="recon2-img-container"  class="container rec2-container">
+            <div class="im-title">Reconstructed Image</div></div>
+
+        </div>
+
+
+      </div>
+      <div id="mainpanel" class="jumbotron">
+        <nav>
+
+          <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link disabled" href="..." >PSD Inspector</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ url_for('on_tx')}}">Tx</a>
+              <!--<a class="nav-link" href="acquire.html">Acquire</a>-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Subject</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_rx')}}">Rx</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_recon')}}">Recon</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="...">Analysis</a>
+            </li>
+
+          </ul>
+        </nav>
+        <form class="" action="/receiver" method="post" enctype="multipart/form-data">
+          <input type="hidden" id="formId" name="formName" value="recon">
+          <div class="row first-row">
+            <div   class="col first-col">
+              <label  class="centered-item">
+                <select class="selector" name="recon-method">
+                  <option value="DL">Deep Learning</option>
+                  <option value="analytical" disabled>Analytical</option>
+                  <option value="iter" disabled>Iterative</option>
+                </select>
+              </label>
+                <div class="w-100"></div>
+              <label class="centered-item">
+                <input id="show-filename" class="largeinput" type="text" name="file-input-name">
+                <input id="trigger-btn" class="btn btn-primary" type="button" value="Select File">
+              </label>
+                <div class="w-100"></div>
+              <label>
+                <input id="file-select" type="file" accept=".jpg" name="file">
+              </label>
+                <div class="w-100"></div>
+              <label class="centered-item">
+                <input  id="GT" type="radio" name="DL-type" value="GT" checked >
+                Ground Truth
+              </label>
+
+
+              <label class="centered-item">
+                <input id="US" type="radio" name="DL-type" value="US" >
+                Undersampled
+              </label>
+                <div class="w-100"></div>
+              <label class="centered-item">
+                <input id="submit-btn" class="btn btn-primary" type="submit" name="" value="Reconstruct">
+              </label>
+
+
+
+            </div>
+
+            <div class="col">
+                <img src="../static/recon/recon_example.png" alt="">
+            </div>
+            <div id="ref-col" class="col">
+              <p>Reference:
+                <br>
+                Hyun, Chang Min, et al. “Deep learning for undersampled MRI reconstruction.” Physics in Medicine & Biology 63.13 (2018): 135007.</p>
+            </div>
+
+          </div>
+
+        </form>
+
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+  </body>
+</html>

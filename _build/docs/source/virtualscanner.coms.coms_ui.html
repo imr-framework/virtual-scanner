@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.coms.coms_ui &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server" href="virtualscanner.server.html" />
+    <link rel="prev" title="virtualscanner.coms" href="virtualscanner.coms.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.html" title="virtualscanner.server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.coms.html" title="virtualscanner.coms"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.coms.html" accesskey="U">virtualscanner.coms</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-coms-coms-ui">
+<h1>virtualscanner.coms.coms_ui<a class="headerlink" href="#virtualscanner-coms-coms-ui" title="Permalink to this headline">¶</a></h1>
+<p>Communications with front end</p>
+<div class="section" id="module-virtualscanner.coms.coms_ui.coms_server_flask">
+<span id="coms-server-flask-py"></span><h2>coms_server_flask.py<a class="headerlink" href="#module-virtualscanner.coms.coms_ui.coms_server_flask" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.allowed_file">
+<code class="sig-name descname">allowed_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.allowed_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the file extension is within the application allowed extensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Uploaded file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Allowed or not allowed extension</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.launch_virtualscanner">
+<code class="sig-name descname">launch_virtualscanner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.launch_virtualscanner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the server in the specified machine’s local network address.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.log_in">
+<code class="sig-name descname">log_in</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.log_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the log-in html page on the web and requests user log-in information (e-mail) and choice of user mode
+(Standard/Advanced).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Redirects to register page if user-name exists and Standard mode is selected</div>
+<div class="line-block">
+<div class="line">OR</div>
+</div>
+<div class="line">Redirects to recon page if user-name exists and Advanced mode is selected</div>
+<div class="line-block">
+<div class="line">OR</div>
+</div>
+<div class="line">Renders log-in template</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_acq">
+<code class="sig-name descname">on_acq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_acq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the acquire html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders acquire template</div>
+<div class="line">May also pass variables:</div>
+<div class="line">success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on acquisition success</div>
+</div>
+<div class="line">axial : list</div>
+<div class="line-block">
+<div class="line">File names for generated axial images</div>
+</div>
+<div class="line">sagittal : list</div>
+<div class="line-block">
+<div class="line">File names for generated sagittal images</div>
+</div>
+<div class="line">coronal : list</div>
+<div class="line-block">
+<div class="line">File names for generated coronal images</div>
+</div>
+<div class="line">payload : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_analyze">
+<code class="sig-name descname">on_analyze</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the analyze html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders analyze template</div>
+<div class="line">May also pass variables:</div>
+<div class="line">roi_success/map_success/load_success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on analyze steps success</div>
+</div>
+<div class="line">payload1/payload2/payload3 : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values and output results sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_recon">
+<code class="sig-name descname">on_recon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_recon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the recon html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders recon template</div>
+<div class="line">May also pass variables:</div>
+<div class="line">success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on recon success</div>
+</div>
+<div class="line">payload : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values and output results sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_register">
+<code class="sig-name descname">on_register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the registration html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders register page</div>
+<div class="line-block">
+<div class="line">OR</div>
+</div>
+<div class="line">Redirects to register success page if registration occurs</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_register_success">
+<code class="sig-name descname">on_register_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_register_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the registration html page on the web with a success message when registration occurs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders register page with registration success message</div>
+<div class="line">May also pass variables:</div>
+<div class="line">success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on registration success</div>
+</div>
+<div class="line">payload : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_rx">
+<code class="sig-name descname">on_rx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_rx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the rx html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders rx template</div>
+<div class="line">May also pass variables:</div>
+<div class="line">success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on rx success</div>
+</div>
+<div class="line">payload : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values and output results sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.on_tx">
+<code class="sig-name descname">on_tx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.on_tx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the tx html page on the web.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><div class="line-block">
+<div class="line">Renders tx template</div>
+<div class="line">May also pass variables:</div>
+<div class="line">success : int</div>
+<div class="line-block">
+<div class="line">Either 1 or 0 depending on tx success</div>
+</div>
+<div class="line">payload : dict</div>
+<div class="line-block">
+<div class="line">Form inputted values and output results sent back to display together with template</div>
+</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="virtualscanner.coms.coms_ui.coms_server_flask.worker">
+<code class="sig-name descname">worker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.coms.coms_ui.coms_server_flask.worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receives form inputs from the templates and applies the server methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Either renders templates or redirects to other templates</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>AppContext</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-virtualscanner.coms.coms_ui.utest_coms_ui">
+<span id="coms-ui-py"></span><h2>coms_ui.py<a class="headerlink" href="#module-virtualscanner.coms.coms_ui.utest_coms_ui" title="Permalink to this headline">¶</a></h2>
+<p>This script unit starts and tests the communications between server and client(s).
+Requires <cite>coms_server_flask</cite> to be running before the unit test is run (run <cite>coms_server_flask</cite> first).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.coms.coms_ui</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.coms.coms_ui.coms_server_flask">coms_server_flask.py</a></li>
+<li><a class="reference internal" href="#module-virtualscanner.coms.coms_ui.utest_coms_ui">coms_ui.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.coms.html"
+                        title="previous chapter">virtualscanner.coms</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.html"
+                        title="next chapter">virtualscanner.server</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.coms.coms_ui.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.html" title="virtualscanner.server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.coms.html" title="virtualscanner.coms"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.coms.html" >virtualscanner.coms</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

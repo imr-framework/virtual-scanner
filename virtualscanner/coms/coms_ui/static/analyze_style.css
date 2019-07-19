@@ -1,0 +1,169 @@
+#mainpanel{
+  height: 45vh;
+  min-width: 98vw;
+  /* TODO: Set min width  */
+}
+/*CONTAINERS*/
+.images-container{
+  height: 48vh;
+  width: 98vw;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  background-color: black;
+}
+#enclosingjumbo .images-container{
+  position: absolute;
+  left: 0;
+  bottom: 45vh;
+}
+.analysis-container{
+  /*border: 5px solid #003865;*/
+  height: 100%;
+  width: 48vh;
+  min-width: 48vh;
+  text-align: center;
+  padding: 0;
+}
+#original-data-container img{
+  width: 100%;
+
+}
+#map-container img{
+    display:block;
+    height:100%;
+}
+#roiresults-container img{
+    display:block;
+    height:100%;
+}
+.carousel{
+  display:none;
+}
+.vertical-line {
+  border-left: 2px solid white;
+
+  min-height: 100%;
+  left: 50%;
+
+}
+/*.analysis-container p{
+  vertical-align: middle;
+  line-height: 48vh;
+  font-weight: bold;
+  color: #003865;
+}*/
+/*
+.workspace-container{
+  width: 16vw;
+  border: 2px solid #003865;
+  border-radius: 15px;
+  background-color: white;
+
+}
+.workspace-container h2{
+  text-align: center;
+  color: white;
+  padding-top: 15px;
+  background-color: #5f9bef;
+  border-radius: 15px 15px 0px 0px;
+  height: 7vh;
+}
+#enclosingjumbo .workspace-container{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+/*LABELS*/
+label{
+  margin-bottom: 1.2vh;
+}
+
+.tag-label-small{
+  width: 5%
+}
+.tag-label-med{
+  width: 30%
+}
+.tag-label-large{
+  width:50%;
+}
+.input-label{
+  padding-left: 5%;
+}
+.no-tag{
+  padding-left: 10%;
+}
+#skip-a-line{
+  min-width: 1.5rem;
+}
+.largeinput-label{
+  width: 80%;
+}
+/*INPUT*/
+.fileInput{
+  width: 50%;
+  height: 24px;
+  border-color:black;
+  border-width: 2px;
+  margin-left: 15px;
+}
+#file-select{
+  display: none;
+}
+.largeinput{
+  width: 100%;
+}
+#TI-input{
+  background-color: #bfbfbf;
+
+}
+#TR{
+  width: 100px;
+}
+/*BUTTONS*/
+.btn-align-right{
+  float: right;
+}
+.analysis-btn{
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+
+}
+#roi-analysis-button{
+  background-color: #bfbfbf;
+
+}
+
+/*COLS AND ROWS*/
+#map-gen-col{
+  min-width:60%;
+}
+#ROI-ana-col{
+  width:25%;
+}
+/*FORMS*/
+.map-gen-Form{
+  margin-left: 15px;
+}
+/*MENU*/
+.dialog {
+    overflow: visible;
+    width:auto;
+}
+
+.dialog .menu {
+    overflow: inherit;
+}
+.im-title{
+  color: white;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5rem;
+
+}

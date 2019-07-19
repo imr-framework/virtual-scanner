@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>virtualscanner.server.rf.rx &#8212; Virtual Scanner 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="virtualscanner.server.simulation" href="virtualscanner.server.simulation.html" />
+    <link rel="prev" title="virtualscanner.server.rf.tx.SAR_calc" href="virtualscanner.server.rf.tx.SAR_calc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.simulation.html" title="virtualscanner.server.simulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.tx.SAR_calc.html" title="virtualscanner.server.rf.tx.SAR_calc"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.rf.html" accesskey="U">virtualscanner.server.rf</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="virtualscanner-server-rf-rx">
+<h1>virtualscanner.server.rf.rx<a class="headerlink" href="#virtualscanner-server-rf-rx" title="Permalink to this headline">¶</a></h1>
+<p>RF Reception (Rx) chain: simulate signals from images and view reconstruction after demodulation and sampling</p>
+<div class="section" id="module-virtualscanner.server.rf.rx.caller_script_Rx">
+<span id="caller-script-rx-py"></span><h2>caller_script_Rx.py<a class="headerlink" href="#module-virtualscanner.server.rf.rx.caller_script_Rx" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="virtualscanner.server.rf.rx.caller_script_Rx.run_Rx_sim">
+<code class="sig-name descname">run_Rx_sim</code><span class="sig-paren">(</span><em class="sig-param">Rxinfo</em><span class="sig-paren">)</span><a class="headerlink" href="#virtualscanner.server.rf.rx.caller_script_Rx.run_Rx_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs MR receive chain simulation</p>
+<p>Receive chain is simulated by modulating k-space from an axial, coronal, or sagittal brain image,
+and then demodulating using selected demod. frequency and sampling at selected down-sampling factor (dsf).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Rxinfo</strong> (<em>dict</em>) – <div class="line-block">
+<div class="line">Dictionary of parameters used to run Rx simulation</div>
+<div class="line">{‘deltaf’: demod_frequency, ‘image-or’: image_orientation, ‘DSF’: downsampling_factor}</div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>signals_plot_filename</strong> (<em>str</em>) – File name for plot of time-domain signals (.png format)</p></li>
+<li><p><strong>recon_plot_filename</strong> (<em>str</em>) – File name for image reconstructed from demodulated &amp; sampled signals (.png format)</p></li>
+<li><p><strong>im_path</strong> (<em>str</em>) – Path of image used for generating artificial k-space</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">virtualscanner.server.rf.rx</a><ul>
+<li><a class="reference internal" href="#module-virtualscanner.server.rf.rx.caller_script_Rx">caller_script_Rx.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="virtualscanner.server.rf.tx.SAR_calc.html"
+                        title="previous chapter">virtualscanner.server.rf.tx.SAR_calc</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="virtualscanner.server.simulation.html"
+                        title="next chapter">virtualscanner.server.simulation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/docs/source/virtualscanner.server.rf.rx.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.simulation.html" title="virtualscanner.server.simulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="virtualscanner.server.rf.tx.SAR_calc.html" title="virtualscanner.server.rf.tx.SAR_calc"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Virtual Scanner 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Virtual Scanner</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="virtualscanner.html" >virtualscanner</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="virtualscanner.server.html" >virtualscanner.server</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="virtualscanner.server.rf.html" >virtualscanner.server.rf</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Columbia University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+    </div>
+  </body>
+</html>

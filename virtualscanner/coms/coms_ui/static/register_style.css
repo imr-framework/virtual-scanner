@@ -1,0 +1,116 @@
+/*Register styling*/
+
+
+/*CONTAINERS*/
+#mainpanel{
+  min-height: 90vh;
+  width: 70vw;
+  min-width: 950px;
+}
+#subjectImage-container{
+  width:30vw;
+  position:absolute;
+  right: 0;
+  bottom: 0;
+  height: 90vh;
+  text-align: center;
+  vertical-align: middle;
+}
+.success-container{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 30vw;
+  height: 10vh;
+  text-align: center;
+}
+.success-container h1{
+  display:none;
+  text-align: center;
+}
+#success-sentence{
+  display: none;
+}
+
+
+.first-row-header{
+  padding-top: 30px;
+}
+
+#dropdownMenuButton{
+  font-size: 1.25rem;
+  font-weight: 500;
+  height: auto;
+}
+
+.mediuminput{
+  width: 100px;
+  height: 24px;
+  border-color:black;
+  border-width: 2px;
+}
+
+.list-group-item{
+  border-color:#2f2f91;
+  border-width: 2px;
+  color: black;
+}
+.list-group-item.active{
+  background-color: green;
+  border-color:#2f2f91;
+  border-width: 2px;
+}
+
+.radio-inline{
+  font-size: 0.9rem;
+  margin-bottom: 0px;
+}
+.not-first-radio{
+  margin-left:8px;
+}
+label{
+  margin-bottom: 1.2rem; /*Default 0.5rem*/
+  font-size: 16px;
+}
+
+#subjectImage{
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  /*margin-left:25px;*/
+}
+#extraImpFields{
+  display:none;
+}
+#submitButton{
+  margin-top:15px;
+  margin-bottom: 20px;
+  text-align:center;
+  position:relative;
+  bottom:0;
+}
+#subjectSelect{
+  height: auto;
+}
+img{
+  width: 100%;
+}
+#regparameters{
+  margin-left: 15px;
+  margin-right: 15px;
+}
+#new-subject-form{
+  text-align: center;
+}
+#new-subject{
+
+  margin-top: 3vh;
+  display: none;
+}
+#in-input{
+  margin-left: 1vw;
+}
+.extra-field{
+  display: none;
+}

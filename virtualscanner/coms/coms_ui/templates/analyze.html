@@ -1,0 +1,364 @@
+<!--"""-->
+<!--This script corresponds to the GUI content for the Analysis tab of the virtual scanner-->
+<!--Parameters-->
+
+    <!--Requires input from the user regarding sequence parameters and map parameters-->
+
+
+<!--Returns-->
+    <!--Original sample data or data from previous simulation-->
+    <!--T1/T2 maps-->
+    <!--ROI analysis (curve fitting)-->
+
+
+
+
+<!--Author: Marina Manso-->
+<!--Date: 04/29/2019-->
+<!--Version 0.0-->
+<!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
+<!--"""-->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Standard Mode</title>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!--jQuery and JS files-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="{{url_for('static',filename='analyze_func.js')}}"></script>
+    <script src="../static/log_out_func.js"> </script>
+
+
+    <!--CSS-->
+    <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='analyze_style.css')}}">
+
+    <!--Favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--JS to capture template variables-->
+    <script type="text/javascript">
+
+      var load_step = '{{ load_success }}'
+      var map_step = '{{ map_success }}'
+      var roi_step = '{{ roi_path }}'
+
+      //First step: load sample original data:
+      if ('{{ load_success }}'){
+        {% autoescape false %}
+          console.log('load success')
+          var payload1_dict = {{ payload1 }}
+
+          $(document).ready(function(){
+
+            autoFillForm(payload1_dict);
+
+            //displayImages(payload1_dict['data-path']);
+            var im_array = payload1_dict['data-path']
+
+            $("#original-data-carousel").show();
+
+
+            var i;
+            im_array.sort();
+            for (i = 0; i < im_array.length; i++) {
+
+              if (i == 0) {
+                $('#original-data-carousel .carousel-inner').append('<div class="carousel-item active"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
+              }
+              else{
+                $('#original-data-carousel .carousel-inner').append('<div class="carousel-item"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
+              }
+            }
+          });
+
+
+        {% endautoescape %}
+      }
+
+
+      //Second step: load the generated map file
+      if ('{{ map_success }}') {
+        {% autoescape false %}
+        console.log('map success')
+          //var payload1_dict = {{ payload1 }};
+          var payload2_dict = {{ payload2 }}
+          $(document).ready(function(){
+            autoFillForm2(payload2_dict);
+            var map_type=
+            $('#map-container').append('<div class="im-title">'+$("#map-type").val()+ ' mapping </div><img class="d-block " src="'+payload2_dict['map_path']+'"/>');
+
+          });
+        {% endautoescape %}
+      }
+
+
+      if ('{{ roi_success }}'){
+        {% autoescape false %}
+        console.log('roi success')
+
+          var payload3_dict = {{ payload3 }}
+
+          $(document).ready(function(){
+
+            autoFillForm3(payload3_dict);
+            $('#roiresults-container').append('<img class="d-block " src="'+payload3_dict['roi_path']+'"/>');
+          });
+        {% endautoescape %}
+      }
+
+
+    </script>
+
+
+
+
+  </head>
+  <body>
+
+    <div id="enclosingjumbo" class="jumbotron">
+
+      <h1>Virtual MR Scanner - Standard Mode</h1>
+      <input type="button" class="btn btn-primary feedback-btn" value="?">
+      <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
+      <!--Images display panel-->
+      <div class="images-container">
+        <!--Original data-->
+        <div id="data-container" class="container analysis-container">
+        <div id="original-data-carousel" class="carousel" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+
+            </div>
+            <a class="carousel-control-prev"  href="#original-data-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+            </a>
+
+            <a class="carousel-control-next"  href="#original-data-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            </a>
+          </div>
+        </div>
+
+          <div class="vertical-line"></div>
+
+        <!--T1/T2 map-->
+        <div id="map-container" class="container analysis-container">
+
+
+
+
+        </div>
+
+            <div class="vertical-line"></div>
+
+        <!--ROI analysis results-->
+        <div id="roiresults-container" class="container analysis-container">
+          <!--<p>ROI ANALYSIS RESULTS</p>-->
+        </div>
+      </div>
+
+      <!--Workspace-->
+      <!--
+      <div class="workspace-container">
+        <h2>Workspace</h2>
+        <ul class="file-list">
+
+        </ul>
+      </div>
+      -->
+
+      <!--Analyze main panel-->
+      <div id="panel-container" class="container">
+        <div id="mainpanel" class="jumbotron container">
+
+          <!--Navigation Bar-->
+          <nav>
+            <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_analyze')}}">Analyze</a>
+            </li>
+
+          </nav>
+
+          <!--Load a DICOM file-->
+          <form id="original-data-form" method='post' action='/receiver'> <!--First form-->
+            <input type="hidden" id="formId" name="formName" value="ana">
+            <input type="hidden" id="selected-option" name="original-data-opt">
+            <label id="first-row-item" for="fileInput">
+
+              <input id="file-input-display" class="fileInput" type="text" name="fileInput" placeholder="Choose a DICOM file..."/>
+              <input id="load-btn" class="btn btn-primary" type="button" value="Load" />
+
+              <!-- Hidden file input to trigger file choice dialog to open-->
+              <!--Set accept=".dicom" to filter the files and only allow dicom selection-->
+              <!--<input id="file-select" type="file" accept=".jpg">-->
+
+              <!--Save and reset buttons-->
+              <input class="btn btn-primary btn-align-right" type="button" value="Save"/>
+              <input id="reset-btn" class="btn btn-primary btn-align-right" type="button" value="Reset"/>
+            </label>
+          </form>
+
+          <!--Forms-->
+          <div class="row">
+            <div id="map-gen-col" class="col">
+              <form class="map-gen-Form" method='post' action='/receiver'>
+                <input type="hidden" id="formId" name="formName" value="ana">
+                <input type="hidden" name="map-form" value="map">
+
+                <!--Sequece selection: currently only SE and IRSE-->
+                <label>Sequence</label>
+                <label class="input-label">
+                  <select id="seq-choice" class="selector" name="seq-choice">
+                    <option value="SE">SE</option>
+                    <option value="IRSE">IRSE</option>
+                  </select>
+                </label>
+
+                  <!--Column 1 (Map generation): Sequence parameters and model-->
+                <div class="row">
+                  <!--Column 1.1: Sequence parameters-->
+                  <div class="col">
+
+                    <h2>Parameters</h2>
+
+                    <!--Repetition Time (TR): Unique value -->
+                    <label class="tag-label-small">TR</label>
+                    <label class="input-label">
+                      <input id="TR" class="smallinput" type="number" name="TR">
+                    </label>
+                    <label>ms</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Echo Time (TE): same number as number of images, if T2 map -->
+                    <label class="tag-label-small">TE</label>
+                    <label class="input-label largeinput-label">
+                      <input id="TE" class="largeinput" type="text" name="TE"  />
+                    </label>
+                    <label>ms</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Inversion Time (TI): same number as number of images, if T1 map -->
+                    <label class="tag-label-small">TI</label>
+                    <label class="input-label largeinput-label"">
+                      <input id="TI-input" class="largeinput" type="text" name="TI" readonly>
+                    </label>
+                    <label>ms</label>
+                  </div>
+
+                  <!--Column 1.2: Model equation-->
+                  <div class="col">
+
+                    <h2>Model</h2>
+
+                    <label class="input-label largeinput-label ">
+
+                      <select id="model-eq" class="selector" name="model-eq">
+                        <option value="SE-eq">a(1-exp(-y/b)exp(-x/c))+d</option>
+
+                        <option value="IRSE-eq">a(1-2exp(-x/b)+exp(-y/b))</option>
+                      </select>
+                    </label>
+
+                  </div>
+                </div>
+
+                <!--Button for map generation-->
+                <div class="row">
+                  <input  class="btn btn-primary analysis-btn" type="submit" value="Generate Map"/>
+                </div>
+
+
+              </form>
+            </div>
+
+            <div id="ROI-ana-col" class="col">
+              <form id="ROI-ana-Form" method="post" action="/receiver">
+                <input type="hidden" name="roi-form" value="roi">
+                <input type="hidden" id="formId" name="formName" value="ana">
+                  <label ><p id="skip-a-line"></p></label>
+                  <h2>ROI Analysis</h2>
+
+
+
+                  <!--Map type: Choose between T1 or T2 map-->
+                  <label class="tag-label-med">Map Type</label>
+                  <label class="input-label">
+                    <select id="map-type" class="selector" name="map-type">
+                      <option value="T1">T1</option>
+                      <option value="T2">T2</option>
+                    </select>
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--Map size-->
+                  <label class="tag-label-med">Map Size</label>
+                  <label class="input-label">
+                    <input id="map-size" type="number" class="smallinput" name="map-size">
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--FOV -->
+                  <label class="tag-label-med">Field of View</label>
+                  <label class="input-label ">
+                    <input id="FOV" class="smallinput" type="number" name="map-FOV">
+                  </label>
+                  <label>mm</label>
+
+                  <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="submit" value="Detect Spheres" disabled/>
+
+
+
+
+
+              </form>
+            </div>
+
+          </div>
+
+        </div><!--Main panel-->
+
+      </div><!--Panel-container-->
+
+
+
+    </div><!--enclosingjumbo-->
+
+    <div id="file-select-dialog" class="dialog" title="Select a folder:">
+      <ul class="menu no-bullet">
+        <li class="ui-state-disabled"><div><a class="menu-item" href = "#">Simulation Results</a></div></li>
+        <li ><div>Analyze Sample Data</div>
+          <ul>
+            <li><a class="menu-item" href = "#">T1</a></li>
+            <li><a class="menu-item" href = "#">T2</a></li>
+          </ul>
+        </li>
+
+
+      </ul>
+    </div>
+
+
+  </body>
+</html>

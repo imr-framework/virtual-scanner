@@ -1,0 +1,43 @@
+/*.container{
+
+  display: flex;
+}*/
+#images-panel img{
+
+  height: 96%;
+  position: absolute;
+  left: 30%;
+  top: 2%
+}
+#file-select{
+  display: none;
+}
+#mainpanel .row{
+  height: 100%;
+}
+#inputs-col{
+  width: 100%;
+  text-align: center;
+  margin-top: 15vh;
+
+
+}
+#SAR-calc{
+  display: none;
+}
+table{
+  width: 95%;
+  height: 95%;
+
+  margin-top: 2vh;
+}
+table, th, td {
+  text-align: center;
+  border: 3px solid #5a71a8;
+}
+th, td {
+  padding: 15px;
+}
+.no-border{
+  border: 0px;
+}
