@@ -41,5 +41,5 @@ def addition(a, b):
   -------
   Arthimetic sum of operand 1 and operand 2.
   """
-  retun a + b
+  return a + b
 ```
