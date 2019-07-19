@@ -29,7 +29,7 @@ Alternatively, you can read the API documentation [here](https://imr-framework.g
 
 * The **Acquire** page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values. 
 
-* The **Analyze** page allows the user to load a series of data acquired for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect circles on the maps, a common feature of real MR phantoms.
+* The **Analyze** page allows the user to load a series of data acquired in ISMRM/NIST phantom for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect spheres in the phantom, a feature useful for comparing generated parameter values to literature values. 
 
 ## Advanced Mode
 * The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files.
