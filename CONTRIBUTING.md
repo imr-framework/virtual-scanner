@@ -17,14 +17,14 @@ Read through the [Style Guide for Python Code](https://www.python.org/dev/peps/p
 ## Source code header
 Insert and fill out the following header comments at the top of every script in your source code:
 ```
-Author: Name
-Date: mm//dd/yyyy
-Version 0.0
-Copyright of the Board of Trustees of  Columbia University in the City of New York.
+Institution : (your university/research facility)
+Version : 1.0.0 
 ```
+Note that "Version" refers to the Virtual Scanner release you developed your code on. You can add more fields if needed. 
 
 ## Documenting source code
-Document every class and method in your source code as per this convention:
+Please add a top-level description of code functionality in each script. In addition, document every class and method in your source code using the [Numpy docstring guide](https://numpydoc.readthedocs.io/en/latest/format.html). An example is shown below.
+
 ```python
 def addition(a, b):
   """
