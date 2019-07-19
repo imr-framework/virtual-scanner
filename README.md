@@ -16,7 +16,7 @@ Then, run [`coms_server_flask.py`](https://github.com/imr-framework/virtual-scan
 
 To access the browser app, there are two ways:
 * Local hosting (only on the laptop running the script): go to the generated link (http://0.0.0.0:5000/) if you are a mac user, and this link (http://127.0.0.1:5000) if you are a windows user.  
-* Remote hosting : look up your IP address. Suppose it's 123.45.67.890, then you can go to (http://123.45.67.890:5000) to connect to the server remotely, either on the server laptop or different ones. 
+* Remote hosting : look up your IP address. Suppose it's 123.45.67.890, then you can go to (http://123.45.67.890:5000) to connect to the server remotely, either on the server laptop or different ones connected to the same network. 
 
 Now you can start playing with Virtual Scanner! Log in with your email address, select Standard or Advanced mode, and click "Begin Scan". Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
 
