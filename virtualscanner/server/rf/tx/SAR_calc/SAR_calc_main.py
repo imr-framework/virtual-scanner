@@ -282,6 +282,7 @@ def payload_process(fname='rad2D.seq'):
     if (tsec[-1] > 10):
         print('Display starts now..')
         plt.figure
+        plt.clf()
         plt.plot(tsec, SAR_wbg_tensec, label='Whole Body:10sec')
         plt.plot(tsec, SAR_hg_tensec, label='Head only:10sec')
 
