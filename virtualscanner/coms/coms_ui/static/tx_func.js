@@ -13,3 +13,6 @@ $(document).on("click", "#computer-im",function(){
 $(document).on("click", "#rx-im",function(){
   location.href='rx';
 });
+$(document).on("click",".feedback-btn",function(){
+  window.open('https://docs.google.com/forms/d/1267utGFl5VPDLE_6lQu153tF4vSTDTi4Kni9uam_QsM/edit', '_blank');
+});

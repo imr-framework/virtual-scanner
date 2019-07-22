@@ -35,3 +35,6 @@ function autoFillForm(dict){
   $("#dsf").val(dict['DSF']);
   $("#deltaf").val(dict['deltaf']);
 }
+$(document).on("click",".feedback-btn",function(){
+  window.open('https://docs.google.com/forms/d/1Xtsmow_k0QmOjKfbGEaFU0gFh8RtFCUO5eZsGgQGkcg/edit?ts=5d2ce1f8', '_blank');
+});

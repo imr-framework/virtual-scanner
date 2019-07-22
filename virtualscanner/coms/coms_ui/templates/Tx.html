@@ -26,7 +26,7 @@
           var payload_dict = {{ payload }}
 
           $(document).ready(function(){
-            
+
             $('#images-panel').html('<img src='+payload_dict['plot_path']+'>');
             $('#H10s').html(payload_dict['SAR_hg_tensec_peak']);
             $('#H6min').html(payload_dict['SAR_hg_sixmin_peak']);
@@ -79,6 +79,7 @@
     </div>
     <div id="enclosingjumbo" class="jumbotron">
       <h1>Virtual MR Scanner - Advanced Mode</h1>
+      <input type="button" class="btn btn-primary feedback-btn" value="?">
       <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
       <div id="images-panel" class="jumbotron"></div>
 
