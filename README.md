@@ -40,8 +40,3 @@ Alternatively, you can read the API documentation [here](https://imr-framework.g
 
 * Other features, including phantom and sequence viewers and reconstruction methods, are in active development. 
 
-## References
-
-Kose, R., & Kose, K. (2017). BlochSolver: a GPU-optimized fast 3D MRI simulator for experimentally compatible pulse sequences. Journal of Magnetic Resonance, 281, 51-65.
-
-Layton, K. J., Kroboth, S., Jia, F., Littin, S., Yu, H., Leupold, J., ... & Zaitsev, M. (2017). Pulseq: a rapid and hardware-independent pulse sequence prototyping framework. Magnetic resonance in medicine, 77(4), 1544-1552.
