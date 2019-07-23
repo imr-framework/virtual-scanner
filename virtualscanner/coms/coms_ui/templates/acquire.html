@@ -119,7 +119,7 @@
               var TEn = sagittal[i].search("_TE");
               var FAn = sagittal[i].search("_FA");
               var last_n = sagittal[i].search("_20");
-              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+sagittal[i].slice(TRn+3,TEn)+", TE="+sagittal[i].slice(TEn+3,FAn)+ ", FA="+sagittal[i].slice(FAn+3,last_n)
+              var title =sagittal[i].slice(seq_type+3,TRn-2)+" TR="+sagittal[i].slice(TRn+3,TEn)+", TE="+sagittal[i].slice(TEn+3,FAn)+ ", FA="+sagittal[i].slice(FAn+3,last_n)
 
               if (i == 0) {
                 $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
@@ -139,7 +139,7 @@
               var TEn = coronal[i].search("_TE");
               var FAn = coronal[i].search("_FA");
               var last_n = coronal[i].search("_20");
-              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+coronal[i].slice(TRn+3,TEn)+", TE="+coronal[i].slice(TEn+3,FAn)+ ", FA="+coronal[i].slice(FAn+3,last_n)
+              var title =coronal[i].slice(seq_type+3,TRn-2)+" TR="+coronal[i].slice(TRn+3,TEn)+", TE="+coronal[i].slice(TEn+3,FAn)+ ", FA="+coronal[i].slice(FAn+3,last_n)
 
               if (i == 0) {
                 $('#coronal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
