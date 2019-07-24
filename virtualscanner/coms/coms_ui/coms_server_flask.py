@@ -333,9 +333,9 @@ def worker():
 
             # session['acq'] = 0
             session['acq_payload'] = payload
+            print(payload)
 
-            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],
-                                         pat_id=pat_id)  # phtinfo just needs to be 1 string
+            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
             sim_result_path = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session['patid']
 
             while (os.path.isdir(sim_result_path) is False):
@@ -354,8 +354,11 @@ def worker():
                 Y_acq = []
 
                 for indx in range(len(complete_path)):
+                    if payload['selectedSeq'] == 'GRE':
+                        pos = complete_path[indx].find('_', 30, ) + 1  #
+                    else:
+                        pos = complete_path[indx].find('_', 29, ) + 1  #
 
-                    pos = complete_path[indx].find('_', 30, ) + 1  #
 
                     sl_orientation = complete_path[indx][pos]
                     if sl_orientation == 'Z':
