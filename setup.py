@@ -1,7 +1,15 @@
+from pathlib import Path
+
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+here = Path(__file__).parent
+
+with open(str(here / 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+with open(str(here / 'requirements.txt'), 'r') as f:
+    install_reqs = f.read().strip()
+    install_reqs = install_reqs.split("\n")
 
 setuptools.setup(
     name='virtual-scanner',
@@ -13,42 +21,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url='https://github.com/imr-framework/virtual-scanner',
     packages=setuptools.find_packages(),
-    install_requires=['absl-py==0.7.1',
-                      'astor==0.7.1',
-                      'Click==7.0',
-                      'cycler==0.10.0',
-                      'Flask==1.0.2',
-                      'gast==0.2.2',
-                      'grpcio==1.20.0',
-                      'h5py==2.9.0',
-                      'itsdangerous==1.1.0',
-                      'Jinja2==2.10.1',
-                      'Keras==2.2.4',
-                      'Keras-Applications==1.0.7',
-                      'Keras-Preprocessing==1.0.9',
-                      'kiwisolver==1.0.1',
-                      'Markdown==3.1',
-                      'MarkupSafe==1.1.1',
-                      'matplotlib==3.0.3',
-                      'mock==2.0.0',
-                      'nibabel==2.4.0',
-                      'numpy==1.16.2',
-                      'opencv-python==4.0.0.21',
-                      'pbr==5.1.3',
-                      'Pillow==6.0.0',
-                      'protobuf==3.7.1',
-                      'pydicom==1.2.2',
-                      'pyparsing==2.3.1',
-                      'pypulseq==0.0.3',
-                      'python-dateutil==2.8.0',
-                      'PyYAML==5.1',
-                      'scipy==1.2.1',
-                      'six==1.12.0',
-                      'tensorboard==1.13.1',
-                      'tensorflow==1.13.1',
-                      'tensorflow-estimator==1.13.0',
-                      'termcolor==1.1.0',
-                      'Werkzeug==0.15.2'],
+    install_requires=install_reqs,
     license='License :: OSI Approved :: GNU Affero General Public License v3',
     include_package_data=True,
     entry_points={
