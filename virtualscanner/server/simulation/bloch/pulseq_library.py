@@ -16,10 +16,10 @@ from pypulseq.make_trap import make_trapezoid
 from pypulseq.opts import Opts
 
 GAMMA_BAR = 42.5775e6
-GAMMA = 2*pi*GAMMA_BAR
+GAMMA = 2 * pi * GAMMA_BAR
 
 
-def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_gre(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """Makes a gradient-echo sequence
 
     2D orthogonal multi-slice gradient-echo pulse sequence with Cartesian encoding
@@ -74,7 +74,7 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     # Readout and ADC
     readoutTime = 6.4e-3
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
-    g_ro= make_trapezoid(kwargs_for_g_ro)
+    g_ro = make_trapezoid(kwargs_for_g_ro)
     kwargs_for_adc = {"num_samples": Nf, "duration": g_ro.flat_time, "delay": g_ro.rise_time}
     adc = makeadc(kwargs_for_adc)
     # Readout rewinder
@@ -86,7 +86,7 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     phase_areas = (np.arange(Np) - (Np / 2)) * delta_k
 
     # TE, TR = 10e-3, 1000e-3
-    TE, TR = te,tr
+    TE, TR = te, tr
     delayTE = TE - calc_duration(g_ro_pre) - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
     delayTR = TR - calc_duration(g_ro_pre) - calc_duration(g_ss) - calc_duration(g_ro) - delayTE
     delay1 = make_delay(delayTE)
@@ -106,17 +106,18 @@ def make_pulseq_gre(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
             g_pe = make_trapezoid(kwargs_for_g_pe)
             seq.add_block(g_ro_pre, g_pe, g_ss_reph)
             seq.add_block(delay1)
-            seq.add_block(g_ro,adc)
+            seq.add_block(g_ro, adc)
             seq.add_block(delay2)
 
     if write:
-        seq.write("gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
-                                                                                               TR * 1000, flip * 180 / pi))
+        seq.write(
+            "gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                         TR * 1000, flip * 180 / pi))
     print('GRE sequence constructed')
     return seq
 
 
-def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_gre_oblique(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """Makes a gradient-echo sequence in any plane
 
         2D oblique multi-slice gradient-echo pulse sequence with Cartesian encoding
@@ -159,10 +160,10 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
         """
 
     # System options
-    #kwargs_for_opts = {"rf_ring_down_time": 0, "rf_dead_time": 0}
+    # kwargs_for_opts = {"rf_ring_down_time": 0, "rf_dead_time": 0}
     kwargs_for_opts = {'max_grad': 32, 'grad_unit': 'mT/m',
-    'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
-    'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
+                       'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
+                       'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
     system = Opts(kwargs_for_opts)
     seq = Sequence(system)
 
@@ -170,8 +171,8 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
     ug_fe, ug_pe, ug_ss = parse_enc(enc)
 
     # Sequence parameters
-    Nf, Np = (n,n) if isinstance(n,int) else (n[0], n[1])
-    delta_k_ro, delta_k_pe = (1/fov,1/fov) if isinstance(fov,float) else (1/fov[0], 1/fov[1])
+    Nf, Np = (n, n) if isinstance(n, int) else (n[0], n[1])
+    delta_k_ro, delta_k_pe = (1 / fov, 1 / fov) if isinstance(fov, float) else (1 / fov[0], 1 / fov[1])
     kWidth_ro = Nf * delta_k_ro
     flip = fa * pi / 180
 
@@ -179,20 +180,20 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
     kwargs_for_sinc = {"flip_angle": flip, "system": system, "duration": 4e-3, "slice_thickness": thk,
                        "apodization": 0.5, "time_bw_product": 4}
     rf, g_ss = make_sinc_pulse(kwargs_for_sinc, 2)
-    g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss,ug_ss)
+    g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss, ug_ss)
 
     # Readout and ADC
     readoutTime = 6.4e-3
     kwargs_for_g_ro = {"channel": 'x', "system": system, "flat_area": kWidth_ro, "flat_time": readoutTime}
-    g_ro= make_trapezoid(kwargs_for_g_ro)
-    g_ro_x, g_ro_y, g_ro_z = make_oblique_gradients(g_ro,ug_fe)#
+    g_ro = make_trapezoid(kwargs_for_g_ro)
+    g_ro_x, g_ro_y, g_ro_z = make_oblique_gradients(g_ro, ug_fe)  #
     kwargs_for_adc = {"num_samples": Nf, "duration": g_ro.flat_time, "delay": g_ro.rise_time}
     adc = makeadc(kwargs_for_adc)
 
     # Readout rewinder
     kwargs_for_g_ro_pre = {"channel": 'x', "system": system, "area": -g_ro.area / 2, "duration": 2e-3}
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
-    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre,ug_fe)#
+    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre, ug_fe)  #
 
     # Slice refocusing
     kwargs_for_g_ss_reph = {"channel": 'z', "system": system, "area": -g_ss.area / 2, "duration": 2e-3}
@@ -202,7 +203,7 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
     # Prepare phase areas
     phase_areas = (np.arange(Np) - (Np / 2)) * delta_k_pe
 
-    TE, TR = te,tr
+    TE, TR = te, tr
     delayTE = TE - calc_duration(g_ro_pre) - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
     delayTR = TR - calc_duration(g_ro_pre) - calc_duration(g_ss) - calc_duration(g_ro) - delayTE
     delay1 = make_delay(delayTE)
@@ -218,17 +219,17 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
         # add frequency offset
         rf.freq_offset = g_ss.amplitude * locs[u]
         for i in range(Np):
-            seq.add_block(rf,g_ss_x, g_ss_y, g_ss_z)
+            seq.add_block(rf, g_ss_x, g_ss_y, g_ss_z)
             kwargs_for_g_pe = {"channel": 'y', "system": system, "area": phase_areas[i], "duration": 2e-3}
             g_pe = make_trapezoid(kwargs_for_g_pe)
 
-            g_pe_x, g_pe_y, g_pe_z = make_oblique_gradients(g_pe,ug_pe)
+            g_pe_x, g_pe_y, g_pe_z = make_oblique_gradients(g_pe, ug_pe)
 
             pre_grads_list = [g_ro_pre_x, g_ro_pre_y, g_ro_pre_z,
-                             g_ss_reph_x, g_ss_reph_y, g_ss_reph_z,
-                             g_pe_x, g_pe_y, g_pe_z]
+                              g_ss_reph_x, g_ss_reph_y, g_ss_reph_z,
+                              g_pe_x, g_pe_y, g_pe_z]
 
-            gtx, gty, gtz = combine_trap_grad_xyz(gradients=pre_grads_list,system=system, dur=2e-3)
+            gtx, gty, gtz = combine_trap_grad_xyz(gradients=pre_grads_list, system=system, dur=2e-3)
 
             seq.add_block(gtx, gty, gtz)
             seq.add_block(delay1)
@@ -236,13 +237,14 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
             seq.add_block(delay2)
 
     if write:
-        seq.write("gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
-                                                                                               TR * 1000, flip * 180 / pi))
+        seq.write(
+            "gre_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_FA{:.0f}deg.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                         TR * 1000, flip * 180 / pi))
     print('GRE sequence constructed')
     return seq
 
 
-def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False):
+def make_pulseq_irse(fov, n, thk, fa, tr, te, ti, enc='xyz', slice_locs=None, write=False):
     """Makes an Inversion Recovery Spin Echo (IRSE) sequence
 
         2D orthogonal multi-slice IRSE pulse sequence with Cartesian encoding
@@ -292,11 +294,10 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     delta_k = 1 / fov
     kWidth = Nf * delta_k
 
-    TI,TE,TR = ti,te,tr
+    TI, TE, TR = ti, te, tr
 
     if np.shape(TI) == ():
         TI = [TI]
-
 
     # Non-180 pulse
     flip1 = fa * pi / 180
@@ -321,8 +322,8 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2,
-                        "duration": 2e-3}
+    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area / 2,
+                           "duration": 2e-3}
 
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
 
@@ -332,12 +333,13 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
 
     # Delays
 
-    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) / 2 - calc_duration(
+    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(
+        g_ss) / 2 - calc_duration(
         g_ss180) / 2
     delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
     delayTE3 = TR - TE - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
 
-    print('dur rf', calc_duration(rf),'dur gss:' ,calc_duration(g_ss))
+    print('dur rf', calc_duration(rf), 'dur gss:', calc_duration(g_ss))
 
     delay1 = make_delay(delayTE1)
     delay2 = make_delay(delayTE2)
@@ -355,14 +357,16 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
             rf.freq_offset = g_ss.amplitude * locs[u]
             for i in range(Np):
                 # Inversion Recovery part
-                seq.add_block(rf180)# Non-selective at the moment; could be extended to make this selective/adiabatic
-                seq.add_block(make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
+                seq.add_block(rf180)  # Non-selective at the moment; could be extended to make this selective/adiabatic
+                seq.add_block(
+                    make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
                 # Spin echo part
                 seq.add_block(rf, g_ss)  # 90-deg pulse
                 kwargs_for_g_pe_pre = {"channel": enc[1], "system": system, "area": -(Np / 2 - i) * delta_k,
-                                     "duration":2e-3}
+                                       "duration": 2e-3}
                 g_pe_pre = make_trapezoid(kwargs_for_g_pe_pre)  # Phase encoding gradient
-                seq.add_block(g_ro_pre, g_pe_pre, g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
+                seq.add_block(g_ro_pre, g_pe_pre,
+                              g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
                 seq.add_block(delay1)  # Delay 1: until 180-deg pulse
                 seq.add_block(rf180, g_ss180)  # 180 deg pulse for SE
                 seq.add_block(delay2)  # Delay 2: until readout
@@ -371,14 +375,20 @@ def make_pulseq_irse(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False
 
     if write:
         if len(TI) == 1:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TI[0] * 1000, TE * 1000, TR * 1000))
+            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np,
+                                                                                                   TI[0] * 1000,
+                                                                                                   TE * 1000,
+                                                                                                   TR * 1000))
         else:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
+            seq.write(
+                "irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                          TR * 1000))
 
     print('IRSE sequence constructed')
     return seq
 
-def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,write=False):
+
+def make_pulseq_irse_oblique(fov, n, thk, fa, tr, te, ti, enc='xyz', slice_locs=None, write=False):
     """Makes an Inversion Recovery Spin Echo (IRSE) sequence in any plane
 
         2D oblique multi-slice IRSE pulse sequence with Cartesian encoding
@@ -424,17 +434,17 @@ def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,wri
         """
     # System options
     kwargs_for_opts = {'max_grad': 32, 'grad_unit': 'mT/m',
-    'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
-    'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
+                       'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
+                       'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
     system = Opts(kwargs_for_opts)
     seq = Sequence(system)
 
     # Sequence parameters
     ug_fe, ug_pe, ug_ss = parse_enc(enc)
-    Nf, Np = (n,n) if isinstance(n,int) else (n[0], n[1])
-    delta_k_ro, delta_k_pe = (1/fov,1/fov) if isinstance(fov,float) else (1/fov[0], 1/fov[1])
+    Nf, Np = (n, n) if isinstance(n, int) else (n[0], n[1])
+    delta_k_ro, delta_k_pe = (1 / fov, 1 / fov) if isinstance(fov, float) else (1 / fov[0], 1 / fov[1])
     kWidth_ro = Nf * delta_k_ro
-    TI,TE,TR = ti,te,tr
+    TI, TE, TR = ti, te, tr
 
     if np.shape(TI) == ():
         TI = [TI]
@@ -464,9 +474,9 @@ def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,wri
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2, "duration": 2e-3}
+    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area / 2, "duration": 2e-3}
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
-    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre,ug_fe)#
+    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre, ug_fe)  #
 
     # Slice refocusing gradient
     kwargs_for_g_ss_reph = {"channel": enc[2], "system": system, "area": -g_ss.area / 2, "duration": 2e-3}
@@ -474,7 +484,7 @@ def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,wri
     g_ss_reph_x, g_ss_reph_y, g_ss_reph_z = make_oblique_gradients(g_ss_reph, ug_ss)
 
     # Delays
-    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre))\
+    delayTE1 = TE / 2 - max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) \
                - calc_duration(g_ss) / 2 - calc_duration(g_ss180) / 2
     delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
     delayTE3 = TR - TE - calc_duration(g_ss) / 2 - calc_duration(g_ro) / 2
@@ -495,19 +505,20 @@ def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,wri
             rf.freq_offset = g_ss.amplitude * locs[u]
             for i in range(Np):
                 # Inversion Recovery part
-                seq.add_block(rf180)# Non-selective at the moment; could be extended to make this selective/adiabatic
-                seq.add_block(make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
+                seq.add_block(rf180)  # Non-selective at the moment; could be extended to make this selective/adiabatic
+                seq.add_block(
+                    make_delay(TI[inv] - calc_duration(rf) / 2 - calc_duration(rf180) / 2))  # Inversion time delay
                 # Spin echo part
                 seq.add_block(rf, g_ss_x, g_ss_y, g_ss_z)  # 90-deg pulse
                 kwargs_for_g_pe = {"channel": 'y', "system": system, "area": -(Np / 2 - i) * delta_k_pe,
-                                     "duration":2e-3}
+                                   "duration": 2e-3}
                 g_pe = make_trapezoid(kwargs_for_g_pe)  # Phase encoding gradient
                 g_pe_x, g_pe_y, g_pe_z = make_oblique_gradients(g_pe, ug_pe)
 
                 pre_grads_list = [g_ro_pre_x, g_ro_pre_y, g_ro_pre_z,
                                   g_ss_reph_x, g_ss_reph_y, g_ss_reph_z,
                                   g_pe_x, g_pe_y, g_pe_z]
-                gtx, gty, gtz = combine_trap_grad_xyz(pre_grads_list,system,2e-3)
+                gtx, gty, gtz = combine_trap_grad_xyz(pre_grads_list, system, 2e-3)
 
                 seq.add_block(gtx, gty, gtz)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
                 seq.add_block(delay1)  # Delay 1: until 180-deg pulse
@@ -518,14 +529,20 @@ def make_pulseq_irse_oblique(fov,n,thk,fa,tr,te,ti,enc='xyz',slice_locs=None,wri
 
     if write:
         if len(TI) == 1:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TI[0] * 1000, TE * 1000, TR * 1000))
+            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_TI{:.0f}ms_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np,
+                                                                                                   TI[0] * 1000,
+                                                                                                   TE * 1000,
+                                                                                                   TR * 1000))
         else:
-            seq.write("irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
+            seq.write(
+                "irse_fov{:.0f}mm_Nf{:d}_Np{:d}_multiTI_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000,
+                                                                                          TR * 1000))
 
     print('IRSE (oblique) sequence constructed')
     return seq
 
-def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+
+def make_pulseq_se(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """Makes a Spin Echo (SE) sequence
 
     2D orthogonal multi-slice Spin-Echo pulse sequence with Cartesian encoding
@@ -573,8 +590,7 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     delta_k = 1 / fov
     kWidth = Nf * delta_k
 
-    TE,TR = te,tr
-
+    TE, TR = te, tr
 
     # Non-180 pulse
     flip1 = fa * pi / 180
@@ -582,7 +598,6 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
                        "apodization": 0.5, "time_bw_product": 4}
     rf, g_ss = make_sinc_pulse(kwargs_for_sinc, 2)
     g_ss.channel = enc[2]
-
 
     # 180 pulse
     flip2 = 180 * pi / 180
@@ -592,7 +607,7 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     g_ss180.channel = enc[2]
 
     # Readout gradient & ADC
-#    readoutTime = system.grad_raster_time * Nf
+    #    readoutTime = system.grad_raster_time * Nf
     readoutTime = 6.4e-3
     kwargs_for_g_ro = {"channel": enc[0], "system": system, "flat_area": kWidth, "flat_time": readoutTime}
     g_ro = make_trapezoid(kwargs_for_g_ro)
@@ -600,9 +615,9 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area/2,
-                            "duration": 2e-3}
-#                        "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+    kwargs_for_g_ro_pre = {"channel": enc[0], "system": system, "area": g_ro.area / 2,
+                           "duration": 2e-3}
+    #                        "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
 
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
 
@@ -611,17 +626,15 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
     g_ss_reph = make_trapezoid(kwargs_for_g_ss_reph)
 
     # Delays
-    delayTE1 = (TE - 2*max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
-        g_ss180))/2
-  # delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
-    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180))/2
+    delayTE1 = (TE - 2 * max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
+        g_ss180)) / 2
+    # delayTE2 = TE / 2 - calc_duration(g_ro) / 2 - calc_duration(g_ss180) / 2
+    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180)) / 2
     delayTE3 = TR - TE - (calc_duration(g_ss) + calc_duration(g_ro)) / 2
-
 
     delay1 = make_delay(delayTE1)
     delay2 = make_delay(delayTE2)
     delay3 = make_delay(delayTE3)
-
 
     # Construct sequence
     if slice_locs is None:
@@ -635,10 +648,11 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
         for i in range(Np):
             seq.add_block(rf, g_ss)  # 90-deg pulse
             kwargs_for_g_pe_pre = {"channel": enc[1], "system": system, "area": -(Np / 2 - i) * delta_k,
-                                   "duration":2e-3}
-                                 # "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
+                                   "duration": 2e-3}
+            # "duration": g_ro.rise_time + g_ro.fall_time + readoutTime / 2}
             g_pe_pre = make_trapezoid(kwargs_for_g_pe_pre)  # Phase encoding gradient
-            seq.add_block(g_ro_pre, g_pe_pre, g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
+            seq.add_block(g_ro_pre, g_pe_pre,
+                          g_ss_reph)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
             seq.add_block(delay1)  # Delay 1: until 180-deg pulse
             seq.add_block(rf180, g_ss180)  # 180 deg pulse for SE
             seq.add_block(delay2)  # Delay 2: until readout
@@ -646,13 +660,14 @@ def make_pulseq_se(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
             seq.add_block(delay3)  # Delay 3: until next inversion pulse
 
     if write:
-        seq.write("se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
-
+        seq.write(
+            "se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
 
     print('Spin echo sequence constructed')
     return seq
 
-def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=False):
+
+def make_pulseq_se_oblique(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, write=False):
     """Makes a Spin Echo (SE) sequence in any plane
 
         2D oblique multi-slice Spin-Echo pulse sequence with Cartesian encoding
@@ -696,31 +711,31 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
 
     # System options
     kwargs_for_opts = {'max_grad': 32, 'grad_unit': 'mT/m',
-    'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
-    'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
+                       'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
+                       'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
     system = Opts(kwargs_for_opts)
     seq = Sequence(system)
 
     # Sequence parameters
     ug_fe, ug_pe, ug_ss = parse_enc(enc)
-    Nf, Np = (n,n) if isinstance(n,int) else (n[0], n[1])
-    delta_k_ro, delta_k_pe = (1/fov,1/fov) if isinstance(fov,float) else (1/fov[0], 1/fov[1])
+    Nf, Np = (n, n) if isinstance(n, int) else (n[0], n[1])
+    delta_k_ro, delta_k_pe = (1 / fov, 1 / fov) if isinstance(fov, float) else (1 / fov[0], 1 / fov[1])
     kWidth_ro = Nf * delta_k_ro
-    TE,TR = te,tr
+    TE, TR = te, tr
 
     # Non-180 pulse
     flip1 = fa * pi / 180
     kwargs_for_sinc = {"flip_angle": flip1, "system": system, "duration": 2e-3, "slice_thickness": thk,
                        "apodization": 0.5, "time_bw_product": 4}
     rf, g_ss = make_sinc_pulse(kwargs_for_sinc, 2)
-    g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss,ug_ss)
+    g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss, ug_ss)
 
     # 180 pulse
     flip2 = 180 * pi / 180
     kwargs_for_sinc = {"flip_angle": flip2, "system": system, "duration": 2e-3, "slice_thickness": thk,
                        "apodization": 0.5, "time_bw_product": 4}
     rf180, g_ss180 = make_sinc_pulse(kwargs_for_sinc, 2)
-    g_ss180_x, g_ss180_y, g_ss180_z = make_oblique_gradients(g_ss180,ug_ss)
+    g_ss180_x, g_ss180_y, g_ss180_z = make_oblique_gradients(g_ss180, ug_ss)
 
     # Readout gradient & ADC
     readoutTime = 6.4e-3
@@ -731,8 +746,8 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
     adc = makeadc(kwargs_for_adc)
 
     # RO rewinder gradient
-    kwargs_for_g_ro_pre = {"channel": 'x', "system": system, "area": g_ro.area/2,
-                            "duration": 2e-3}
+    kwargs_for_g_ro_pre = {"channel": 'x', "system": system, "area": g_ro.area / 2,
+                           "duration": 2e-3}
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
     g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre, ug_fe)
 
@@ -742,11 +757,10 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
     g_ss_reph_x, g_ss_reph_y, g_ss_reph_z = make_oblique_gradients(g_ss_reph, ug_ss)
 
     # Delays
-    delayTE1 = (TE - 2*max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
-        g_ss180))/2
-    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180))/2
+    delayTE1 = (TE - 2 * max(calc_duration(g_ss_reph), calc_duration(g_ro_pre)) - calc_duration(g_ss) - calc_duration(
+        g_ss180)) / 2
+    delayTE2 = (TE - calc_duration(g_ro) - calc_duration(g_ss180)) / 2
     delayTE3 = TR - TE - (calc_duration(g_ss) + calc_duration(g_ro)) / 2
-
 
     delay1 = make_delay(delayTE1)
     delay2 = make_delay(delayTE2)
@@ -763,7 +777,7 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
         rf.freq_offset = g_ss.amplitude * locs[u]
         for i in range(Np):
             seq.add_block(rf, g_ss_x, g_ss_y, g_ss_z)  # 90-deg pulse
-            kwargs_for_g_pe = {"channel": 'y', "system": system, "area": -(Np/2 - i)*delta_k_pe, "duration":2e-3}
+            kwargs_for_g_pe = {"channel": 'y', "system": system, "area": -(Np / 2 - i) * delta_k_pe, "duration": 2e-3}
             g_pe = make_trapezoid(kwargs_for_g_pe)  # Phase encoding gradient
             g_pe_x, g_pe_y, g_pe_z = make_oblique_gradients(g_pe, ug_pe)
 
@@ -772,8 +786,7 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
                               g_pe_x, g_pe_y, g_pe_z]
             gtx, gty, gtz = combine_trap_grad_xyz(pre_grads_list, system, 2e-3)
 
-
-            seq.add_block(gtx,gty,gtz)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
+            seq.add_block(gtx, gty, gtz)  # Add a combination of ro rewinder, phase encoding, and slice refocusing
             seq.add_block(delay1)  # Delay 1: until 180-deg pulse
             seq.add_block(rf180, g_ss180_x, g_ss180_y, g_ss180_z)  # 180 deg pulse for SE
             seq.add_block(delay2)  # Delay 2: until readout
@@ -781,18 +794,18 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
             seq.add_block(delay3)  # Delay 3: until next inversion pulse
 
     if write:
-        seq.write("se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
-
+        seq.write(
+            "se_fov{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms.seq".format(fov * 1000, Nf, Np, TE * 1000, TR * 1000))
 
     print('Spin echo sequence (oblique) constructed')
     return seq
-
 
     # TODO 2D Cartesian EPI sequence - fix phase problem seen in simulation
 
 
 # TODO multi-shot epi needs to be completed and tested
-def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_type="se",n_shots=1,seg_type='blocked',write=False):
+def make_pulseq_epi_oblique(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, echo_type="se", n_shots=1,
+                            seg_type='blocked', write=False):
     """Makes an Echo Planar Imaging (EPI) sequence in any plane
 
         2D oblique multi-slice EPI pulse sequence with Cartesian encoding
@@ -856,19 +869,18 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
 
     # System options
     kwargs_for_opts = {'max_grad': 32, 'grad_unit': 'mT/m',
-    'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
-    'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
-
+                       'max_slew': 130, 'slew_unit': 'T/m/s', 'rf_ring_down_time': 30e-6,
+                       'rf_dead_time': 100e-6, 'adc_dead_time': 20e-6}
 
     system = Opts(kwargs_for_opts)
     seq = Sequence(system)
     ug_fe, ug_pe, ug_ss = parse_enc(enc)
 
     # Sequence parameters
-    Nf, Np = (n,n) if isinstance(n,int) else (n[0], n[1])
-    delta_k_ro, delta_k_pe = (1/fov,1/fov) if isinstance(fov,float) else (1/fov[0], 1/fov[1])
+    Nf, Np = (n, n) if isinstance(n, int) else (n[0], n[1])
+    delta_k_ro, delta_k_pe = (1 / fov, 1 / fov) if isinstance(fov, float) else (1 / fov[0], 1 / fov[1])
     kWidth_ro = Nf * delta_k_ro
-    TE,TR = te,tr
+    TE, TR = te, tr
     flip = fa * pi / 180
 
     # RF Pulse (first)
@@ -877,19 +889,19 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
     rf, g_ss = make_sinc_pulse(kwargs_for_sinc, 2)
     g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss, ug_ss)
 
-
     # Readout gradients
-#    readoutTime = Nf * 4e-6
-    dwell=1e-5
-    readoutTime = Nf*dwell
+    #    readoutTime = Nf * 4e-6
+    dwell = 1e-5
+    readoutTime = Nf * dwell
     kwargs_for_g_ro = {"channel": 'x', "system": system, "flat_area": kWidth_ro, "flat_time": readoutTime}
     g_ro_pos = make_trapezoid(kwargs_for_g_ro)
-    g_ro_pos_x, g_ro_pos_y, g_ro_pos_z = make_oblique_gradients(g_ro_pos,ug_fe)
+    g_ro_pos_x, g_ro_pos_y, g_ro_pos_z = make_oblique_gradients(g_ro_pos, ug_fe)
     g_ro_neg = copy.deepcopy(g_ro_pos)
-    modify_gradient(g_ro_neg,scale=-1)
-    g_ro_neg_x, g_ro_neg_y, g_ro_neg_z = make_oblique_gradients(g_ro_neg,ug_fe)
+    modify_gradient(g_ro_neg, scale=-1)
+    g_ro_neg_x, g_ro_neg_y, g_ro_neg_z = make_oblique_gradients(g_ro_neg, ug_fe)
 
-    kwargs_for_adc = {"num_samples": Nf, "system": system, "duration": g_ro_pos.flat_time, "delay": g_ro_pos.rise_time+dwell/2}
+    kwargs_for_adc = {"num_samples": Nf, "system": system, "duration": g_ro_pos.flat_time,
+                      "delay": g_ro_pos.rise_time + dwell / 2}
     adc = makeadc(kwargs_for_adc)
 
     pre_time = 8e-4
@@ -904,7 +916,7 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
         kwargs_for_g_ss_spoil = {"channel": 'z', "system": system, "area": g_ss.area * 2, "duration": 3 * pre_time}
         g_ss_spoil = make_trapezoid(kwargs_for_g_ss_spoil)
         ##
-        modify_gradient(g_ss_spoil,0)
+        modify_gradient(g_ss_spoil, 0)
         ##
         g_ss_spoil_x, g_ss_spoil_y, g_ss_spoil_z = make_oblique_gradients(g_ss_spoil, ug_ss)
 
@@ -912,7 +924,7 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
     ro_pre_area = g_ro_neg.area / 2 if echo_type == 'gre' else g_ro_pos.area / 2
     kwargs_for_g_ro_pre = {"channel": 'x', "system": system, "area": ro_pre_area, "duration": pre_time}
     g_ro_pre = make_trapezoid(kwargs_for_g_ro_pre)
-    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre,ug_fe)
+    g_ro_pre_x, g_ro_pre_y, g_ro_pre_z = make_oblique_gradients(g_ro_pre, ug_fe)
 
     # Slice-selective rephasing
     kwargs_for_g_ss_reph = {"channel": 'z', "system": system, "area": -g_ss.area / 2, "duration": pre_time}
@@ -921,19 +933,19 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
 
     # Phase encode rewinder
     if echo_type == 'gre':
-        pe_max_area = (Np/2)*delta_k_pe
+        pe_max_area = (Np / 2) * delta_k_pe
     elif echo_type == 'se':
-        pe_max_area = -(Np/2)*delta_k_pe
+        pe_max_area = -(Np / 2) * delta_k_pe
     kwargs_for_g_pe_max = {"channel": 'y', "system": system, "area": pe_max_area, "duration": pre_time}
     g_pe_max = make_trapezoid(kwargs_for_g_pe_max)
 
     # Phase encoding blips
-    dur = ceil(2 * sqrt(delta_k_pe/ system.max_slew) / 10e-6) * 10e-6
+    dur = ceil(2 * sqrt(delta_k_pe / system.max_slew) / 10e-6) * 10e-6
     kwargs_for_g_blip = {"channel": 'y', "system": system, "area": delta_k_pe, "duration": dur}
     g_blip = make_trapezoid(kwargs_for_g_blip)
 
     # Delays
-    duration_to_center = (Np/ 2 ) * calc_duration(g_ro_pos) + (Np-1) / 2 * calc_duration(g_blip) # why?
+    duration_to_center = (Np / 2) * calc_duration(g_ro_pos) + (Np - 1) / 2 * calc_duration(g_blip)  # why?
 
     if echo_type == 'se':
         delayTE1 = TE / 2 - calc_duration(g_ss) / 2 - pre_time - calc_duration(g_ss_spoil) - calc_duration(rf180) / 2
@@ -941,13 +953,13 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
         delay1 = make_delay(delayTE1)
         delay2 = make_delay(delayTE2)
     elif echo_type == 'gre':
-        delayTE = TE - calc_duration(g_ss)/2 - pre_time - duration_to_center
+        delayTE = TE - calc_duration(g_ss) / 2 - pre_time - duration_to_center
         delay12 = make_delay(delayTE)
 
     delayTR = TR - TE - calc_duration(rf) / 2 - duration_to_center
-    delay3 = make_delay(delayTR) # This might be different for each rep though. Fix later
+    delay3 = make_delay(delayTR)  # This might be different for each rep though. Fix later
 
-#####################################################################################################
+    #####################################################################################################
     # Multi-shot calculations
     ro_dirs = []
     ro_order = []
@@ -960,16 +972,16 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
         nl = ceil(Np / n_shots)
 
         # Number of k-space lines per readout
-        if Np%nl == 0:
-            nlines_list = nl*np.ones(n_shots)
+        if Np % nl == 0:
+            nlines_list = nl * np.ones(n_shots)
         else:
-            nlines_list = nl*np.ones(n_shots-1)
-            nlines_list = np.append(nlines_list,Np%nl)
+            nlines_list = nl * np.ones(n_shots - 1)
+            nlines_list = np.append(nlines_list, Np % nl)
 
-        pe_scales = 2*np.append([0],np.cumsum(nlines_list)[:-1])/Np - 1
+        pe_scales = 2 * np.append([0], np.cumsum(nlines_list)[:-1]) / Np - 1
         g_blip_x, g_blip_y, g_blip_z = make_oblique_gradients(g_blip, ug_pe)
         for nlines in nlines_list:
-            ro_dirs = np.append(ro_dirs, ((-1)**(np.arange(0,nlines)+1)+1)/2)
+            ro_dirs = np.append(ro_dirs, ((-1) ** (np.arange(0, nlines) + 1) + 1) / 2)
 
 
     elif seg_type == 'interleaved':
@@ -977,39 +989,37 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
         nb = floor(Np / n_shots)
 
         # Number of k-space lines per readout
-        nlines_list = np.ones(n_shots)*nb
-        nlines_list[:Np%n_shots] += 1
+        nlines_list = np.ones(n_shots) * nb
+        nlines_list[:Np % n_shots] += 1
 
         # Phase encoding scales (starts from -1; i.e. bottom left combined with pre-readout)
-        pe_scales = 2*np.arange(0,(Np-n_shots)/Np,1/Np)[0:n_shots]-1
+        pe_scales = 2 * np.arange(0, (Np - n_shots) / Np, 1 / Np)[0:n_shots] - 1
         print(pe_scales)
         # Larger blips
         modify_gradient(g_blip, scale=n_shots)
         g_blip_x, g_blip_y, g_blip_z = make_oblique_gradients(g_blip, ug_pe)
 
-#        ro_order = np.reshape(np.reshape(np.arange(0,Np),(),order='F'),(0,Np))
+        #        ro_order = np.reshape(np.reshape(np.arange(0,Np),(),order='F'),(0,Np))
 
-        ro_order = np.zeros((nb+1,n_shots))
+        ro_order = np.zeros((nb + 1, n_shots))
         ro_inds = np.arange(Np)
         # Readout order for recon
         for k in range(n_shots):
             cs = int(nlines_list[k])
-            ro_order[:cs,k] = ro_inds[:cs]
-            ro_inds = np.delete(ro_inds,range(cs))
+            ro_order[:cs, k] = ro_inds[:cs]
+            ro_inds = np.delete(ro_inds, range(cs))
         ro_order = ro_order.flatten()[:Np].astype(int)
 
         print(ro_order)
         # Readout directions in original (interleaved) order
         for nlines in nlines_list:
-            ro_dirs = np.append(ro_dirs, ((-1)**(np.arange(0,nlines)+1)+1)/2)
+            ro_dirs = np.append(ro_dirs, ((-1) ** (np.arange(0, nlines) + 1) + 1) / 2)
 
-
-
-#####################################################################################################
+    #####################################################################################################
 
     # Add blocks
 
-    for u in range(len(slice_locs)): # For each slice
+    for u in range(len(slice_locs)):  # For each slice
         # Offset rf
         rf.freq_offset = g_ss.amplitude * slice_locs[u]
         for v in range(n_shots):
@@ -1026,13 +1036,12 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
             gtx, gty, gtz = combine_trap_grad_xyz(pre_grads_list, system, pre_time)
             seq.add_block(gtx, gty, gtz)
 
-
             # 180 deg pulse and spoilers, only for Spin Echo
             if echo_type == 'se':
                 # First delay
                 seq.add_block(delay1)
                 # Second RF : 180 deg with spoilers on both sides
-                seq.add_block(g_ss_spoil_x, g_ss_spoil_y, g_ss_spoil_z)#why?
+                seq.add_block(g_ss_spoil_x, g_ss_spoil_y, g_ss_spoil_z)  # why?
                 seq.add_block(rf180)
                 seq.add_block(g_ss_spoil_x, g_ss_spoil_y, g_ss_spoil_z)
                 # Delay between rf180 and beginning of readout
@@ -1041,30 +1050,25 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
             elif echo_type == 'gre':
                 seq.add_block(delay12)
 
-
-
             # EPI readout with blips
             for i in range(int(nlines_list[v])):
-                if i%2 == 0:
-                    seq.add_block(g_ro_pos_x, g_ro_pos_y, g_ro_pos_z, adc) # ro line in the positive direction
+                if i % 2 == 0:
+                    seq.add_block(g_ro_pos_x, g_ro_pos_y, g_ro_pos_z, adc)  # ro line in the positive direction
                 else:
-                    seq.add_block(g_ro_neg_x, g_ro_neg_y, g_ro_neg_z, adc) # ro line backwards
-                seq.add_block(g_blip_x, g_blip_y, g_blip_z) # blip
+                    seq.add_block(g_ro_neg_x, g_ro_neg_y, g_ro_neg_z, adc)  # ro line backwards
+                seq.add_block(g_blip_x, g_blip_y, g_blip_z)  # blip
 
             seq.add_block(delay3)
 
     # Display 1 TR
-    #seq.plot(time_range=(0, TR))
+    # seq.plot(time_range=(0, TR))
 
     if write:
-        seq.write("epi_{}_FOVf{:.0f}mm_FOVp{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_{:d}shots.seq"\
-                  .format(echo_type, fov[0]*1000, fov[1]*1000, Nf, Np, TE * 1000, TR * 1000, n_shots))
-
+        seq.write("epi_{}_FOVf{:.0f}mm_FOVp{:.0f}mm_Nf{:d}_Np{:d}_TE{:.0f}ms_TR{:.0f}ms_{:d}shots.seq" \
+                  .format(echo_type, fov[0] * 1000, fov[1] * 1000, Nf, Np, TE * 1000, TR * 1000, n_shots))
 
     print('EPI sequence (oblique) constructed')
     return seq, ro_dirs, ro_order
-
-
 
 
 def parse_enc(enc):
@@ -1105,7 +1109,7 @@ def parse_enc(enc):
     return ug_fe, ug_pe, ug_ss
 
 
-def make_oblique_gradients(gradient,unit_grad):
+def make_oblique_gradients(gradient, unit_grad):
     """Helper function to make oblique gradients
 
     (Gx, Gy, Gz) are generated from a single orthogonal gradient
@@ -1128,13 +1132,14 @@ def make_oblique_gradients(gradient,unit_grad):
     ngy = copy.deepcopy(gradient)
     ngz = copy.deepcopy(gradient)
 
-    modify_gradient(ngx, unit_grad[0],'x')
-    modify_gradient(ngy, unit_grad[1],'y')
-    modify_gradient(ngz, unit_grad[2],'z')
+    modify_gradient(ngx, unit_grad[0], 'x')
+    modify_gradient(ngy, unit_grad[1], 'y')
+    modify_gradient(ngz, unit_grad[2], 'z')
 
     return ngx, ngy, ngz
 
-def modify_gradient(gradient,scale,channel=None):
+
+def modify_gradient(gradient, scale, channel=None):
     """Helper function to modify the strength and channel of an existing gradient
 
     Parameters
@@ -1156,7 +1161,7 @@ def modify_gradient(gradient,scale,channel=None):
         gradient.channel = channel
 
 
-def combine_trap_grad_xyz(gradients,system,dur):
+def combine_trap_grad_xyz(gradients, system, dur):
     """Helper function that merges multiple gradients
 
     A list of gradients are combined into one set of 3 oblique gradients (Gx, Gy, Gz) with equivalent areas
@@ -1177,7 +1182,7 @@ def combine_trap_grad_xyz(gradients,system,dur):
         Oblique pulseq gradients with equivalent areas to all input gradients combined
 
     """
-    gx_area, gy_area, gz_area = (0,0,0)
+    gx_area, gy_area, gz_area = (0, 0, 0)
     for g in gradients:
         if g.channel == 'x':
             gx_area += g.area
@@ -1195,5 +1200,3 @@ def combine_trap_grad_xyz(gradients,system,dur):
     gtz = make_trapezoid(kwargs_for_gtz)
 
     return gtx, gty, gtz
-
-

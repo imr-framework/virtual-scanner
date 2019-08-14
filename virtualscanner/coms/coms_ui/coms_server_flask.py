@@ -6,8 +6,10 @@ if __name__ == '__main__':
     import sys
 
     script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtualscanner') + 1]  #
+    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
+
+from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
@@ -15,11 +17,10 @@ from werkzeug.utils import secure_filename
 from virtualscanner.server.ana import T2_mapping as T2_mapping, T1_mapping as T1_mapping, ROI_analysis as ROI_analysis
 from virtualscanner.server.recon.drunck.reconstruct import main
 from virtualscanner.server.registration import register as reg
-from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
 from virtualscanner.server.rf.rx import caller_script_Rx as Rxfunc
+from virtualscanner.server.rf.tx.SAR_calc import SAR_calc_main as SAR_calc_main
 from virtualscanner.server.simulation.bloch import caller_script_blochsim as bsim
 from virtualscanner.utils import constants
-from pathlib import Path
 
 CURRENT_PATH = Path(__file__).parent
 ROOT_PATH = constants.ROOT_PATH
@@ -335,7 +336,8 @@ def worker():
             session['acq_payload'] = payload
             print(payload)
 
-            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],pat_id=pat_id)  # phtinfo just needs to be 1 string
+            progress = bsim.run_blochsim(seqinfo=payload, phtinfo=rows[0][0],
+                                         pat_id=pat_id)  # phtinfo just needs to be 1 string
             sim_result_path = constants.COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs' / session['patid']
 
             while (os.path.isdir(sim_result_path) is False):
@@ -358,7 +360,6 @@ def worker():
                         pos = complete_path[indx].find('_', 30, ) + 1  #
                     else:
                         pos = complete_path[indx].find('_', 29, ) + 1  #
-
 
                     sl_orientation = complete_path[indx][pos]
                     if sl_orientation == 'Z':
@@ -399,7 +400,8 @@ def worker():
                 filenames_in_path = os.listdir(folder_path)
                 STATIC_ANALYZE_PATH_REL = constants.COMS_UI_STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 original_data_path = [
-                    str(STATIC_ANALYZE_PATH_REL / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname) for
+                    str(STATIC_ANALYZE_PATH_REL / 'inputs' / (payload['original-data-opt'] + '_original_data') / iname)
+                    for
                     iname in filenames_in_path]
                 payload['data-path'] = original_data_path
 
@@ -420,7 +422,7 @@ def worker():
                                                            session['patid'])
 
                 payload['dicom_path'] = str(dicom_path)
-                payload['map_path'] = str( STATIC_ANALYZE_PATH_REL / 'outputs' / session['patid'] / map_name)
+                payload['map_path'] = str(STATIC_ANALYZE_PATH_REL / 'outputs' / session['patid'] / map_name)
                 session['ana_payload2'] = payload
 
 
@@ -457,14 +459,12 @@ def worker():
                 file.save(upload_path)
 
                 filename = filename[:-4] + '.seq'
-                
-                if(filename != 'rad2d.seq'):
-                    if(os.path.isfile(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)):
+
+                if (filename != 'rad2d.seq'):
+                    if (os.path.isfile(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)):
                         os.remove(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
                     dest = str(constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
-                    os.rename(upload_path,dest)
-
-                
+                    os.rename(upload_path, dest)
 
                 # os.rename(upload_path, constants.SERVER_PATH / 'rf' / 'tx' / 'SAR_calc' / 'assets' / filename)
 
@@ -472,7 +472,7 @@ def worker():
 
                 session['tx'] = 1
                 STATIC_RFTX_PATH_REL = constants.COMS_UI_STATIC_RFTX_PATH.relative_to(CURRENT_PATH)
-                output['plot_path'] = str(STATIC_RFTX_PATH_REL/ 'SAR' / output['filename'])
+                output['plot_path'] = str(STATIC_RFTX_PATH_REL / 'SAR' / output['filename'])
                 session['tx_payload'] = output
                 return redirect('tx')
         # rx

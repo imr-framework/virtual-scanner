@@ -1,8 +1,10 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
 
 import numpy as np
-GAMMA = 2*42.58e6 * np.pi
+
+GAMMA = 2 * 42.58e6 * np.pi
 GAMMA_BAR = 42.58e6
+
 
 class SpinGroup:
     """Basic magnetization unit for Bloch simulation
@@ -44,14 +46,14 @@ class SpinGroup:
 
     """
 
-    def __init__(self, loc=(0,0,0), pdt1t2=(1,0,0), df=0):
+    def __init__(self, loc=(0, 0, 0), pdt1t2=(1, 0, 0), df=0):
         self.m = np.array([[0], [0], [1]])
         self.PD = pdt1t2[0]
         self.T1 = pdt1t2[1]
         self.T2 = pdt1t2[2]
         self.loc = loc
         self.df = df
-        self.signal=[]
+        self.signal = []
 
     def get_m_signal(self):
         """Gets spin group's transverse magnetization
@@ -64,11 +66,11 @@ class SpinGroup:
             Imaginary part = My
 
         """
-        m_signal = np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
+        m_signal = np.squeeze(self.PD * (self.m[0] + 1j * self.m[1]))
 
         return m_signal
 
-    def fpwg(self,grad_area,t):
+    def fpwg(self, grad_area, t):
         """Apply only gradients to the spin group
 
         The spin group precesses with gradients applied.
@@ -83,15 +85,15 @@ class SpinGroup:
             Total time of precession in seconds
 
         """
-        x,y,z = self.loc
-        phi = GAMMA*(x*grad_area[0]+y*grad_area[1]+z*grad_area[2])+2*np.pi*self.df*t
+        x, y, z = self.loc
+        phi = GAMMA * (x * grad_area[0] + y * grad_area[1] + z * grad_area[2]) + 2 * np.pi * self.df * t
         C, S = np.cos(phi), np.sin(phi)
-        E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
-        E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
-        A = np.array([[E2*C, E2*S, 0],
-                      [-E2*S, E2*C, 0],
+        E1 = 1 if self.T1 == 0 else np.exp(-t / self.T1)
+        E2 = 1 if self.T2 == 0 else np.exp(-t / self.T2)
+        A = np.array([[E2 * C, E2 * S, 0],
+                      [-E2 * S, E2 * C, 0],
                       [0, 0, E1]])
-        self.m = A@self.m + [[0],[0],[1 - E1]]
+        self.m = A @ self.m + [[0], [0], [1 - E1]]
 
     def delay(self, t):
         """Applies a time passage to the spin group
@@ -105,17 +107,15 @@ class SpinGroup:
             Delay interval in seconds
 
         """
-        self.T1 = max(0,self.T1)
-        self.T2 = max(0,self.T2)
-        E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
-        E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
+        self.T1 = max(0, self.T1)
+        self.T2 = max(0, self.T2)
+        E1 = 1 if self.T1 == 0 else np.exp(-t / self.T1)
+        E2 = 1 if self.T2 == 0 else np.exp(-t / self.T2)
 
         A = np.array([[E2, E2, 0],
                       [-E2, E2, 0],
                       [0, 0, E1]])
-        self.m = A@self.m + np.array([[0], [0], [1 - E1]])
-
-
+        self.m = A @ self.m + np.array([[0], [0], [1 - E1]])
 
     def apply_rf(self, pulse_shape, grads_shape, dt):
         """Applies an RF pulse
@@ -134,16 +134,16 @@ class SpinGroup:
 
         """
         m = self.m
-        x,y,z = self.loc
+        x, y, z = self.loc
         for v in range(len(pulse_shape)):
             B1 = pulse_shape[v]
             B1x = np.real(B1)
             B1y = np.imag(B1)
-            glocp = grads_shape[0,v]*x+grads_shape[1,v]*y+grads_shape[2,v]*z
+            glocp = grads_shape[0, v] * x + grads_shape[1, v] * y + grads_shape[2, v] * z
             A = np.array([[0, glocp, B1y],
                           [-glocp, 0, B1x],
                           [B1y, -B1x, 0]])
-            m = m + dt*GAMMA*A@m
+            m = m + dt * GAMMA * A @ m
         self.m = m
 
     def _apply_rf_old(self, pulse_shape, grads_shape, dt):
@@ -160,21 +160,21 @@ class SpinGroup:
             be = np.array([bx, by, bz])
             self.m = anyrot(GAMMA * be * dt) @ self.m
 
-    def _readout_old(self,dt,n,delay,grad,timing):
+    def _readout_old(self, dt, n, delay, grad, timing):
         """Deprecated method for sampling with gradients on
         """
         signal_1D = []
-        self.fpwg(grad[:,0]*delay, delay)
+        self.fpwg(grad[:, 0] * delay, delay)
         v = 1
         for q in range(1, len(timing)):
             if v <= n:
                 signal_1D.append(self.get_m_signal())
-            self.fpwg(grad[:, v]*dt,dt)
+            self.fpwg(grad[:, v] * dt, dt)
             v += 1
 
         self.signal.append(signal_1D)
 
-    def readout(self,dwell,n,delay,grad,timing):
+    def readout(self, dwell, n, delay, grad, timing):
         """ ADC sampling for single spin group
 
         Samples spin group's magnetization while playing an arbitrary gradient
@@ -199,13 +199,14 @@ class SpinGroup:
 
         signal_1D = []
         # ADC delay
-        self.fpwg(np.trapz(y=grad[:,0:2], x=timing[0:2]), delay)
+        self.fpwg(np.trapz(y=grad[:, 0:2], x=timing[0:2]), delay)
         for q in range(1, len(timing)):
             if q <= n:
                 signal_1D.append(self.get_m_signal())
-            self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
+            self.fpwg(np.trapz(y=grad[:, q:q + 2], dx=dwell), dwell)
 
         self.signal.append(signal_1D)
+
 
 # Helpers
 def anyrot(v):
@@ -229,15 +230,16 @@ def anyrot(v):
     vx = v[0]
     vy = v[1]
     vz = v[2]
-    th = np.linalg.norm(v,2)
+    th = np.linalg.norm(v, 2)
     C = np.cos(th)
     S = np.sin(th)
 
     if th != 0:
-        R = (1/(th*th))*np.array([[vx*vx*(1-C)+th*th*C, vx*vy*(1-C)-th*vz*S, vx*vz*(1-C)+th*vy*S],
-                                  [vx*vy*(1-C)+th*vz*S, vy*vy*(1-C)+th*th*C, vy*vz*(1-C)-th*vx*S],
-                                  [vx*vz*(1-C)-th*vy*S, vy*vz*(1-C)+th*vx*S, vz*vz*(1-C)+th*th*C]])
+        R = (1 / (th * th)) * np.array(
+            [[vx * vx * (1 - C) + th * th * C, vx * vy * (1 - C) - th * vz * S, vx * vz * (1 - C) + th * vy * S],
+             [vx * vy * (1 - C) + th * vz * S, vy * vy * (1 - C) + th * th * C, vy * vz * (1 - C) - th * vx * S],
+             [vx * vz * (1 - C) - th * vy * S, vy * vz * (1 - C) + th * vx * S, vz * vz * (1 - C) + th * th * C]])
     else:
-        R = np.array([[1,0,0],[0,1,0],[0,0,1]])
+        R = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 
     return R

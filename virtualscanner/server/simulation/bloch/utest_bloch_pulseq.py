@@ -18,37 +18,37 @@ import virtualscanner.server.simulation.bloch.pulseq_library as psl
 if __name__ == '__main__':
     # Make a phantom
     nn = 15
-    myphantom = pht.makeCylindricalPhantom(dim=2,dir='z',loc=0,n=nn)
+    myphantom = pht.makeCylindricalPhantom(dim=2, dir='z', loc=0, n=nn)
 
     df = 0
-    FOV = [0.24,0.24]
-    N = [15,15]
+    FOV = [0.24, 0.24]
+    N = [15, 15]
     FA = 90
     TR = 5
     TE = 0.10
     TI = 0.10
     slice_locs = [0]
-    thk = 0.3/15
+    thk = 0.3 / 15
 
     # Defining oblique encoding directions
-    #Mrot = np.array([[1,0,0],
+    # Mrot = np.array([[1,0,0],
     #                 [0,np.cos(pi/4),-np.sin(pi/4)],
     #                [0,np.sin(pi/4),np.cos(pi/4)]])
-    #myenc = [[1,0,0],[0,1,0],[0,0,1]]
-    #myenc[0] = np.transpose(Mrot@(np.transpose(myenc[0])))
-    #myenc[1] = np.transpose(Mrot@(np.transpose(myenc[1])))
-    #myenc[2] = np.transpose(Mrot@(np.transpose(myenc[2])))
+    # myenc = [[1,0,0],[0,1,0],[0,0,1]]
+    # myenc[0] = np.transpose(Mrot@(np.transpose(myenc[0])))
+    # myenc[1] = np.transpose(Mrot@(np.transpose(myenc[1])))
+    # myenc[2] = np.transpose(Mrot@(np.transpose(myenc[2])))
 
     # Defining orthogonal encoding directions
-    myenc = [(1,0,0),(0,1,0),(0,0,1)]
-
+    myenc = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
 
     # Make the sequence : choose your own
     # myseq = psl.make_pulseq_irse(fov=FOV,n=N,thk=thk,fa=FA,tr=TR,te=TE,ti=TI,enc='xyz',slice_locs=slice_locs,write=False)
     # myseq = psl.make_pulseq_se(fov=FOV,n=N,thk=FOV/N,fa=FA,tr=TR,te=TE,enc='xyz',slice_locs=[0],write=False)
     # myseq = psl.make_pulseq_gre_oblique(fov=FOV,n=N,thk=thk,fa=FA,tr=TR,te=TE,enc=myenc,slice_locs=[0],write=False)
     # myseq = psl.make_pulseq_irse_oblique(fov=FOV,n=N,thk=thk,fa=FA,tr=TR,te=TE,ti=TI,enc=myenc,slice_locs=[0],write=False)
-    myseq = psl.make_pulseq_se_oblique(fov=FOV,n=N,thk=thk,fa=FA,tr=TR,te=TE,enc=myenc,slice_locs=[0],write=False)
+    myseq = psl.make_pulseq_se_oblique(fov=FOV, n=N, thk=thk, fa=FA, tr=TR, te=TE, enc=myenc, slice_locs=[0],
+                                       write=False)
     myseq.write('oblique.seq')
     myseq.read('oblique.seq')
 
@@ -62,17 +62,17 @@ if __name__ == '__main__':
     # Initiate multiprocessing pool
     pool = mp.Pool(mp.cpu_count())
     # Parallel simulation
-    results = pool.starmap_async(blcsim.sim_single_spingroup, [(loc_ind, df, myphantom, seq_info) for loc_ind in loc_ind_list]).get()
+    results = pool.starmap_async(blcsim.sim_single_spingroup,
+                                 [(loc_ind, df, myphantom, seq_info) for loc_ind in loc_ind_list]).get()
     pool.close()
     # Add up signal across all SpinGroups
-    my_signal = np.sum(results,axis=0)
+    my_signal = np.sum(results, axis=0)
 
     # Time the code: Toc
-    print("Time used: %s seconds" % (time.time()-start_time))
-
+    print("Time used: %s seconds" % (time.time() - start_time))
 
     # Multislice reconstruction
-    Nf, Np = (N,N) if isinstance(N,int) else (N[0],N[1])
+    Nf, Np = (N, N) if isinstance(N, int) else (N[0], N[1])
     Ns = len(slice_locs)
     im_mat = np.zeros((Nf, Np, Ns), dtype=complex)
     kspace = np.zeros((Nf, Np, Ns), dtype=complex)
@@ -105,4 +105,3 @@ if __name__ == '__main__':
         plt.gray()
 
     plt.show()
-
