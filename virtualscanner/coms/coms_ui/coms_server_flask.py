@@ -356,7 +356,7 @@ def worker():
                 Y_acq = []
 
                 for indx in range(len(complete_path)):
-                    if payload['selectedSeq'] == 'GRE':
+                    if 'GRE' in complete_path[indx]:
                         pos = complete_path[indx].find('_', 30, ) + 1  #
                     else:
                         pos = complete_path[indx].find('_', 29, ) + 1  #
@@ -372,6 +372,7 @@ def worker():
                 session['acq_out_axial'] = Z_acq
                 session['acq_out_sagittal'] = X_acq
                 session['acq_out_coronal'] = Y_acq
+                print('hello')
 
                 return redirect('acquire')
 

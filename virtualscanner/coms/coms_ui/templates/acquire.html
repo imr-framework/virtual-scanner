@@ -127,7 +127,7 @@
               else{
                 $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
               }
-              $('#sagittal-carousel .carousel-inner img').attr("title", title);
+              $('#sagittal-carousel .carousel-inner #num'+i).attr("title", title);
             }
           }
           if (coronal.length >= 1){
@@ -147,7 +147,7 @@
               else{
                 $('#coronal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
               }
-              $('#coronal-carousel .carousel-inner img').attr("title", title);
+              $('#coronal-carousel .carousel-inner #num'+i).attr("title", title);
             }
           }
           autoFillForm(payload_dict);
