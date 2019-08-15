@@ -24,7 +24,7 @@ import numpy as np
 import virtualscanner.server.simulation.bloch.pulseq_blochsim_methods as blcsim
 
 matplotlib.use('Agg')
-import matplotlib.pyplot as pltw
+import matplotlib.pyplot as plt
 import time
 import virtualscanner.server.simulation.bloch.phantom as pht
 import multiprocessing as mp
