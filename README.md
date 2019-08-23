@@ -1,6 +1,6 @@
 <p align="center"> <a>
-    <img title="Virtual Scanner Logo" src="https://github.com/imr-framework/imr-framework.github.io/blob/master/img/portfolio/virtual-scanner.png" width="225">
-  </a></p>
+<img title="Virtual Scanner Logo" src="https://github.com/imr-framework/imr-framework.github.io/blob/master/img/portfolio/virtual-scanner.png" width="225">
+</a></p>
 <h1 align="center"> Virtual Scanner </h1> <br>
 
 Virtual Scanner is an end-to-end hybrid Magnetic Resonance Imaging (MRI) simulator/console designed to be zero-footprint, modular, and supported by open-source standards.
@@ -38,10 +38,11 @@ Alternatively, you can read the API documentation [here](https://imr-framework.g
 * The **Analyze** page allows the user to load a series of data acquired in ISMRM/NIST phantom for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect spheres in the phantom, a feature useful for comparing generated parameter values to literature values.
 
 ## Advanced Mode
-* The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files.
-*This feature is under development.*
+* The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files. *This feature is under development.*
 
-* The **Rx** (RF receive) page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate.
-*This feature is under development.*
+* The **Rx** (RF receive) page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. *This feature is under development.*
 
 * Other features, including phantom and sequence viewers and reconstruction methods, are in active development.
+
+## Known Issues
+Please refer to the [Known Issues]() document.
