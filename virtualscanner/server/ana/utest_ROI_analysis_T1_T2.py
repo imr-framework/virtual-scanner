@@ -21,7 +21,8 @@ class MyTestCase(unittest.TestCase):
         Unit test ROI analysis of T1 map.
         """
         platform = {'win32': SERVER_T1_WINDOWS_MAP_PATH,
-                    'darwin': SERVER_T1_MAC_MAP_PATH}
+                    'darwin': SERVER_T1_MAC_MAP_PATH,
+                    'linux': SERVER_T1_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
         roi_filename = dicomROIanalysis.main(dicom_map_path=dicom_map_path, map_type='T1', map_size='128',
                                              fov='170', pat_id='9306')
@@ -35,7 +36,8 @@ class MyTestCase(unittest.TestCase):
         Unit test ROI analysis of T2 map.
         """
         platform = {'win32': SERVER_T2_WINDOWS_MAP_PATH,
-                    'darwin': SERVER_T2_MAC_MAP_PATH}
+                    'darwin': SERVER_T2_MAC_MAP_PATH,
+                    'linux': SERVER_T2_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
         roi_filename = dicomROIanalysis.main(dicom_map_path=dicom_map_path, map_type='T2', map_size='128',
                                              fov='210', pat_id='9306')
