@@ -45,6 +45,4 @@ Alternatively, you can read the API documentation [here](https://imr-framework.g
 * Other features, including phantom and sequence viewers and reconstruction methods, are in active development.
 
 ## Known Issues
-Please refer to the [Known Issues](known-issues) document.
-
-[known-issues]: https://github.com/imr-framework/virtual-scanner/blob/master/KNOWN_ISSUES.md
+Please refer to the [Known Issues](https://github.com/imr-framework/virtual-scanner/blob/master/KNOWN_ISSUES.md) document.
