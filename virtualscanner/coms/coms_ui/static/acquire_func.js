@@ -85,7 +85,7 @@ $(document).on("click", ".menu-item", function(){
   var seq_name = $(this).html();
 
   $("#seq-id").val(seq_name);
-
+  $(".submit-form-btn").prop('disabled',false);
   /*If the selected sequence is SE show the option of IRSE*/
   if (seq_name == "SE") {
     $(".IRSE-checkbox").show();
