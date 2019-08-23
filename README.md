@@ -10,25 +10,29 @@ The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](h
 Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allows users to perform virtual scans and conduct basic analysis; in Advanced Mode, modular simulation/analysis of the entire signal chain may be performed.  
 
 ## Quick Start
+If you just want to get started with using Virtual Scanner:
 1. Install Python 3.6.x.
-2. Create and activate a `venv` virtual environment.
-3. In a terminal: `pip install virtual-scanner`.
+2. Create and activate a virtual environment of your choice.
+3. Then in your terminal:
+  1. `pip install virtual-scanner`, and finally
+  2. `virtualscanner`
 
-If you want to hack around with the code:
-1. Install Python 3.6.x.
-2. Clone the repository and `cd` into it.
-3. Create and activate a `venv` virtual environment.
-4. Install dependencies by running `pip install -r requirements.txt` in a terminal.
-
-Then, run [`coms_server_flask.py`](https://github.com/imr-framework/virtual-scanner/blob/ISMRM2019/virtualscanner/coms/coms_ui/coms_server_flask.py) to start the browser GUI.
-
-To access the browser app, there are two ways:
+The browser application should have started running. To access the browser app, there are two ways:
 * Local hosting (only on the laptop running the script): go to the generated link (http://0.0.0.0:5000/) if you are a mac user, and this link (http://127.0.0.1:5000) if you are a windows user.  
 * Remote hosting : look up your IP address. Suppose it's 123.45.67.890, then you can go to (http://123.45.67.890:5000) to connect to the server remotely, either on the serving machine or different machines on the same network.
 
 Now you can start playing with Virtual Scanner! Log in with your email address, select Standard or Advanced mode, and click "Begin Scan". Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
 
-Alternatively, you can read the API documentation [here](https://imr-framework.github.io/virtual-scanner/) and run the Python test scripts in each module with more options available than allowed on the GUI.
+## Pro Start
+If you want to hack around with the code:
+1. Install Python 3.6.x.
+2. Create and activate a virtual environment of your choice.
+3. Clone the repo and `cd` into it.
+4. `pip install -e .`.
+5. Open the repo in your favourite IDE, hack around with the code.
+6. Run `coms_server_flask.py` to run your changes.
+
+Read the API documentation [here](https://imr-framework.github.io/virtual-scanner/) and run the Python test scripts in each module with more options available than allowed on the GUI.
 
 ## Standard Mode
 * The **Register** page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now.
