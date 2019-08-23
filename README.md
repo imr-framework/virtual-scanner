@@ -5,7 +5,7 @@
 
 Virtual Scanner is an end-to-end hybrid Magnetic Resonance Imaging (MRI) simulator/console designed to be zero-footprint, modular, and supported by open-source standards.
 
-The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/), which poses the task of boosting accessibility to MRI training resources for underserved areas such as sub-Saharan Africa. We designed Virtual Scanner in order to help develop local expertise in these areas so that sustained deployment of MRI hardware is possible. In addition, Virtual Scanner will be continually developed as a research tool that provides functionalities for simulating and prototyping MRI acquisition methods as well as services for sharing computational methods and resources with researchers around the world.
+The project is a response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/), which poses the task of boosting accessibility to MRI training resources for underserved areas such as sub-Saharan Africa. We designed Virtual Scanner to help develop local expertise in these areas so that sustained deployment of MRI hardware is possible. Importantly, Virtual Scanner will be continually developed as a research tool that provides functionalities for simulating and prototyping MRI acquisition methods as well as services for sharing computational methods and resources with researchers around the world.
 
 Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allows users to perform virtual scans and conduct basic analysis; in Advanced Mode, modular simulation/analysis of the entire signal chain may be performed.  
 
