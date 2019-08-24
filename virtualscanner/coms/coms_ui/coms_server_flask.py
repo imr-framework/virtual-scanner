@@ -1,8 +1,8 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
 
+import os
 
 if __name__ == '__main__':
-    import os
     import sys
 
     script_path = os.path.abspath(__file__)
