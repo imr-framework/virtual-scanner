@@ -58,7 +58,7 @@
     <!-- External JS files-->
     <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
     <!--<script src="../static/form2Json.js"> </script>-->
-    
+
     <script src="../static/phantomAutofill.js"> </script>
     <script src="../static/register_func.js"> </script>
     <script src="../static/log_out_func.js"> </script>
@@ -138,14 +138,14 @@
 
                     <!--PATIENT Parameters -->
                     <div class="col">
-                      <h2 class="first-row-header">
-
+                      <h2 class="first-row-header">Subject
 
                           <select id="subjectSelect" class="selector" name="subjecttype">
-                            <option selected hidden>Subject</option>
+                            <!--<option selected hidden>Subject</option>-->
                             <option value="human" disabled>Human</option>
                             <option id="ISMRM-NIST" class="phantomopt" disabled>ISMRM-NIST</option>
-                            <option id="Numerical" class="phantomopt">Numerical</option>
+                            <option id="Numerical" class="phantomopt" selected>Numerical</option>
+                            
 
                           </select>
 
