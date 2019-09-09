@@ -24,9 +24,20 @@ The browser application should have started running. To access the browser app, 
 Now you can start playing with Virtual Scanner! Log in with your email address, select Standard or Advanced mode, and click "Begin Scan". Instructions for each tab are given in the [Wiki](https://github.com/imr-framework/virtual-scanner/wiki).
 
 ## Docker Start
+This would be a good solution if you don't want to install the large number of dependencies to your host. We have tested Docker on Windows and Mac.
 
-Optionally, you can build a Docker container to run the application. 
-This would be a good solution if you don't want to install the large number of dependencies to your host.
+If you use a Windows 10 Pro system, first download Docker desktop and then run the following in the command line:
+
+```bash
+$ docker run -p 5000:5000 imrframework/virtual-scanner:latest
+```
+
+This downloads the pre-built image from Docker. You can then open up your browser to [127.0.0.1:5000](127.0.0.1:5000) to see the interface. 
+
+If you use a Windows 10 Home system, please use an alternate approach (clone the repository or pip install) because Docker isn't supported on this system and we have not succeeded in using the image with Docker Toolbox. 
+
+If you use a Mac, you can either download the image as described above or you can locally build a Docker container to run the application in the following way:
+
 First, build the container from the [Dockerfile](Dockerfile):
 
 ```bash
@@ -39,8 +50,9 @@ Then you can run the container and bind port 5000 to expose the application to t
 $ docker run -p 5000:5000 virtualscanner
 ```
 
-And open up your browser to [127.0.0.1:5000](127.0.0.1:5000) to see the interface.
+And open up your browser to [0.0.0.0:5000](0.0.0.0:5000)to see the interface.
 The container is **not intended** for a production deployment, but rather is appropriate for local usage.
+
 
 ## Pro Start
 If you want to hack around with the code:
