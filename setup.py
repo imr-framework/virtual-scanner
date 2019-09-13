@@ -13,7 +13,7 @@ with open(str(here / 'requirements.txt'), 'r') as f:
 
 setuptools.setup(
     name='virtual-scanner',
-    version='1.0.21',
+    version='1.0.24',
     author='imr-framework',
     author_email='imr.framework2018@gmail.com',
     description='Virtual Scanner educational tool for MRI',
