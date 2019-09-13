@@ -12,11 +12,9 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 ## Quick Start
 If you just want to get started with using Virtual Scanner:
 1. Install Python 3.6.x.
-2. Create and activate a virtual environment of your choice. For example, using `virtualenv`, it would be:
-    `python -m venv virtualscanner_env`
-3. In your terminal:
-  1. `pip install virtual-scanner`, and finally
-  2. `virtualscanner`
+2. Create and activate a virtual environment of your choice. For example, using `virtualenv`, it would be: `python -m venv virtualscanner_env`
+3. In your terminal: `pip install virtual-scanner`, and finally
+4. `virtualscanner`
 
 The browser application should have started running. To access the browser app, there are two ways:
 * Local hosting (only on the laptop running the script): go to the generated link (http://0.0.0.0:5000/) if you are a mac user, and this link (http://127.0.0.1:5000) if you are a windows user.  
