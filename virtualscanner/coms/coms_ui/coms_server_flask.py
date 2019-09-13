@@ -2,12 +2,16 @@
 
 import os
 
-if __name__ == '__main__':
-    import sys
 
+def __modify_search_path():
+    import sys
     script_path = os.path.abspath(__file__)
     SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
     sys.path.insert(0, SEARCH_PATH)
+
+
+if __name__ == '__main__':
+    __modify_search_path()
 
 from pathlib import Path
 
@@ -519,6 +523,7 @@ def launch_virtualscanner():
     """
     Runs the server in the specified machine's local network address.
     """
+    __modify_search_path()
     app.run(host='0.0.0.0', debug=True)
 
 

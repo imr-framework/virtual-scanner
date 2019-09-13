@@ -12,8 +12,9 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 ## Quick Start
 If you just want to get started with using Virtual Scanner:
 1. Install Python 3.6.x.
-2. Create and activate a virtual environment of your choice.
-3. Then in your terminal:
+2. Create and activate a virtual environment of your choice. For example, using `virtualenv`, it would be:
+    `python -m venv virtualscanner_env`
+3. In your terminal:
   1. `pip install virtual-scanner`, and finally
   2. `virtualscanner`
 
@@ -57,11 +58,12 @@ The container is **not intended** for a production deployment, but rather is app
 ## Pro Start
 If you want to hack around with the code:
 1. Install Python 3.6.x.
-2. Create and activate a virtual environment of your choice.
+2. Create and activate a virtual environment of your choice. Here's a [tutorial][pycharm-venv] if you are using the 
+PyCharm IDE, for example.
 3. Clone the repo and `cd` into it.
 4. `pip install -e .`.
 5. Open the repo in your favourite IDE, hack around with the code.
-6. Run `coms_server_flask.py` to run your changes.
+6. Run `virtualscanner/coms/coms_ui/coms_server_flask.py` to run your changes.
 
 Read the API documentation [here](https://imr-framework.github.io/virtual-scanner/) and run the Python test scripts in each module with more options available than allowed on the GUI.
 
@@ -84,3 +86,5 @@ Please refer to the [Known Issues](https://github.com/imr-framework/virtual-scan
 
 ## Contributing
 If you would like to contribute to Virtual Scanner, please take a look at the [Community Guidelines](https://github.com/imr-framework/virtual-scanner/blob/master/CONTRIBUTING.md) document.
+
+[pycharm-venv]: https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html
