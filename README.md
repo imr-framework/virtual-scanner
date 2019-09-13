@@ -12,7 +12,7 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 ## Quick Start
 If you just want to get started with using Virtual Scanner:
 1. Install Python 3.6.x.
-2. Create and activate a virtual environment of your choice. For example, using `virtualenv`, it would be: `python -m venv virtualscanner_env`
+2. Create and activate a virtual environment of your choice.
 3. In your terminal: `pip install virtual-scanner`, and finally
 4. `virtualscanner`
 
