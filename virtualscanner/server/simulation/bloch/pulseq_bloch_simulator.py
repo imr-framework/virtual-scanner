@@ -10,14 +10,14 @@ Notes
 See beginning of the main section for explanations of the command line arguments (line 41-71)
 
 """
-if __name__ == '__main__':
-    import os
-    import sys
-
-    script_path = os.path.abspath(__file__)
-    SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
-    sys.path.insert(0, SEARCH_PATH)
-
+# if __name__ == '__main__':
+#     import os
+#     import sys
+#
+#     script_path = os.path.abspath(__file__)
+#     SEARCH_PATH = script_path[:script_path.index('virtual-scanner') + len('virtual-scanner') + 1]
+#     sys.path.insert(0, SEARCH_PATH)
+#
 import matplotlib
 import numpy as np
 
