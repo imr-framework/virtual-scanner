@@ -14,12 +14,19 @@
       1: fail
 
 """
-
+import unittest
 import virtualscanner.server.rf.tx.SAR_calc.SAR_calc_main as SAR
 from virtualscanner.utils import constants
 
 SAR_PATH = constants.RF_SAR_PATH
 
+
+class MyTestCase(unittest.TestCase):
+    def SAR_payload_process(self, fname='rad2D.seq'):
+
+        fname = 'rad2D.seq'
+        payload = SAR.payload_process(fname)
+
+
 if __name__ == '__main__':
-    fname = 'rad2D.seq'
-    payload = SAR.payload_process()
+    unittest.main()
