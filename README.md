@@ -13,8 +13,8 @@ Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allo
 If you just want to get started with using Virtual Scanner:
 1. Install Python 3.6.x.
 2. Create and activate a virtual environment of your choice.
-3. In your terminal: `pip install virtual-scanner`, and finally
-4. `virtualscanner`
+3. In your terminal: `pip install virtual-scanner`, and finally,
+4. In macOS, run the command:  `virtualscanner`; in Windows, run this longer command within the main folder where you created your virtual environment: `python Lib/site-packages/virtualscanner/coms/coms_ui/coms_server_flask.py`
 
 The browser application should have started running. To access the browser app, there are two ways:
 * Local hosting (only on the laptop running the script): go to the generated link (http://0.0.0.0:5000/) if you are a mac user, and this link (http://127.0.0.1:5000) if you are a windows user.  
