@@ -800,10 +800,8 @@ def make_pulseq_se_oblique(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, 
     print('Spin echo sequence (oblique) constructed')
     return seq
 
-    # TODO 2D Cartesian EPI sequence - fix phase problem seen in simulation
 
 
-# TODO multi-shot epi needs to be completed and tested
 def make_pulseq_epi_oblique(fov, n, thk, fa, tr, te, enc='xyz', slice_locs=None, echo_type="se", n_shots=1,
                             seg_type='blocked', write=False):
     """Makes an Echo Planar Imaging (EPI) sequence in any plane
