@@ -9,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [macOS-lastest, windows-lastest, ubuntu-latest]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
    
     steps:
     - uses: actions/checkout@v1
