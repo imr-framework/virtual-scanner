@@ -74,7 +74,7 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
             if dist_to_center < phantom_radius:
                 n4 = 0
                 min_loc = np.argmin(y_data)
-                while n4 < min_loc:
+                while n4 <= min_loc:
                     y_data[n4] = -y_data[n4]
                     n4 = n4 + 1
 
