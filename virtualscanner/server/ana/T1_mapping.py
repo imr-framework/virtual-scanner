@@ -70,14 +70,12 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
 
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
-            # for n2 in range(0, 32):
-            #     for n3 in range(0, 32):
             dist_to_center = np.sqrt((n2 - centers[0, 0]) ** 2 + (n3 - centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
             if dist_to_center < phantom_radius:
                 n4 = 0
                 min_loc = np.argmin(y_data)
-                while n4 <= min_loc:
+                while n4 < min_loc:
                     y_data[n4] = -y_data[n4]
                     n4 = n4 + 1
 
