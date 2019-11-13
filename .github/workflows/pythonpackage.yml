@@ -9,8 +9,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [windows-latest]
-        #os: [macOS-latest]
+        #os: [windows-latest]
+        os: [macOS-latest, windows-latest]
    
     steps:
     - uses: actions/checkout@v1
@@ -30,7 +30,8 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test (WIP)
-      run: python -m unittest discover -p "utest_ROI_analysis*.py"
+      run: python -m unittest discover -p "utest_ROI_analysis*.py", "utest_SAR_calc*.py" 
+ 
       #run: python -m unittest
       #pip install pytest
       #pytest
