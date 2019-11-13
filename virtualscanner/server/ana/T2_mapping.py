@@ -4,6 +4,9 @@ import os
 import time
 from pathlib import Path
 
+import matplotlib as mpl
+mpl.use('TkAgg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pydicom
