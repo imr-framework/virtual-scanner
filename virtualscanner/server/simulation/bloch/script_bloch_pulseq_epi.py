@@ -7,6 +7,9 @@ Run the script to generated a simulated image. Modify the code directly to set t
 import multiprocessing as mp
 import time
 
+
+import matplotlib as mpl
+mpl.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -16,7 +19,7 @@ import virtualscanner.server.simulation.bloch.pulseq_library as psl
 
 if __name__ == '__main__':
     # Make a phantom
-    nn = 21
+    nn = 49
     myphantom = pht.makeCylindricalPhantom(dim=2, dir='z', loc=0, n=nn)
     df = 0
 
@@ -24,12 +27,12 @@ if __name__ == '__main__':
     # FOV = [0.24,0.24]
     FOV = 0.24
     # N = [21,21]
-    N = 21
+    N = 49
     FA = 90
-    TR = 3
-    TE = 0.1
+    TR = 2
+    TE = 0.5
     slice_locs = [0]
-    thk = 0.24 / 21
+    thk = 0.24 / 49
 
     # Defining oblique encoding directions
     # Mrot = np.array([[1,            0,            0],
@@ -55,7 +58,7 @@ if __name__ == '__main__':
     loc_ind_list = myphantom.get_list_inds()
     # Initiate multiprocessing pool
     pool = mp.Pool(mp.cpu_count())
-    # Parallel CPU simulation
+    # Parallel CPU simulationprint
     results = pool.starmap_async(blcsim.sim_single_spingroup,
                                  [(loc_ind, df, myphantom, seq_info) for loc_ind in loc_ind_list]).get()
     pool.close()
