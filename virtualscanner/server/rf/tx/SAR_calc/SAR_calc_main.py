@@ -19,6 +19,9 @@
 
 import time
 
+import matplotlib as mpl
+mpl.use('TkAgg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.matlib
@@ -28,8 +31,6 @@ from pypulseq.calc_duration import calc_duration
 from scipy import interpolate
 
 from virtualscanner.utils import constants
-
-
 
 SAR_PATH = constants.RF_SAR_PATH
 IMG_SAR_PATH = constants.RF_SAR_STATIC_IMG_PATH
