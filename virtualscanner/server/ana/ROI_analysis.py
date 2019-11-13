@@ -8,10 +8,18 @@ from skimage.transform import hough_circle, hough_circle_peaks
 from skimage.feature import canny
 
 import cv2
+
+#import matplotlib.pyplot as plt
+
+import matplotlib as mpl
+mpl.use('TkAgg')
+
 import matplotlib.pyplot as plt
+
 import numpy as np
 import numpy.matlib
 import pydicom
+
 
 from virtualscanner.utils import constants
 
