@@ -81,11 +81,17 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
     timestr = time.strftime("%Y%m%d%H%M%S")
     png_map_path = COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
     dicom_map_path = SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T2_map'
+    np_map_path = SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T2_map'
 
     if not os.path.isdir(png_map_path):
         os.makedirs(png_map_path)
     if not os.path.isdir(dicom_map_path):
         os.makedirs(dicom_map_path)
+    if not os.path.isdir(np_map_path):
+        os.makedirs(np_map_path)
+
+    np_map_name = 'T2_map' + timestr + '.npy'
+    np.save(str(np_map_path) + '/T2_map' + timestr + '.npy', T2_map)
 
     plt.figure(frameon=False)
     plt.imshow(T2_map, cmap='hot')
@@ -107,7 +113,7 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
     ds.PixelData = pixel_array_int.tostring()
     ds.save_as(str(dicom_map_path) + '/T2_map' + timestr + '.dcm')
 
-    return png_map_name, dicom_map_path
+    return png_map_name, dicom_map_path, np_map_name
 
 
 def T2_sig_eq(X, a, b, c):
