@@ -32,10 +32,10 @@ class MyTestCase(unittest.TestCase):
                     'darwin': SERVER_T1_MAC_MAP_PATH,
                     'linux': SERVER_T1_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
+        print(dicom_map_path)
         map_name, dicom_path = dicom2mapT1.main(dicom_file_path=SERVER_T1_INPUT_PATH , TR=TRstr, TE=TEstr, TI=TIstr, pat_id='9306')
         generated_map = imageio.imread(COMS_MAP_PATH / map_name)
         utest_map = imageio.imread(dicom_map_path / 'utest_T1_map.png')
-        utest_map = utest_map[0:488, :, :]
 
         np.testing.assert_allclose(generated_map, utest_map)
 
@@ -47,10 +47,10 @@ class MyTestCase(unittest.TestCase):
                     'darwin': SERVER_T2_MAC_MAP_PATH,
                     'linux': SERVER_T2_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
+        print(dicom_map_path)
         map_name, dicom_path = dicom2mapT2.main(dicom_file_path=SERVER_T2_INPUT_PATH, TR=TRstr, TE=TEstr, pat_id='9306')
         generated_map = imageio.imread(COMS_MAP_PATH / map_name)
         utest_map = imageio.imread(dicom_map_path / 'utest_T2_map.png')
-        utest_map = utest_map[0:488, :, :]
 
         np.testing.assert_allclose(generated_map, utest_map)
 
