@@ -5,7 +5,7 @@ import unittest
 import virtualscanner.server.ana.T1_mapping as dicom2mapT1
 import virtualscanner.server.ana.T2_mapping as dicom2mapT2
 import numpy as np
-from scipy.misc import imread
+from matplotlib.pyplot import imread
 from virtualscanner.utils import constants
 import imageio
 
@@ -32,10 +32,9 @@ class MyTestCase(unittest.TestCase):
                     'darwin': SERVER_T1_MAC_MAP_PATH,
                     'linux': SERVER_T1_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
-        print(dicom_map_path)
         map_name, dicom_path = dicom2mapT1.main(dicom_file_path=SERVER_T1_INPUT_PATH , TR=TRstr, TE=TEstr, TI=TIstr, pat_id='9306')
-        generated_map = imageio.imread(COMS_MAP_PATH / map_name)
-        utest_map = imageio.imread(dicom_map_path / 'utest_T1_map.png')
+        generated_map = imageio.imread(str(COMS_MAP_PATH / map_name))
+        utest_map = imageio.imread(str(dicom_map_path / 'utest_T1_map.png'))
 
         np.testing.assert_allclose(generated_map, utest_map)
 
@@ -49,8 +48,8 @@ class MyTestCase(unittest.TestCase):
         dicom_map_path = platform[sys.platform]
         print(dicom_map_path)
         map_name, dicom_path = dicom2mapT2.main(dicom_file_path=SERVER_T2_INPUT_PATH, TR=TRstr, TE=TEstr, pat_id='9306')
-        generated_map = imageio.imread(COMS_MAP_PATH / map_name)
-        utest_map = imageio.imread(dicom_map_path / 'utest_T2_map.png')
+        generated_map = imageio.imread(str(COMS_MAP_PATH / map_name))
+        utest_map = imageio.imread(str(dicom_map_path / 'utest_T2_map.png'))
 
         np.testing.assert_allclose(generated_map, utest_map)
 
