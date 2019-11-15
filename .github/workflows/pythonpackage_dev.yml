@@ -12,9 +12,9 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-#        os: [windows-latest]
-#         os: [macOS-Latest]
-        os: [macOS-latest, windows-latest]
+#        os: [macOS-latest]
+        os: [windows-latest]
+#        os: [macOS-latest, windows-latest]
    
     steps:
     - uses: actions/checkout@v1
