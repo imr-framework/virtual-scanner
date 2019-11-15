@@ -12,8 +12,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-#        os: [macOS-latest]
-        os: [windows-latest]
+        os: [macOS-latest]
+#        os: [windows-latest]
 #        os: [macOS-latest, windows-latest]
    
     steps:
