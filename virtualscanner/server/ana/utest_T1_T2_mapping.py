@@ -37,6 +37,10 @@ class MyTestCase(unittest.TestCase):
         generated_map = np.load(SERVER_T1_MAP_PATH / np_map_name)
         utest_map = np.load(dicom_map_path / 'utest_T1_map.npy')
 
+        map_diff = np.subtract(generated_map, utest_map)
+        non_zero_loc = np.nonzero(map_diff)
+        print(non_zero_loc)
+
         np.testing.assert_allclose(generated_map, utest_map)
 
     def test_T2_mapping(self):
@@ -50,6 +54,10 @@ class MyTestCase(unittest.TestCase):
         map_name, dicom_path, np_map_name = dicom2mapT2.main(dicom_file_path=SERVER_T2_INPUT_PATH, TR=TRstr, TE=TEstr, pat_id='9306')
         generated_map = np.load(SERVER_T2_MAP_PATH / np_map_name)
         utest_map = np.load(dicom_map_path / 'utest_T2_map.npy')
+
+        map_diff = np.subtract(generated_map, utest_map)
+        non_zero_loc = np.nonzero(map_diff)
+        print(non_zero_loc)
 
         np.testing.assert_allclose(generated_map, utest_map)
 
