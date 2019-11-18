@@ -35,3 +35,4 @@ tensorflow-estimator==1.13.0
 termcolor==1.1.0
 Werkzeug==0.15.2
 scikit-image==0.15.0
+selenium==3.141.0
