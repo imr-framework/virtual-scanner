@@ -8,8 +8,9 @@ from virtualscanner.utils import constants
 import subprocess
 import sys
 import unittest
-import virtualscanner.coms.coms_ui.coms_server_flask_alt as csfa
+# import virtualscanner.coms.coms_ui.coms_server_flask_alt as csfa
 from selenium.webdriver.common.action_chains import ActionChains
+import webbrowser
 
 
 
@@ -19,6 +20,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 def get_vs_address():
+    print(sys.platform)
     if sys.platform == 'win32':
         vs_address = "http://127.0.0.1:5000/"
     else:
@@ -196,21 +198,22 @@ def rx(driver):
     finally:
         return result
 
-
+def launch_tests():
+    vsadr = get_vs_address()
+    webbrowser.open(vsadr)
+    print(vsadr)
+    # Run tests
+    run_test(login_adv, vsadr + "recon")
+    run_test(login_std, vsadr + "register")
+    run_test(register, "display: block;")
+    run_test(acquire, "success")
+    #    run_test(analyze, "success") # This takes a long time (T2 mapping)
+    run_test(rx, "success")
+    webbrowser.close()
 
 
 if __name__ == '__main__':
-
-    vsadr = get_vs_address()
-     # Run tests
-    run_test(login_adv, vsadr+ "recon")
-    run_test(login_std, vsadr+"register")
-    run_test(register, "display: block;")
-    run_test(acquire, "success")
-#    run_test(analyze, "success") # This takes a long time (T2 mapping)
-    run_test(rx ,"success")
-
-
+    launch_tests()
 
 
 
