@@ -4,8 +4,8 @@ This script unit starts and tests the communications between server and client(s
 """
 
 import threading
-from virtualscanner.coms.coms_ui import GUI_test_functions
-from virtualscanner.coms.coms_ui import coms_server_flask
+from virtualscanner.coms.coms_ui.GUI_test_functions import GUItestclass
+from virtualscanner.coms.coms_ui.coms_server_flask import launch_virtualscanner
 import time
 import unittest
 from pprint import pprint
@@ -24,7 +24,7 @@ def selenium_function():
    # return GUI_test_functions.launch_tests()
    ###
     runner = unittest.TextTestRunner()
-    result = runner.run(unittest.makeSuite(GUI_test_functions.GUItestclass))
+    result = runner.run(unittest.makeSuite(GUItestclass))
 
     # Do all tests as you want here and get 200 responses.
     # Figure out how to report 200 responses if required
@@ -70,6 +70,6 @@ if __name__ == '__main__':
     t = threading.Thread(target=selenium_function)
     t.daemon = True
     t.start()
-    coms_server_flask.launch_virtualscanner()
+    launch_virtualscanner()
    #unittest.main()
 

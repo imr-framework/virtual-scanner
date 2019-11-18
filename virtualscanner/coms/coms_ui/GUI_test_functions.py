@@ -20,7 +20,6 @@ from virtualscanner.utils.constants import COMS_UI_PATH
 
 
 class GUItestclass(unittest.TestCase):
-
     def get_vs_address(self):
         print(sys.platform)
         if sys.platform == 'win32':
