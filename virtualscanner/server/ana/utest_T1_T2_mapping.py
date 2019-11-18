@@ -39,6 +39,7 @@ class MyTestCase(unittest.TestCase):
 
         map_diff = np.subtract(generated_map, utest_map)
         non_zero_loc = np.nonzero(map_diff)
+        print(non_zero_loc.shape)
         print(non_zero_loc)
 
         np.testing.assert_allclose(generated_map, utest_map)
@@ -57,6 +58,7 @@ class MyTestCase(unittest.TestCase):
 
         map_diff = np.subtract(generated_map, utest_map)
         non_zero_loc = np.nonzero(map_diff)
+        print(non_zero_loc.shape)
         print(non_zero_loc)
 
         np.testing.assert_allclose(generated_map, utest_map)
