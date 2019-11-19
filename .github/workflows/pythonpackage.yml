@@ -12,8 +12,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [macOS-latest]      
-        #os: [windows-latest]
+        os: [windows-latest]
+        #os: [macOS-latest]      
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.6
