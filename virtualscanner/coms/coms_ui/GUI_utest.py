@@ -2,12 +2,18 @@
 """
 This script unit starts and tests the communications between server and client(s).
 """
+import os
+
+if __name__ == '__main__':
+    import sys
+
+    script_path = os.path.abspath(__file__)
+    SEARCH_PATH = script_path[:script_path.index('virtualscanner')]
+    sys.path.insert(0, SEARCH_PATH)
 
 import threading
-#from virtualscanner.coms.coms_ui.GUI_test_functions import GUItestclass
-from GUI_test_functions import GUItestclass
-#from virtualscanner.coms.coms_ui.coms_server_flask import launch_virtualscanner
-from coms_server_flask import launch_virtualscanner
+from virtualscanner.coms.coms_ui.GUI_test_functions import GUItestclass
+from virtualscanner.coms.coms_ui.coms_server_flask import launch_virtualscanner
 import time
 import unittest
 from pprint import pprint

@@ -4,11 +4,9 @@ from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
 from selenium.webdriver.common.by import By
 import time
-from virtualscanner.utils import constants
 import subprocess
 import sys
 import unittest
-# import virtualscanner.coms.coms_ui.coms_server_flask_alt as csfa
 from selenium.webdriver.common.action_chains import ActionChains
 import webbrowser
 
