@@ -32,10 +32,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test (WIP - GUI test)
-      run: |
-        cd ./virtualscanner/coms/coms_ui
-        python GUI_utest.py
-      #run: python "./virtualscanner/coms/coms_ui/coms_server_flask.py"
+      run: python "./virtualscanner/coms/coms_ui/GUI_utest.py"
   #  - name: Test (WIP - GUI with unittest?)
       #run: python -m unittest discover -p "utest_GUI.py"
       #run: python -m unittest
