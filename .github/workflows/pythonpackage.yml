@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macOS-latest]
         #os: [macOS-latest]      
     steps:
     - uses: actions/checkout@v1
@@ -34,8 +34,8 @@ jobs:
     - name: Enable macOS Firefox driver
       if: matrix.os == 'macOS-latest'
       run: sudo chmod +x "./virtualscanner/coms/coms_ui/firefox_driver/geckodriver_mac"
-    - name: Test (WIP - GUI test)
-      run: python "./virtualscanner/coms/coms_ui/GUI_utest.py"
+    #- name: Test (WIP - GUI test)
+     # run: python "./virtualscanner/coms/coms_ui/GUI_utest.py"
     - name: Test (backend unittests)
       run: python -m unittest discover -p "utest*.py"
   #  - name: Test (WIP - GUI with unittest?)
