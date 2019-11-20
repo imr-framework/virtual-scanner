@@ -12,8 +12,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        #os: [windows-latest]
-        os: [macOS-latest]      
+        os: [windows-latest]
+        #os: [macOS-latest]      
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.6
@@ -36,6 +36,8 @@ jobs:
       run: sudo chmod +x "./virtualscanner/coms/coms_ui/firefox_driver/geckodriver_mac"
     - name: Test (WIP - GUI test)
       run: python "./virtualscanner/coms/coms_ui/GUI_utest.py"
+    - name: Test (backend unittests)
+      run: python -m unittest discover -p "utest*.py"
   #  - name: Test (WIP - GUI with unittest?)
       #run: python -m unittest discover -p "utest_GUI.py"
       #run: python -m unittest
