@@ -12,8 +12,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [windows-latest]
-        #os: [macOS-latest]      
+        #os: [windows-latest]
+        os: [macOS-latest]      
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.6
@@ -31,6 +31,9 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Enable macOS Firefox driver
+      if: matrix.os == 'macOS-latest'
+      run: sudo chmod +x "./virtualscanner/coms/coms_ui/geckodriver_mac"
     - name: Test (WIP - GUI test)
       run: python "./virtualscanner/coms/coms_ui/GUI_utest.py"
   #  - name: Test (WIP - GUI with unittest?)
