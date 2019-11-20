@@ -18,11 +18,14 @@ from virtualscanner.coms.coms_ui.coms_server_flask import kill_virtualscanner
 import time
 import unittest
 from pprint import pprint
-
+import os, signal
 
 # import webbrowser
 # import subprocess
 # from virtualscanner.utils import constants
+def kill_utest():
+    pid = os.getpid()
+    os.kill(pid, signal.SIGTERM)
 
 
 def selenium_function():
@@ -35,11 +38,13 @@ def selenium_function():
    ###
     runner = unittest.TextTestRunner()
     result = runner.run(unittest.makeSuite(GUItestclass))
-
+    print('Hello')
     # Do all tests as you want here and get 200 responses.
     # Figure out how to report 200 responses if required
     # webbrowser.close()
+    kill_utest()
     kill_virtualscanner()
+
     return result
 
 
