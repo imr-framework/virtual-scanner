@@ -25,6 +25,7 @@ from pprint import pprint
 
 
 def selenium_function():
+    print("Side thread started!")
     time.sleep(10)
     # This URL needs to be changed to the server address if running on a remote client on the local network
     # webbrowser.open("http://0.0.0.0:5000/")
