@@ -14,6 +14,7 @@ if __name__ == '__main__':
 import threading
 from virtualscanner.coms.coms_ui.GUI_test_functions import GUItestclass
 from virtualscanner.coms.coms_ui.coms_server_flask import launch_virtualscanner
+from virtualscanner.coms.coms_ui.coms_server_flask import kill_virtualscanner
 import time
 import unittest
 from pprint import pprint
@@ -38,6 +39,7 @@ def selenium_function():
     # Do all tests as you want here and get 200 responses.
     # Figure out how to report 200 responses if required
     # webbrowser.close()
+    kill_virtualscanner()
     return result
 
 

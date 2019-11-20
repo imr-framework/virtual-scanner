@@ -1,6 +1,6 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
 
-import os
+import os, signal
 
 if __name__ == '__main__':
     import sys
@@ -521,6 +521,9 @@ def launch_virtualscanner():
     """
     app.run(host='0.0.0.0', debug=True)
 
+def kill_virtualscanner():
+    pid = os.getpid()
+    os.kill(pid, signal.SIGTERM)
 
 if __name__ == '__main__':
     launch_virtualscanner()
