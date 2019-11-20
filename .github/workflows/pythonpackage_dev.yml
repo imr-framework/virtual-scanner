@@ -11,9 +11,9 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [macOS-latest]
+#        os: [macOS-latest]
 #        os: [windows-latest]
-#        os: [macOS-latest, windows-latest]
+        os: [macOS-latest, windows-latest]
    
     steps:
     - uses: actions/checkout@v1
@@ -32,8 +32,12 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v1
     - name: Test (T1/T2 mapping only)
       run: python -m unittest discover -p "utest_T1_T2_mapping*.py"
+    - uses: actions/download-artifact@master
+      with:
+        name: my-artifact
+        path: path/to/artifact
+
+    - run: cat path/to/artifact
 
