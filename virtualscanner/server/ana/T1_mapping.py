@@ -75,7 +75,7 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
             if dist_to_center < phantom_radius:
                 n4 = 0
                 min_loc = np.argmin(y_data)
-                while n4 < min_loc:
+                while n4 <= min_loc:
                     y_data[n4] = -y_data[n4]
                     n4 = n4 + 1
 
@@ -93,12 +93,17 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
     timestr = time.strftime("%Y%m%d%H%M%S")
     png_map_path = COMS_ANALYZE_PATH / 'static' / 'ana' / 'outputs' / pat_id
     dicom_map_path = SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T1_map'
+    np_map_path = SERVER_ANALYZE_PATH / 'outputs' / pat_id / 'T1_map'
 
     if not os.path.isdir(png_map_path):
         os.makedirs(png_map_path)
-
     if not os.path.isdir(dicom_map_path):
         os.makedirs(dicom_map_path)
+    if not os.path.isdir(np_map_path):
+        os.makedirs(np_map_path)
+
+    np_map_name = 'T1_map' + timestr + '.npy'
+    np.save(str(np_map_path) + '/T1_map' + timestr + '.npy', T1_map)
 
     plt.figure(frameon=False)
     plt.imshow(T1_map, cmap='hot')
@@ -121,7 +126,7 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
     ds.PixelData = pixel_array_int.tostring()
     ds.save_as(str(dicom_map_path) + '/T1_map' + timestr + '.dcm')
 
-    return png_map_name, dicom_map_path
+    return png_map_name, dicom_map_path, np_map_name
 
 
 def T1_sig_eq(X, a, b, c):

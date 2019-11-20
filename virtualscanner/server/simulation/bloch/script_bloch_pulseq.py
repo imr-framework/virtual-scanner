@@ -8,7 +8,10 @@ Run the script to generated a simulated image. Modify the code directly to set t
 import multiprocessing as mp
 import time
 
+import matplotlib as mpl
+mpl.use('TkAgg')
 import matplotlib.pyplot as plt
+
 import numpy as np
 
 import virtualscanner.server.simulation.bloch.phantom as pht

@@ -7,12 +7,10 @@ on:
 
 jobs:
   build:
-   # runs-on: windows-latest
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 2
       matrix:
-        #os: [windows-latest]
         os: [macOS-latest, windows-latest]
    
     steps:
@@ -35,6 +33,4 @@ jobs:
     - name: Test (T1/T2 mapping only)
       run: python -m unittest discover -p "utest_T1_T2_mapping*.py"
 
-      #run: python -m unittest
-      #pip install pytest
-      #pytest
+

@@ -415,11 +415,11 @@ def worker():
 
                 if payload['TI'] == "":
                     server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T2_orig_data'
-                    map_name, dicom_path = T2_mapping.main(server_od_path, payload['TR'], payload['TE'],
+                    map_name, dicom_path, np_map_name = T2_mapping.main(server_od_path, payload['TR'], payload['TE'],
                                                            session['patid'])
                 else:
                     server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T1_orig_data'
-                    map_name, dicom_path = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'],
+                    map_name, dicom_path, np_map_name = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'],
                                                            session['patid'])
 
                 payload['dicom_path'] = str(dicom_path)
