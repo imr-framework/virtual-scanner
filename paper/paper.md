@@ -14,7 +14,7 @@ authors:
   - name: Sairam Geethanath
     orcid: 0000-0002-3776-4114
     affiliation: 1
-  - name: Marina Jimeno Manso
+  - name: Marina Manso Jimeno
     orcid: 0000-0002-1141-2049
     affiliation: 1
   - name: Enlin Qian
