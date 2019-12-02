@@ -66,25 +66,24 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
     image_data_final = np.divide(image_data_final, np.amax(image_data_final))
-    T1_map = image_data_final[:, :, 3]  # for debug purpose
-    # T1_map = np.zeros([image_size[0], image_size[1]])
-    #
-    # for n2 in range(image_size[0]):
-    #     for n3 in range(image_size[1]):
-    #         dist_to_center = np.sqrt((n2 - centers[0, 0]) ** 2 + (n3 - centers[0, 1]) ** 2) * voxel_size
-    #         y_data = image_data_final[n2, n3, :]
-    #         if dist_to_center < phantom_radius:
-    #             n4 = 0
-    #             min_loc = np.argmin(y_data)
-    #             while n4 <= min_loc:
-    #                 y_data[n4] = -y_data[n4]
-    #                 n4 = n4 + 1
-    #
-    #         popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data,
-    #                                p0=(0.278498218867048, 0.546881519204984, 0.398930085350989), bounds=(0, 6))
-    #         T1_map[n2, n3] = popt[1]
-    #
-    # T1_map[T1_map > 5] = 5
+    T1_map = np.zeros([image_size[0], image_size[1]])
+
+    for n2 in range(image_size[0]):
+        for n3 in range(image_size[1]):
+            dist_to_center = np.sqrt((n2 - centers[0, 0]) ** 2 + (n3 - centers[0, 1]) ** 2) * voxel_size
+            y_data = image_data_final[n2, n3, :]
+            if dist_to_center < phantom_radius:
+                n4 = 0
+                min_loc = np.argmin(y_data)
+                while n4 <= min_loc:
+                    y_data[n4] = -y_data[n4]
+                    n4 = n4 + 1
+
+            popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data,
+                                   p0=(0.278498218867048, 0.546881519204984, 0.398930085350989), bounds=(0, 6))
+            T1_map[n2, n3] = popt[1]
+
+    T1_map[T1_map > 5] = 5
 
     # plt.figure()
     # imshowobj = plt.imshow(T1_map, cmap='hot')
