@@ -48,11 +48,6 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
     TR = TR / 1000
     TE = TE / 1000
     TI = TI / 1000
-    fov = 170
-    map_size = 128
-    voxel_size = fov / map_size  # unit should be mm/voxel
-    phantom_radius = 101.72  # unit in mm
-    centers = np.array([[map_size / 2, map_size / 2]])
 
     lstFilesDCM = sorted(list(dicom_file_path.glob('*.dcm')))
     ref_image = pydicom.read_file(str(lstFilesDCM[0]))  # Get ref file
@@ -70,17 +65,14 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
 
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
-            dist_to_center = np.sqrt((n2 - centers[0, 0]) ** 2 + (n3 - centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
-            if dist_to_center < phantom_radius:
-                n4 = 0
-                min_loc = np.argmin(y_data)
-                while n4 <= min_loc:
-                    y_data[n4] = -y_data[n4]
-                    n4 = n4 + 1
-
+            n4 = 0
+            min_loc = np.argmin(y_data)
+            while n4 <= min_loc:
+                y_data[n4] = -y_data[n4]
+                n4 = n4 + 1
             popt, pcov = curve_fit(T1_sig_eq, (TI, TR), y_data,
-                                   p0=(0.278498218867048, 0.546881519204984, 0.398930085350989), bounds=(0, 6))
+                                   p0=(0.991966876997438, 0.526367507137759, 0.961046087302673), bounds=([0, 0, -1], [10, 6, 6]))
             T1_map[n2, n3] = popt[1]
 
     T1_map[T1_map > 5] = 5

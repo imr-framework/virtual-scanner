@@ -44,11 +44,6 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
     TE = np.fromstring(TE, dtype=float, sep=',')
     TR = TR / 1000
     TE = TE / 1000
-    fov = 210
-    map_size = 128
-    voxel_size = fov / map_size  # unit should be mm/voxel
-    phantom_radius = 101.72  # unit in mm
-    centers = np.array([[map_size / 2, map_size / 2]])
 
     lstFilesDCM = sorted(list(dicom_file_path.glob('*.dcm')))  # create an empty list
     ref_image = pydicom.read_file(str(lstFilesDCM[0]))  # Get ref file
@@ -62,15 +57,12 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
 
     image_data_final = np.divide(image_data_final, np.amax(image_data_final))
     T2_map = np.zeros([image_size[0], image_size[1]])
-    # p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275, 0.915735525189067)  # initial guess for parameters
-    p0 = (0.8002804688888, 0.141886338627215, 0.421761282626275)  # initial guess for parameters
+    p0 = (0.655477890177557, 0.171186687811562)  # initial guess for parameters
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
-            dist_to_center = np.sqrt((n2-centers[0, 0]) ** 2+(n3-centers[0, 1]) ** 2) * voxel_size
             y_data = image_data_final[n2, n3, :]
-            if dist_to_center < phantom_radius:
-                popt, pcov = curve_fit(T2_sig_eq, (TE, TR), y_data, p0, bounds=(0, 2))
-                T2_map[n2, n3] = popt[2]
+            popt, pcov = curve_fit(T2_sig_eq, TE, y_data, p0, bounds=([0, 0], [10, 6]))
+            T2_map[n2, n3] = popt[1]
 
     T2_map[T2_map > 2] = 2
     # plt.figure()
@@ -116,7 +108,7 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
     return png_map_name, dicom_map_path, np_map_name
 
 
-def T2_sig_eq(X, a, b, c):
+def T2_sig_eq(x, a, b):
     """
     Generate an exponential function for curve fitting.
 
@@ -136,6 +128,4 @@ def T2_sig_eq(X, a, b, c):
     float
         Exponential function used for T2 curve fitting
     """
-
-    x, y = X
-    return a * (1 - np.exp(-y / b)) * np.exp(-x / c)
+    return a * np.exp(-x / b)
