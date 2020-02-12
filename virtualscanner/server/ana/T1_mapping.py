@@ -58,21 +58,6 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
     for filenameDCM in lstFilesDCM:
         ds = pydicom.read_file(str(filenameDCM))  # read the file
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data (uint16)
-
-    # This part of script is used to save all dicom files to .png files.
-    # png_map_path = COMS_ANALYZE_PATH / 'static' / 'ana' / 'inputs' / 'T1_original_data'
-    # for n in range(image_size[2]):
-    #     plt.imshow(image_data_final[:, :, n], cmap='gray')
-    #     plt.axis('off')
-    #     plt.gca().set_axis_off()
-    #     plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
-    #                         hspace=0, wspace=0)
-    #     plt.margins(0, 0)
-    #     plt.gca().xaxis.set_major_locator(plt.NullLocator())
-    #     plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    #     plt.savefig(str(png_map_path) + '/T1_experiments_data_' + str(n+1) + '.png', bbox_inches = 'tight',
-    #         pad_inches = 0)
-
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
     image_data_final = np.divide(image_data_final, np.amax(image_data_final))

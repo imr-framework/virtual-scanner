@@ -54,27 +54,26 @@ function autoFillForm(dict){
   if (dict['original-data-opt'] == 'T1'){
 
     $("#seq-choice").val('IRSE');
-    $("#TE").val(7.344);
+    $("#TE").val(12);
     $("#TI-input").css('background-color','white');
-    $("#TI-input").val('50, 75, 100, 125, 150, 250, 500, 1000, 2000, 3000');
+    $("#TI-input").val('21, 100, 200, 400, 800, 1600, 3200');
     $("#model-eq").val('IRSE-eq');
     $("#map-type").val('T1');
-    $("#FOV").val(250);
-    $("#TR").val(4500);
+    $("#FOV").val(170);
 
   }
   else if (dict['original-data-opt'] == 'T2') {
     $("#seq-choice").val('SE');
-    $("#TE").val('15, 25, 30, 40, 45, 50, 60, 75, 80, 100, 120, 160');
+    $("#TE").val('12, 22, 42, 62, 102, 152, 202');
     $("#model-eq").val('SE-eq');
     $("#map-type").val('T2');
     $("#FOV").val(210);
-    $("#TR").val(5000);
   }
   $('#seq-choice option:not(:selected)').attr('disabled', true);
   $('#model-eq option:not(:selected)').attr('disabled', true);
   $('#map-type option:not(:selected)').attr('disabled', true);
-  $("#map-size").val(256);
+  $("#TR").val(10000);
+  $("#map-size").val(128);
 
 
 }
