@@ -412,13 +412,13 @@ def worker():
             elif 'map-form' in payload:
                 STATIC_ANALYZE_PATH_REL = constants.COMS_UI_STATIC_ANALYZE_PATH.relative_to(CURRENT_PATH)
                 session['ana_map'] = 1
-
                 if payload['TI'] == "":
                     server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T2_orig_data'
                     map_name, dicom_path, np_map_name = T2_mapping.main(server_od_path, payload['TR'], payload['TE'],
                                                            session['patid'])
                 else:
                     server_od_path = SERVER_ANALYZE_PATH / 'inputs' / 'T1_orig_data'
+                    payload['TI'] = '50, 75, 100, 125, 150, 250, 500, 1000, 2000, 3000' # brute force change TI to new values
                     map_name, dicom_path, np_map_name = T1_mapping.main(server_od_path, payload['TR'], payload['TE'], payload['TI'],
                                                            session['patid'])
 
