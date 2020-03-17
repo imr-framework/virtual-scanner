@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<simulate name="JEMRIS">
+   <sample name="2D sphere" uri="sample.h5"/>
+   <RXcoilarray uri="uniform.xml"/>
+   <TXcoilarray uri="uniform.xml"/>
+   <parameter ConcomitantFields="0" EvolutionPrefix="evol" EvolutionSteps="0" RandomNoise="0"/>
+   <sequence name="FLASH" uri="example.xml"/>
+   <model name="Bloch" type="CVODE"/>
+</simulate>

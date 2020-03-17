@@ -1,0 +1,18 @@
+C:\Users\tongg\PycharmProjects\py2jemris\try_seq2xml>jemris MySimu.xml
+
+jemris 2.8.3 (289fa35d)
+
+Model    : Bloch          , solver = CVODE
+Sample   : 2D sphere      , spins  = 7825
+TxArray  : uniform.xml
+RxArray  : uniform.xml
+Sequence : example.xml
+
+
+Restart files found. Resuming calculation.
+
+Simulating | ************************************************** | 100% done
+
+Actual simulation took 15.30 seconds.
+
+C:\Users\tongg\PycharmProjects\py2jemris\try_seq2xml>
