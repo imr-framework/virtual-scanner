@@ -1,10 +1,11 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
+# 08/2019 WIP
 
 import numpy as np
-
-GAMMA = 2 * 42.58e6 * np.pi
+from scipy.integrate import solve_ivp
+from scipy.interpolate import interp1d
+GAMMA = 2*42.58e6 * np.pi
 GAMMA_BAR = 42.58e6
-
 
 class SpinGroup:
     """Basic magnetization unit for Bloch simulation
@@ -46,14 +47,14 @@ class SpinGroup:
 
     """
 
-    def __init__(self, loc=(0, 0, 0), pdt1t2=(1, 0, 0), df=0):
+    def __init__(self, loc=(0,0,0), pdt1t2=(1,0,0), df=0):
         self.m = np.array([[0], [0], [1]])
         self.PD = pdt1t2[0]
         self.T1 = pdt1t2[1]
         self.T2 = pdt1t2[2]
         self.loc = loc
         self.df = df
-        self.signal = []
+        self.signal=[]
 
     def get_m_signal(self):
         """Gets spin group's transverse magnetization
@@ -66,11 +67,11 @@ class SpinGroup:
             Imaginary part = My
 
         """
-        m_signal = np.squeeze(self.PD * (self.m[0] + 1j * self.m[1]))
+        m_signal = np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
 
         return m_signal
 
-    def fpwg(self, grad_area, t):
+    def fpwg(self,grad_area,t):
         """Apply only gradients to the spin group
 
         The spin group precesses with gradients applied.
@@ -85,15 +86,15 @@ class SpinGroup:
             Total time of precession in seconds
 
         """
-        x, y, z = self.loc
-        phi = GAMMA * (x * grad_area[0] + y * grad_area[1] + z * grad_area[2]) + 2 * np.pi * self.df * t
+        x,y,z = self.loc
+        phi = GAMMA*(x*grad_area[0]+y*grad_area[1]+z*grad_area[2])+2*np.pi*self.df*t
         C, S = np.cos(phi), np.sin(phi)
-        E1 = 1 if self.T1 == 0 else np.exp(-t / self.T1)
-        E2 = 1 if self.T2 == 0 else np.exp(-t / self.T2)
-        A = np.array([[E2 * C, E2 * S, 0],
-                      [-E2 * S, E2 * C, 0],
+        E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
+        E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
+        A = np.array([[E2*C, E2*S, 0],
+                      [-E2*S, E2*C, 0],
                       [0, 0, E1]])
-        self.m = A @ self.m + [[0], [0], [1 - E1]]
+        self.m = A@self.m + [[0],[0],[1 - E1]]
 
     def delay(self, t):
         """Applies a time passage to the spin group
@@ -107,15 +108,17 @@ class SpinGroup:
             Delay interval in seconds
 
         """
-        self.T1 = max(0, self.T1)
-        self.T2 = max(0, self.T2)
-        E1 = 1 if self.T1 == 0 else np.exp(-t / self.T1)
-        E2 = 1 if self.T2 == 0 else np.exp(-t / self.T2)
+        self.T1 = max(0,self.T1)
+        self.T2 = max(0,self.T2)
+        E1 = 1 if self.T1 == 0 else np.exp(-t/self.T1)
+        E2 = 1 if self.T2 == 0 else np.exp(-t/self.T2)
 
         A = np.array([[E2, E2, 0],
                       [-E2, E2, 0],
                       [0, 0, E1]])
-        self.m = A @ self.m + np.array([[0], [0], [1 - E1]])
+        self.m = A@self.m + np.array([[0], [0], [1 - E1]])
+
+
 
     def apply_rf(self, pulse_shape, grads_shape, dt):
         """Applies an RF pulse
@@ -134,17 +137,117 @@ class SpinGroup:
 
         """
         m = self.m
-        x, y, z = self.loc
+        x,y,z = self.loc
         for v in range(len(pulse_shape)):
             B1 = pulse_shape[v]
             B1x = np.real(B1)
             B1y = np.imag(B1)
-            glocp = grads_shape[0, v] * x + grads_shape[1, v] * y + grads_shape[2, v] * z
-            A = np.array([[0, glocp, B1y],
+            glocp = grads_shape[0,v]*x+grads_shape[1,v]*y+grads_shape[2,v]*z
+            A = np.array([[0, glocp, -B1y],
                           [-glocp, 0, B1x],
                           [B1y, -B1x, 0]])
-            m = m + dt * GAMMA * A @ m
+            m = m + dt*GAMMA*A@m
         self.m = m
+
+
+    def apply_rf_store(self, pulse_shape, grads_shape, dt):
+        """Applies an RF pulse and store magnetization at all time points
+
+        Euler's method numerical integration of Bloch equation
+        with both B1(RF) field and gradient field
+
+        Parameters
+        ----------
+        pulse_shape :
+            1 x n complex array (B1)[tesla]
+        grads_shape :
+            3 x n real array  [tesla/meter]
+        dt:
+            raster time for both shapes [seconds]
+
+        Returns
+        -------
+        m_signal : 1 x n complex array (a.u.)
+            Transverse magnetization in complex form
+        magnetizations : 3 x n real array (a.u.)
+            [Mx, My, Mz] magnetization over time
+
+        """
+        m = self.m
+
+        T1_inv = 1/self.T1 if self.T1 > 0 else 0
+        T2_inv = 1/self.T2 if self.T2 > 0 else 0
+
+        m_signal = np.zeros(len(pulse_shape), dtype=complex)
+        magnetizations = np.zeros((3, len(pulse_shape)+1))
+        magnetizations[:,0] = np.squeeze(m)
+
+        x,y,z = self.loc
+        dB = self.df/GAMMA_BAR
+        for v in range(len(pulse_shape)):
+            B1 = pulse_shape[v]
+            B1x = np.real(B1)
+            B1y = np.imag(B1)
+            glocp = grads_shape[0,v]*x+grads_shape[1,v]*y+grads_shape[2,v]*z
+            A = np.array([[-T2_inv, GAMMA*(dB + glocp), -GAMMA*B1y],
+                          [-GAMMA*(dB + glocp), -T2_inv, GAMMA*B1x],
+                          [GAMMA*B1y, -GAMMA*B1x, -T1_inv]])
+            #print(A)
+            m = m + dt*(A@m + np.array([[0],[0],[T1_inv]]))
+            magnetizations[:,v+1] = np.squeeze(m)
+            self.m = m
+
+            m_signal[v] = self.get_m_signal()
+
+        return m_signal, magnetizations
+
+    # TODO : incorporate scipy.integrate.solve_ivp for more accurate RF simulation
+    # Motivated by the overflow problems generated by current simple method (step-and-add) when dealing with adiabatic pulses
+    # def apply_rf_solveivp_store(self, pulse_func, grads_func, interval, dt):
+    #     # Uses scipy ode integrator to simulate RF effects.
+    #     # Preparation
+    #     m = self.m
+    #     T1_inv = 1/self.T1 if self.T1 > 0 else 0
+    #     T2_inv = 1/self.T2 if self.T2 > 0 else 0
+    #     x,y,z = self.loc
+    #     dB = self.df/GAMMA_BAR
+    #
+    #     # Desired time points
+    #     tmodel = np.linspace()
+    #     tmodel = np.arange(0, len(pulse_shape)*dt, dt)
+    #
+    #     # Define ODE
+    #     def bloch_fun(t,m):
+    #         m = np.reshape(m, (3,1))
+    #         B1 = pulse_shape[np.where(tmodel==t)]
+    #         print(B1)
+    #         B1x = np.real(B1)[0]
+    #         B1y = np.imag(B1)[0]
+    #
+    #         grad = grads_shape[:,np.where(tmodel==t)[0]]
+    #         glocp = grad[0,0]*x+grad[1,0]*y+grad[2,0]*z
+    #
+    #         A = np.array([[-T2_inv, GAMMA*(dB + glocp), -GAMMA*B1y],
+    #                       [-GAMMA*(dB +glocp), -T2_inv, GAMMA*B1x],
+    #                       [GAMMA*B1y, -GAMMA*B1x, -T1_inv]])
+    #         print(A)
+    #         return np.squeeze(np.matmul(A,m) + np.array([[0],[0],[T1_inv]])) # dm/dt
+    #
+    #
+    #     # TODO test this?
+    #     # Put into solve_ivp
+    #     print(np.shape(m))
+    #     sol = solve_ivp(fun=bloch_fun, t_span=(tmodel[0],tmodel[-1]), y0=np.squeeze(m), method='RK45',t_eval=tmodel)
+    #
+    #     all_ms = sol.y
+    #     print(np.shape(all_ms))
+    #
+    #     t = sol.t
+    #     print(np.shape(t))
+    #
+    #     self.m = all_ms[-1]
+    #     return all_ms
+
 
     def _apply_rf_old(self, pulse_shape, grads_shape, dt):
         """Deprecated method for applying an RF pulse
@@ -160,21 +263,21 @@ class SpinGroup:
             be = np.array([bx, by, bz])
             self.m = anyrot(GAMMA * be * dt) @ self.m
 
-    def _readout_old(self, dt, n, delay, grad, timing):
+    def _readout_old(self,dt,n,delay,grad,timing):
         """Deprecated method for sampling with gradients on
         """
         signal_1D = []
-        self.fpwg(grad[:, 0] * delay, delay)
+        self.fpwg(grad[:,0]*delay, delay)
         v = 1
         for q in range(1, len(timing)):
             if v <= n:
                 signal_1D.append(self.get_m_signal())
-            self.fpwg(grad[:, v] * dt, dt)
+            self.fpwg(grad[:, v]*dt,dt)
             v += 1
 
         self.signal.append(signal_1D)
 
-    def readout(self, dwell, n, delay, grad, timing):
+    def readout(self,dwell,n,delay,grad,timing):
         """ ADC sampling for single spin group
 
         Samples spin group's magnetization while playing an arbitrary gradient
@@ -199,13 +302,76 @@ class SpinGroup:
 
         signal_1D = []
         # ADC delay
-        self.fpwg(np.trapz(y=grad[:, 0:2], x=timing[0:2]), delay)
+        self.fpwg(np.trapz(y=grad[:,0:2], x=timing[0:2]), delay)
         for q in range(1, len(timing)):
             if q <= n:
                 signal_1D.append(self.get_m_signal())
-            self.fpwg(np.trapz(y=grad[:, q:q + 2], dx=dwell), dwell)
+            self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
 
         self.signal.append(signal_1D)
+
+
+
+class NumSolverSpinGroup(SpinGroup):
+    # TODO package the funtions to generate a final function that only takes in t and M and returns dM/dt
+
+    @staticmethod
+    def interpolate_waveforms(grads_shape, pulse_shape, dt):
+        # Helper function to generate continuous waveforms
+        gx_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[0,:])
+        gy_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[1,:])
+        gz_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[2,:])
+        pulse_real_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.real(pulse_shape))
+        pulse_imag_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.imag(pulse_shape))
+
+        return gx_func, gy_func, gz_func, pulse_real_func, pulse_imag_func
+
+    # TODO make this return the input diffEQ to solver
+    def get_bloch_eqn(self, grads_shape, pulse_shape, dt):
+        x, y, z = self.loc
+        gx_func, gy_func, gz_func, pulse_real_func, pulse_imag_func = self.interpolate_waveforms(grads_shape, pulse_shape, dt)
+
+        T1_inv = 1 / self.T1 if self.T1 > 0 else 0
+        T2_inv = 1 / self.T2 if self.T2 > 0 else 0
+        dB = self.df / GAMMA_BAR
+
+        def bloch_eqn(t,m):
+            gx, gy, gz = gx_func(t), gy_func(t), gz_func(t)
+            B1x = pulse_real_func(t)
+            B1y = pulse_imag_func(t)
+            glocp = gx*x + gy*y + gz*z
+            A = np.array([[-T2_inv, GAMMA * (dB + glocp), -GAMMA * B1y],
+                          [-GAMMA * (dB + glocp), -T2_inv, GAMMA * B1x],
+                          [GAMMA * B1y, -GAMMA * B1x, -T1_inv]])
+            return A @ m + np.array([[0], [0], [T1_inv]])
+
+
+        return bloch_eqn
+
+
+    # Override RF method!
+    def apply_rf_store(self, pulse_shape, grads_shape, dt):
+        m = np.squeeze(self.m)
+
+        ####
+        m_signal = np.zeros(len(pulse_shape), dtype=complex)
+        magnetizations = np.zeros((3, len(pulse_shape) + 1))
+        magnetizations[:, 0] = np.squeeze(m)
+        ####
+
+        # Set correct arguments to ivp solver ...
+        results = solve_ivp(fun=self.get_bloch_eqn(grads_shape,pulse_shape,dt), t_span=[0,len(pulse_shape)*dt-dt],
+                            y0=m, method="RK45",t_eval=dt*np.arange(len(pulse_shape)), vectorized=True)
+
+        m_signal = results.y[0,:] + 1j*results.y[1,:]
+        magnetizations = results.y
+
+        return m_signal, magnetizations
+
+
+
+
+
 
 
 # Helpers
@@ -230,16 +396,15 @@ def anyrot(v):
     vx = v[0]
     vy = v[1]
     vz = v[2]
-    th = np.linalg.norm(v, 2)
+    th = np.linalg.norm(v,2)
     C = np.cos(th)
     S = np.sin(th)
 
     if th != 0:
-        R = (1 / (th * th)) * np.array(
-            [[vx * vx * (1 - C) + th * th * C, vx * vy * (1 - C) - th * vz * S, vx * vz * (1 - C) + th * vy * S],
-             [vx * vy * (1 - C) + th * vz * S, vy * vy * (1 - C) + th * th * C, vy * vz * (1 - C) - th * vx * S],
-             [vx * vz * (1 - C) - th * vy * S, vy * vz * (1 - C) + th * vx * S, vz * vz * (1 - C) + th * th * C]])
+        R = (1/(th*th))*np.array([[vx*vx*(1-C)+th*th*C, vx*vy*(1-C)-th*vz*S, vx*vz*(1-C)+th*vy*S],
+                                  [vx*vy*(1-C)+th*vz*S, vy*vy*(1-C)+th*th*C, vy*vz*(1-C)-th*vx*S],
+                                  [vx*vz*(1-C)-th*vy*S, vy*vz*(1-C)+th*vx*S, vz*vz*(1-C)+th*th*C]])
     else:
-        R = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        R = np.array([[1,0,0],[0,1,0],[0,0,1]])
 
     return R
