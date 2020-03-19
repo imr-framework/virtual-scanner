@@ -5,6 +5,9 @@ Numerical phantom generation and access
 
 import numpy as np
 import scipy.signal as ss
+import h5py
+
+
 
 class Phantom:
     """Generic numerical phantom for MRI simulations
@@ -43,6 +46,7 @@ class Phantom:
 
     """
     def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,loc=(0,0,0)):
+        self.vsize = vsize
         self.T1map = T1map
         self.T2map = T2map
         self.PDmap = PDmap
@@ -143,16 +147,24 @@ class Phantom:
         output_folder : str
             Folder in which to output the h5 file
         """
+
+        GAMMA = 2 * 42.58e6 * np.pi
+
         pht_shape = list(self.get_shape())
         dim = len(pht_shape)
         pht_shape.append(5)
 
         PDmap_au = self.PDmap
-        T1map_ms = self.T1map * 1000
-        T2map_ms = self.T2map * 1000
-        dBmap_rad_per_ms = self.dBmap * ???
+        T1map_ms = self.T1map * 1e3
+        T2map_ms = self.T2map * 1e3
+        dBmap_rad_per_ms = self.dBmap * GAMMA * 1e-3
 
+        if output_folder is not '':
+            output_folder += '/'
         pht_file = h5py.File(output_folder + name + '.h5', 'a')
+        if "sample" in pht_file.keys():
+            del pht_file["sample"]
+
         sample = pht_file.create_group('sample')
         data = sample.create_dataset('data', tuple(pht_shape),
                                      dtype='f')  # M0, 1/T1 [1/ms], 1/T2 [1/ms], 1/T2* [1/ms], chemical shift [rad/ms]
@@ -160,28 +172,35 @@ class Phantom:
         resolution = sample.create_dataset('resolution', (3, 1), dtype='f')
 
         if dim == 1:
-            data[:, 1] = PDmap_au
-            data[:, 2] = 1 / T1map_ms
-            data[:, 3] = 1 / T2map_ms
-            data[:, 4] = 1 / T2map_ms  # T2 assigned as T2* for now
-            data[:, 5] = dBmap_rad_per_ms
+            data[:, 0] = PDmap_au
+            data[:, 1] = 1 / T1map_ms
+            data[:, 2] = 1 / T2map_ms
+            data[:, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, 4] = dBmap_rad_per_ms
 
         elif dim == 2:
 
-            data[:, :, 1] = PDmap_au
-            data[:, :, 2] = 1 / T1map_ms
-            data[:, :, 3] = 1 / T2map_ms
-            data[:, :, 4] = 1 / T2map_ms  # T2 assigned as T2* for now
-            data[:, :, 5] = dBmap_rad_per_ms
+            data[:, :, 0] = PDmap_au
+            data[:, :, 1] = 1 / T1map_ms
+            data[:, :, 2] = 1 / T2map_ms
+            data[:, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, :, 4] = dBmap_rad_per_ms
 
         elif dim == 3:
 
-            data[:, :, :, 1] = PDmap_au
-            data[:, :, :, 2] = 1 / T1map_ms
-            data[:, :, :, 3] = 1 / T2map_ms
-            data[:, :, :, 4] = 1 / T2map_ms  # T2 assigned as T2* for now
-            data[:, :, :, 5] = dBmap_rad_per_ms
+            data[:, :, :, 0] = PDmap_au
+            data[:, :, :, 1] = 1 / T1map_ms
+            data[:, :, :, 2] = 1 / T2map_ms
+            data[:, :, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, :, :, 4] = dBmap_rad_per_ms
 
+
+        offset[:,0] = np.array(self.loc)*1000 # meters to mm conversion
+        resolution[:,0] = [self.vsize*1000]*3 # isotropic
+
+        pht_file.close()
+
+        return
 
 class DTTPhantom(Phantom):
     """Discrete tissue type phantom
