@@ -60,7 +60,8 @@ def main(dicom_file_path: Path, TR: str, TE: str, TI: str, pat_id: str):  # TI s
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array  # store the raw image data (uint16)
     image_data_final = image_data_final.astype(np.float64)  # convert data type
 
-    image_data_final = np.divide(image_data_final, np.amax(image_data_final))
+    # image_data_final = np.divide(image_data_final, np.amax(image_data_final))
+    image_data_final = image_data_final/1000
     T1_map = np.zeros([image_size[0], image_size[1]])
 
     for n2 in range(image_size[0]):
