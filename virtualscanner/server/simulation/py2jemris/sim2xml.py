@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 from io import BytesIO
 
-def sim2xml(sim_name="mysimu2", seq="example.xml", phantom="sample.h5", Tx="uniform.xml", Rx="uniform.xml",
+def sim2xml(sim_name="simu", seq="example.xml", phantom="sample.h5", Tx="uniform.xml", Rx="uniform.xml",
             seq_name="Sequence", sample_name="Sample", out_folder_name = None):
 
     root = ET.Element("simulate")
@@ -32,15 +32,23 @@ def sim2xml(sim_name="mysimu2", seq="example.xml", phantom="sample.h5", Tx="unif
     model.set("type", "CVODE")
 
     sim_tree = ET.ElementTree(root)
-    sim_tree.write(out_folder_name + '/' + sim_name + '.xml')
+    sim_out_path = out_folder_name + '/' + sim_name + '.xml'
+    sim_tree.write(sim_out_path)
 
-    return sim_tree
+    return sim_out_path
+
 
 
 
 # Fig 1. Draw diagram of what py2jemris consists of
 # Fig 2. SDC Debug progress
 
+
+
+
+
+
 if __name__ == '__main__':
+
     sim2xml(seq="gre_jemris_seq2xml.xml", phantom="sample.h5", Tx="uniform.xml", Rx="uniform.xml",
             seq_name="Sequence", sample_name="Sample", out_folder_name="try_seq2xml")

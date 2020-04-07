@@ -8,7 +8,6 @@ import scipy.signal as ss
 import h5py
 
 
-
 class Phantom:
     """Generic numerical phantom for MRI simulations
 
@@ -150,22 +149,32 @@ class Phantom:
 
         GAMMA = 2 * 42.58e6 * np.pi
 
-        pht_shape = list(self.get_shape())
+        pht_shape = list(np.flip(self.get_shape()))
         dim = len(pht_shape)
+
         pht_shape.append(5)
 
-        PDmap_au = self.PDmap
-        T1map_ms = self.T1map * 1e3
-        T2map_ms = self.T2map * 1e3
-        dBmap_rad_per_ms = self.dBmap * GAMMA * 1e-3
 
-        if output_folder is not '':
+        PDmap_au = np.swapaxes(self.PDmap,0,-1)
+        T1map_ms = np.swapaxes(self.T1map * 1e3, 0,-1)
+        T2map_ms = np.swapaxes(self.T2map * 1e3,0,-1)
+
+        if np.shape(self.dBmap) == tuple(pht_shape):
+            dBmap_rad_per_ms = np.swapaxes(self.dBmap * GAMMA * 1e-3, 0, -1)
+        else:
+            dBmap_rad_per_ms = self.dBmap * GAMMA * 1e-3
+
+
+
+
+        if len(output_folder) > 0:
             output_folder += '/'
         pht_file = h5py.File(output_folder + name + '.h5', 'a')
         if "sample" in pht_file.keys():
             del pht_file["sample"]
 
         sample = pht_file.create_group('sample')
+
         data = sample.create_dataset('data', tuple(pht_shape),
                                      dtype='f')  # M0, 1/T1 [1/ms], 1/T2 [1/ms], 1/T2* [1/ms], chemical shift [rad/ms]
         offset = sample.create_dataset('offset', (3, 1), dtype='f')
@@ -179,7 +188,6 @@ class Phantom:
             data[:, 4] = dBmap_rad_per_ms
 
         elif dim == 2:
-
             data[:, :, 0] = PDmap_au
             data[:, :, 1] = 1 / T1map_ms
             data[:, :, 2] = 1 / T2map_ms
@@ -187,7 +195,6 @@ class Phantom:
             data[:, :, 4] = dBmap_rad_per_ms
 
         elif dim == 3:
-
             data[:, :, :, 0] = PDmap_au
             data[:, :, :, 1] = 1 / T1map_ms
             data[:, :, :, 2] = 1 / T2map_ms
@@ -237,7 +244,6 @@ class DTTPhantom(Phantom):
                     PDmap[x,y,z] = type_params[type_map[x,y,z]][0]
                     T1map[x,y,z] = type_params[type_map[x,y,z]][1]
                     T2map[x,y,z] = type_params[type_map[x,y,z]][2]
-
 
         super().__init__(T1map,T2map,PDmap,vsize,dBmap,loc)
 

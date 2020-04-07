@@ -56,3 +56,4 @@ RX_PATH = SERVER_PATH / 'RF' / 'rx'
 # server.simulation
 SERVER_SIM_BLOCH_PATH = SERVER_PATH / 'simulation' / 'bloch'
 SERVER_SIM_OUTPUT_PATH = SERVER_PATH / 'simulation' / 'outputs'
+SERVER_SIM_BLOCH_PY2JEMRIS_PATH = SERVER_PATH / 'simulation' / 'py2jemris'

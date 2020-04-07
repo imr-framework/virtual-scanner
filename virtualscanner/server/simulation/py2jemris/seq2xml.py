@@ -9,6 +9,7 @@ import h5py
 import numpy as np
 from math import pi
 
+
 # Notes
 # This is for generating an .xml file for input into JEMRIS simulator, from a Pulseq .seq file
 # The opposite philosophies make the .xml encoding suboptimal for storage
@@ -58,7 +59,7 @@ def seq2xml(seq, seq_name, out_folder_name):
     # Use helper functions to save all RF and only arbitrary gradient info
     rf_shapes_path_dict = save_rf_library_info(seq, out_folder_name)
     grad_shapes_path_dict = save_grad_library_info(seq, out_folder_name)
-
+    print(grad_shapes_path_dict)
     #///////////////////////////////////////////////////////////////////////////
 
 
@@ -181,8 +182,11 @@ def seq2xml(seq, seq_name, out_folder_name):
 
     # Output it!
     seq_tree = ET.ElementTree(root)
-    seq_tree.write(out_folder_name + '/' + seq_name + '.xml')
-    return seq_tree
+
+    seq_path = out_folder_name + '/' + seq_name + '.xml'
+    seq_tree.write(seq_path)
+
+    return seq_tree, seq_path
 
 def save_rf_library_info(seq, out_folder_name):
     ### Store library info ### (for (1) All RF pulses; (2) Arbitrary gradients?)
@@ -242,6 +246,8 @@ def save_grad_library_info(seq, out_folder_name):
             if g_ind != 0 and len(seq.grad_library.data[g_ind]) == 3 \
                 and g_ind not in processed_g_inds:
 
+                print(f'Adding Gradient Number {g_ind}')
+
                 this_block = seq.get_block(nb)
 
                 file_path_partial = f'grad_{int(g_ind)}.h5'
@@ -257,7 +263,7 @@ def save_grad_library_info(seq, out_folder_name):
                 f["extpulse"][0,:] = t_points * sec2ms
                 f["extpulse"][1,:] = g_shape * g_const
                 f.close()
-                grad_shapes_path_dict[gx_ind] = file_path_partial
+                grad_shapes_path_dict[g_ind] = file_path_partial
                 processed_g_inds.append(g_ind)
 
     return grad_shapes_path_dict
@@ -269,8 +275,12 @@ def save_grad_library_info(seq, out_folder_name):
 
 
 if __name__ == '__main__':
-    seq =  Sequence()
+    print('ha')
+#seq =  Sequence()
 #    seq.read('seq_files/spgr_gspoil_N16_Ns1_TE5ms_TR10ms_FA30deg.seq')
     #seq.read('benchmark_seq2xml/gre_jemris.seq')
-    seq.read('try_seq2xml/spgr_gspoil_N15_Ns1_TE5ms_TR10ms_FA30deg.seq')
-    stree = seq2xml(seq, seq_name="example", out_folder_name='try_seq2xml')
+#    seq.read('try_seq2xml/spgr_gspoil_N15_Ns1_TE5ms_TR10ms_FA30deg.seq')
+    #seq.read('orc_test/seq_2020-02-26_ORC_54_9_384_1.seq')
+    #stree = seq2xml(seq, seq_name="ORC-Marina", out_folder_name='orc_test')
+
+
