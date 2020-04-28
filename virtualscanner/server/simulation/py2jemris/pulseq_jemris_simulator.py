@@ -20,11 +20,40 @@ from scipy.io import savemat, loadmat
 
 PY2JEMRIS_PATH = constants.SERVER_SIM_BLOCH_PY2JEMRIS_PATH
 
-# This function is for simulating a .seq sequence you just coded
 def simulate_pulseq_jemris(seq_path, phantom_info, coil_fov,
                            tx='uniform', rx='uniform', # TODO add input that includes sequence info for
                                                        # TODO      dimensioning the RO points into kspace
                            tx_maps=None, rx_maps=None, sim_name=None):
+    """Runs simulation using an already-made .seq file
+
+    Inputs
+    ------
+    seq_path : str
+        Path to seq file
+    phantom_info : dict
+        Information used to create phantom; input to create_and_save_phantom()
+    coil_fov : float
+        Field-of-view of coil in mm
+    tx : str, optional
+        Type of tx coil; default is 'uniform'; the only other option is 'custom'
+    rx : str, optional
+        Type of rx coil; default is 'uniform'; the only other option is 'custom'
+    tx_maps : list, optional
+        List of np.ndarray (dtype='complex') maps for all tx channels
+        Required for 'custom' type tx
+    rx_maps : list, optional
+        List of np.ndarray (dtype='complex') maps for all rx channels
+        Required for 'custom' type rx
+    sim_name : str, optional
+        Used as folder name inside sim folder
+        Default is None, in which case sim_name will be set to the current timestamp
+
+    Returns
+    -------
+    sim_output :
+        Delivers output from sim_jemris
+
+    """
     if sim_name is None:
         sim_name = time.strftime("%Y%m%d%H%M%S")
 
@@ -76,9 +105,40 @@ def simulate_pulseq_jemris(seq_path, phantom_info, coil_fov,
 
 
 # TODO
-def create_and_save_phantom(phantom_info, out_folder_name):
+def create_and_save_phantom(phantom_info, out_folder):
+    """Generates a phantom and saves it into desired folder as .h5 file for JEMRIS purposes
 
-    out_folder_name = str(out_folder_name)
+    Inputs
+    ------
+    phantom_info : dict
+        Info of phantom to be constructed
+
+        REQUIRED
+        'fov' : float, field-of-view [meters]
+        'N' : int, phantom matrix size (isotropic)
+        'pht_type' : str, 'spherical', 'cylindrical' or 'custom'
+        'pht_dim' : int, either 3 or 2; 3D or 2D phantom options
+        'pht_dir' : str, {'x', 'y', 'z'}; orientation of 2D phantom
+
+        OPTIONAL (only required for 'custom' phantom type)
+        'T1' : np.ndarray, T1 map matrix
+        'T2' : np.ndarray, T2 map matrix
+        'PD' : np.ndarray, PD map matrix
+        'dr' : float, voxel size [meters] (isotropic)
+        'dBmap' : optional even for 'custom' type. If not provided, dB is set to 0 everywhere.
+
+
+    out_folder : str or pathlib Path object
+        Path to directory where phantom will be saved
+
+    Returns
+    -------
+    pht_type : str
+        phantom_info['pht_type'] (returned for naming purposes)
+
+
+    """
+    out_folder = str(out_folder)
 
     FOV = phantom_info['fov']
     N = phantom_info['N']
@@ -122,13 +182,13 @@ def create_and_save_phantom(phantom_info, out_folder_name):
         raise ValueError("Phantom type non-existent!")
 
     # Save as h5
-    sim_phantom.output_h5(out_folder_name, pht_type)
+    sim_phantom.output_h5(out_folder, pht_type)
 
     return pht_type
 
 if __name__ == '__main__':
     # Define the same phantom
-    phantom_info = {'fov': 0.256, 'N': 16, 'type': 'cylindrical', 'dim':2, 'dir':'z'}
+    phantom_info = {'fov': 0.256, 'N': 32, 'type': 'cylindrical', 'dim':2, 'dir':'z'}
     sim_names = ['test0413_GRE', 'test0413_SE', 'test0413_IRSE']
     sps = ['gre_fov256mm_Nf15_Np15_TE50ms_TR200ms_FA90deg.seq',
            'se_fov256mm_Nf15_Np15_TE50ms_TR200ms_FA90deg.seq',

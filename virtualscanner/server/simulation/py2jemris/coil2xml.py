@@ -8,19 +8,11 @@ import numpy as np
 
 
 
-# TODO: consider making Coil a class!
-
-def circle_of_loops_2d(R, n_loop, diameter):
-    coil_design = {}
-
-    return coil_design
-
-
 def coil2xml(b1maps=None, coil_design=None, fov=256, name='coils', out_folder=''):
     """
     Inputs
     ------
-    b1map : list, optional
+    b1maps : list, optional
         List of np.ndarray (dtype='complex') maps for all channels
     coil_design : dict, optional
         Dictionary containing information on coil design (see documentation)
@@ -90,16 +82,6 @@ def coil2xml(b1maps=None, coil_design=None, fov=256, name='coils', out_folder=''
 
         coil_tree = ET.ElementTree(root)
         coil_tree.write(out_folder + '/' + name + '.xml')
-
-
-    # TODO Biot-Savart loop based designs
-    # coil design case
-    #elif coil_design is not None:
-    #    root = ET.Element("CoilArray")
-    #    for coil_key in coil_design.keys():
-    #        coil_params = coil_design[coil_key]
-
-    #    # for each entry, add a loop
 
 
 

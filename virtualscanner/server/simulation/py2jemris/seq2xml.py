@@ -30,7 +30,7 @@ sec2ms = 1000  # time conversion constant
 rad2deg = 180/pi
 freq_const = 2 * pi / 1000 # From Hz to rad/ms
 
-def seq2xml(seq, seq_name, out_folder_name):
+def seq2xml(seq, seq_name, out_folder):
     """
     # Takes a Pulseq sequence and converts it into .xml format for JEMRIS
     # Plus all RF and gradient shapes as .h5 files
@@ -38,7 +38,9 @@ def seq2xml(seq, seq_name, out_folder_name):
     Inputs
     ------
     seq : pypulseq.Sequence.sequence.Sequence
-    out_filename : str
+    seq_name : name of output .xml file
+    out_folder : str
+        Path to output folder for .xml file
 
     Returns
     -------
@@ -57,8 +59,8 @@ def seq2xml(seq, seq_name, out_folder_name):
     C0 = ET.SubElement(root, "ConcatSequence")
 
     # Use helper functions to save all RF and only arbitrary gradient info
-    rf_shapes_path_dict = save_rf_library_info(seq, out_folder_name)
-    grad_shapes_path_dict = save_grad_library_info(seq, out_folder_name)
+    rf_shapes_path_dict = save_rf_library_info(seq, out_folder)
+    grad_shapes_path_dict = save_grad_library_info(seq, out_folder)
     print(grad_shapes_path_dict)
     #///////////////////////////////////////////////////////////////////////////
 
@@ -94,8 +96,7 @@ def seq2xml(seq, seq_name, out_folder_name):
 
                 rf_atom.set("InitialDelay", str(rf.delay*sec2ms))
                 rf_atom.set("InitialPhase", str(rf.phase_offset*rad2deg))
-                rf_atom.set("Frequency", str(rf.freq_offset*freq_const)) # TODO what is the unit for frequency in JEMRIS???
-
+                rf_atom.set("Frequency", str(rf.freq_offset*freq_const))
                 # Find ID of this rf event
                 rf_id = seq.block_events[block_ind][1]
                 rf_atom.set("Filename", rf_shapes_path_dict[rf_id])
@@ -183,12 +184,12 @@ def seq2xml(seq, seq_name, out_folder_name):
     # Output it!
     seq_tree = ET.ElementTree(root)
 
-    seq_path = out_folder_name + '/' + seq_name + '.xml'
+    seq_path = out_folder + '/' + seq_name + '.xml'
     seq_tree.write(seq_path)
 
     return seq_tree, seq_path
 
-def save_rf_library_info(seq, out_folder_name):
+def save_rf_library_info(seq, out_folder):
     ### Store library info ### (for (1) All RF pulses; (2) Arbitrary gradients?)
     # RF library
     rf_shapes_path_dict = {}
@@ -201,7 +202,7 @@ def save_rf_library_info(seq, out_folder_name):
         # Time is assumed to increase and start at zero.
         # The last time point defines the length of the pulse.
         file_path_partial = f'rf_{int(rf_id)}.h5'
-        file_path_full = out_folder_name + '/' + file_path_partial
+        file_path_full = out_folder + '/' + file_path_partial
         # De-compress using inbuilt PyPulseq method
         rf = seq.rf_from_lib_data(seq.rf_library.data[rf_id])
         # Only extract time, magnitude, and phase
@@ -231,9 +232,9 @@ def save_rf_library_info(seq, out_folder_name):
 
 
 # Helper function
-def save_grad_library_info(seq, out_folder_name):
+def save_grad_library_info(seq, out_folder):
     #//// Gradient library ////////////////////////////////////////////////////
-    #file_paths = [out_folder_name + f'grad_{int(grad_id)}.h5' for grad_id in range(1,N_grad_id+1)]
+    #file_paths = [out_folder + f'grad_{int(grad_id)}.h5' for grad_id in range(1,N_grad_id+1)]
     grad_shapes_path_dict = {}
     processed_g_inds = []
 
@@ -251,7 +252,7 @@ def save_grad_library_info(seq, out_folder_name):
                 this_block = seq.get_block(nb)
 
                 file_path_partial = f'grad_{int(g_ind)}.h5'
-                file_path_full = out_folder_name + '/' + file_path_partial
+                file_path_full = out_folder + '/' + file_path_partial
                 t_points = this_block.gx.t
                 g_shape = this_block.gx.waveform
                 N = len(t_points)
@@ -281,6 +282,6 @@ if __name__ == '__main__':
     #seq.read('benchmark_seq2xml/gre_jemris.seq')
 #    seq.read('try_seq2xml/spgr_gspoil_N15_Ns1_TE5ms_TR10ms_FA30deg.seq')
     #seq.read('orc_test/seq_2020-02-26_ORC_54_9_384_1.seq')
-    #stree = seq2xml(seq, seq_name="ORC-Marina", out_folder_name='orc_test')
+    #stree = seq2xml(seq, seq_name="ORC-Marina", out_folder='orc_test')
 
 

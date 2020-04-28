@@ -8,6 +8,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def recon_jemris(file, dims):
+    """Reads JEMRIS's signals.h5 output, reconstructs it (Cartesian only for now) using the dimensions specified,
+             and returns both the complex k-space and image matrix AND magnitude images
+
+    Inputs
+    ------
+    file : str
+        Path to signals.h5
+    dims : array_like
+        Dimensions for reconstruction
+        [Nro], [Nro, Nline], or [Nro, Nline, Nslice]
+
+    Returns
+    -------
+    kspace : np.ndarray
+        Complex k-space
+    imspace : np.ndarray
+        Complex image space
+    images : np.ndarray
+        Real, channel-combined images
+
+
+    """
     Mxy_out, M_vec_out, times_out = read_jemris_output(file)
     kspace, imspace = recon_jemris_output(Mxy_out, dims)
     images = save_recon_images(imspace)# TODO save as png (use previous code!)
@@ -16,6 +38,26 @@ def recon_jemris(file, dims):
 
 
 def read_jemris_output(file):
+    """Reads and parses JEMRIS's signals.h5 output
+
+    Inputs
+    ------
+    file : str
+        Path to signals.h5
+
+    Returns
+    -------
+    Mxy_out : np.ndarray
+        Complex representation of transverse magnetization sampled during readout
+        Matrix dimensions : (total # readouts) x (# channels)
+    M_vec_out : np.ndarray
+        3D representation of magnetization vector (Mx, My, Mz) sampled during readout
+        Matrix dimensions : (total # readouts) x 3 x (# channels)
+    times_out : np.ndarray
+        Timing vector for all readout points
+
+
+    """
     # 1. Read simulated data
     f = h5py.File(file,'r')
     signal = f['signal']
@@ -51,6 +93,14 @@ def recon_jemris_output(Mxy_out, dims):
     dims : array_like
         [Nro], [Nro, Nline], or [Nro, Nline, Nslice]
 
+
+    Returns
+    -------
+    kspace : np.ndarray
+        Complex k-space matrix
+    imspace : np.ndarray
+        Complex image space matrix
+
     """
     Nt, Nch = Mxy_out.shape
     print(Nt)
@@ -85,13 +135,30 @@ def recon_jemris_output(Mxy_out, dims):
 
 
 def save_recon_images(imspace, method='sum_squares'):
+    """For now, this method combines channels and returns the image matrix
+       (Future, for GUI use: add options to save as separate image files / mat / etc. in a directory)
+
+    Inputs
+    ------
+    imspace : np.ndarray
+        Complex image space. The last dimension must be # Channels.
+    method : str, optional
+        Method used for combining channels
+        Either 'sum_squares' (default, sum of squares) or 'sum_abs' (sum of absolute values)
+
+    Returns
+    -------
+    images : np.ndarray
+        Real, channel_combined image matrix
+
+    """
     if method == 'sum_squares':
-        image = np.sum(np.square(np.absolute(imspace)),axis=-1)
+        images = np.sum(np.square(np.absolute(imspace)),axis=-1)
     elif method == 'sum_abs':
-        image = np.sum(np.absolute(imspace), axis=-1)
+        images = np.sum(np.absolute(imspace), axis=-1)
     else:
         raise ValueError("Method not recognized. Must be either sum_squares or sum_abs")
-    return image
+    return images
 
 
 if __name__ == '__main__':
