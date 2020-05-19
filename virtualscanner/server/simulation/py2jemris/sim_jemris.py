@@ -118,7 +118,6 @@ def sim_jemris(list_sim_files=None, working_folder=None):
     seq_name = seq_xml[seq_xml.rfind('/')+1:seq_xml.rfind('.xml')]
     pht_name = pht_h5[pht_h5.rfind('/')+1:pht_h5.rfind('.h5')]
 
-
     # Make simu.xml
     sim2xml(sim_name='simu', seq=seq_xml, phantom=pht_h5, Tx=tx_xml, Rx=rx_xml,
                         seq_name=seq_name, sample_name=pht_name, out_folder_name=str(working_folder))
@@ -145,6 +144,17 @@ from virtualscanner.server.simulation.py2jemris.recon_jemris import *
 
 
 if __name__ == '__main__':
+
+    # JEMRIS seq.h5
+    #T   = h5read('seq.h5','/seqdiag/T');           % temporal sampling points
+    #RXP = h5read('seq.h5','/seqdiag/RXP');         % RF Receiver phase; unit: radiants; if negative, the TPOI was not an ADC
+    #TXM = h5read('seq.h5','/seqdiag/TXM');         % RF Transmitter magnitude
+    #TXP = h5read('seq.h5','/seqdiag/TXP');         % RF Transmitter phase; unit: radiants
+    #GX  = h5read('seq.h5','/seqdiag/GX');          % physical X-Gradient
+    #GY  = h5read('seq.h5','/seqdiag/GY');          % physical Y-Gradient
+    #GZ  = h5read('seq.h5','/seqdiag/GZ');          % physical Z-Gradient
+
+
     #['seq_xml', 'pht_h5', 'tx_xml', 'rx_xml', 'working_path'
     #output = sim_jemris()
   #  print(output)
@@ -155,18 +165,16 @@ if __name__ == '__main__':
     # "Sim test" April 17 for seq2xml
 
     # First, sim using original gre
-    list_sim_orig = {'seq_xml': 'gre_test_0417.xml', 'pht_h5': 'cylindrical.h5', 'tx_xml':'uniform.xml',
+    list_sim_orig = {'seq_xml': 'gre32.xml', 'pht_h5': 'cylindrical.h5', 'tx_xml':'uniform.xml',
                        'rx_xml': 'uniform.xml'}
-    out = sim_jemris(list_sim_orig, working_folder = 'sim/testfolder')
-    # Save output in file
+    out = sim_jemris(list_sim_orig, working_folder = 'sim/test0504')
+    savemat('sim/test0504/data32_orig.mat',out)
+
+
 
     # Second, use twice converted (.xml output of seq2xml)
-    #list_sim_twice = {'seq_xml': 'gre_test_0417_twice.xml', 'pht_h5': 'cylindrical.h5', 'tx_xml':'uniform.xml',
-  #                     'rx_xml': 'uniform.xml'}
-  #  out = sim_jemris(list_sim_twice, working_folder = 'sim/testfolder')
-
-    # Save output in file
-
-    #kspace, imspace, images = recon_jemris('sim/testfolder/signals1.h5', [32,32])
-    #savemat('sim/testfolder/data_orig.mat', {'kspace':kspace, 'imspace':imspace,'images':images})
+    list_sim_twice = {'seq_xml': 'gre32_twice.xml', 'pht_h5': 'cylindrical.h5', 'tx_xml':'uniform.xml',
+                      'rx_xml': 'uniform.xml'}
+   # out = sim_jemris(list_sim_twice, working_folder = 'sim/test0504')
+   # savemat('sim/test0504/data32_twice.mat',out)
 

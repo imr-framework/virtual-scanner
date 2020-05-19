@@ -68,10 +68,10 @@ def simulate_pulseq_jemris(seq_path, phantom_info, coil_fov,
     seq = Sequence()
     seq.read(seq_path)
     seq_name = seq_path[seq_path.rfind('/')+1:seq_path.rfind('.seq')]
-    seq2xml(seq, seq_name=seq_name, out_folder_name=str(target_path))
+    seq2xml(seq, seq_name=seq_name, out_folder=str(target_path))
 
     # Make phantom and save as .h5 file
-    pht_name = create_and_save_phantom(phantom_info, out_folder_name=target_path)
+    pht_name = create_and_save_phantom(phantom_info, out_folder=target_path)
 
 
     # Make sure we have the tx/rx files
@@ -116,9 +116,9 @@ def create_and_save_phantom(phantom_info, out_folder):
         REQUIRED
         'fov' : float, field-of-view [meters]
         'N' : int, phantom matrix size (isotropic)
-        'pht_type' : str, 'spherical', 'cylindrical' or 'custom'
-        'pht_dim' : int, either 3 or 2; 3D or 2D phantom options
-        'pht_dir' : str, {'x', 'y', 'z'}; orientation of 2D phantom
+        'type' : str, 'spherical', 'cylindrical' or 'custom'
+        'dim' : int, either 3 or 2; 3D or 2D phantom options
+        'dir' : str, {'x', 'y', 'z'}; orientation of 2D phantom
 
         OPTIONAL (only required for 'custom' phantom type)
         'T1' : np.ndarray, T1 map matrix

@@ -33,7 +33,7 @@ freq_const = 2 * pi / 1000 # From Hz to rad/ms
 def seq2xml(seq, seq_name, out_folder):
     """
     # Takes a Pulseq sequence and converts it into .xml format for JEMRIS
-    # Plus all RF and gradient shapes as .h5 files
+    # All RF and gradient shapes are stored as .h5 files
 
     Inputs
     ------
@@ -44,7 +44,10 @@ def seq2xml(seq, seq_name, out_folder):
 
     Returns
     -------
-    seqtree : xml.etree.ElementTree
+    seq_tree : xml.etree.ElementTree
+        Tree object used for generating the sequence .xml file
+    seq_path : str
+        Path to stored .xml sequence
     """
 
     # Parameters is the root of the xml
@@ -190,7 +193,9 @@ def seq2xml(seq, seq_name, out_folder):
     return seq_tree, seq_path
 
 def save_rf_library_info(seq, out_folder):
-    ### Store library info ### (for (1) All RF pulses; (2) Arbitrary gradients?)
+    """
+    Helper function that stores distinct RF waveforms for seq2xml
+    """
     # RF library
     rf_shapes_path_dict = {}
     for rf_id in list(seq.rf_library.data.keys()): # for each RF ID
@@ -233,7 +238,10 @@ def save_rf_library_info(seq, out_folder):
 
 # Helper function
 def save_grad_library_info(seq, out_folder):
-    #//// Gradient library ////////////////////////////////////////////////////
+    """
+    Helper function that stores distinct gradients for seq2xml
+    """
+
     #file_paths = [out_folder + f'grad_{int(grad_id)}.h5' for grad_id in range(1,N_grad_id+1)]
     grad_shapes_path_dict = {}
     processed_g_inds = []
@@ -276,8 +284,10 @@ def save_grad_library_info(seq, out_folder):
 
 
 if __name__ == '__main__':
-    print('ha')
-#seq =  Sequence()
+    print('')
+    seq = Sequence()
+    seq.read('sim/test0504/gre32.seq')
+    seq2xml(seq, seq_name='gre32_twice', out_folder='sim/test0504')
 #    seq.read('seq_files/spgr_gspoil_N16_Ns1_TE5ms_TR10ms_FA30deg.seq')
     #seq.read('benchmark_seq2xml/gre_jemris.seq')
 #    seq.read('try_seq2xml/spgr_gspoil_N15_Ns1_TE5ms_TR10ms_FA30deg.seq')

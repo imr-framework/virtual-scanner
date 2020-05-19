@@ -20,7 +20,8 @@ def coil2xml(b1maps=None, coil_design=None, fov=256, name='coils', out_folder=''
         Field-of-view of coil in mm
     name : str, optional
         Name of generated .xml file
-    working_folder : str, optional
+    out_folder : str, optional
+        Path to directory where the output .h5 is stored
 
 
     Returns
