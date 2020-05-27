@@ -3,6 +3,9 @@
 </a></p>
 <h1 align="center"> Virtual Scanner </h1> <br>
 
+<img title="PyPulseq Badge" src="https://img.shields.io/badge/made%20using-pypulseq-brightgreen" width="100">
+
+
 Virtual Scanner is an end-to-end hybrid Magnetic Resonance Imaging (MRI) simulator/console designed to be zero-footprint, modular, and supported by open-source standards.
 
 This project is a winning response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/), which poses the task of boosting accessibility to MRI training resources for underserved areas such as sub-Saharan Africa. We designed Virtual Scanner to help develop local expertise in these areas so that sustained deployment of MRI hardware is possible. Importantly, Virtual Scanner will be continually developed as a research tool that provides functionalities for simulating and prototyping MRI acquisition methods as well as services for sharing computational methods and resources with researchers around the world. Please read our publication in the journal of open souce software [here](https://joss.theoj.org/papers/10.21105/joss.01637).
