@@ -23,7 +23,7 @@ PY2JEMRIS_PATH = constants.SERVER_SIM_BLOCH_PY2JEMRIS_PATH
 def simulate_pulseq_jemris(seq_path, phantom_info, coil_fov,
                            tx='uniform', rx='uniform', # TODO add input that includes sequence info for
                                                        # TODO      dimensioning the RO points into kspace
-                           tx_maps=None, rx_maps=None, sim_name=None):
+                           tx_maps=None, rx_maps=None, sim_name=None, env_option="local"):
     """Runs simulation using an already-made .seq file
 
     Inputs
@@ -57,7 +57,10 @@ def simulate_pulseq_jemris(seq_path, phantom_info, coil_fov,
     if sim_name is None:
         sim_name = time.strftime("%Y%m%d%H%M%S")
 
-    target_path = PY2JEMRIS_PATH / 'sim' / sim_name
+    if env_option == 'local':
+        target_path = PY2JEMRIS_PATH / 'sim' / sim_name
+    elif env_option == 'colab':
+        target_path = 'sim/' + sim_name
 
     # Make target folder
     dir_str = f'{str(PY2JEMRIS_PATH)}\\sim\\{sim_name}'
