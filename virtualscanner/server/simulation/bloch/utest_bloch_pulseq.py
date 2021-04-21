@@ -85,7 +85,7 @@ if __name__ == '__main__':
     np.save('pulseq_signal_new.npy', sim_data)
 
     # Display
-    mydata = np.load('pulseq_signal_new.npy').all()
+    mydata = np.load('pulseq_signal_new.npy', allow_pickle=True).all()
     image = mydata['image']
     kspace = mydata['kspace']
     Ns = np.shape(image)[2]
