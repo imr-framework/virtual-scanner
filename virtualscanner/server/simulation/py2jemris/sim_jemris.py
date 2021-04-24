@@ -62,7 +62,7 @@ def run_jemris(working_folder = None):
 
     """
     print("Simulating using JEMRIS ...")
-    # Always rom from the py2jemris/sim directory
+    # Always run from the py2jemris/sim directory
     if working_folder is None:
         working_folder = 'sim'
     original_wd = os.getcwd()

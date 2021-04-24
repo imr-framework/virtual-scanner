@@ -9,17 +9,17 @@ from pypulseq.Sequence.sequence import Sequence
 import virtualscanner.server.simulation.bloch.phantom as pht
 import virtualscanner.server.simulation.bloch.pulseq_blochsim_methods as blcsim
 import virtualscanner.server.simulation.bloch.pulseq_library as psl
-from virtualscanner.server.simulation.bloch.phantom_acr import make_phantom_acr
+from virtualscanner.server.simulation.bloch.phantom_acr import make_phantom_acr, make_phantom_circle
 
 if __name__ == '__main__':
     df = 0
-    #myphantom = pht.makeCylindricalPhantom(dim=2, dir='z', loc=0, n=32)
-
-    # 04/20 (line_thk = 1)
+    #myphantom = pht.makeCylindricalPhantom(dim=2, dir='z', loc=-0.08, n=32)
     myphantom = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
-    myphantom.output_h5(output_folder='seq_validation_files',name='pht0420_2')
 
-
+    #myphantom = make_phantom_circle(N=32, FOV=0.25, slice_loc=0, shrink_factor=1)
+    # 04/20 (line_thk = 1)
+    #myphantom = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
+    #myphantom.output_h5(output_folder='seq_validation_files',name='pht0420_2')
     #myphantom.loc = (0,0,0)
     #myphantom.Zs = [0]
     #sp = {'circ_scale': 1, 'line_thk': N / 30, 'num_lines': 4}
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     pool.close()
     # Add up signal across all SpinGroups
     my_signal = np.sum(results, axis=0)
-    savemat('seq_validation_files/tse64_signal_grid0420_N128_solver.mat',{'signal':my_signal})
+    savemat('seq_validation_files/tse64_grid128.mat',{'signal':my_signal})
 
     # Time the code: Toc
     print("Time used: %s seconds" % (time.time() - start_time))

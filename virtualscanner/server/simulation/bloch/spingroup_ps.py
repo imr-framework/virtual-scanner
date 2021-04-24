@@ -277,7 +277,7 @@ class SpinGroup:
 
         self.signal.append(signal_1D)
 
-    def readout(self,dwell,n,delay,grad,timing):
+    def _readout_trapz(self,dwell,n,delay,grad,timing):
         """ ADC sampling for single spin group
 
         Samples spin group's magnetization while playing an arbitrary gradient
@@ -307,6 +307,57 @@ class SpinGroup:
             if q <= n:
                 signal_1D.append(self.get_m_signal())
             self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
+        self.signal.append(signal_1D)
+
+    def readout(self,dwell,n,delay,grad,timing):
+        """ ADC sampling for single spin group
+
+        Samples spin group's magnetization while playing an arbitrary gradient
+        This data is then stored in self.signal
+
+        Parameters
+        ----------
+        dwell : float
+            Constant sampling interval in seconds
+        n : int
+            Number of samples
+        delay : float
+            Delay of the first point sampled relative to beginning of gradient waveform
+        grad : numpy.ndarray
+            2D array with shape 3 x m (i.e. m samples of the 3D gradient (Gx, Gy, Gz))
+            Arbitrary gradient waveform in Tesla/meter
+        timing : numpy.ndarray
+            1D array with length m
+            Timing of gradient waveform
+
+        """
+
+        signal_1D = []
+        # ADC raster time assuming timing is uniformly spaced
+        dt_adc = timing[1] - timing[0]
+
+        N_delay = int(delay / dt_adc)
+        delay_times = dt_adc * np.arange(N_delay)
+        delay_grads = np.zeros((3,N_delay))
+        delay_grads[0,:] = np.interp(delay_times, timing, grad[0,:])
+        delay_grads[1,:] = np.interp(delay_times, timing, grad[1,:])
+        delay_grads[2,:] = np.interp(delay_times, timing, grad[2,:])
+
+        # ADC delay
+        self.fpwg(np.trapz(y=delay_grads, x=delay_times), delay)
+
+        # Readout
+        adc_begin_time = delay
+        N_dwell = int(dwell / dt_adc)
+        for q in range(n):
+            signal_1D.append(self.get_m_signal())
+            dwell_times = adc_begin_time + np.linspace(0,dwell,N_dwell+1,endpoint=True)
+            dwell_grads = np.zeros((3, N_dwell+1))
+            dwell_grads[0,:] = np.interp(dwell_times, timing, grad[0,:])
+            dwell_grads[1,:] = np.interp(dwell_times, timing, grad[1,:])
+            dwell_grads[2,:] = np.interp(dwell_times, timing, grad[2,:])
+            self.fpwg(np.trapz(y=dwell_grads, x=dwell_times), dwell)
+            adc_begin_time += dwell
 
         self.signal.append(signal_1D)
 

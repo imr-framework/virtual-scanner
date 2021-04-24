@@ -27,6 +27,31 @@ def make_phantom_acr(N, FOV, slice_loc, shrink_factor = 1, slice_type='grid'):
     pht = DTTPhantom(type_map,type_params,vsize,dBmap=0,loc=(0,0,0))
     return pht
 
+
+
+def make_phantom_circle(N, FOV, slice_loc, shrink_factor = 1):
+    # Define tissue types
+    # Define geometrical maps
+    #
+    diam_circ_mask = np.zeros((N,N))
+    for u in range(N):
+        for v in range(N):
+            diam_circ_mask[u,v] = np.linalg.norm([u-N/2,v-N/2]) <= 0.5*N*shrink_factor
+    type_map = np.zeros((N,N))
+
+    type_map = type_map + diam_circ_mask.astype(int)
+
+    PDs = [0, 1]
+    T1s = [1, 0.5]
+    T2s = [1, 0.250]
+    type_params = {0:(PDs[0],T1s[0],T2s[0]), 1:(PDs[1],T1s[1],T2s[1])} # 0 - background; 1 - main filling; 2 - material within grid
+    vsize = FOV/N
+    type_map = np.reshape(type_map, (N,N,1))
+    pht = DTTPhantom(type_map,type_params,vsize,dBmap=0,loc=(0,0,0))
+    return pht
+
+
+
 def make_grid(N, circ_scale, line_thk, num_lines):
     # Make grid
     grid_mask = np.zeros((N,N))
@@ -47,7 +72,8 @@ def make_grid(N, circ_scale, line_thk, num_lines):
 
 
 if __name__ == "__main__":
-    pht = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
+    #pht = make_phantom_circle(N=32, FOV=0.25, slice_loc=0, shrink_factor=0.8)
+    pht = make_phantom_acr(N=32, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
     #pht.output_h5(output_folder='sim/seq_validation/Revision1') # TODO (and simulate!)
     plt.figure(1)
     plt.imshow(pht.PDmap)

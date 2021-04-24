@@ -6,7 +6,7 @@ Numerical phantom generation and access
 import numpy as np
 import scipy.signal as ss
 import h5py
-
+import matplotlib.pyplot as plt
 
 class Phantom:
     """Generic numerical phantom for MRI simulations
@@ -575,5 +575,4 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
 
     phantom = DTTPhantom(type_map, type_params, vsize, loc=pht_loc)
     return phantom
-
 

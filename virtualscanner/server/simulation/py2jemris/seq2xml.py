@@ -254,7 +254,6 @@ def save_grad_library_info(seq, out_folder):
             #                             and (c) its index has not been processed
             if g_ind != 0 and len(seq.grad_library.data[g_ind]) == 3 \
                 and g_ind not in processed_g_inds:
-
                 print(f'Adding Gradient Number {g_ind}')
 
                 this_block = seq.get_block(nb)
