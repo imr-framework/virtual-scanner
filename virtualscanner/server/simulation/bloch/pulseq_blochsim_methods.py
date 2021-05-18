@@ -35,7 +35,11 @@ def store_pulseq_commands(seq): # TODO important for compatibility with new PyPu
         Pulseq commands used by apply_pulseq_commands()
 
     """
-    events = seq.block_events
+    if hasattr('seq', 'block_events'):
+        events = seq.block_events
+    elif hasattr('seq', 'dict_block_events'):
+        events = seq.dict_block_events
+
     dt_grad = seq.system.grad_raster_time
     dt_rf = seq.system.rf_raster_time
     seq_params = []
