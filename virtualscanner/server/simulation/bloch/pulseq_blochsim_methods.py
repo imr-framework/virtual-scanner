@@ -3,7 +3,7 @@
 Methods to help Bloch simulation from pulseq objects
 """
 
-# TODO : This script is trying its best to become compatible with PyPulseq 1.2.1 right now (07/26/19)
+# TODO : This script is trying its best to become compatible with PyPulseq 1.3.1 right now (05/18/21)
 
 
 
@@ -35,9 +35,9 @@ def store_pulseq_commands(seq): # TODO important for compatibility with new PyPu
         Pulseq commands used by apply_pulseq_commands()
 
     """
-    if hasattr('seq', 'block_events'):
+    if hasattr(seq, 'block_events'):
         events = seq.block_events
-    elif hasattr('seq', 'dict_block_events'):
+    elif hasattr(seq, 'dict_block_events'):
         events = seq.dict_block_events
 
     dt_grad = seq.system.grad_raster_time
