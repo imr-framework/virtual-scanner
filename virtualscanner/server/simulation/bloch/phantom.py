@@ -159,8 +159,14 @@ class Phantom:
         T1map_ms = np.swapaxes(self.T1map * 1e3, 0,-1)
         T2map_ms = np.swapaxes(self.T2map * 1e3,0,-1)
 
-        if np.shape(self.dBmap) == tuple(pht_shape):
+        T1map_ms_inv = np.where(T1map_ms > 0, 1/T1map_ms, 0)
+        T2map_ms_inv = np.where(T2map_ms > 0, 1/T2map_ms, 0)
+
+
+        if np.shape(self.dBmap) == tuple(pht_shape): # TODO what is this doing???
             dBmap_rad_per_ms = np.swapaxes(self.dBmap * GAMMA * 1e-3, 0, -1)
+        elif self.dBmap == 0:
+            dBmap_rad_per_ms = np.zeros(np.flip(self.get_shape()))
         else:
             dBmap_rad_per_ms = self.dBmap * GAMMA * 1e-3
 
@@ -182,23 +188,32 @@ class Phantom:
 
         if dim == 1:
             data[:, 0] = PDmap_au
-            data[:, 1] = 1 / T1map_ms
-            data[:, 2] = 1 / T2map_ms
-            data[:, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            #data[:, 1] = 1 / T1map_ms
+            data[:, 1] = T1map_ms_inv
+            #data[:, 2] = 1 / T2map_ms
+            data[:, 2] = T2map_ms_inv
+            #data[:, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, 3] = T2map_ms_inv
             data[:, 4] = dBmap_rad_per_ms
 
         elif dim == 2:
             data[:, :, 0] = PDmap_au
-            data[:, :, 1] = 1 / T1map_ms
-            data[:, :, 2] = 1 / T2map_ms
-            data[:, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            #data[:, :, 1] = 1 / T1map_ms
+            #data[:, :, 2] = 1 / T2map_ms
+            #data[:, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, :, 1] = T1map_ms_inv
+            data[:, :, 2] = T2map_ms_inv
+            data[:, :, 3] = T2map_ms_inv
             data[:, :, 4] = dBmap_rad_per_ms
 
         elif dim == 3:
             data[:, :, :, 0] = PDmap_au
-            data[:, :, :, 1] = 1 / T1map_ms
-            data[:, :, :, 2] = 1 / T2map_ms
-            data[:, :, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            #data[:, :, :, 1] = 1 / T1map_ms
+            #data[:, :, :, 2] = 1 / T2map_ms
+            #data[:, :, :, 3] = 1 / T2map_ms  # T2 assigned as T2* for now
+            data[:, :, :, 1] = T1map_ms_inv
+            data[:, :, :, 2] = T2map_ms_inv
+            data[:, :, :, 3] = T2map_ms_inv
             data[:, :, :, 4] = dBmap_rad_per_ms
 
 
@@ -491,7 +506,7 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
         type_map = np.swapaxes(type_map,0,2)
         type_map = np.swapaxes(type_map,0,1)
 
-    return DTTPhantom(type_map, type_params, vsize, loc)
+    return DTTPhantom(type_map=type_map, type_params=type_params, vsize=vsize, dBmap = 0, loc=loc)
 
 
 def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
@@ -573,6 +588,12 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
     else:
         raise ValueError('#Dimensions must be 2 or 3')
 
-    phantom = DTTPhantom(type_map, type_params, vsize, loc=pht_loc)
+    phantom = DTTPhantom(type_map, type_params, vsize, loc=(0,0,0))
     return phantom
 
+
+if __name__ == '__main__':
+    pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=-0.08, fov = 0.25)
+    plt.imshow(pht.PDmap)
+    plt.show()
+    print(pht.loc)
