@@ -8,7 +8,6 @@ Methods to help Bloch simulation from pulseq objects
 
 
 import numpy as np
-import numpy.matlib as npm
 import matplotlib.pyplot as plt
 import time
 import virtualscanner.server.simulation.bloch.phantom as pht
@@ -68,7 +67,7 @@ def store_pulseq_commands(seq): # TODO important for compatibility with new PyPu
             #b1 = np.multiply(np.exp(-2*pi*1j*df*rf_time),this_blk['rf'].signal/GAMMA_BAR)
             b1 = np.multiply(np.exp(1j*(-2*pi*df*rf_time + dph)), this_blk.rf.signal/GAMMA_BAR)
 
-            rf_grad, rf_timing, rf_duration = combine_gradients(blk=this_blk, timing=rf_time)
+            rf_grad, rf_timing, rf_duration, __ = combine_gradients(blk=this_blk, timing=rf_time)
             seq_params.append([b1,rf_grad,dt_rf])
 
         # Case 3: ADC sampling
@@ -78,8 +77,8 @@ def store_pulseq_commands(seq): # TODO important for compatibility with new PyPu
             adc = this_blk.adc
             dt_adc = adc.dwell
             delay = adc.delay
-            grad, timing, duration = combine_gradients(blk=this_blk, dt=dt_adc, delay=delay)
-            seq_params.append([dt_adc,int(adc.num_samples),delay,grad,timing])
+            grad, timing, duration, grad_type = combine_gradients(blk=this_blk, dt=dt_adc, delay=delay)
+            seq_params.append([dt_adc,int(adc.num_samples),delay,grad,timing,grad_type])
 
         # Case 4: just gradients
         elif event_row[2] != 0 or event_row[3] != 0 or event_row[4] != 0:
@@ -121,7 +120,10 @@ def apply_pulseq_commands(isc,seq_info,store_m=False):
         elif cstr == 'p': # rf pulse
             isc.apply_rf(pulse_shape=cpars[0],grads_shape=cpars[1],dt=cpars[2])
         elif cstr == 'r': # Readout
-            isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
+            if cpars[5] == 'trap':
+                isc.readout_trapz(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
+            else:
+                isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
         elif cstr == 'g': # free precessing with gradients
             isc.fpwg(grad_area=cpars[0],t=cpars[1])
         if store_m:
@@ -312,7 +314,7 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
         else:
             grad.append(np.zeros(np.shape(grad_timing)))
 
-    return np.array(grad), grad_timing, duration
+    return np.array(grad), grad_timing, duration, g.type
 
 
 def find_precessing_time(blk,dt): # TODO

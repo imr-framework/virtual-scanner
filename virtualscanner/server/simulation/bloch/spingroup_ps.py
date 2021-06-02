@@ -277,7 +277,7 @@ class SpinGroup:
 
         self.signal.append(signal_1D)
 
-    def _readout_trapz(self,dwell,n,delay,grad,timing):
+    def readout_trapz(self,dwell,n,delay,grad,timing):
         """ ADC sampling for single spin group
 
         Samples spin group's magnetization while playing an arbitrary gradient
