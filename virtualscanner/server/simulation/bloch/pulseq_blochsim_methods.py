@@ -299,7 +299,7 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
         grad_timing = timing
 
     grad = []
-
+    g = None
     # Interpolate gradient values at desired time points
     for g_name in ['gx','gy','gz']:
        # if blk.__contains__(g_name):
@@ -313,8 +313,11 @@ def combine_gradients(blk,dt=0,timing=(),delay=0):
             grad.append(np.interp(x=grad_timing,xp=g_time,fp=g_shape))
         else:
             grad.append(np.zeros(np.shape(grad_timing)))
-
-    return np.array(grad), grad_timing, duration, g.type
+    if g is not None:
+        grad_type = g.type
+    else:
+        grad_type = None
+    return np.array(grad), grad_timing, duration, grad_type
 
 
 def find_precessing_time(blk,dt): # TODO
