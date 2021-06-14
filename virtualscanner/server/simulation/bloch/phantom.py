@@ -7,6 +7,7 @@ import numpy as np
 import scipy.signal as ss
 import h5py
 import matplotlib.pyplot as plt
+from scipy.io import savemat, loadmat
 
 class Phantom:
     """Generic numerical phantom for MRI simulations
@@ -44,13 +45,14 @@ class Phantom:
         1D array of all z locations in phantom
 
     """
-    def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,loc=(0,0,0)):
+    def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,Dmap=0,loc=(0,0,0)):
         self.vsize = vsize
         self.T1map = T1map
         self.T2map = T2map
         self.PDmap = PDmap
         self.vsize = vsize
         self.dBmap = dBmap
+        self.Dmap = Dmap
         self.loc = loc
 
         # Find field-of-view
@@ -108,6 +110,7 @@ class Phantom:
         """
         return self.PDmap[indx],self.T1map[indx],self.T2map[indx]
 
+
     def get_list_locs(self):
         """Returns a flattened 1D array of all location vectors [(x1,y1,z1),...,(xk,yk,zk)]
 
@@ -138,6 +141,11 @@ class Phantom:
                 for w in range(sh[2]):
                     list_inds.append((u,v,w))
         return list_inds
+
+    def output_mat(self, output_folder, name='phantom'):
+        savemat(f'{output_folder}/{name}.mat', {'T1map': self.T1map, 'T2map': self.T2map, 'PDmap': self.PDmap,
+                                              'vsize': self.vsize})
+        return
 
     def output_h5(self, output_folder, name='phantom'):
         """
@@ -245,7 +253,7 @@ class DTTPhantom(Phantom):
 
     """
 
-    def __init__(self,type_map,type_params,vsize,dBmap=0,loc=(0,0,0)):
+    def __init__(self,type_map,type_params,vsize,dBmap=0,Dmap=0, loc=(0,0,0)):
         print(type(type_map))
         self.type_map = type_map
         self.type_params = type_params
@@ -260,7 +268,14 @@ class DTTPhantom(Phantom):
                     T1map[x,y,z] = type_params[type_map[x,y,z]][1]
                     T2map[x,y,z] = type_params[type_map[x,y,z]][2]
 
-        super().__init__(T1map,T2map,PDmap,vsize,dBmap,loc)
+        super().__init__(T1map,T2map,PDmap,vsize,dBmap,Dmap,loc)
+
+    def output_mat(self, output_folder, name='phantom'):
+        types = np.array(list(self.type_params.keys()))
+        params = np.array(list(self.type_params.values()))
+        savemat(f'{output_folder}/{name}.mat', {'type_map': self.type_map, 'types': types, 'params': params,
+                                                'vsize': self.vsize})
+        return
 
 
 class BrainwebPhantom(Phantom):
@@ -270,7 +285,7 @@ class BrainwebPhantom(Phantom):
 
     def __init__(self, filename,dsf=1,make2d=False,loc=0,dir='z',dBmap=0):
         dsf = int(np.absolute(dsf))
-        bw_data = np.load(filename).all()
+        bw_data = np.load(filename, allow_pickle=True).all()
         params = {k: np.array([v[3],v[0],v[1]]) for k, v in bw_data['params'].items()}
 
         typemap =  bw_data['typemap']
@@ -593,7 +608,20 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
 
 
 if __name__ == '__main__':
-    pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=-0.08, fov = 0.25)
-    plt.imshow(pht.PDmap)
-    plt.show()
-    print(pht.loc)
+    pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=0, fov = 0.25)
+    #plt.imshow(pht.PDmap)
+    #plt.show()
+    #print(pht.loc)
+    #print(np.array(list(pht.type_params.keys())))
+    #print(np.array(pht.type_params.items()))
+    #print(np.array(list(pht.type_params.values()))[0])
+    pht.output_mat(output_folder='sim/amri_debug',name='cylindrical_upload_test')
+    q = loadmat('sim/amri_debug/cylindrical_upload_test.mat')
+    print(np.shape(q['types']))
+    print(np.shape(q['params']))
+    type_params = dict((q['types'][0,u],tuple(q['params'][u,:])) for u in range(q['types'].shape[1]))
+    print(type_params)
+
+
+    p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
+                       loc=(0, 0, 0))

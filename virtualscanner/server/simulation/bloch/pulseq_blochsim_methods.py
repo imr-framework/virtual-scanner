@@ -77,8 +77,9 @@ def store_pulseq_commands(seq): # TODO important for compatibility with new PyPu
             adc = this_blk.adc
             dt_adc = adc.dwell
             delay = adc.delay
+            adc_phase = adc.phase_offset
             grad, timing, duration, grad_type = combine_gradients(blk=this_blk, dt=dt_adc, delay=delay)
-            seq_params.append([dt_adc,int(adc.num_samples),delay,grad,timing,grad_type])
+            seq_params.append([dt_adc,int(adc.num_samples),delay,grad,timing,grad_type,adc_phase])
 
         # Case 4: just gradients
         elif event_row[2] != 0 or event_row[3] != 0 or event_row[4] != 0:
@@ -121,9 +122,9 @@ def apply_pulseq_commands(isc,seq_info,store_m=False):
             isc.apply_rf(pulse_shape=cpars[0],grads_shape=cpars[1],dt=cpars[2])
         elif cstr == 'r': # Readout
             if cpars[5] == 'trap':
-                isc.readout_trapz(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
+                isc.readout_trapz(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4],phase=cpars[6])
             else:
-                isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4])
+                isc.readout(dwell=cpars[0],n=cpars[1],delay=cpars[2],grad=cpars[3],timing=cpars[4],phase=cpars[6])
         elif cstr == 'g': # free precessing with gradients
             isc.fpwg(grad_area=cpars[0],t=cpars[1])
         if store_m:
