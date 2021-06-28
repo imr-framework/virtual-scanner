@@ -253,7 +253,7 @@ class DTTPhantom(Phantom):
 
     """
 
-    def __init__(self,type_map,type_params,vsize,dBmap=0,Dmap=0, loc=(0,0,0)):
+    def __init__(self,type_map,type_params,vsize,dBmap=0,Dmap=0,loc=(0,0,0)):
         print(type(type_map))
         self.type_map = type_map
         self.type_params = type_params
@@ -524,7 +524,7 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
     return DTTPhantom(type_map=type_map, type_params=type_params, vsize=vsize, dBmap = 0, loc=loc)
 
 
-def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24,type_params=None):
     """Makes a cylindrical phantom with fixed geometry and T1, T2, PD but variable resolution and overall size
 
     The cylinder's diameter is the same as its height; three layers of spheres represent T1, T2, and PD variation.
@@ -558,11 +558,12 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
                (0,R/2,-0.08),(-R/2,0,-0.08),(0,-R/2,-0.08),(R/2,0,-0.08)] # T2 spheres
     centers_inds = [(np.array(c)/vsize + (n-1)/2) for c in centers]
 
-    type_params = {0:(0,1,1), # background
-                   1:(1,0.5,0.1),2:(0.75,0.5,0.1),3:(0.5,0.5,0.1), # PD spheres
-                4:(0.75,1.5,0.1),5:(0.75,0.6,0.1),6:(0.75,0.25,0.1),7:(0.75,0.1,0.1), # T1 spheres
-                8:(0.75,0.5,0.5),9:(0.75,0.5,0.15),10:(0.75,0.5,0.05),11:(0.75,0.5,0.01), # T2 spheres
-                13:(0.25,0.5,0.1)}
+    if type_params is None:
+        type_params = {0:(0,1,1), # background
+                       1:(1,0.5,0.1),2:(0.75,0.5,0.1),3:(0.5,0.5,0.1), # PD spheres
+                    4:(0.75,1.5,0.1),5:(0.75,0.6,0.1),6:(0.75,0.25,0.1),7:(0.75,0.1,0.1), # T1 spheres
+                    8:(0.75,0.5,0.5),9:(0.75,0.5,0.15),10:(0.75,0.5,0.05),11:(0.75,0.5,0.01), # T2 spheres
+                    13:(0.25,0.5,0.1)}
 
     q = (n - 1) / 2
     p = 'xyz'.index(dir)
@@ -606,6 +607,22 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24):
     phantom = DTTPhantom(type_map, type_params, vsize, loc=(0,0,0))
     return phantom
 
+def makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2,n=16,dir='z',loc=0,fov=0.24):
+    T1o, T2o, PDo = tuple(T1T2PD0)
+    if T1T2PD1 is None:
+        T1T2PD1 = (1,4,2) # Water/CSF
+
+    type_params_custom = {0:(0,1,1), # background has zero proton density
+                       1:(PDs[0],T1o,T2o),2:(PDs[1],T1o,T2o),3:(PDs[2],T1o,T2o), # PD spheres
+                    4:(PDo,T1s[0],T2o),5:(PDo,T1s[1],T2o),6:(PDo,T1s[2],T2o),7:(PDo,T1s[3],T2o), # T1 spheres
+                    8:(PDo,T1o,T2s[0]),9:(PDo,T1o,T2s[1]),10:(PDo,T1o,T2s[2]),11:(PDo,T1o,T2s[3]), # T2 spheres
+                    13:T1T2PD1} # main fill of cylinder - default is water
+
+    phantom = makeCylindricalPhantom(dim=dim,n=n,dir=dir,loc=loc,fov=fov,type_params=type_params_custom)
+    return phantom
+
+
+
 
 if __name__ == '__main__':
     pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=0, fov = 0.25)
@@ -625,3 +642,12 @@ if __name__ == '__main__':
 
     p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
                        loc=(0, 0, 0))
+
+
+if __name__ == '__main__':
+    T1T2PD0 = [0.5,0.5,0.05] # 0.5 PD, 500 ms T1, 50 ms T2
+    PDs = [1,0.5,0.25] # varying PD
+    T1s = [1,0.5,0.2,0.08]
+    T2s = [0.25,0.12,0.06,0.02]
+    mypht = makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2, n=16, dir='z', loc=-0.08, fov=0.24)
+
