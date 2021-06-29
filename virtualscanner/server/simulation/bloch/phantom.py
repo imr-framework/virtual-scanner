@@ -524,7 +524,7 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
     return DTTPhantom(type_map=type_map, type_params=type_params, vsize=vsize, dBmap = 0, loc=loc)
 
 
-def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24,type_params=None):
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.25,type_params=None):
     """Makes a cylindrical phantom with fixed geometry and T1, T2, PD but variable resolution and overall size
 
     The cylinder's diameter is the same as its height; three layers of spheres represent T1, T2, and PD variation.
@@ -607,16 +607,47 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24,type_params=None):
     phantom = DTTPhantom(type_map, type_params, vsize, loc=(0,0,0))
     return phantom
 
-def makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2,n=16,dir='z',loc=0,fov=0.24):
+def makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2,n=16,dir='z',loc=0,fov=0.25):
+    """ Make a cylindrical phantom with the 3 planes, same as in makeCylindricalPhantom()
+             but allow custom T1/T2/PD values
+
+    Params
+    ------
+    T1T2PD0 : array_like
+        [T1(seconds),T2(seconds),PD(a.u.)] for all spheres whenever that parameter is not varied
+    PDs : array_like
+        Length-3 array of proton density values (a.u.) of the 3 spheres on the PD-plane
+    T1s : array_like
+        Length-4 array of T1 values (seconds) of the 4 spheres on the T1-plane
+    T2s : array_like
+        Length-4 array of T2 values (seconds) of the 4 spheres on the T2-plane
+    T1T2PD1 : array_like
+        [T1(seconds),T2(seconds),PD(a.u.)] for the main body of the cylinder surrounding the spheres
+    dim : int, optional {2,3}
+         Dimension of phantom created
+    n : int
+        Number of spin groups in each dimension; default is 16
+    dir : str, optional {'z', 'x', 'y'}
+        Direction (norm) of plane in the case of 2D phantom
+    loc : float, optional
+        Location of plane relative to isocenter; default is 0
+    fov : float, optional
+        Physical length for both diameter and height of cylinder
+
+    Returns
+    -------
+    phantom : DTTPhantom
+
+    """
     T1o, T2o, PDo = tuple(T1T2PD0)
     if T1T2PD1 is None:
         T1T2PD1 = (1,4,2) # Water/CSF
-
+    T11, T21, PD1 = tuple(T1T2PD1)
     type_params_custom = {0:(0,1,1), # background has zero proton density
                        1:(PDs[0],T1o,T2o),2:(PDs[1],T1o,T2o),3:(PDs[2],T1o,T2o), # PD spheres
                     4:(PDo,T1s[0],T2o),5:(PDo,T1s[1],T2o),6:(PDo,T1s[2],T2o),7:(PDo,T1s[3],T2o), # T1 spheres
                     8:(PDo,T1o,T2s[0]),9:(PDo,T1o,T2s[1]),10:(PDo,T1o,T2s[2]),11:(PDo,T1o,T2s[3]), # T2 spheres
-                    13:T1T2PD1} # main fill of cylinder - default is water
+                    13:(PD1,T11,T21)} # main fill of cylinder - default is water
 
     phantom = makeCylindricalPhantom(dim=dim,n=n,dir=dir,loc=loc,fov=fov,type_params=type_params_custom)
     return phantom
@@ -625,26 +656,24 @@ def makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2,n=1
 
 
 if __name__ == '__main__':
-    pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=0, fov = 0.25)
-    #plt.imshow(pht.PDmap)
-    #plt.show()
-    #print(pht.loc)
-    #print(np.array(list(pht.type_params.keys())))
-    #print(np.array(pht.type_params.items()))
-    #print(np.array(list(pht.type_params.values()))[0])
-    pht.output_mat(output_folder='sim/amri_debug',name='cylindrical_upload_test')
-    q = loadmat('sim/amri_debug/cylindrical_upload_test.mat')
-    print(np.shape(q['types']))
-    print(np.shape(q['params']))
-    type_params = dict((q['types'][0,u],tuple(q['params'][u,:])) for u in range(q['types'].shape[1]))
-    print(type_params)
-
-
-    p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
-                       loc=(0, 0, 0))
-
-
-if __name__ == '__main__':
+    # pht = makeCylindricalPhantom(dim=2, n=16, dir='z', loc=0, fov = 0.25)
+    # #plt.imshow(pht.PDmap)
+    # #plt.show()
+    # #print(pht.loc)
+    # #print(np.array(list(pht.type_params.keys())))
+    # #print(np.array(pht.type_params.items()))
+    # #print(np.array(list(pht.type_params.values()))[0])
+    # pht.output_mat(output_folder='sim/amri_debug',name='cylindrical_upload_test')
+    # q = loadmat('sim/amri_debug/cylindrical_upload_test.mat')
+    # print(np.shape(q['types']))
+    # print(np.shape(q['params']))
+    # type_params = dict((q['types'][0,u],tuple(q['params'][u,:])) for u in range(q['types'].shape[1]))
+    # print(type_params)
+    #
+    #
+    # p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
+    #                    loc=(0, 0, 0))
+    #
     T1T2PD0 = [0.5,0.5,0.05] # 0.5 PD, 500 ms T1, 50 ms T2
     PDs = [1,0.5,0.25] # varying PD
     T1s = [1,0.5,0.2,0.08]
