@@ -197,7 +197,7 @@ def sim_single_spingroup_old(loc_ind,freq_offset,phantom,seq):
     return signal
 
 
-def sim_single_spingroup(loc_ind,freq_offset,phantom,seq_info,sg_type='Default'):
+def sim_single_spingroup(loc_ind,freq_offset,phantom,seq_info,sg_type='Default',b=0):
     """Function for applying a seq on a spin group and retrieving the signal
 
     Parameters
@@ -223,6 +223,10 @@ def sim_single_spingroup(loc_ind,freq_offset,phantom,seq_info,sg_type='Default')
         isc = sg.SpinGroup(loc=sgloc,pdt1t2=phantom.get_params(loc_ind),df=freq_offset)
     elif sg_type == 'Solver':
         isc = sg.NumSolverSpinGroup(loc=sgloc, pdt1t2=phantom.get_params(loc_ind),df=freq_offset)
+    elif sg_type == 'Diffusion':
+        isc = sg.SpinGroupDiffusion(loc=sgloc, pdt1t2=phantom.get_params(loc_ind),df=freq_offset,
+                                    D=phantom.get_diffusion_coeff(loc_ind),b=b)
+
     apply_pulseq_commands(isc,seq_info)
     return isc.signal
 

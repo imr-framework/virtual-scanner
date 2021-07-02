@@ -111,6 +111,25 @@ class Phantom:
         return self.PDmap[indx],self.T1map[indx],self.T2map[indx]
 
 
+    def get_diffusion_coeff(self, indx):
+        """Returns D at given indices
+
+         Parameters
+         ----------
+         indx : tuple
+             Index for querying
+
+         Returns
+         -------
+         PD, T1, T2 : float
+             Tissue parameters corresponding to the queried index
+
+         """
+        if self.Dmap.size == 1:
+            return self.Dmap
+        else:
+            return self.Dmap[indx]
+
     def get_list_locs(self):
         """Returns a flattened 1D array of all location vectors [(x1,y1,z1),...,(xk,yk,zk)]
 
@@ -674,7 +693,7 @@ if __name__ == '__main__':
     # p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
     #                    loc=(0, 0, 0))
     #
-    T1T2PD0 = [0.5,0.5,0.05] # 0.5 PD, 500 ms T1, 50 ms T2
+    T1T2PD0 = [0.5,0.5,0.05] #
     PDs = [1,0.5,0.25] # varying PD
     T1s = [1,0.5,0.2,0.08]
     T2s = [0.25,0.12,0.06,0.02]
