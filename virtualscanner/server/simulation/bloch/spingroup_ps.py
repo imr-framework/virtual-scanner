@@ -446,6 +446,30 @@ class NumSolverSpinGroup(SpinGroup):
         return m_signal, magnetizations
 
 
+class SpinGroupDiffusion(SpinGroup):
+    # Add D parameter as attribute
+    def __init__(self, loc=(0,0,0), pdt1t2=(1,0,0), df=0, D=0, b=0):
+        # Diffusion coefficient in [(mm^2)/seconds]
+        super().__init__(loc, pdt1t2, df)
+        self.D = D
+        self.b = b
+
+    # Overwrite signal method
+    def get_m_signal(self):
+        """Gets spin group's transverse magnetization attenuated by pulse sequence diffusion effects
+           Note: this is a simple version of diffusion simulation using the exp(-bD) factor.
+
+        Returns
+        -------
+        m_signal : numpy.ndarray
+            Single complex number representing transverse magnetization
+            Real part      = Mx
+            Imaginary part = My
+
+        """
+        m_signal = np.exp(-self.b*self.D)*np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
+
+        return m_signal
 
 
 

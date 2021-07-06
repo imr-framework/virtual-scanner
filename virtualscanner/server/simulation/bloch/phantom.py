@@ -543,7 +543,7 @@ def makePlanarPhantom(n,fov,T1s,T2s,PDs,radii,dir='z',loc=(0,0,0)):
     return DTTPhantom(type_map=type_map, type_params=type_params, vsize=vsize, dBmap = 0, loc=loc)
 
 
-def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.25,type_params=None):
+def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.24,type_params=None):
     """Makes a cylindrical phantom with fixed geometry and T1, T2, PD but variable resolution and overall size
 
     The cylinder's diameter is the same as its height; three layers of spheres represent T1, T2, and PD variation.
@@ -572,9 +572,10 @@ def makeCylindricalPhantom(dim=2,n=16,dir='z',loc=0,fov=0.25,type_params=None):
     s2 = np.sqrt(2)
     s3 = np.sqrt(3)
     vsize = fov/n
-    centers = [(0,R/2,0.08),(-R*s3/4,-R/4,0.08),(R*s3/4,-R/4,0.08), # PD spheres
+    plane_loc = fov/3
+    centers = [(0,R/2,plane_loc),(-R*s3/4,-R/4,plane_loc),(R*s3/4,-R/4,plane_loc), # PD spheres
                (R/(2*s2),R/(2*s2),0),(-R/(2*s2),R/(2*s2),0),(-R/(2*s2),-R/(2*s2),0),(R/(2*s2),-R/(2*s2),0), # T1 spheres
-               (0,R/2,-0.08),(-R/2,0,-0.08),(0,-R/2,-0.08),(R/2,0,-0.08)] # T2 spheres
+               (0,R/2,-plane_loc),(-R/2,0,-plane_loc),(0,-R/2,-plane_loc),(R/2,0,-plane_loc)] # T2 spheres
     centers_inds = [(np.array(c)/vsize + (n-1)/2) for c in centers]
 
     if type_params is None:
@@ -693,9 +694,54 @@ if __name__ == '__main__':
     # p = DTTPhantom(type_map=q['type_map'], type_params=type_params, vsize=float(q['vsize']), dBmap=0,
     #                    loc=(0, 0, 0))
     #
-    T1T2PD0 = [0.5,0.5,0.05] #
-    PDs = [1,0.5,0.25] # varying PD
-    T1s = [1,0.5,0.2,0.08]
-    T2s = [0.25,0.12,0.06,0.02]
-    mypht = makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2, n=16, dir='z', loc=-0.08, fov=0.24)
+    # T1T2PD0 = [0.5,0.5,0.05] #
+    # PDs = [1,0.5,0.25] # varying PD
+    # T1s = [1,0.5,0.2,0.08]
+    # T2s = [0.25,0.12,0.06,0.02]
+    # mypht = makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2, n=16, dir='z', loc=-0.08, fov=0.24)
+    #
+
+    Npht = 16
+    FOV= 0.064
+    # Choose your own T1s, T2s, and PDs to fill the planes
+    T1T2PD0 = [0.5, 0.1, 1]  # Default values (T1o,T2o,PDo) for use when the other parameters are varied
+    PDs = [1, 0.75, 0.5]  # varying PD (3 values/spheres; a.u. relative to water=1)
+    T1s = 0.25 * np.array([1.5, 0.6, 0.25, 0.1])  # varying T1 (4 values/spheres in [seconds])
+    T2s = [0.5, 0.15, 0.05, 0.01]  # varying T2 (4 values/spheres in [seconds])
+    T1T2PD1 = [0.5, 0.1, 1]  # Values for the main cylinder fill surrounding the sphere s
+    p = makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=T1T2PD1, dim=3, n=Npht, loc=0, fov=FOV)
+
+    # Display phantom maps (3D)
+
+    nz_disp = 3
+
+    print(p.T2map[:,:,3])
+
+    plt.figure(1)
+    plt.subplot(131)
+    plt.imshow(np.squeeze(p.T1map[:, :, nz_disp]))
+    plt.colorbar()
+    plt.title('T1 map (s)')
+    frame1 = plt.gca()
+    frame1.axes.get_xaxis().set_visible(False)
+    frame1.axes.get_yaxis().set_visible(False)
+
+    plt.subplot(132)
+    plt.imshow(np.squeeze(p.T2map[:, :, nz_disp]))
+    plt.title('T2 map (s)')
+    plt.colorbar()
+
+    frame2 = plt.gca()
+    frame2.axes.get_xaxis().set_visible(False)
+    frame2.axes.get_yaxis().set_visible(False)
+
+    plt.subplot(133)
+    plt.imshow(np.squeeze(p.PDmap[:, :, nz_disp]))
+    plt.title('PD map (a.u.)')
+    plt.colorbar()
+    frame3 = plt.gca()
+    frame3.axes.get_xaxis().set_visible(False)
+    frame3.axes.get_yaxis().set_visible(False)
+
+    plt.show()
 
