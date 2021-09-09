@@ -13,8 +13,17 @@ from virtualscanner.server.simulation.bloch.phantom_acr import make_phantom_acr,
 
 if __name__ == '__main__':
     df = 0
-    #myphantom = pht.makeCylindricalPhantom(dim=2, dir='z', loc=-0.08, n=32)
-    myphantom = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
+    p = pht.makeCylindricalPhantom(dim=2, dir='z', loc=0, n=32)
+   # p.loc = (0,0,0)
+   # p.Zs = [0]
+
+    #p = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, shrink_factor=0.8, slice_type='grid')
+    # Save phantom for repo.
+    #T1map, T2map, PDmap, vsize, dBmap = 0, loc = (0, 0, 0)
+    savemat('seq_validation_files/phantom_stored/T1plane.mat',
+            {'T1map':p.T1map, 'T2map':p.T2map, 'PDmap': p.PDmap, 'vsize': p.vsize,
+             'dBmap': p.dBmap, 'loc': p.loc})
+
 
     #myphantom = make_phantom_circle(N=32, FOV=0.25, slice_loc=0, shrink_factor=1)
     # 04/20 (line_thk = 1)
@@ -27,27 +36,30 @@ if __name__ == '__main__':
     #pht = make_phantom_acr(N=128, FOV=0.25, slice_loc=0, slice_type='grid')
 
     # Load the sequence : choose your own
-    myseq = Sequence()
-    myseq.read('seq_validation_files/tse64.seq')
+    #myseq = Sequence()
+    #myseq.read('seq_validation_files/irse64.seq')
+
+
+
 
     # Time the code: Tic
-    start_time = time.time()
+    #start_time = time.time()
 
     # Store seq info
-    seq_info = blcsim.store_pulseq_commands(myseq)
+    #seq_info = blcsim.store_pulseq_commands(myseq)
     # Get list of locations from phantom
-    loc_ind_list = myphantom.get_list_inds()
+    #loc_ind_list = myphantom.get_list_inds()
     # Initiate multiprocessing pool
-    pool = mp.Pool(mp.cpu_count())
+    #pool = mp.Pool(mp.cpu_count())
     # Parallel simulation
-    sg_type = 'Solver'
-    results = pool.starmap_async(blcsim.sim_single_spingroup,
-                                 [(loc_ind, df, myphantom, seq_info,sg_type) for loc_ind in loc_ind_list]).get()
-    pool.close()
+    #sg_type = 'Solver'
+    #results = pool.starmap_async(blcsim.sim_single_spingroup,
+    #                             [(loc_ind, df, myphantom, seq_info,sg_type) for loc_ind in loc_ind_list]).get()
+    #pool.close()
     # Add up signal across all SpinGroups
-    my_signal = np.sum(results, axis=0)
-    savemat('seq_validation_files/tse64_grid128.mat',{'signal':my_signal})
+    #my_signal = np.sum(results, axis=0)
+    #savemat('seq_validation_files/irse64_grid128.mat',{'signal':my_signal})
 
     # Time the code: Toc
-    print("Time used: %s seconds" % (time.time() - start_time))
+    #print("Time used: %s seconds" % (time.time() - start_time))
 

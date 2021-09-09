@@ -1,11 +1,13 @@
 # Copyright of the Board of Trustees of Columbia University in the City of New York
-# 08/2019 WIP
 
 import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.interpolate import interp1d
+from virtualscanner.server.simulation.bloch.util import combine_gradients
 GAMMA = 2*42.58e6 * np.pi
 GAMMA_BAR = 42.58e6
+
+#from disimpy import gradients, simulations, utils as dgrad, dsim, dutils
 
 class SpinGroup:
     """Basic magnetization unit for Bloch simulation
@@ -70,6 +72,19 @@ class SpinGroup:
         m_signal = np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
 
         return m_signal
+
+    def scale_m_signal(self, scale):
+        """Scales the signal to simulate Rx effects
+
+        Parameters
+        ----------
+        scale : complex
+            Complex number B1_receive to multiply all signal samples by
+
+        """
+
+        self.signal = np.array(self.signal)*scale
+
 
     def fpwg(self,grad_area,t):
         """Apply only gradients to the spin group
@@ -384,7 +399,6 @@ class SpinGroup:
         self.signal.append(signal_1D_ref)
 
 
-
 class NumSolverSpinGroup(SpinGroup):
     # TODO package the funtions to generate a final function that only takes in t and M and returns dM/dt
 
@@ -453,6 +467,7 @@ class SpinGroupDiffusion(SpinGroup):
         super().__init__(loc, pdt1t2, df)
         self.D = D
         self.b = b
+        self.diff_att = np.exp(-self.b*self.D) # diffusion attenuation factor
 
     # Overwrite signal method
     def get_m_signal(self):
@@ -467,11 +482,50 @@ class SpinGroupDiffusion(SpinGroup):
             Imaginary part = My
 
         """
-        m_signal = np.exp(-self.b*self.D)*np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
+        m_signal = self.diff_att*np.squeeze(self.PD*(self.m[0] + 1j * self.m[1]))
 
         return m_signal
 
+    # def apply_diffusion(self, gradient_blocks_list, dt, num_spins=1e4):
+    #     """
+    #     Use disimpy to simulate the amount of attenuation
+    #
+    #     Parameters
+    #     ----------
+    #     gradient_blocks_list : list
+    #         List of Pypulseq gradient objects to be applied to randomly diffusing spins
+    #
+    #     Returns
+    #     -------
+    #     diff_att : float
+    #         Net diffusion attenuation coefficient after applying this list of blocks
+    #
+    #     """
+    #     # Reset diffusion attenuation to 1
+    #     self.diff_att = 1
+    #
+    #     for block in gradient_blocks_list: # For each of the selected gradients, model diffusion effects
+    #         # Compile gradient
+    #         waveform = self.compile_gradients_for_diffusion_sim(block, dt)
+    #         # Set up substrate
+    #         substrate = {'type': 'free'}
+    #         n_s = num_spins
+    #         diffusivity = 1e-6 * self.D # Convert from [mm^2/s] to [m^2/s]
+    #         signal = dsim.simulation(n_s, diffusivity, waveform, dt, substrate)
+    #         self.diff_att = self.diff_att * float(signal)
+    #
+    #     return self.diff_att
 
+    @staticmethod
+    def compile_gradients_for_diffusion_sim(block, dt):
+        # Shapes pulseq gradient block into (1, N_timepoints, 3) numpy array
+        if 'rf' in block.__dict__.keys():
+            raise TypeError("Blocks with diffusion gradients must not include an RF pulse")
+        grad_waveform, _, _, _ = combine_gradients(blk=block,dt=dt,delay=0)
+        N = grad_waveform.shape[1]
+        grad_waveform_shaped = np.reshape(np.swapaxes(grad_waveform,0,1), (1,N,3))
+
+        return grad_waveform_shaped
 
 
 
