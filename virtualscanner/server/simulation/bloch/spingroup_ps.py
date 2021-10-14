@@ -338,7 +338,7 @@ class SpinGroup:
                 signal_1D.append(self.get_m_signal())
             self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
 
-        signal_1D_ref = np.array(signal_1D) * np.exp(-1j*phase)
+        signal_1D_ref = np.array(signal_1D) * np.exp(1j*phase)
 
         self.signal.append(signal_1D_ref)
 
@@ -394,7 +394,7 @@ class SpinGroup:
             self.fpwg(np.trapz(y=dwell_grads, x=dwell_times), dwell)
             adc_begin_time += dwell
 
-        signal_1D_ref = np.array(signal_1D) * np.exp(-1j*phase)
+        signal_1D_ref = np.array(signal_1D) * np.exp(1j*phase)
 
         self.signal.append(signal_1D_ref)
 
