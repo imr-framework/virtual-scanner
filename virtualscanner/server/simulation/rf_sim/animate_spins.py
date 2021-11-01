@@ -6,7 +6,6 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib.animation import FuncAnimation
 from math import pi
 from matplotlib import rc
-from IPython.display import HTML, Image
 
 
 ###############################################################################

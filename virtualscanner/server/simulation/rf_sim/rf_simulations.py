@@ -5,14 +5,14 @@
 # - connect to animate_spins.py for visualization (can integrated into virtual scanner later)
 ################################################################################
 # Simulates effects of some RF pulses & plots their instantaneous & average power
-import bloch.spingroup_ps as sg
+import virtualscanner.server.simulation.bloch.spingroup_ps as sg
 import numpy as np
 import matplotlib.pyplot as plt
 from math import pi
-from rf_sim.animate_spins import animate_spins
+from virtualscanner.server.simulation.rf_sim.animate_spins import animate_spins
 from pypulseq.make_sinc_pulse import make_sinc_pulse
 from pypulseq.opts import Opts
-from rf_sim.rf_helpers import *
+from virtualscanner.server.simulation.rf_sim.rf_helpers import *
 from pypulseq.make_arbitrary_rf import make_arbitrary_rf
 from scipy.io import savemat
 
