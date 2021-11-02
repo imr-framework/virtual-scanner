@@ -353,4 +353,4 @@ if __name__ == '__main__':
     print(m.shape)
 
 
-    savemat('sim_results/2d_rw_UTE_fullpulse_matched_results.mat', {'m': m[:, :, -1], 'thk_sim': 2 * thk})
+    #savemat('sim_results/2d_rw_UTE_fullpulse_matched_results.mat', {'m': m[:, :, -1], 'thk_sim': 2 * thk})

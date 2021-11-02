@@ -405,11 +405,11 @@ class NumSolverSpinGroup(SpinGroup):
     @staticmethod
     def interpolate_waveforms(grads_shape, pulse_shape, dt):
         # Helper function to generate continuous waveforms
-        gx_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[0,:])
-        gy_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[1,:])
-        gz_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[2,:])
-        pulse_real_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.real(pulse_shape))
-        pulse_imag_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.imag(pulse_shape))
+        gx_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[0,:], bounds_error=False, fill_value=0)
+        gy_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[1,:], bounds_error=False, fill_value=0)
+        gz_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=grads_shape[2,:], bounds_error=False, fill_value=0)
+        pulse_real_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.real(pulse_shape),bounds_error=False, fill_value=0)
+        pulse_imag_func = interp1d(x=dt*np.arange(len(pulse_shape)), y=np.imag(pulse_shape),bounds_error=False, fill_value=0)
 
         return gx_func, gy_func, gz_func, pulse_real_func, pulse_imag_func
 
@@ -448,7 +448,7 @@ class NumSolverSpinGroup(SpinGroup):
         ####
 
         # Set correct arguments to ivp solver ...
-        results = solve_ivp(fun=self.get_bloch_eqn(grads_shape,pulse_shape,dt), t_span=[0,(len(pulse_shape)-1)*dt],
+        results = solve_ivp(fun=self.get_bloch_eqn(grads_shape,pulse_shape,dt), t_span=[0,len(pulse_shape)*dt],
                             y0=m, method="RK45",t_eval=dt*np.arange(len(pulse_shape)), vectorized=True)
 
         m_signal = results.y[0,:] + 1j*results.y[1,:]
