@@ -70,11 +70,11 @@ def simulate_rf(bw_spins, n_spins, pdt1t2, flip_angle, dt, pulse_type, dur = 0, 
     all_signals = np.array([result[0] for result in all_results])
     all_magnetizations = np.array([result[1] for result in all_results])
 
-    fig = plt.figure(1)
-    ax = fig.add_axes(xlim=(0, 4), ylim=(-2, 2))
-    for a in range(len(spins)):
-        pp = plt.plot(tmodel, np.absolute(all_signals[a]))
-
+    # fig = plt.figure(1)
+    # ax = fig.add_axes(xlim=(0, 4), ylim=(-2, 2))
+    # for a in range(len(spins)):
+    #     pp = plt.plot(tmodel, np.absolute(all_signals[a]))
+    #
 
     # Bandwidth info to print out
     if 'bw_rf' in kwargs:
@@ -85,7 +85,6 @@ def simulate_rf(bw_spins, n_spins, pdt1t2, flip_angle, dt, pulse_type, dur = 0, 
     if display:
         plt.title(pulse_type + ' RF pulse ' + bw_info + ' applied to isochromats')
         plt.legend(['df = '+ str(df) + ' Hz' for df in df_array])
-
         plt.xlabel('Time (s)')
         plt.ylabel('Mxy (a.u.)')
         plt.show()
