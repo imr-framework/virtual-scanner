@@ -19,6 +19,7 @@ def animate_spins(m_data, acc_factor=1, xyzlines=True, view_fig=True, save_fig=F
         Magnetization in time of multiple spins to be animated
         Dim 1 : number of spins
         Dim 2 : time point
+        Dim 3 : x/y/z
 
     acc_factor : int, optional
         Acceleration factor for frame-skipping.
@@ -97,6 +98,7 @@ def animate_spins(m_data, acc_factor=1, xyzlines=True, view_fig=True, save_fig=F
     # Display animation if directed
     if view_fig: plt.show()
 
+    return animation 
 
 
 # Example
