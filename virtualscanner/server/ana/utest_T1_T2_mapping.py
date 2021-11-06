@@ -33,7 +33,7 @@ class MyTestCase(unittest.TestCase):
                     'darwin': SERVER_T1_MAC_MAP_PATH,
                     'linux': SERVER_T1_MAC_MAP_PATH}
         dicom_map_path = platform[sys.platform]
-        map_name, dicom_path, np_map_name = dicom2mapT1.main(dicom_file_path=SERVER_T1_INPUT_PATH, TR=TRstr, TE=TEstr, TI=TIstr, pat_id='9306')
+        map_name, dicom_path, np_map_name = dicom2mapT1.main(dicom_file_path=SERVER_T1_INPUT_PATH , TR=TRstr, TE=TEstr, TI=TIstr, pat_id='9306')
         generated_map = np.load(SERVER_T1_MAP_PATH / np_map_name)
         utest_map = np.load(dicom_map_path / 'utest_T1_map.npy')
 

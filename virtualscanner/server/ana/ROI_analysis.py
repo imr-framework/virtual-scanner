@@ -76,64 +76,46 @@ def main(dicom_map_path: Path, map_type: str, map_size: str, fov: str,
     sphere_std : numpy.ndarray
         Std for all spheres in sphere number order
     """
-
     map_size = np.ndarray.item(np.fromstring(map_size, dtype=int, sep=','))
     fov = np.ndarray.item(np.fromstring(fov, dtype=int, sep=','))
     num_spheres = 14
     voxel_size = fov / map_size  # unit should be mm/voxel
     sphere_all_loc_template = np.zeros([num_spheres, 2])
+    rot_center = np.array([[map_size / 2, map_size / 2]])
+    distance_angle_mat = np.array([[0, 0],  # first one is Sphere 1, unit mm, degree
+                                   [32.214, 75],
+                                   [60.687, 53.13],
+                                   [83.562, 35.1],
+                                   [98.512, 16.32],
+                                   [103.81, -1.426],
+                                   [99.2, -19.712],
+                                   [85.02, -36.8],
+                                   [62.305, -55.13],
+                                   [31.451, -72.27],
+                                   [36.841, -34.228],
+                                   [37.093, 36.379],
+                                   [76.805, 14.367],
+                                   [76.252, -17.5565]])
+
     if map_type == 'T1':
         max_values = 5
-        sphere_1_ref_mean = 1.989
-        direction_angle_mat = np.array([[0, 0],  # first one is Sphere 1, unit mm, degree
-                                        [voxel_size * 23.9443, 70.0850],
-                                        [voxel_size * 44.7587, 53.3538],
-                                        [voxel_size * 61.8170, 35.3270],
-                                        [voxel_size * 72.2544, 16.9426],
-                                        [voxel_size * 75.4064, -0.6324],
-                                        [voxel_size * 71.9021, -18.7705],
-                                        [voxel_size * 60.8042, -36.9326],
-                                        [voxel_size * 44.5492, -56.4287],
-                                        [voxel_size * 23.2302, -72.7011],
-                                        [voxel_size * 26.6487, 33.6653],
-                                        [voxel_size * 27.3647, -34.0284],
-                                        [voxel_size * 55.5667, 14.9729],
-                                        [voxel_size * 55.0918, -16.4091]])
-        sphere_all_loc_template[0, 0:2] = np.squeeze(np.array([[64.8397, 26.1065]]))
-        radius_scale = 0.8
-        intensity_range_lb = 0
-        intensity_range_ub = 5
-        golden_standard = np.array(
-            [1.989, 1.454, 0.9841, 0.706, 0.4967, 0.3515, 0.24713, 0.1753, 0.1259, 0.089, 0.0627, 0.04453, 0.03084,
-             0.021719])
+        true_value = np.array(
+            [1.838, 1.398, 0.9983, 0.7258, 0.5091, 0.367, 0.2587, 0.1847, 0.1308, 0.0909, 0.0642, 0.04628, 0.03265, 0.02295])
+        sphere_1_ref_mean = true_value(0)
+        plane_radius = 170  # mm
+
     if map_type == 'T2':
         max_values = 2  # The maximum value for map should be fixed, any intensity outside that range is meaningless
-        sphere_1_ref_mean = 0.5813
-        direction_angle_mat = np.array([[0, 0],  # first one is Sphere 1
-                                        [voxel_size * 20.0543, 71.4899],
-                                        [voxel_size * 36.5569, 54.0302],
-                                        [voxel_size * 49.9120, 35.7043],
-                                        [voxel_size * 58.6171, 17.5603],
-                                        [voxel_size * 61.5867, -0.1549],
-                                        [voxel_size * 58.0576, -18.3830],
-                                        [voxel_size * 49.4963, -35.8010],
-                                        [voxel_size * 35.5692, -54.2831],
-                                        [voxel_size * 18.2029, -70.3638],
-                                        [voxel_size * 22.2754, 33.1854],
-                                        [voxel_size * 21.9875, -33.0284],
-                                        [voxel_size * 44.7193, 15.213],
-                                        [voxel_size * 44.2191,
-                                         -16.2861]])  # matrix with distance and angle for each sphere respect to sphere 1
-        sphere_all_loc_template[0, 0:2] = np.squeeze(np.array([[64.1242, 33.5806]]))
-        radius_scale = 0.9
-        intensity_range_lb = 0
-        intensity_range_ub = 2
-        golden_standard = np.array(
-            [0.5813, 0.4035, 0.2781, 0.19094, 0.13327, 0.09689, 0.06407, 0.04642, 0.03197, 0.02256, 0.015813, 0.011237,
-             0.007911, 0.005592])
+        true_value = np.array(
+            [0.6458, 0.4236, 0.286, 0.1848, 0.1341, 0.0944, 0.06251, 0.04498, 0.03095, 0.0201, 0.0154, 0.01085, 0.007591, 0.00535])
+        sphere_1_ref_mean = true_value(0)
+        plane_radius = 195  # mm
 
-    direction_angle_mat[:, 0] = direction_angle_mat[:, 0] / voxel_size
-    direction_angle_mat[:, 1] = direction_angle_mat[:, 1]
+    tolerance = 0.1
+    intensity_range_lb = sphere_1_ref_mean * (1 - tolerance)
+    intensity_range_ub = sphere_1_ref_mean * (1 + tolerance)
+    distance_angle_mat[:, 0] = distance_angle_mat[:, 0] / voxel_size # convert to pixel distance
+
     lstFilesDCM = []  # create an empty list
     for dirName, subdirList, fileList in os.walk(dicom_map_path):
         for filename in fileList:
@@ -154,13 +136,11 @@ def main(dicom_map_path: Path, map_type: str, map_size: str, fov: str,
         map_data_final[:, :, n1] = np.multiply(map_data_final[:, :, n1],
                                                max_values)  # conversion to original intensity (this is desired)
 
-    rot_center = np.array([[map_size / 2, map_size / 2]])
-
     for n2 in range(1,
-                    num_spheres):  # get all sphere centers in the template (use distance instead of just coordinates because of scaling)
-        sphere_all_loc_template[n2, 0] = direction_angle_mat[n2, 0] * np.sin(np.pi * direction_angle_mat[n2, 1] / 180) + \
+                    num_spheres): # get all sphere centers in the template (use distance instead of just coordinates because of scaling)
+        sphere_all_loc_template[n2, 0] = distance_angle_mat[n2, 0] * np.sin(np.pi * distance_angle_mat[n2, 1] / 180) + \
                                          sphere_all_loc_template[0, 0]
-        sphere_all_loc_template[n2, 1] = direction_angle_mat[n2, 0] * np.cos(np.pi * direction_angle_mat[n2, 1] / 180) + \
+        sphere_all_loc_template[n2, 1] = distance_angle_mat[n2, 0] * np.cos(np.pi * distance_angle_mat[n2, 1] / 180) + \
                                          sphere_all_loc_template[0, 1]
     angle_template_vec = np.array(
         [[sphere_all_loc_template[0, 0] - rot_center[0, 0], sphere_all_loc_template[0, 1] - rot_center[0, 1]]])

@@ -41,9 +41,11 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
         Path of T2 map in dicom format
     """
     TR = np.fromstring(TR, dtype=int, sep=',')
-    TE = np.fromstring(TE, dtype=float, sep=',')
+    TE_acq1 = np.fromstring(TE, dtype=float, sep=',')
+    TE_acq2 = np.array([12, 15, 18, 21])
     TR = TR / 1000
-    TE = TE / 1000
+    TE_acq1 = TE_acq1 / 1000
+    TE_acq2 = TE_acq2 / 1000
 
     lstFilesDCM = sorted(list(dicom_file_path.glob('*.dcm')))  # create an empty list
     ref_image = pydicom.read_file(str(lstFilesDCM[0]))  # Get ref file
@@ -54,14 +56,37 @@ def main(dicom_file_path: Path, TR: str, TE: str, pat_id: str):
         ds = pydicom.read_file(str(filenameDCM))  # read the file, data type is uint16 (0~65535)
         image_data_final[:, :, lstFilesDCM.index(filenameDCM)] = ds.pixel_array
     image_data_final = image_data_final.astype(np.float64)  # convert data type
+    image_data_final_acq1 = image_data_final[:, :, :7]
+    image_data_final_acq2 = image_data_final[:, :, 7:]  # to separate two acqs
 
-    image_data_final = np.divide(image_data_final, np.amax(image_data_final))
+    # image_data_final_acq1 = np.divide(image_data_final_acq1, np.amax(image_data_final_acq1))
+    # image_data_final_acq2 = np.divide(image_data_final_acq2, np.amax(image_data_final_acq2))
+    image_data_final_acq1 = image_data_final_acq1/1000
+    image_data_final_acq2 = image_data_final_acq2/1000
+
     T2_map = np.zeros([image_size[0], image_size[1]])
-    p0 = (0.655477890177557, 0.171186687811562)  # initial guess for parameters
+    # p0 = (0.655477890177557, 0.171186687811562)  # initial guess for parameters
+    p0 = (0.65, 0.65)
+    # n2 = 35
+    # n3 = 64
+    # y_data = image_data_final_acq1[n2, n3, :]
+    # popt, pcov = curve_fit(T2_sig_eq, TE_acq1, y_data, p0, bounds=([0, 0], [10, 6]))
+    #
+    # plt.figure()
+    # plt.plot(TE_acq1, y_data, label='Data', marker='o')
+    # plt.plot(TE_acq1, T2_sig_eq(TE_acq1, popt[0], popt[1]), 'g--')
+    # plt.show()
+    x_range = np.arange(43, 83, 1)
+    y_range = np.arange(70, 84, 1)
+
     for n2 in range(image_size[0]):
         for n3 in range(image_size[1]):
-            y_data = image_data_final[n2, n3, :]
-            popt, pcov = curve_fit(T2_sig_eq, TE, y_data, p0, bounds=([0, 0], [10, 6]))
+            if n2 in y_range and n3 in x_range:
+                y_data = image_data_final_acq2[n2, n3, :]
+                popt, pcov = curve_fit(T2_sig_eq, TE_acq2, y_data, p0, bounds=([0, 0], [10, 6]))
+            else:
+                y_data = image_data_final_acq1[n2, n3, :]
+                popt, pcov = curve_fit(T2_sig_eq, TE_acq1, y_data, p0, bounds=([0, 0], [10, 6]))
             T2_map[n2, n3] = popt[1]
 
     T2_map[T2_map > 2] = 2
