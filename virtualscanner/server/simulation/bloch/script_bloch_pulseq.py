@@ -5,6 +5,8 @@ Unit test for bloch simulation on GRE, SE, and IRSE sequences (2D Cartesian, lin
 Run the script to generated a simulated image. Modify the code directly to set the phantom and acquisition parameters.
 """
 
+# This script is for quick testing of image simulation (virtual experiment) - Dec 11, 2019
+
 import multiprocessing as mp
 import time
 
