@@ -98,7 +98,7 @@ def animate_spins(m_data, acc_factor=1, xyzlines=True, view_fig=True, save_fig=F
     # Display animation if directed
     if view_fig: plt.show()
 
-    return animation 
+    return animation
 
 
 # Example

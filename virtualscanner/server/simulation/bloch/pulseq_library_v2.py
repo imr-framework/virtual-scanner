@@ -518,6 +518,9 @@ def write_tse(n=256, fov=250e-3, thk=5e-3, fa_exc=90, fa_ref=180,
 
     return seq, pe_order
 
+
+
+
 if __name__ == '__main__':
     # Make sequences with the seq validation default settings, check timing, visualize, and export
 
