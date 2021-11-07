@@ -33,7 +33,7 @@ tensorboard>=1.13.1
 tensorflow==1.15.2
 tensorflow-estimator>=1.13.0
 termcolor==1.1.0
-Werkzeug==0.15.2
+Werkzeug==0.15.3
 scikit-image==0.15.0
 h5py==2.9.0
 
