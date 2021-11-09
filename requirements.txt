@@ -9,7 +9,7 @@ h5py==2.9.0
 itsdangerous==1.1.0
 Jinja2==2.10.1
 Keras==2.2.4
-Keras-Applications==1.0.7
+Keras-Applications>=1.0.7
 Keras-Preprocessing==1.0.9
 kiwisolver==1.0.1
 Markdown==3.1
@@ -29,9 +29,9 @@ python-dateutil==2.8.0
 PyYAML==5.1
 scipy>=1.2.1
 six==1.12.0
-tensorboard==1.13.1
+tensorboard>=1.13.1
 tensorflow==1.15.2
-tensorflow-estimator==1.13.0
+tensorflow-estimator>=1.13.0
 termcolor==1.1.0
 Werkzeug==0.15.2
 scikit-image==0.15.0
