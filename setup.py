@@ -13,13 +13,13 @@ with open(str(here / 'requirements.txt'), 'r') as f:
 
 setuptools.setup(
     name='virtual-scanner',
-    version='2.0.0',
     author='imr-framework',
     author_email='imr.framework2018@gmail.com',
     description='Virtual Scanner educational tool for MRI',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/imr-framework/virtual-scanner',
+    version=".".join(_get_version()),
     packages=setuptools.find_packages(),
     install_requires=install_reqs,
     license='License :: OSI Approved :: GNU Affero General Public License v3',
