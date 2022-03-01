@@ -1,0 +1,1 @@
+<simulate name="JEMRIS"><sample name="cylindrical" uri="cylindrical.h5" /><TXcoilarray uri="uniform.xml" /><RXcoilarray uri="uniform.xml" /><parameter ConcomitantFields="0" EvolutionPrefix="evol" EvolutionSteps="0" RandomNoise="0" /><sequence name="gre32" uri="gre32.xml" /><model name="Bloch" type="CVODE" /></simulate>
