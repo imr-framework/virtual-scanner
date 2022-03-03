@@ -529,6 +529,7 @@ class SpinGroupDiffusion(SpinGroup):
 
 
 
+
 # Helpers
 def anyrot(v):
     """ Helper method that generates rotational matrix from Rodrigues's formula
@@ -545,7 +546,7 @@ def anyrot(v):
     Returns
     -------
     R : numpy.ndarray
-        3 x 3 rotational matrix
+        3 x 3 rotational matrix`1
 
     """
     vx = v[0]
