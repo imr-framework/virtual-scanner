@@ -58,6 +58,21 @@ class SpinGroup:
         self.df = df
         self.signal=[]
 
+    def reset(self):
+        self.signal=[]
+        self.m = np.array([[0], [0], [1]])
+
+    def get_m(self):
+        return self.m
+
+    #TODO
+    def apply_ideal_RF(self, rf_phase, fa, f_low, f_high, gradients):
+        df_tot = self.df + np.sum(gradients*self.loc)
+        if df_tot > f_low and df_tot < f_high:
+            v = -fa*np.array([np.cos(rf_phase), np.sin(rf_phase),0])
+            self.m = anyrot(v) @ self.m
+
+
     def get_m_signal(self):
         """Gets spin group's transverse magnetization
 
@@ -400,7 +415,6 @@ class SpinGroup:
 
 
 class NumSolverSpinGroup(SpinGroup):
-    # TODO package the funtions to generate a final function that only takes in t and M and returns dM/dt
 
     @staticmethod
     def interpolate_waveforms(grads_shape, pulse_shape, dt):
@@ -413,7 +427,6 @@ class NumSolverSpinGroup(SpinGroup):
 
         return gx_func, gy_func, gz_func, pulse_real_func, pulse_imag_func
 
-    # TODO make this return the input diffEQ to solver
     def get_bloch_eqn(self, grads_shape, pulse_shape, dt):
         x, y, z = self.loc
         gx_func, gy_func, gz_func, pulse_real_func, pulse_imag_func = self.interpolate_waveforms(grads_shape, pulse_shape, dt)
@@ -437,8 +450,6 @@ class NumSolverSpinGroup(SpinGroup):
 
 
     # Override RF method!
-    # TODO fix problem with using this in sequence simulation
-    # TODO override apply_rf
     def apply_rf_store(self, pulse_shape, grads_shape, dt):
         m = np.squeeze(self.m)
 

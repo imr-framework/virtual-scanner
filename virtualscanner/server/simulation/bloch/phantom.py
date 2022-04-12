@@ -9,6 +9,7 @@ import h5py
 import matplotlib.pyplot as plt
 from scipy.io import savemat, loadmat
 
+# TODO : Add T2* into the Class
 class Phantom:
     """Generic numerical phantom for MRI simulations
 
@@ -45,7 +46,7 @@ class Phantom:
         1D array of all z locations in phantom
 
     """
-    def __init__(self,T1map,T2map,PDmap,vsize,dBmap=0,Dmap=0,loc=(0,0,0)):
+    def __init__(self,T1map,T2map,PDmap,vsize,T2star_map=0, dBmap=0,Dmap=0,loc=(0,0,0)):
         self.vsize = vsize
         self.T1map = T1map
         self.T2map = T2map
@@ -54,6 +55,12 @@ class Phantom:
         self.dBmap = dBmap
         self.Dmap = Dmap
         self.loc = loc
+
+        if len(T2star_map) == 1 :
+            self.T2star_map = np.zeros(self.T2map.shape)
+        else:
+            self.T2star_map = T2star_map
+
 
         # Find field-of-view
         self.fov = vsize*np.array(np.shape(T1map))
@@ -109,6 +116,22 @@ class Phantom:
 
         """
         return self.PDmap[indx],self.T1map[indx],self.T2map[indx]
+
+    def get_t2star(self,indx):
+        """Return T2* at given indices
+
+        Parameters
+        ----------
+        indx : tuple
+            Index for querying
+
+        Returns
+        -------
+        float
+            Tissue T2* at the queried index
+        """
+
+        return self.T2star_map[indx]
 
 
     def get_diffusion_coeff(self, indx):
@@ -166,6 +189,8 @@ class Phantom:
                                               'vsize': self.vsize})
         return
 
+
+    # TODO : add T2star into the h5 -> JEMRIS incorporation
     def output_h5(self, output_folder, name='phantom'):
         """
         Inputs

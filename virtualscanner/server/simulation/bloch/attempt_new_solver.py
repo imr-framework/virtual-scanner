@@ -1,5 +1,5 @@
 # Test the new NumSolverSpinGroup class
-from bloch.spingroup_ps_wsolver import NumSolverSpinGroup
+from bloch.spingroup_ps import NumSolverSpinGroup
 from rf_sim.rf_simulations import make_rf_shapes
 import numpy as np
 import matplotlib.pyplot as plt
