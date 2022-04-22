@@ -3,7 +3,6 @@
 Library for generating pulseq sequences: GRE, SE, IRSE, EPI
 """
 
-# TODO update for PyPulseq 1.2.1
 
 import copy
 from math import pi, sqrt, ceil, floor
@@ -175,7 +174,7 @@ def make_pulseq_gre_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=F
 
     # Slice select: RF and gradient
     rf, g_ss, __ = make_sinc_pulse(flip_angle=flip,system=system,duration=4e-3,slice_thickness=thk,
-                               apodization=0.5, time_bw_product=4)
+                               apodization=0.5, time_bw_product=4, return_gz=True)
     g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss,ug_ss)
 
     # Readout and ADC
@@ -676,13 +675,13 @@ def make_pulseq_se_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,write=Fa
     # Non-180 pulse
     flip1 = fa * pi / 180
     rf, g_ss, __ = make_sinc_pulse(flip_angle=flip1, system=system, duration=2e-3, slice_thickness=thk,
-                                apodization=0.5, time_bw_product=4)
+                                apodization=0.5, time_bw_product=4, return_gz=True)
     g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss,ug_ss)
 
     # 180 pulse
     flip2 = 180 * pi / 180
     rf180, g_ss180, __ = make_sinc_pulse(flip_angle=flip2, system=system, duration=2e-3, slice_thickness=thk,
-                                     apodization=0.5, time_bw_product=4)
+                                     apodization=0.5, time_bw_product=4, return_gz=True)
     g_ss180_x, g_ss180_y, g_ss180_z = make_oblique_gradients(g_ss180,ug_ss)
 
     # Readout gradient & ADC

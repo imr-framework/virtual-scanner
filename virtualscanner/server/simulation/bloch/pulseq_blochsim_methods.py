@@ -235,7 +235,10 @@ def sim_single_spingroup(loc_ind,freq_offset,phantom,seq_info,sg_type='Default',
     apply_pulseq_commands(isc,seq_info)
 
     if output_type == 'signal':
-        return isc.signal
+        if sg_type == 'T2Star':
+            return isc.get_avg_signal()
+        else:
+            return isc.signal
     elif output_type == 'spingroup':
         return isc
 

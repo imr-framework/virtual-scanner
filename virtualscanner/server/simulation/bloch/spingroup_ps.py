@@ -354,7 +354,6 @@ class SpinGroup:
             self.fpwg(np.trapz(y=grad[:,q:q+2], dx=dwell), dwell)
 
         signal_1D_ref = np.array(signal_1D) * np.exp(-1j*phase)
-
         self.signal.append(signal_1D_ref)
 
     def readout(self,dwell,n,delay,grad,timing,phase):

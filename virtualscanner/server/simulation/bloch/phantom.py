@@ -56,7 +56,7 @@ class Phantom:
         self.Dmap = Dmap
         self.loc = loc
 
-        if len(T2star_map) == 1 :
+        if len(np.shape(T2star_map))== 1:
             self.T2star_map = np.zeros(self.T2map.shape)
         else:
             self.T2star_map = T2star_map
@@ -321,7 +321,6 @@ class DTTPhantom(Phantom):
                                                 'vsize': self.vsize})
         return
 
-
 class BrainwebPhantom(Phantom):
     """This phantom is in development.
 
@@ -405,7 +404,6 @@ class BrainwebPhantom(Phantom):
         T2map = np.clip(T2map,a_min=0,a_max=None)
 
         super().__init__(T1map,T2map,PDmap,dr,dBmap)
-
 
 class SpheresArrayPlanarPhantom(DTTPhantom):
     """2D phantom extracted from a cylinder containing spheres
