@@ -686,7 +686,7 @@ def makeCustomCylindricalPhantom(T1T2PD0, PDs, T1s, T2s, T1T2PD1=None, dim=2,n=1
     if T1T2PD1 is None:
         T1T2PD1 = (1,4,2) # Water/CSF
     T11, T21, PD1 = tuple(T1T2PD1)
-    type_params_custom = {0:(0,1,1), # background has zero proton density
+    type_params_custom = {0:(0,0,0), # background has zero proton density
                        1:(PDs[0],T1o,T2o),2:(PDs[1],T1o,T2o),3:(PDs[2],T1o,T2o), # PD spheres
                     4:(PDo,T1s[0],T2o),5:(PDo,T1s[1],T2o),6:(PDo,T1s[2],T2o),7:(PDo,T1s[3],T2o), # T1 spheres
                     8:(PDo,T1o,T2s[0]),9:(PDo,T1o,T2s[1]),10:(PDo,T1o,T2s[2]),11:(PDo,T1o,T2s[3]), # T2 spheres
