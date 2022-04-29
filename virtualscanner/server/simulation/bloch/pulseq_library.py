@@ -825,7 +825,7 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
 
     # RF Pulse (first)
     rf, g_ss, __ = make_sinc_pulse(flip_angle=flip, system=system,duration=2.5e-3, slice_thickness=thk,
-                               apodization=0.5, time_bw_product=4)
+                               apodization=0.5, time_bw_product=4,return_gz=True)
     g_ss_x, g_ss_y, g_ss_z = make_oblique_gradients(g_ss, ug_ss)
 
 
@@ -851,7 +851,7 @@ def make_pulseq_epi_oblique(fov,n,thk,fa,tr,te,enc='xyz',slice_locs=None,echo_ty
         # RF Pulse (180 deg for SE)
         flip180 = 180 * pi / 180
         rf180, g_ss180, __ = make_sinc_pulse(flip_angle=flip180, system=system,duration=2.5e-3,slice_thickness=thk,
-                                         apodization=0.5, time_bw_product=4)
+                                         apodization=0.5, time_bw_product=4, return_gz=True)
         g_ss180_x, g_ss180_y, g_ss180_z = make_oblique_gradients(g_ss180, ug_ss)
 
         # Slice-select direction spoilers
@@ -1145,5 +1145,3 @@ def combine_trap_grad_xyz(gradients,system,dur):
     gtz = make_trapezoid(channel='z',system=system,area=gz_area,duration=dur)
 
     return gtx, gty, gtz
-
-
