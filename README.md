@@ -71,14 +71,34 @@ Read the API documentation [here](https://imr-framework.github.io/virtual-scanne
 ## Standard Mode
 * The **Register** page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now.
 
+<p align="center"> <a>
+<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/register.JPG" width="600">
+</a></p>
+
 * The **Acquire** page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values.
 
+<p align="center"> <a>
+<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/acquire.JPG" width="600">
+</a></p>
+
 * The **Analyze** page allows the user to load a series of data acquired in ISMRM/NIST phantom for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect spheres in the phantom, a feature useful for comparing generated parameter values to literature values.
+
+<p align="center"> <a>
+<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/analyze.JPG" width="600">
+</a></p>
 
 ## Advanced Mode
 * The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files. *This feature is under development.*
 
+<p align="center"> <a>
+<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/tx.JPG" width="600">
+</a></p>
+
 * The **Rx** (RF receive) page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. *This feature is under development.*
+
+<p align="center"> <a>
+<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/rx.png" width="600">
+</a></p>
 
 * Other features, including phantom and sequence viewers and reconstruction methods, are in active development.
 
