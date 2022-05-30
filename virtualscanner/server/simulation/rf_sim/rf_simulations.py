@@ -22,7 +22,8 @@ from scipy.io import savemat
 GAMMA = 42.58e6 * 2 * pi
 
 # Caller function
-def simulate_rf(bw_spins, n_spins, pdt1t2, flip_angle, dt, pulse_type, dur = 0, solver="Euler", display=True, **kwargs):
+def simulate_rf(bw_spins: object, n_spins: object, pdt1t2: object, flip_angle: object, dt: object, pulse_type: object, dur: object = 0, solver: object = "Euler", display: object = True,
+                **kwargs: object) -> object:
     '''Simulates and plots absolute signal (|Mxy|) of isochromats over time
 
     Parameters

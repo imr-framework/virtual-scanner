@@ -165,8 +165,8 @@ def utest_phantom_output_h5():
 if __name__ == '__main__':
 
     # Run all "utests"
-    utest_coil2xml() # Converts B1 map into .h5 and .xml files for JEMRIS
-    utest_phantom_output_h5() # Makes a virtual scanner phantom and converts it into .h5 format for JEMRIS
-    utest_seq2xml() # Makes a pypulseq sequence and converts it into .xml and .h5 files for JEMRIS
+    #utest_coil2xml() # Converts B1 map into .h5 and .xml files for JEMRIS
+    #utest_phantom_output_h5() # Makes a virtual scanner phantom and converts it into .h5 format for JEMRIS
+    #utest_seq2xml() # Makes a pypulseq sequence and converts it into .xml and .h5 files for JEMRIS
     utest_sim_jemris() # Calls JEMRIS on command line using pre-made files
-    utest_pulseq_sim() # Calls pipeline (INPUT: seq + phantom info + FOV ; OUTPUT: complex image space & k-space, images)
+    #utest_pulseq_sim() # Calls pipeline (INPUT: seq + phantom info + FOV ; OUTPUT: complex image space & k-space, images)
