@@ -52,7 +52,7 @@ Then you can run the container and bind port 5000 to expose the application to t
 $ docker run -p 5000:5000 virtualscanner
 ```
 
-And open up your browser to [0.0.0.0:5000](0.0.0.0:5000)to see the interface.
+And open up your browser to [0.0.0.0:5000](0.0.0.0:5000) to see the interface.
 The container is **not intended** for a production deployment, but rather is appropriate for local usage.
 
 
