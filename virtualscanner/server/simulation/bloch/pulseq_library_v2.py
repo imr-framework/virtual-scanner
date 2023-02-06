@@ -300,6 +300,7 @@ def write_tse(n=256, fov=250e-3, thk=5e-3, fa_exc=90, fa_ref=180,
 
 
     # Derived parameters
+    n_slices = len(slice_locations)
     Nf, Np = (n,n)
     delta_k = 1 / fov
     k_width = Nf * delta_k
@@ -447,6 +448,8 @@ def write_tse(n=256, fov=250e-3, thk=5e-3, fa_exc=90, fa_ref=180,
     gr7_amp = [gr_acq.amplitude, gr_spr.amplitude, gr_spr.amplitude, 0]
     gr7 = make_extended_trapezoid(channel=ch_ro, times=gr7_times, amplitudes=gr7_amp)
 
+
+
     # Timing (delay) calculations
 
     # delay_TR : delay at the end of each TSE pulse train (i.e. each TR)
@@ -525,30 +528,34 @@ if __name__ == '__main__':
     # Make sequences with the seq validation default settings, check timing, visualize, and export
 
     # Define ACR slice locations
-    n_slices = 11
-    thk = 5e-3
-    gap = 5e-3
-    L = (n_slices - 1) * (thk + gap)
-    # displacement = -4.4e-3
-    displacement = -4e-3
-    acr_sl_locs = displacement + np.arange(-L / 2, L / 2 + thk + gap, thk + gap)
-    print('Slice locations in meters: ', acr_sl_locs)
-
-
-    # Make, check, visualize, and save an IRSE sequence
-    # IRSE
-    # seq_irse, sl_order = write_irse_interleaved_split_gradient(slice_locations=acr_sl_locs)
-    # print(seq_irse.test_report())
-    # seq_irse.plot(time_range=[0,2])
+    # n_slices = 11
+    # thk = 5e-3
+    # gap = 5e-3
+    # L = (n_slices - 1) * (thk + gap)
+    # # displacement = -4.4e-3
+    # displacement = -4e-3
+    # acr_sl_locs = displacement + np.arange(-L / 2, L / 2 + thk + gap, thk + gap)
+    # print('Slice locations in meters: ', acr_sl_locs)
     #
-    # seq_irse.write('irse.seq')
-    # savemat('irse_info.mat',{'sl_order':sl_order})
+    #
+    # # Make, check, visualize, and save an IRSE sequence
+    # # IRSE
+    # # seq_irse, sl_order = write_irse_interleaved_split_gradient(slice_locations=acr_sl_locs)
+    # # print(seq_irse.test_report())
+    # # seq_irse.plot(time_range=[0,2])
+    # #
+    # # seq_irse.write('irse.seq')
+    # # savemat('irse_info.mat',{'sl_order':sl_order})
+    #
+    # # TSE
+    # # Make, check, visualize, and save a TSE sequence
+    # seq_tse, pe_order = write_tse(slice_locations=acr_sl_locs)
+    # print(seq_tse.test_report())
+    # seq_tse.plot(time_range=[0,2])
+    #
+    # seq_tse.write('tse.seq')
+    # savemat('tse_info.mat',{'pe_order':pe_order})
 
-    # TSE
-    # Make, check, visualize, and save a TSE sequence
-    seq_tse, pe_order = write_tse(slice_locations=acr_sl_locs)
-    print(seq_tse.test_report())
-    seq_tse.plot(time_range=[0,2])
-
-    seq_tse.write('tse.seq')
-    savemat('tse_info.mat',{'pe_order':pe_order})
+    seq, pe_order = write_tse(n=64, fov=10e-3, thk=5e-3, fa_exc=90, fa_ref=180,
+              te=50e-3, tr=2000e-3, slice_locations=[0], turbo_factor=4, enc='xyz')
+    seq.write('tse64.seq')

@@ -1,0 +1,124 @@
+{% extends "base_research.html" %}
+{% block content %}
+<div class="row h-100">
+    <div class="col-4" id="b0-parameters">
+        <div class="card row h-50">
+            <div class="card-header">Parameters</div>
+            <div class="card-body">
+<!--                <ul>-->
+<!--                    <li>Ring radii</li>-->
+<!--                    <li>Magnet numbers</li>-->
+<!--                    <li>Resolution</li>-->
+<!--                    <li>Number of rings</li>-->
+<!--                    <li>Ring separation</li>-->
+<!--                    <li>...</li>-->
+
+<!--                </ul>-->
+                <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.ring_radii_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.ring_radii_field(class="form-control",id="innerRadii") }}
+                    </div>
+                </div>
+                <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.num_magnets_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.num_magnets_field(class="form-control",id="innerNum") }}
+                    </div>
+                </div>
+                       <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.num_rings_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.num_rings_field(class="form-control",id="numRings") }}
+                    </div>
+                </div>
+                       <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.ring_separation_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.ring_separation_field(class="form-control",id="ringSep") }}
+                    </div>
+                </div>
+                       <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.dsv_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.dsv_field(class="form-control",id="dsv") }}
+                    </div>
+                </div>
+                <div class="p-2 row">
+                    <button class="btn btn-lg btn-success" id="run-halbach">
+                        <span class="spinner-border spinner-border-sm d-none" id="run-halbach-spinner" role="status" aria-hidden="true"></span>
+                        <span>Run</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card row h-50">
+            <div class="card-header">Display options</div>
+            <div class="card-body">
+                  <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.xslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.xslice_field(class="form-control") }}
+                    </div>
+                </div>
+                  <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.yslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.yslice_field(class="form-control") }}
+                    </div>
+                </div>
+                  <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.zslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.zslice_field(class="form-control") }}
+                    </div>
+                </div>
+                <div class="row p-2">
+                    <button class="btn btn-lg btn-info">Update display</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-8" id="b0-display">
+        <div class="card row h-50">
+            <div class="card-header">B0 map</div>
+            <div class="card-body">
+                <div class="chart" id="halbach-chart"></div>
+            </div>
+        </div>
+        <div class="card row h-50">
+            <div class="card-header">Program output</div>
+            <div class="card-body">
+                <p id="output-space"></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block additional_imports %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="../static/b0.js"></script>
+
+{% endblock %}

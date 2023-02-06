@@ -7,6 +7,9 @@
     <!--Bootsrap-->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -15,7 +18,7 @@
     <!--JQuery-->
     <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
 
-    <!--JavaScript customized funcitons-->
+    <!--JavaScript customized functions-->
     <!--
     <script type="text/javascript" src="{{url_for('static',filename='log_in_func.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>
@@ -23,14 +26,15 @@
     <!--Favicon -->
     <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
 
+
     <!--Google Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
     <!--CSS-->
-    <link rel="stylesheet" href="{{url_for('static',filename='main_style.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='log_in_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='/styles/main_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='/styles/log_in_style.css')}}">
 
     <!--JQuery customized scripts-->
     <script type="text/javascript" src="{{url_for('static',filename='log_in_func.js')}}"></script>
@@ -38,6 +42,8 @@
 
   </head>
   <body>
+
+
 
       <div class="logo-image">
           <img src="{{url_for('static',filename='virtual_scanner_logo_v1.png')}}" />
@@ -90,16 +96,20 @@
                 <label class="standard-tag">Standard</label>
                 <br>
                 <label class="advanced-tag">Advanced</label>
+                <br>
+                <label class="research-tag">Research</label>
               </div>
               <div class="col coltype2">
                 <label class="standard-tag">
                   <input class="mode-option" id="opt1" type="radio" name="mode" value="Standard" checked >
                 </label>
-
                 <br>
-
                 <label class="advanced-tag">
                   <input class="mode-option" id="opt2" type="radio" name="mode" value="Advanced" >
+                </label>
+                <br>
+                <label class="advanced-tag">
+                  <input class="mode-option" id="opt3" type="radio" name="mode" value="Research" >
                 </label>
               </div>
               <br>
@@ -136,12 +146,32 @@
 
         <br>
 
-        <button id="mode-selection" type="submit" class="btn btn-primary">Begin Scan</button>
-
+        <button id="mode-selection" type="submit" class="btn btn-primary">Begin</button>
 
       </form>
+        <button id="login-emi" class="btn btn-secondary" data-toggle="modal" data-target="#emimodal">Acquire EMI map</button>
 
-
+      <div class="modal" id="emimodal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-primary">EMI Mapping</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-secondary">
+            <p>Press "Start" to begin the EMI mapping. <p>
+            <div class="canvas-frame">
+                      <canvas id="emi-graph"></canvas>
+                        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Start</button>
+            <button type="button" class="btn btn-primary">Save data</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
