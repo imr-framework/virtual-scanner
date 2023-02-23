@@ -17,3 +17,8 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def update_session_subdict(sess, first_key, params):
+    for second_key in params.keys():
+        sess[first_key][second_key] = params[second_key]
+    sess.modified = True

@@ -1,0 +1,199 @@
+{% extends "base_research.html" %}
+{% block content %}
+
+<div class="container-fluid vh-100">
+    <div class="row h-75">
+        <!-- Tabs navs -->
+        <ul class="nav nav-tabs nav-fill mb-3" id="sim-tab-list" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link active"
+              id="sim-tab-1"
+              data-mdb-toggle="tab"
+              href="#sim-tabs-1"
+              role="tab"
+              aria-controls="sim-tabs-1"
+              aria-selected="true"
+              >Sequence</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="sim-tab-2"
+              data-mdb-toggle="tab"
+              href="#sim-tabs-2"
+              role="tab"
+              aria-controls="sim-tabs-2"
+              aria-selected="false"
+              >Phantom</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="sim-tab-3"
+              data-mdb-toggle="tab"
+              href="#sim-tabs-3"
+              role="tab"
+              aria-controls="sim-tabs-3"
+              aria-selected="false"
+              >Hardware</a
+            >
+          </li>
+              <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="sim-tab-4"
+              data-mdb-toggle="tab"
+              href="#sim-tabs-4"
+              role="tab"
+              aria-controls="sim-tabs-4"
+              aria-selected="false"
+              >Reconstruction</a
+            >
+          </li>
+        </ul>
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content h-100" id="sim-content">
+          <div
+            class="tab-pane fade show active h-100"
+            id="sim-tabs-1"
+            role="tabpanel"
+            aria-labelledby="sim-tab-1"
+          >
+            <div class="row h-100">
+                <div class="col-4 h-100">
+                    <div class="row h-25">
+                        <div class="card">Presets</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Customize</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Upload</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Design</div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row h-50">
+                        <div class="card">
+                            <div class="card-header">Seq waveforms</div>
+                            <div class="card-body">(Plots)</div>
+                        </div>
+                    </div>
+                    <div class="row h-50">
+                        <div class="card">
+                            <div class="card-header">Seq parameters</div>
+                            <div class="card-body">(form)</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+          </div>
+          <div
+            class="tab-pane fade h-100"
+            id="sim-tabs-2"
+            role="tabpanel"
+            aria-labelledby="sim-tab-2"
+          >
+            <div class="row h-100">
+                <div class="col-4 h-100">
+                    <div class="row h-25">
+                        <div class="card">Presets</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Customize</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Upload</div>
+                    </div>
+                    <div class="row h-25">
+                        <div class="card">Design</div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="row h-100">
+                        <div class="card">
+                            <div class="card-header">Phantom maps</div>
+                            <div class="card-body">(2 x 2 Plots)</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+          </div>
+          <div
+            class="tab-pane fade h-100"
+            id="sim-tabs-3"
+            role="tabpanel"
+            aria-labelledby="sim-tab-3"
+          >
+            <div class="row h-100">
+                <div class="col-4 card">
+                    <div class="row h-50"> B0 plot </div>
+                    <div class="row h-50"> B0 options</div>
+                </div>
+                <div class="col-4 card">
+                    <div class="row h-50"> B1 Tx plot </div>
+                    <div class="row h-50"> B1 Tx options</div>
+                </div>
+                <div class="col-4 card">
+                    <div class="row h-50"> B1 Rx plot </div>
+                    <div class="row h-50"> B1 Rx options</div>
+                </div>
+
+            </div>
+          </div>
+
+              <div
+            class="tab-pane fade h-100"
+            id="sim-tabs-4"
+            role="tabpanel"
+            aria-labelledby="sim-tab-4"
+          >
+              <div class="row h-100">
+                  <div class="col-4">
+                    <div class="row h-25 card">
+                        Cartesian (with reordering)
+                    </div>
+                        <div class="row h-25 card">
+                        NUFFT
+                    </div>
+                    <div class="row h-25 card">
+                        Custom (External script)
+                    </div>
+                    <div class="row h-25 card">
+                        Design pipeline (combinations; filtering, coil comb...)
+                    </div>
+                  </div>
+                  <div class="col-8">
+                      <div class="row h-100">
+                          <div class="card">
+                          <div class="card-header">Reconed images</div>
+                          <div class="card-body">(images)</div>
+                      </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+    </div>
+    <div class="row h-25">
+            <button class="col btn btn-primary">Sim</button>
+            <button class="col btn btn-primary">Recon</button>
+            <button class="col btn btn-primary">Save</button>
+            <button class="col btn btn-primary">Load</button>
+
+    </div>
+</div>
+
+{% endblock %}

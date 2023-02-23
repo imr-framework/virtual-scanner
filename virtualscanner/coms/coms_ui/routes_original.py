@@ -9,6 +9,7 @@ ROOT_PATH = constants.ROOT_PATH
 UPLOAD_FOLDER = constants.COMS_UI_STATIC_USER_UPLOAD_PATH
 SERVER_ANALYZE_PATH = constants.SERVER_ANALYZE_PATH
 STATIC_ANALYZE_PATH = constants.COMS_UI_STATIC_ANALYZE_PATH
+import numpy as np
 
 from virtualscanner.server.ana import T2_mapping as T2_mapping, T1_mapping as T1_mapping, ROI_analysis as ROI_analysis
 from virtualscanner.server.recon.drunck.reconstruct import main
@@ -40,6 +41,26 @@ def log_in():
     session['acq_out_axial'] = []
     session['acq_out_sagittal'] = []
     session['acq_out_coronal'] = []
+
+    ## Initialize session variables ########
+    session['b0'] = {'best_vector': [],'opt-3d':'z','masked_field':np.zeros((10,10,10)),
+                     'coordinates':[np.arange(10) for q in range(3)],
+                     'ring_position_symmetry': [],
+                     'inner_num_magnets': [],
+                     'inner_ring_radii': [],
+                     'outer_num_magnets':[],
+                     'outer_ring_radii':[],
+                     'resolution': 5,
+                     'sim_dimensions': [],
+                     'dsv':0,
+                     'dsv_display': 50,
+                     'res_display': 5,
+                     'x': 5,
+                     'y': 5,
+                     'z': 5
+                     }
+    # TODO add x,y,z slices into session of b0 (have javascript update session on those ... )
+
     if request.method == 'POST':
         # users.append(request.form['user-name'])
         # session['username'] = users[-1]

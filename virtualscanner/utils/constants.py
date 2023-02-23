@@ -32,6 +32,9 @@ COMS_UI_STATIC_RX_OUTPUT_PATH = COMS_PATH / 'coms_ui' / 'static' / 'RF' / 'Rx' /
 COMS_UI_STATIC_RX_INPUT_PATH = COMS_PATH / 'coms_ui' / 'static' / 'RF' /'Rx' / 'inputs'
 COMS_UI_SIM_OUTPUT_PATH = COMS_PATH / 'coms_ui' / 'static' / 'acq' / 'outputs'
 
+B0_DATA_PATH = COMS_PATH / 'coms_ui' / 'static' / 'b0'
+SEQ_DATA_PATH = COMS_PATH / 'coms_ui' / 'static' / 'sequence'
+
 # server
 SERVER_PATH = ROOT_PATH / 'server'
 

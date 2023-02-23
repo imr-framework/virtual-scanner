@@ -1,11 +1,12 @@
-# Incorporate and acknowledge Halbach design code
 
+######################################
+# Halbach simulation and optimization code authorship information
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep 24 16:17:41 2018
-
 @author: to_reilly
 """
+######################################
 
 import numpy as np
 import random
@@ -20,7 +21,10 @@ import plotly
 from plotly.subplots import make_subplots
 import plotly.express as px
 from scipy.io import savemat
+import time
+import numpy as np
 
+from skimage import io
 mu = 1e-7
 
 
@@ -76,6 +80,8 @@ def createHalbach(numMagnets=24, rings=(-0.075, -0.025, 0.025, 0.075), radius=0.
     dip_mom = magnetization(bRem, magnetSize)
 
     # create array to store field data
+    print(f'Sim dim: {simDimensions}')
+    print(f'Resolution: {resolution}')
     B0 = np.zeros((int(simDimensions[0] * resolution) + 1, int(simDimensions[1] * resolution) + 1,
                    int(simDimensions[2] * resolution) + 1, 3), dtype=np.float32)
 
@@ -94,24 +100,26 @@ def createHalbach(numMagnets=24, rings=(-0.075, -0.025, 0.025, 0.075), radius=0.
     return B0
 
 
-def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
+def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV, max_num_gen, resolution):
     print('Starting simulation...')
+
+    # Calculate error term
     def fieldError(shimVector):
         field = np.zeros(np.size(sharedShimMagnetsFields, 0))
         for idx1 in range(0, np.size(shimVector)):
             field += sharedShimMagnetsFields[:, idx1, shimVector[idx1]]
         return (((np.max(field) - np.min(field)) / np.mean(field)) * 1e6,)
 
-    outerRingRadii = innerRingRadii + 21 * 1e-3
-    outerNumMagnets = innerNumMagnets + 7
+    outerRingRadii = innerRingRadii + 21 * 1e-3  # Fixed radius difference between inner and outer at 21 mm
+    outerNumMagnets = innerNumMagnets + 7 # Fixed number of magnets difference between inner and outer at 7
 
-    resolution = 5
+   # resolution = 5
     magnetLength = (numRings - 1) * ringSep
     ringPositions = np.linspace(-magnetLength / 2, magnetLength / 2, numRings)
 
     # population
     popSim = 10000
-    maxGeneration = 50
+    maxGeneration = max_num_gen
 
     output_text = ""
     ###################################################################################################################
@@ -203,8 +211,7 @@ def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
         # A new generation
         g = g + 1
         output_text += "-- Generation %i -- \n" % g
-        print(output_text)
-
+        print(f"-- Generation {g} -- \n")
         # Select the next generation individuals
         offspring = toolbox.select(pop, len(pop))
         # Clone the selected individuals
@@ -244,7 +251,6 @@ def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
         if min(fits) < bestError:
             # best in a generation is not per se best ever due to mutations, this tracks best ever
             output_text += "BEST VECTOR: \n" + str(tools.selBest(pop, 1)[0])
-            print(output_text)
 
             bestError = min(fits)
             actualBestVector = tools.selBest(pop, 1)[0]
@@ -252,12 +258,10 @@ def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
         minTracker[g - 1] = min(fits)
         output_text += "Evaluation took " + str(time.time() - startTime) + " seconds \n"
         output_text += "Minimum: %i ppm \n" % min(fits)
-        print(output_text)
 
     output_text += "-- End of (successful) evolution -- \n"
     best_ind = tools.selBest(pop, 1)[0]
     output_text += "Best individual is %s, %s \n" % (best_ind, best_ind.fitness.values)
-    print(output_text)
 
     bestVector = np.array(actualBestVector)
 
@@ -282,9 +286,8 @@ def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
     output_text += "Shimmed homogeneity: %.4f mT \n" % (1e3 * (np.nanmax(maskedField) - np.nanmin(maskedField)))
     output_text += "Shimmed homogeneity: %i ppm \n" % (
                 1e6 * ((np.nanmax(maskedField) - np.nanmin(maskedField)) / np.nanmean(maskedField)))
-    print(output_text)
 
-    return minTracker, coordinateAxis, maskedField, output_text
+    return minTracker, coordinateAxis, maskedField, output_text, bestVector, ringPositionsSymmetery, simDimensions
     # plt.figure()
     # plt.plot(coordinateAxis * 1e3,
     #          maskedField[int(np.floor(np.size(maskedField, 0) / 2)), int(np.floor(np.size(maskedField, 1) / 2)), :])
@@ -307,12 +310,262 @@ def b0_halbach_worker(innerRingRadii, innerNumMagnets, numRings, ringSep, DSV):
 
     #savemat('halbach.mat', {'maskedField': maskedField, 'coordinateAxis': coordinateAxis, 'minTracker': minTracker})
 
-def b0_plot_worker(maskedField, xslice, yslice, zslice):
+def b0_plot_worker(maskedField, coordinates, xslice, yslice, zslice):
     # Make plot with plotly and return them in json format
+    print(f'length of coordinates: {len(coordinates)}')
+    if len(coordinates) == 1: # isotropic
+        x_coord = coordinates[0]
+        y_coord = coordinates[0]
+        z_coord = coordinates[0]
+    else:
+        x_coord = np.arange(maskedField.shape[0])
+        y_coord = np.arange(maskedField.shape[1])
+        z_coord = np.arange(maskedField.shape[2])
+
     fig = make_subplots(rows=1,cols=3)
-    fig.add_trace(go.Heatmap(z=maskedField[xslice,:,:]),row=1,col=1)
-    fig.add_trace(go.Heatmap(z=maskedField[:,yslice,:]),row=1,col=2)
-    fig.add_trace(go.Heatmap(z=maskedField[:,:,zslice]),row=1,col=3)
+    fig.add_trace(go.Heatmap(z=maskedField[xslice,:,:],coloraxis="coloraxis",x=y_coord*1e3,y=z_coord*1e3),row=1,col=1)
+    fig.add_trace(go.Heatmap(z=maskedField[:,yslice,:],coloraxis="coloraxis",x=x_coord*1e3,y=z_coord*1e3),row=1,col=2)
+    fig.add_trace(go.Heatmap(z=maskedField[:,:,zslice],coloraxis="coloraxis",x=x_coord*1e3,y=y_coord*1e3),row=1,col=3)
+
+
+
+    fig.update_xaxes(title_text='Y (mm)',showgrid=False, row=1, col=1)
+    fig.update_yaxes(title_text='Z (mm)',showgrid=False, row=1, col=1)
+
+    fig.update_xaxes(title_text='X (mm)', showgrid=False, row=1, col=2)
+    fig.update_yaxes(title_text='Z (mm)', showgrid=False, row=1, col=2)
+
+    fig.update_xaxes(title_text='X (mm)', showgrid=False, row=1, col=3)
+    fig.update_yaxes(title_text='Y (mm)', showgrid=False, row=1, col=3)
+
+    fig.update_layout(
+        margin=dict(
+            l=5,
+            r=5,
+            b=5,
+            t=5,
+            pad=0
+        ))
+    fig.update_coloraxes(colorbar_nticks=10)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
+
+def b0_3d_worker():
+    # Inputs: design, field
+    # Output: 3D graphJSON plotting it, with sliders and everything
+    fig = go.Figure()
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
+def b0_eval_field_any(diameter, info):
+    # TODO enable temperature map
+    print(f"Eval b0 diam: {diameter}")
+    print(f'Eval b0 info: {info}')
+
+    # evalDimensions are (DVx, DVy, DVz) - FOV to be evaluated
+    inner_ring_radii = np.squeeze(info['inner_ring_radii'])
+    if 'outer_ring_radii' in info.keys():
+        outer_ring_radii = np.squeeze(info['outer_ring_radii'])
+    else:
+        outer_ring_radii = inner_ring_radii + 21 * 1e-3
+
+    inner_num_magnets = np.squeeze(info['inner_num_magnets'])
+
+    if 'outer_num_magnets' in info.keys():
+        outer_num_magnets = np.squeeze(info['outer_num_magnets'])
+    else:
+        outer_num_magnets = inner_num_magnets + 7 # Fixed number of magnets difference between inner and outer at 7
+
+    # Need to be able to see outside the optimized DSV for a given optimization
+    # Use Halbach functions to do it!
+    for positionIdx, position in enumerate(np.squeeze(info['ring_position_symmetry'])):
+        if position == 0:
+            rings = (0,)
+        else:
+            rings = (-position, position)
+
+        use_ind = np.squeeze(info['best_vector'])[positionIdx]
+        res = np.squeeze(info['res_display']) # mm
+        eval_dimensions = [1e-3 * diameter]*3 # m
+
+        if positionIdx == 0: # Only the first time
+            shimmedField = createHalbach(numMagnets=inner_num_magnets[use_ind], rings=rings,
+                                                        radius=inner_ring_radii[use_ind], magnetSize=0.012,
+                                                        resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+        else:
+            shimmedField += createHalbach(numMagnets=inner_num_magnets[use_ind], rings=rings,
+                                                        radius=inner_ring_radii[use_ind], magnetSize=0.012,
+                                                        resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+
+        shimmedField += createHalbach(numMagnets=outer_num_magnets[use_ind], rings=rings,
+                                                    radius=outer_ring_radii[use_ind], magnetSize=0.012,
+                                                    resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+
+    # Make spherical mask
+
+
+    coordinates = np.linspace(-eval_dimensions[0] / 2, eval_dimensions[0] / 2,
+                                 int(1e3 * eval_dimensions[0] / res + 1))
+    print('coordinates:')
+    print(coordinates[0],coordinates[-1])
+    coords = np.meshgrid(coordinates, coordinates, coordinates)  # Same for x, y, and z
+
+    # Spherical mask
+    mask = np.zeros(np.shape(coords[0]))
+    mask[np.square(coords[0]) + np.square(coords[1]) + np.square(coords[2]) <= (1e-3 * np.squeeze(info['dsv_display']) / 2) ** 2] = 1
+    mask[mask == 0] = np.nan
+
+    masked_field = np.abs(np.multiply(shimmedField,mask))
+
+    return masked_field, coordinates
+
+
+
+def b0_3dplot_worker(maskedField, coordinates, axis='z'):
+    # Make plot with plotly and return them in json format
+    # Import data
+    if len(coordinates) == 1:  # isotropic
+        x_coord = coordinates[0]
+        y_coord = coordinates[0]
+        z_coord = coordinates[0]
+    else:
+        x_coord = np.arange(maskedField.shape[0])
+        y_coord = np.arange(maskedField.shape[1])
+        z_coord = np.arange(maskedField.shape[2])
+
+
+    vol = maskedField
+    nx, ny, nz = vol.shape
+
+    CMIN = np.amin(vol[~np.isnan(vol)])
+    CMAX = np.amax(vol[~np.isnan(vol)])
+
+    # Define frames
+    import plotly.graph_objects as go
+
+    if axis == 'x':
+        nb_frames = nx
+        yy, zz = np.meshgrid(y_coord, z_coord)
+        frames = [go.Frame(data=go.Surface(x=1e3*x_coord[k]*np.ones((ny,nz)), y=1e3*yy,
+                                           z=1e3*zz,
+                                           surfacecolor=(np.squeeze(vol[k, :, :])),
+                                           cmin=CMIN, cmax=CMAX),
+                           name=str(k)  # you need to name the frame for the animation to behave properly
+                           ) for k in range(nb_frames)]
+        surface = go.Surface(
+                    x = x_coord[0]*np.ones((ny,nz)), y=yy, z=zz,
+                    surfacecolor=(np.squeeze(vol[nb_frames-1,:,:])),
+                    colorscale='plasma',
+                    cmin=CMIN, cmax=CMAX,
+                    colorbar=dict(thickness=20, ticklen=4))
+    elif axis == 'y':
+        nb_frames = ny
+        xx, zz = np.meshgrid(x_coord,z_coord)
+        frames = [go.Frame(data=go.Surface(x=1e3*xx, y= 1e3*y_coord[k]*np.ones((nx,nz)),
+                                           z=1e3*zz,
+                                           surfacecolor=(np.squeeze(vol[:, k, :])),
+                                           cmin=CMIN, cmax=CMAX),
+                           name=str(k)  # you need to name the frame for the animation to behave properly
+                           ) for k in range(nb_frames)]
+        surface = go.Surface(
+                    x = 1e3*xx, y= 1e3*y_coord[0]*np.ones((nx,nz)), z=1e3*zz,
+                    surfacecolor=(np.squeeze(vol[:,nb_frames-1,:])),
+                    colorscale='plasma',
+                    cmin=CMIN, cmax=CMAX,
+                    colorbar=dict(thickness=20, ticklen=4))
+    elif axis == 'z':
+        nb_frames = nz
+
+        frames = [go.Frame(data=go.Surface(x=1e3*x_coord, y=1e3*y_coord,
+                                           z=1e3*z_coord[k] * np.ones((nx,ny)),
+                                           surfacecolor=(np.squeeze(vol[:, :, k])),
+                                           cmin=CMIN, cmax=CMAX),
+                           name=str(k)  # you need to name the frame for the animation to behave properly
+                          )for k in range(nb_frames)]
+        surface = go.Surface(
+            x=x_coord, y=y_coord, z=z_coord[0]*np.ones((nx,ny)),
+            surfacecolor=(np.squeeze(vol[:,:,nb_frames - 1])),
+            colorscale='plasma',
+            cmin=CMIN, cmax=CMAX,
+            colorbar=dict(thickness=20, ticklen=4))
+
+    else:
+        raise ValueError('Axis must be x, y, or z for 3D display of B0 map!')
+
+
+
+
+
+    # Add all frames?
+    fig = go.Figure(frames=frames)
+
+    # Add data to be displayed before animation starts
+    fig.add_trace(surface)
+
+
+
+
+    def frame_args(duration):
+        return {
+            "frame": {"duration": duration},
+            "mode": "immediate",
+            "fromcurrent": True,
+            "transition": {"duration": duration, "easing": "linear"},
+        }
+
+    sliders = [
+        {
+            "pad": {"b": 10, "t": 60},
+            "len": 0.9,
+            "x": 0.1,
+            "y": 0,
+            "steps": [
+                {
+                    "args": [[f.name], frame_args(0)],
+                    "label": str(k),
+                    "method": "animate",
+                }
+                for k, f in enumerate(fig.frames)
+            ],
+        }
+    ]
+
+    # Layout
+    fig.update_layout(
+        title='B0 map slices (Tesla)',
+        width=600,
+        height=600,
+        scene=dict(
+            xaxis=dict(range=[1e3*x_coord[0],1e3*x_coord[-1]],autorange=False,title='x (mm)'),
+            yaxis=dict(range=[1e3*y_coord[0],1e3*y_coord[-1]],autorange=False,title='y (mm)'),
+            zaxis=dict(range=[1e3*z_coord[0],1e3*z_coord[-1]], autorange=False,title='z (mm)'),
+            aspectratio=dict(x=1, y=1, z=1),
+        ),
+        updatemenus=[
+            {
+                "buttons": [
+                    {
+                        "args": [None, frame_args(50)],
+                        "label": "&#9654;",  # play symbol
+                        "method": "animate",
+                    },
+                    {
+                        "args": [[None], frame_args(0)],
+                        "label": "&#9724;",  # pause symbol
+                        "method": "animate",
+                    },
+                ],
+                "direction": "left",
+                "pad": {"r": 10, "t": 70},
+                "type": "buttons",
+                "x": 0.1,
+                "y": 0,
+            }
+        ],
+        sliders=sliders
+    )
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -320,18 +573,75 @@ def b0_plot_worker(maskedField, xslice, yslice, zslice):
 
 
 
+def b0_rings_worker(innerRadii, outerRadii, ringPositionSymmetry, dsv, bestVector):
+    # Generate plot of ring locations and diameters (current optimization)
+    fig = go.Figure()
+
+    bestVector = np.squeeze(bestVector)
+    innerRadii = np.squeeze(innerRadii)
+    outerRadii = np.squeeze(outerRadii)
+    ringPositionSymmetry = np.squeeze(ringPositionSymmetry)
+    axis = 'z'
+
+    for u in range(len(ringPositionSymmetry)):
+        Ri = innerRadii[bestVector[u]]
+        #Ro = Ri + 21*1e-3
+        Ro = outerRadii[bestVector[u]]
+        # Add ring to figure at appropriate location
+        Xi, Yi, Zi = make_ring_in_3d(N=100, radius=Ri, position=ringPositionSymmetry[u],orientation=axis) # Add 3D ring visualization
+        fig.add_trace(go.Scatter3d(x=1e3*Xi,y=1e3*Yi,z=1e3*Zi,mode='lines',line=dict(color='darkblue',width=4)))
+        Xo, Yo, Zo = make_ring_in_3d(N=100, radius=Ro, position=ringPositionSymmetry[u],
+                                     orientation=axis)  # Add 3D ring visualization
+        fig.add_trace(go.Scatter3d(x=1e3*Xo, y=1e3*Yo, z=1e3*Zo, mode='lines',  line=dict(color='cornflowerblue',width=4)))
+
+        if ringPositionSymmetry[u] != 0:
+            Xi, Yi, Zi = make_ring_in_3d(N=100, radius=Ri, position=-ringPositionSymmetry[u],
+                                         orientation=axis)  # Add 3D ring visualization
+            fig.add_trace(go.Scatter3d(x=1e3*Xi, y=1e3*Yi, z=1e3*Zi, mode='lines', line=dict(color='darkblue', width=4)))
+            Xo, Yo, Zo = make_ring_in_3d(N=100, radius=Ro, position=-ringPositionSymmetry[u],
+                                         orientation=axis)  # Add 3D ring visualization
+            fig.add_trace(go.Scatter3d(x=1e3*Xo, y=1e3*Yo, z=1e3*Zo, mode='lines', line=dict(color='cornflowerblue', width=4)))
+
+    fig.update_layout(showlegend=False, scene=dict(
+        xaxis=dict(autorange=True, title='x (mm)'),
+        yaxis=dict(autorange=True, title='y (mm)'),
+        zaxis=dict(autorange=True, title='z (mm)'),
+    ))
 
 
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
 
 
+def make_ring_in_3d(N, radius, position, orientation):
+    # Single plotly trace of ring
+    center = np.roll([position,0,0],'xyz'.index(orientation))
+    dir1 = np.roll([0,1,0],'xyz'.index(orientation))
+    dir2 = np.roll([0,0,1],'xyz'.index(orientation))
+    phis = np.linspace(0,2*np.pi,N,endpoint=True)
+
+    locations = np.array([center + radius * (np.cos(phi)*dir1 + np.sin(phi)*dir2) for phi in phis])
+    X = locations[:,0]
+    Y = locations[:,1]
+    Z = locations[:,2]
+
+    return X, Y, Z
+
+# TODO
+def get_default_design():
+    #
+    # update_session_subdict(session, 'b0', {'best_vector': best_vector,
+    #                                        'masked_field':maskedField,
+    #                                        'coordinates': [coordinateAxis],
+    #                                        'ring_position_symmetry': ring_position_symmetry,
+    #                                        'inner_num_magnets': innerNumMagnets,
+    #                                        'inner_ring_radii': innerRingRadii,
+    #                                        'resolution': resolution,
+    #                                        'sim_dimensions': simDimensions,
+    #                                        'dsv': DSV})
+
+    # Load default design parameters from data
 
 
-
-
-
-
-
-
-
-
-
+    return

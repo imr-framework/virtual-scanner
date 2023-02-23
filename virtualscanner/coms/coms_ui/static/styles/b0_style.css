@@ -1,0 +1,19 @@
+/* Ticks for range slider labeling */
+.ticks {
+    box-sizing:border-box;
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0;
+}
+.tick {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 1px;
+  background: gray;
+
+  height: 10px;
+  line-height: 50px;
+  margin-bottom: 20px;
+}

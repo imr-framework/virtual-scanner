@@ -1,11 +1,88 @@
 {% extends "base_research.html" %}
 {% block content %}
-    <div class="card row h-100">
-        <div class="card-header">
-            Seq viewer
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">Sequence</div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="upload-form">
+                        <input type="file" name="file" id="upload-input">
+                        <div class="btn btn-lg btn-primary" id="upload-button">Upload</div>
+                    </form>
+                    <hr>
+                    <div class="row">
+                         <div class="col-5">
+                        {{ template_form.min_time_field.label(class="form-label") }}
+                        {{ template_form.min_time_field(class="form-control") }}
+                        </div>
+                        <div class="col-5">
+                            {{ template_form.max_time_field.label(class="form-label") }}
+                            {{ template_form.max_time_field(class="form-control") }}
+                        </div>
+                        <div class="col-2 d-flex align-items-bottom">
+                            <button class="btn btn-lg btn-success" id="display-seq" disabled>Plot</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                </div>
+            </div>
+                      <div class="card">
+
+            </div>
+        <div class="card h-75">
+                <div class="card-header">Block viewer</div>
+                <div class="card-body">
+                    Display list of blocks here
+                </div>
+            </div>
+
         </div>
-        <div class="card-body">
-            Plots
+
+
+        <div class="col-8">
+            <div class="row h-50">
+                <div class="card">
+                    <div class="card-header">Sequence waveforms</div>
+                    <div class="card-body">
+                        <div class="chart h-100" id="psd-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row h-50">
+                <div class="card">
+                    <div class="card-header">
+                        Simulate
+                        <button class="btn btn-sm btn-info">Type</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                RF pulse / grad / ADC
+                                <div class="chart"></div>
+                            </div>
+                            <div class="col-6">
+                                Simulated results
+                                <div class="chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block additional_imports %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../static/sequence.js"></script>
+
 {% endblock %}
