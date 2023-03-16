@@ -57,9 +57,26 @@ def log_in():
                      'res_display': 5,
                      'x': 5,
                      'y': 5,
-                     'z': 5
+                     'z': 5,
+                     'temperature': 20
                      }
+
     # TODO add x,y,z slices into session of b0 (have javascript update session on those ... )
+    session['rf'] = {
+        'spin_bw': 1000,
+        'spin_num': 10,
+        'pulse_type': 'sinc90',
+        'rf_shape': 'sinc',
+        'rf_thk': 5,
+        'rf_fa': 90,
+        'rf_dur': 2,
+        'rf_df': 0,
+        'rf_dphi': 0,
+        'rf_tbw': 2,
+        'spin_t1': 0,
+        'spin_t2': 0
+
+    }
 
     if request.method == 'POST':
         # users.append(request.form['user-name'])

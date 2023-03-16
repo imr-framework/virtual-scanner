@@ -8,6 +8,8 @@ Created on Mon Sep 24 16:17:41 2018
 """
 ######################################
 
+
+
 import numpy as np
 import random
 from deap import algorithms, base, tools, creator
@@ -23,10 +25,12 @@ import plotly.express as px
 from scipy.io import savemat
 import time
 import numpy as np
+from scipy.interpolate import interpn
 
 from skimage import io
 mu = 1e-7
-
+BREM_TEMP_COEFF = -0.13e-2
+BASE_TEMP = 25
 
 def magnetization(bRem, dimensions, shape='cube'):
     if shape == 'cube':
@@ -66,7 +70,9 @@ def singleMagnet(position, dipoleMoment, simDimensions, resolution):
 
 
 def createHalbach(numMagnets=24, rings=(-0.075, -0.025, 0.025, 0.075), radius=0.145, magnetSize=0.0254, kValue=2,
-                  resolution=1000, bRem=1.3, simDimensions=(0.3, 0.3, 0.2)):
+                  resolution=1000, bRem=1.3, simDimensions=(0.3, 0.3, 0.2),temp_array=None):
+    #TODO figure out how to incorporate temperature!
+
     # define vacuum permeability
     mu = 1e-7
 
@@ -86,8 +92,8 @@ def createHalbach(numMagnets=24, rings=(-0.075, -0.025, 0.025, 0.075), radius=0.
                    int(simDimensions[2] * resolution) + 1, 3), dtype=np.float32)
 
     # create halbach array
-    for row in rings:
-        for angle in angle_elements:
+    for count, row in enumerate(rings):
+        for elind, angle in enumerate(angle_elements):
             position = (radius * np.cos(angle), radius * np.sin(angle), row)
 
             dip_vec = [dip_mom * np.cos(kValue * angle), dip_mom * np.sin(kValue * angle)]
@@ -95,7 +101,13 @@ def createHalbach(numMagnets=24, rings=(-0.075, -0.025, 0.025, 0.075), radius=0.
 
             # calculate contributions of magnet to total field, dipole always points in xy plane
             # so second term is zero for the z component
-            B0 += singleMagnet(position, dip_vec, simDimensions, resolution)
+
+            # TODO how to calculate temperature factor: as a relative percentage that scales B0 - what is the base temperature?
+            if temp_array is not None:
+                temperature_factor = (temp_array[count,elind]-BASE_TEMP) * BREM_TEMP_COEFF
+            else:
+                temperature_factor = 1
+            B0 += temperature_factor * singleMagnet(position, dip_vec, simDimensions, resolution)
 
     return B0
 
@@ -359,10 +371,12 @@ def b0_3d_worker():
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
-def b0_eval_field_any(diameter, info):
+def b0_eval_field_any(diameter, info, temperature):
     # TODO enable temperature map
     print(f"Eval b0 diam: {diameter}")
     print(f'Eval b0 info: {info}')
+
+
 
     # evalDimensions are (DVx, DVy, DVz) - FOV to be evaluated
     inner_ring_radii = np.squeeze(info['inner_ring_radii'])
@@ -386,22 +400,34 @@ def b0_eval_field_any(diameter, info):
         else:
             rings = (-position, position)
 
+
         use_ind = np.squeeze(info['best_vector'])[positionIdx]
         res = np.squeeze(info['res_display']) # mm
         eval_dimensions = [1e-3 * diameter]*3 # m
 
+        # TODO Parse temperature based on magnet locations
+        # only single temperature value for now, but follow the structure!
+        inner_temp_array = parse_b0_temperature(temperature, rings,
+                                                radius=inner_ring_radii[use_ind],
+                                                num_magnets=inner_num_magnets[use_ind])
+        outer_temp_array = parse_b0_temperature(temperature, rings,
+                                                radius=outer_ring_radii[use_ind],
+                                                num_magnets=outer_num_magnets[use_ind])
+
+        # INNER
         if positionIdx == 0: # Only the first time
             shimmedField = createHalbach(numMagnets=inner_num_magnets[use_ind], rings=rings,
                                                         radius=inner_ring_radii[use_ind], magnetSize=0.012,
-                                                        resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+                                                        resolution=1e3 / res, simDimensions=eval_dimensions, temp_array=inner_temp_array)[..., 0]
         else:
             shimmedField += createHalbach(numMagnets=inner_num_magnets[use_ind], rings=rings,
                                                         radius=inner_ring_radii[use_ind], magnetSize=0.012,
-                                                        resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+                                                        resolution=1e3 / res, simDimensions=eval_dimensions, temp_array=inner_temp_array)[..., 0]
 
+        # OUTER
         shimmedField += createHalbach(numMagnets=outer_num_magnets[use_ind], rings=rings,
                                                     radius=outer_ring_radii[use_ind], magnetSize=0.012,
-                                                    resolution=1e3 / res, simDimensions=eval_dimensions)[..., 0]
+                                                    resolution=1e3 / res, simDimensions=eval_dimensions,temp_array=outer_temp_array)[..., 0]
 
     # Make spherical mask
 
@@ -628,20 +654,32 @@ def make_ring_in_3d(N, radius, position, orientation):
 
     return X, Y, Z
 
-# TODO
-def get_default_design():
-    #
-    # update_session_subdict(session, 'b0', {'best_vector': best_vector,
-    #                                        'masked_field':maskedField,
-    #                                        'coordinates': [coordinateAxis],
-    #                                        'ring_position_symmetry': ring_position_symmetry,
-    #                                        'inner_num_magnets': innerNumMagnets,
-    #                                        'inner_ring_radii': innerRingRadii,
-    #                                        'resolution': resolution,
-    #                                        'sim_dimensions': simDimensions,
-    #                                        'dsv': DSV})
+# TODO enable spatial differences.
+def parse_b0_temperature(temperature, rings, radius, num_magnets):
+    # temperature [deg celsius]
+    # rings : either (0) or (-pos,+pos) - in meters
+    # radius : [meters]
+    # num_magnets
 
-    # Load default design parameters from data
+    # Case 1 : global temperature
+    if np.size(temperature) == 1: # Only 1 value
+        if np.size(rings) == 1:
+            magnet_temp_array = temperature * np.ones((1,num_magnets))
+        else:
+            magnet_temp_array = temperature * np.ones((2,num_magnets))
+    elif np.size(np.shape(temperature)) == 2:  # 2D array of (ring, magnet) values
+        raise NotImplementedError("Non-single value temperature maps not implemented yet.")
+    else: # 3D array in space - needs to be interpolated to magnet's center locations
+        raise NotImplementedError("Non-single value temperature maps not implemented yet.")
+    return magnet_temp_array
 
 
-    return
+def spatially_interpolate(temp_map, coordinates, locs):
+    # Perform spatial interpolation of temperature map to get temperature at a list of given locations
+    # temp_map : Nx x Ny x Nz sized matrix of input temperature map
+    # coordinates: list of length 3: x, y, and z arrays
+    # locs : magnet locations to interpolate the temperature map to; (m x 3)
+
+    temps = interpn(points=tuple(coordinates), values=temp_map, xi=locs,bounds_error=False, fill_value=BASE_TEMP)
+
+    return temps

@@ -78,14 +78,11 @@ def run_halbach_sim(payload):
     socketio.emit('Update B0 plot',{'graphData':j1, 'x':mid_indices[0],'y':mid_indices[1],'z':mid_indices[2]})
 
 
-
-# TODO
 @socketio.on('Update Halbach plot')
 def update_halbach_plot(xslice, yslice, zslice):
     # Update view using session data
     #maskedField = session['b0']['b0_simulated']
     socketio.emit('Update Halbach plot',{})
-
 
 @socketio.on('Update B0 session')
 def update_b0_session(params):
@@ -118,7 +115,7 @@ def get_rings_plot():
 def update_halbach_slices(info):
     # Update masked_field with new dsv
     d = info['dsv_display']
-    masked_field, coordinates = b0_eval_field_any(diameter=d, info=session['b0'])
+    masked_field, coordinates = b0_eval_field_any(diameter=d, info=session['b0'],temperature=info['temperature'])
     print('Size of masked field: ', masked_field.shape)
     j1 = b0_plot_worker(masked_field, [coordinates], int(info['x']),int(info['y']),int(info['z']))
     update_session_subdict(session,'b0',{'masked_field': masked_field, 'coordinates': [coordinates]})

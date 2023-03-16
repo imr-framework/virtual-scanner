@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired, EqualTo, Email, NumberRange, InputR
 class HalbachForm(FlaskForm):
     # Environment
     temp_sensitivity_field = DecimalField('Temp. coefficient of remanence (ppm/K)', default=0)
-    temperature_field = DecimalRangeField('Temperature (C)', validators= [DataRequired(), NumberRange(min=-50, max=50)],default=25)
+    temperature_field = DecimalRangeField('Temperature: ', validators= [DataRequired(), NumberRange(min=-50, max=50)],default=20)
 
     #
     ring_radii_field = StringField('Inner ring Radii (mm) ',default='148, 151, 154')#, 156, 159, 162, 165, 168, 171, 174, 177, 180, 183, 186, 189, 192, 195, 198, 201')
@@ -35,13 +35,29 @@ class HalbachForm(FlaskForm):
 
 
 
-    # username_field = StringField("Username",validators=[DataRequired()])
-    # password_field = PasswordField('Password', validators=[DataRequired()])
-    # password2_field = PasswordField('Re-enter Password',
-    #                                 validators=[DataRequired(), EqualTo('password_field',message='Passwords must match')])
-    # submit_field = SubmitField("Register!")
-
 
 class SequenceForm(FlaskForm):
     min_time_field = DecimalField('Start time (s)', default=0)
     max_time_field = DecimalField('End time (s)', default=2)
+
+class RFForm(FlaskForm):
+    bw_spins_field = DecimalField('Spin bandwidth (Hz)', default=1e3)
+    num_spins_field = IntegerField('Number of spins', default=10)
+    default_rf_pulses_field = SelectField('Pulse type', choices=[('sinc90','sinc 90'), ('sinc180','sinc 180'),
+                                                                 ('blk90','block 90'), ('custom','Custom')], default='sinc90')
+    # RF options
+    rf_shape_field = SelectField('Pulse shape', choices=[('sinc','Sinc'),('block','Block'),('gauss','Gaussian')])
+    rf_thk_field = DecimalField('Slice thickness (mm)', default=5)
+    rf_fa_field = DecimalField('Flip angle (deg)', default=90)
+    rf_dur_field = DecimalField('Pulse duration (ms)', default=2)
+    rf_df_field = DecimalField('Freq. offset (Hz)',default=0)
+    rf_dphi_field = DecimalField('Phase offset (deg)',default=0)
+    rf_tbw_field = IntegerField('Time-bandwidth factor', default=2)
+
+    # Spin options
+    spin_t1_field = DecimalField('T1 (ms)', default=0) # 0 means no relaxation
+    spin_t2_field = DecimalField('T2 (ms)', default=0) # 0 means no relaxation
+
+
+
+

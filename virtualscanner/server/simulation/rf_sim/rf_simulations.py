@@ -65,12 +65,14 @@ def simulate_rf(bw_spins: object, n_spins: object, pdt1t2: object, flip_angle: o
     # No gradients - we are using the off-resonance parameter for making off-center spins
     grads_shape = np.zeros((3, len(pulse_shape)))
 
+    print('starting simulation ')
+    print('number of spins', len(spins))
     # Simulate
     all_results = [spin.apply_rf_store(pulse_shape, grads_shape, dt) for spin in spins]
     #all_ms = [spin.apply_rf_solveivp_store(pulse_shape, grads_shape, dt)[0] for spin in spins]
     all_signals = np.array([result[0] for result in all_results])
     all_magnetizations = np.array([result[1] for result in all_results])
-
+    print('ending simulation')
     # fig = plt.figure(1)
     # ax = fig.add_axes(xlim=(0, 4), ylim=(-2, 2))
     # for a in range(len(spins)):
@@ -156,7 +158,6 @@ def animate_rf_action(bw_spins, n_spins, pdt1t2, pulse_type, flip_angle, dt=1e-6
 
     all_ms = np.array([np.transpose(spin.apply_rf_store(pulse_shape,grads_shape,dt)[1]) for spin in spins])
     animate_spins(all_ms, acc_factor=acc_factor, save_fig=save_fig, title=title)
-
 
 def make_rf_shapes(pulse_type, flip_angle, dt, dur=0, tmodel=None, **kwargs):
     """

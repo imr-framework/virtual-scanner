@@ -1,0 +1,138 @@
+{% extends "base_research.html" %}
+{% block content %}
+<div class="row h-100">
+    <div class="col-4 h-100 p-0 m-0">
+        <div class="card">
+            <div class="card-header">Inputs</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-6">
+                        <!-- FORM INPUTS -->
+                        <div class="form-group">
+                            {{ template_form.bw_spins_field.label(class="form-label")}}
+                            {{ template_form.bw_spins_field(id="spin_bw",class="form-control session-variable var-float")}}
+                        </div>
+                        <div class="form-group">
+                            {{ template_form.num_spins_field.label(class="form-label")}}
+                            {{ template_form.num_spins_field(id="spin_num",class="form-control session-variable var-int")}}
+                        </div>
+                        <div class="form-group">
+                            {{ template_form.default_rf_pulses_field.label(class="form-label")}}
+                            {{ template_form.default_rf_pulses_field(id="pulse_type",class="form-control session-variable var-string")}}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-info text-white m-2">
+                            <div class="card-header">Spin properties (0: no relaxation)</div>
+                            <div class="card-body">
+                                {{ template_form.spin_t1_field.label(class="form-label text-white")}}
+                                {{ template_form.spin_t1_field(id="spin_t1",class="form-control session-variable var-float")}}
+                                {{ template_form.spin_t2_field.label(class="form-label text-white")}}
+                                {{ template_form.spin_t2_field(id="spin_t2",class="form-control session-variable var-float")}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card bg-primary text-white m-2">
+                    <div class="card-header">Pulse specific options</div>
+                    <div class="card-body text-white">
+                        <div class="row">
+                            <div class="form-group">
+                             {{ template_form.rf_shape_field.label(class="form-label text-white")}}
+                             {{ template_form.rf_shape_field(id="rf_shape",class="form-control session-variable var-string")}}
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                     {{ template_form.rf_thk_field.label(class="form-label text-white")}}
+                                     {{ template_form.rf_thk_field(id="rf_thk",class="form-control session-variable var-float")}}
+                                </div>
+                                <div class="form-group">
+                                     {{ template_form.rf_fa_field.label(class="form-label text-white")}}
+                                     {{ template_form.rf_fa_field(id="rf_fa",class="form-control session-variable var-float")}}
+                                </div>
+                                <div class="form-group">
+                                     {{ template_form.rf_dur_field.label(class="form-label text-white")}}
+                                     {{ template_form.rf_dur_field(id="rf_dur",class="form-control session-variable var-float")}}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                             {{ template_form.rf_df_field.label(class="form-label text-white")}}
+                             {{ template_form.rf_df_field(id="rf_df",class="form-control session-variable var-float")}}
+                        </div>
+                                <div class="form-group">
+                             {{ template_form.rf_dphi_field.label(class="form-label text-white")}}
+                             {{ template_form.rf_dphi_field(id="rf_dphi",class="form-control session-variable var-float")}}
+                        </div>
+                                <div class="form-group">
+                             {{ template_form.rf_tbw_field.label(class="form-label text-white")}}
+                             {{ template_form.rf_tbw_field(id="rf_tbw",class="form-control session-variable var-int")}}
+                        </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                </div>
+                <hr>
+                <button class="btn btn-lg btn-info" id="rf-display">Display</button>
+                <button class="btn btn-lg btn-success" id="rf-simulate">
+                    <span class="spinner-border spinner-border-sm d-none" id="run-rf-sim-spinner" role="status" aria-hidden="true"></span>
+                    <span>Simulate</span>
+                </button>
+                <button class="btn btn-lg btn-light" id="generate-code">Generate code</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                Message board
+            </div>
+        </div>
+    </div>
+    <div class="col-8 h-100 p-0 m-0">
+        <div class="card h-100">
+                 <div class="card-header">Results</div>
+        <div class="card-body h-100">
+            <!-- PLOTS  2 x 2-->
+            <div class="row h-50">
+                <div class="col-6 card">
+                    <div class="chart" id="rf-pulse-chart"></div>
+                </div>
+                <div class="col-6 card">
+                    <div class="chart" id="rf-evolution-chart"></div>
+                </div>
+            </div>
+            <div class="row h-50">
+                <div class="col-6 card">
+                    <div class="chart" id="rf-profile-chart"></div>
+                </div>
+                <div class="col-6 card">
+                    <div class="chart" id="rf-animation-chart"></div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+{% block additional_imports %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--      <link rel="stylesheet" href="../static/styles/b0_style.css">-->
+
+    <script src="../static/rf.js"></script>
+
+{% endblock %}

@@ -53,7 +53,8 @@ $("#update-halbach-slices").on('click',()=>{
                                            'y':$("#indy").val(),
                                            'z':$("#indz").val(),
                                             'dsv_display':parseFloat($("#dsv_display").val()),
-                                            'dsv':parseFloat($("#dsv").val())});
+                                            'dsv':parseFloat($("#dsv").val()),
+                                            'temperature': parseFloat($('#b0_temperature').val())});
 })
 
 $('input[name=mag-options]').on('click',(event)=>{
@@ -68,7 +69,10 @@ $("#dsv_display").on('change',()=>{
 $('#res_display').on('change',()=>{
     socketio.emit('Update B0 session',  {'res_display': parseFloat($('#res_display').val())});
 })
-
+$("#b0_temperature").on('change',()=>{
+    $('#temp-display').text(parseInt($('#b0_temperature').val()));
+    socketio.emit('Update B0 session', {'temperature': parseFloat($('#b0_temperature').val())});
+})
 
 
 //--------------END OF SESSION UPDATES------------------

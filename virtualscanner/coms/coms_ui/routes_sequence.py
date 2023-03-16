@@ -70,7 +70,7 @@ def display_seq(info):
 
     # Create plot
     fig = make_subplots(rows=3, cols=2,
-                        subplot_titles=("RF magnitude","RF phase", "ADC", "Gx", "Gy", "Gz"), shared_xaxes='all')
+                        subplot_titles=("RF magnitude","Gx","RF phase", "Gy","ADC","Gz"), shared_xaxes='all')
                       #  row_heights=6*[20])
     fig.update_layout(
         margin=dict(
@@ -105,9 +105,9 @@ def display_seq(info):
     fig.update_yaxes(title_text=all_waveforms['rf_unit'], row=1, col=1)
     fig.update_yaxes(title_text='[rads]', row=2, col=1)
     fig.update_yaxes(title_text='[rads]', row=3, col=1)
-    fig.update_yaxes(title_text='[Hz/m]', row=4, col=1)
-    fig.update_yaxes(title_text='[Hz/m]', row=5, col=1)
-    fig.update_yaxes(title_text='[Hz/m]', row=6, col=1)
+    fig.update_yaxes(title_text='[Hz/m]', row=1, col=2)
+    fig.update_yaxes(title_text='[Hz/m]', row=2, col=2)
+    fig.update_yaxes(title_text='[Hz/m]', row=3, col=2)
 
 
     j1 = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)

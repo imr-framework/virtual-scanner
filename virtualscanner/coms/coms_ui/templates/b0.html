@@ -5,18 +5,21 @@
         <div class="card row bg-white">
             <div class="card-header">Temperature settings</div>
             <div class="card-body row">
-                <div class="col-9">
+                <div class="col-12">
                     <div class="form-group row mb-3">
                             <div class="col-4">
                                 {{ template_form.temp_sensitivity_field.label(class="form-label") }}
                             </div>
                             <div class="col-8">
-                                {{ template_form.temp_sensitivity_field(class="form-control",id="temp_sensitivity") }}
+                                {{ template_form.temp_sensitivity_field(class="form-control disabled",id="temp_sensitivity") }}
                             </div>
             </div>
             <div class="form-group row mb-3">
                             <div class="col-4">
-                                {{ template_form.temperature_field.label(class="form-label") }}
+                                <div class="row">
+                                    {{ template_form.temperature_field.label(class="form-label") }}
+                                </div>
+                                    <span id="temp-display">25</span> C
                             </div>
                             <div class="col-8">
                                 <div class="row">
@@ -30,9 +33,7 @@
                             </div>
             </div>
                 </div>
-                <div class="col-3">
-                    <button class="btn btn-lg btn-primary" id="update-temperature">Update</button>
-                </div>
+
 
             </div>
 

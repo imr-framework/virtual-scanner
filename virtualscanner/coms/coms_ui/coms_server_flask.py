@@ -57,6 +57,7 @@ def launch_virtualscanner():
     import virtualscanner.coms.coms_ui.routes_twin
     import virtualscanner.coms.coms_ui.routes_research
     import virtualscanner.coms.coms_ui.routes_sequence
+    import virtualscanner.coms.coms_ui.routes_rf
     #app.run(host='0.0.0.0', debug=True)
     socketio.run(app, debug=True, host="0.0.0.0")
 
