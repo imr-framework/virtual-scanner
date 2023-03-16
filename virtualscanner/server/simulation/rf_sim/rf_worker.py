@@ -218,12 +218,47 @@ def get_pulse(info):
 
     return rf.signal, rf.t, thk_bw
 
+# TODO  convert to just code and return!
+def generate_rf_code(info):
+    system = set_June_system_limits()
+    code = ""
+    if info['pulse_type'] == 'sinc90':
+        code += f"rf, gz, gz_ref = make_sinc_pulse(flip_angle=np.pi/2, system=system, duration=1e-3, slice_thickness=5e-3,"
+        code += "apodization=0.5, time_bw_product=4, phase_offset=0,return_gz=True)"
+
+
+    elif info['pulse_type'] == 'sinc180':
+        code += "rf, gz, gz_ref = make_sinc_pulse(flip_angle=np.pi, system=system, duration=1e-3, slice_thickness=5e-3,"
+        code += "apodization=0.5, time_bw_product=4, phase_offset=0,return_gz=True)"
+
+    elif info['pulse_type'] == 'blk90':
+        code += "rf, gz = make_block_pulse(flip_angle=np.pi/2, system=system, duration=1e-3, slice_thickness=5e-3, return_gz=True)"
+
+    elif info['pulse_type'] == 'custom':
+        if info['rf_shape'] == 'sinc':
+            # Declare values
+            code += f"rf, gz, gzref = make_sinc_pulse(flip_angle={info['rf_fa']*np.pi/180}, system=system, duration={info['rf_dur']*1e-3},"
+            code += f"slice_thickness={info['rf_thk']*1e-3}, freq_offset={info['rf_df']},"
+            code += f"phase_offset={info['rf_dphi']*np.pi/180}, time_bw_product={info['rf_tbw']},return_gz=True)"
+
+        elif info['rf_shape'] == 'block':
+            code += f"rf, gz = make_block_pulse(flip_angle={info['rf_fa'] * np.pi / 180}, system=system,"
+            code += f"duration={info['rf_dur'] * 1e-3}, slice_thickness={info['rf_thk'] * 1e-3}, freq_offset={info['rf_df']},"
+            code += f"phase_offset={info['rf_dphi'] * np.pi / 180}, time_bw_product={info['rf_tbw']},return_gz=True)"
+        elif info['rf_shape'] == 'gauss':
+            code += f"rf, gz, _ = make_gauss_pulse(flip_angle={info['rf_fa']*np.pi/180}, system=system,"
+            code += f"duration={info['rf_dur']*1e-3}, slice_thickness={info['rf_thk']*1e-3}, freq_offset={info['rf_df']},"
+            code += f"phase_offset={info['rf_dphi']*np.pi/180}, time_bw_product={info['rf_tbw']},return_gz=True)"
+
+    return code
+
 # system: use June defaults for now
 def set_June_system_limits():
     system = Opts(max_grad=32, grad_unit='mT/m', max_slew=130,
                       slew_unit='T/m/s', rf_ringdown_time=100e-6, # changed from 30e-6
                       rf_dead_time=100e-6, adc_dead_time=20e-6)
     return system
+
 
 
 def get_color_mapped(scale=0):

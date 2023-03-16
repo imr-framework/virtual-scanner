@@ -61,3 +61,12 @@ function gather_rf_options(){
     }
 
 }
+
+$("#generate-code").on('click',()=>{
+    console.log("Code for RF pulse requested!");
+    socket.emit("Generate code from RF settings",gather_rf_options());
+})
+
+socket.on("Deliver RF code",(info)=>{
+    $('#rf-code-area').val(info['code']);
+})

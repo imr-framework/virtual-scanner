@@ -43,3 +43,9 @@ def simulate_rf_pulse(payload):
     socketio.emit('Deliver RF profile',{'graph-profile':j2,'graph-evol':j3})
     return
 
+@socketio.on('Generate code from RF settings')
+def get_rf_code(payload):
+    code = generate_rf_code(payload)
+    socketio.emit('Deliver RF code', {'code': code})
+    return
+
