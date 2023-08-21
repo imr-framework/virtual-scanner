@@ -19,7 +19,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/imr-framework/virtual-scanner',
-    version=2.0.0,
+    version='2.0.0.post5',
     packages=setuptools.find_packages(),
     install_requires=install_reqs,
     license='License :: OSI Approved :: GNU Affero General Public License v3',

@@ -8,7 +8,7 @@
 
 Virtual Scanner is an end-to-end hybrid Magnetic Resonance Imaging (MRI) simulator/console designed to be zero-footprint, modular, and supported by open-source standards.
 
-This project is a winning response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/), which poses the task of boosting accessibility to MRI training resources for underserved areas such as sub-Saharan Africa. We designed Virtual Scanner to help develop local expertise in these areas so that sustained deployment of MRI hardware is possible. Importantly, Virtual Scanner will be continually developed as a research tool that provides functionalities for simulating and prototyping MRI acquisition methods as well as services for sharing computational methods and resources with researchers around the world. Please read our publication in the journal of open source software [here](https://joss.theoj.org/papers/10.21105/joss.01637).
+This project is a winning response to the [ISMRM 2019 Junior Fellow Challenge (Africa)](https://www.ismrm.org/2019-junior-fellow-challenge/africa/), which poses the task of boosting accessibility to MRI training resources for underserved areas such as sub-Saharan Africa. We designed Virtual Scanner to help develop local expertise in these areas so that sustained deployment of MRI hardware is possible. Importantly, Virtual Scanner will be continually developed as a research tool that provides functionalities for simulating and prototyping MRI acquisition methods as well as services for sharing computational methods and resources with researchers around the world. Please read our publication in the journal of open souce software [here](https://joss.theoj.org/papers/10.21105/joss.01637).
 
 Virtual Scanner consists of two modes: in Standard Mode, a console-like GUI allows users to perform virtual scans and conduct basic analysis; in Advanced Mode, modular simulation/analysis of the entire signal chain may be performed.  
 
@@ -71,34 +71,14 @@ Read the API documentation [here](https://imr-framework.github.io/virtual-scanne
 ## Standard Mode
 * The **Register** page allows you to choose a phantom for simulation. Its format is similar to the form for entering information of the subject when conducting real scans. Choose the "Numerical" phantom for all simulations now.
 
-<p align="center"> <a>
-<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/register.JPG" width="600">
-</a></p>
-
 * The **Acquire** page allows the user to choose either a Gradient Echo (GRE) or a Spin Echo (SE, with optional inversion recovery) sequence, enter the parameters, and simulate them on a cylindrical phantom ("Numerical") containing spheres with different T1, T2, and PD values.
 
-<p align="center"> <a>
-<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/acquire.JPG" width="600">
-</a></p>
-
 * The **Analyze** page allows the user to load a series of data acquired in ISMRM/NIST phantom for T1 or T2 mapping and conduct curve fitting to obtain T1 and T2 maps. In addition, it can detect spheres in the phantom, a feature useful for comparing generated parameter values to literature values.
-
-<p align="center"> <a>
-<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/analyze.JPG" width="600">
-</a></p>
 
 ## Advanced Mode
 * The **Tx** (RF transmit) page allows one to calculate and plot SAR from pulseq .seq files. *This feature is under development.*
 
-<p align="center"> <a>
-<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/tx.JPG" width="600">
-</a></p>
-
 * The **Rx** (RF receive) page allows one to visualize time-domain MR signal, generated from an arbitrary grayscale image, and see the effects of using different demodulation frequencies and ADC sampling rate. *This feature is under development.*
-
-<p align="center"> <a>
-<img title="Register Screenshot" src="https://github.com/imr-framework/virtual-scanner/blob/master/virtualscanner/coms/coms_ui/static/screenshots/rx.png" width="600">
-</a></p>
 
 * Other features, including phantom and sequence viewers and reconstruction methods, are in active development.
 
