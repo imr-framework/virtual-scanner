@@ -1,0 +1,23 @@
+.im-title-static{
+
+  color: white;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5rem;
+}
+.im-title{
+  display: none;
+  color: white;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5rem;
+}
+#images-panel #signal-container{
+
+  height: 96%;
+  position: absolute;
+  
+  top: 2%
+}

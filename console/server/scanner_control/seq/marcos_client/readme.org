@@ -1,0 +1,43 @@
+#+TITLE: marcos_client
+
+(NEED TO UPDATE THIS FILE -- SOME OF THE DESCRIPTIONS ARE OBSOLETE)
+
+Python-based MaRCoS GUI and associated tests.
+
+See the [[https://github.com/vnegnev/marcos_extras/wiki][MaRCoS wiki]] for info; specifically the [[https://github.com/vnegnev/marcos_extras/wiki/using_marcos][Using MaRCoS]] and the [[https://github.com/vnegnev/marcos_extras/wiki/marcos_internals][MaRCoS internals]] pages.
+
+* Setup guide
+
+  - Install =msgpack= for Python manually or via the package manager of your choice.
+
+  - Clone the repo and copy =local_config.py.example= to =local_config.py=.
+
+  - Edit =local_config.py= to suit your network and hardware setup.
+
+  - Run =test_server.py= and make sure no errors are returned.
+
+  - Run =test_noise.py= to generate some simple pulses and view their properties on an oscilloscope.
+
+  - Import experiment.py in your higher-level MRI scripts.
+
+* File description
+
+  csvs/ : CSV files used by test_flocra_model.py
+
+  experiment.py : basic API for controlling the MaRCoS server
+
+  examples.py : examples of how to use experiment.py and other libraries [WIP]
+
+  local_config.py.example : template file for local configuration; create a copy and name it local_config.py to configure your local setup
+
+  server_comms.py : low-level communication library for the MaRCoS server; use if you wish to write your own API
+
+  test_flocra.py : hand-written (low-level) examples/tests of the Flocra system
+
+  test_flocra_model.py : unit tests of the MaRCoS server + Verilator model of the Flocra HDL
+
+  test_ocra_pulseq.py : tests of the [[https://github.com/lcbMGH/ocra-pulseq][ocra-pulseq]] interface [WIP]
+
+  test_server.py : unit tests of the standalone MaRCoS server operation
+
+  vlsualiser.py : [WIP] plot expected ocra assembly file outputs (for very basic files)

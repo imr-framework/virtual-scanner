@@ -1,0 +1,12 @@
+03-18-2021 
+(irse32, cylindrical): 1165.92 s 
+
+(tse32, cylindrical): 717.99 s 
+
+(irse32, grid): 1368.24 s 
+
+(tse32, grid): 706.14 s 
+
+(irse32, grid2): 1251.32 s 
+
+(tse32, grid2): 717.86 s

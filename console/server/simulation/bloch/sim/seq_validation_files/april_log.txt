@@ -1,0 +1,30 @@
+Timings:
+--------
+IRSE 32, T1 plane with N_ph = 128: 23659.67 s or 6.57 hours 
+TSE 32, T2 plane with N_ph = 128:  Time used: 12889.142153978348 seconds
+TSE 32, T1 plane with N_ph = 128: Time used: 11856.006633281708 seconds
+
+TSE 32, T1 plane with N_ph = 32, solver: Time used: 919.6856408119202 seconds
+TSE 32, ACR larger FOV 32: ~ 750 seconds
+IRSE 32, ACR larger FOV 32:  Time used: 1278.2243206501007 seconds
+TSE 64, Grid 128 : Time used: 21942.8448138237 seconds
+
+TSE 32, K0, T1 plane with N_ph = 32, solver: Time used: 751.3299281597137 seconds
+TSE 64, T1 plane 128: Time used: 21155.261072397232 seconds
+
+
+before fixing readout
+============================================================
+after fixing readout
+
+TSE 32, circle 32: Time used: 584.1294903755188 seconds
+TSE 32, T1 plane 32: Time used: 543.0569753646851 seconds
+IRSE 32, T1 plane 32: Time used: 1193.1382706165314 seconds
+TSE 64, grid 128:Time used: 14698.895397663116 seconds
+=======================
+after second fixing of readout
+IRSE 32 T1 32: Time used: 1161.277819633484 seconds
+TSE 32 T2 32 : Time used: 570.1042323112488 seconds
+TSE 32 GRID 64: Time used: 2109.572243452072 seconds
+TSE 64 GRID 128:  Time used: 18128.438450574875 seconds
+IRSE 64 GRID 128: Time used: 34537.07305073738 seconds

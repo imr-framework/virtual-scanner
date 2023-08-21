@@ -1,0 +1,567 @@
+<!--"""-->
+<!--This script corresponds to the GUI content for the Acquire tab of the virtual scanner-->
+<!--Parameters-->
+    <!-- TODO: change this -->
+    <!--Requires input from the user regarding subject data and Procedure-->
+    <!--ID, Name, Age, Date of Birth, Gender, Weight, height, orientation within the scanner and anatomy imaged -->
+
+<!--Returns-->
+    <!--payload with the form inputs after pressing the submission button-->
+
+
+<!--Author: Marina Manso-->
+<!--Date: 04/12/2019-->
+<!--Version 0.0-->
+<!--Copyright of the Board of Trustees of  Columbia University in the City of New York-->
+<!--"""-->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Standard Mode</title>
+
+
+  <!-- CDN-->
+  <!--Bootstrap-->
+  <!--
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!--JQuery-->
+  <!--
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--JQuery UI-->
+  <!--
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
+  <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+
+  <!--Manual links-->
+  <!--Bootstrap & JQuery-->
+  <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+  <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+  <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+  <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+  <!--JQuery-->
+  <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+  <!--JQuery UI-->
+  <script type="text/javascript" src="../static/packages/jQuery-ui/jquery-ui.js"></script>
+  <!--<link rel="stylesheet" href="../static/packages/jQuery-ui/jquery-ui.css">-->
+
+  <!--JavaScript customized funcitons-->
+  <script type="text/javascript" src="{{url_for('static',filename='acquire_func.js')}}"></script>
+  <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
+  <script src="../static/log_out_func.js"> </script>
+
+  <!--Customized CSS-->
+  <link rel="stylesheet" href="{{url_for('static',filename='/styles/main_style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='/styles/acquire_style.css')}}">
+
+  <!--Favicon -->
+  <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+
+
+  <script type="text/javascript">
+
+
+
+    if ('{{ success }}') {
+      {% autoescape false %}
+
+        var im = '{{ output_im }}'
+        var payload_dict = {{ payload }}
+
+        var axial = {{ axial }}
+        var sagittal = {{ sagittal }}
+        var coronal = {{ coronal }}
+        $(document).ready(function(){
+
+          if (axial.length >= 1){
+            $("#axial-carousel").show();
+            for (i = 0; i < axial.length; i++) {
+              var seq_type = axial[i].search("IM_");
+              var TRn = axial[i].search("_TR");
+              var TEn = axial[i].search("_TE");
+              var FAn = axial[i].search("_FA");
+              var last_n = axial[i].search("_20");
+              var title =axial[i].slice(seq_type+3,TRn-2)+" TR="+axial[i].slice(TRn+3,TEn)+", TE="+axial[i].slice(TEn+3,FAn)+", FA="+axial[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+
+                $('#axial-carousel .carousel-inner').append('<div  class="carousel-item active"><div class="im-title">Axial</div><img id="num'+i +'" class="d-block w-100" src="'+axial[i]+'" title=title></div>');
+
+
+
+              }
+              else{
+                $('#axial-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Axial</div><img id="num'+i +'" class="d-block w-100" src="'+axial[i]+'"></div>');
+
+              }
+
+              $('#axial-carousel .carousel-inner #num'+i).attr("title", title);
+
+            }
+          }
+          if (sagittal.length >= 1){
+
+
+
+            $("#sagittal-carousel").show();
+            for (i = 0; i < sagittal.length; i++) {
+
+              var TRn = sagittal[i].search("_TR");
+              var TEn = sagittal[i].search("_TE");
+              var FAn = sagittal[i].search("_FA");
+              var last_n = sagittal[i].search("_20");
+              var title =sagittal[i].slice(seq_type+3,TRn-2)+" TR="+sagittal[i].slice(TRn+3,TEn)+", TE="+sagittal[i].slice(TEn+3,FAn)+ ", FA="+sagittal[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+                $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
+              }
+              else{
+                $('#sagittal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Sagittal</div><img id="num'+i +'" class="d-block w-100" src="'+sagittal[i]+'"></div>');
+              }
+              $('#sagittal-carousel .carousel-inner #num'+i).attr("title", title);
+            }
+          }
+          if (coronal.length >= 1){
+            $("#coronal-carousel").show();
+
+            for (i = 0; i < coronal.length; i++) {
+
+              var TRn = coronal[i].search("_TR");
+              var TEn = coronal[i].search("_TE");
+              var FAn = coronal[i].search("_FA");
+              var last_n = coronal[i].search("_20");
+              var title =coronal[i].slice(seq_type+3,TRn-2)+" TR="+coronal[i].slice(TRn+3,TEn)+", TE="+coronal[i].slice(TEn+3,FAn)+ ", FA="+coronal[i].slice(FAn+3,last_n)
+
+              if (i == 0) {
+                $('#coronal-carousel .carousel-inner').append('<div class="carousel-item active"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
+              }
+              else{
+                $('#coronal-carousel .carousel-inner').append('<div class="carousel-item"><div class="im-title">Coronal</div><img id="num'+i +'" class="d-block w-100" src="'+coronal[i]+'"></div>');
+              }
+              $('#coronal-carousel .carousel-inner #num'+i).attr("title", title);
+            }
+          }
+          autoFillForm(payload_dict);
+
+        });
+
+      {% endautoescape %}
+    }
+  </script>
+</head>
+<body>
+
+  <!--Enclosing Panel-->
+  <div id="enclosingjumbo" class="jumbotron">
+
+    <h1>Virtual MR Scanner - Standard Mode</h1>
+    <input type="button" class="btn btn-primary feedback-btn" value="?">
+    <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
+    <!--Acquired images will be displayed in three views: axial, sagital and coronal-->
+
+    <div class="images-container">
+      <!--Axial-->
+      <!--</input id="axial-slider" class="slider" type="range" min="1" max="4" value="0">-->
+      <div id="axial-container"  class="container acquire-container">
+        <div id="axial-carousel" class="carousel" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+
+            </div>
+            <a class="carousel-control-prev"  href="#axial-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+            </a>
+
+            <a class="carousel-control-next"  href="#axial-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            </a>
+        </div>
+
+        <!--<p>Axial View</p>-->
+      </div>
+
+      <div class="vertical-line"></div>
+
+      <!--Sagital-->
+
+      <div id="sagital-container" class="container acquire-container">
+        <!--<p>Sagittal View</p>-->
+
+          <div id="sagittal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#sagittal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#sagittal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
+      </div>
+
+      <div class="vertical-line"></div>
+
+      <!--Coronal-->
+
+      <div id="coronal-container" class="container acquire-container">
+        <!--<p>Coronal View</p>-->
+
+          <div id="coronal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#coronal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#coronal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
+      </div>
+
+
+      <!--Black containers-->
+
+
+    </div>
+
+
+      <!--Main Panel-->
+    <div id="panel-container" class="container">
+
+        <div id="mainpanel" class="jumbotron">
+
+          <!--Navigation Bar-->
+          <nav >
+            <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_adjustments')}}">Adjustments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_acq')}}">Acquire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
+            </li>
+
+          </nav>
+
+          <form id="seqparameters" method="post" action="/receiver">
+
+            <input type="hidden" id="formId" name="formName" value="acq">
+            <input type="hidden" id="seq-id" name="selectedSeq">
+            <div class="row">
+
+              <!--Column 1: Sequence Contrast-->
+              <div id="contrast-col" class="col">
+
+                <h2 id="first-row-item">Contrast</h2>
+                <div class="row">
+
+                  <!--Column 1.1: Parameters: TR,TE,TI,FA-->
+                    <div class="col coltype1">
+                      <label class="IRSE-checkbox">IR</label>
+                        <div class="w-100"></div>
+                      <label>TR</label>
+                       <div class="w-100"></div>
+                      <label>TE</label>
+                       <div class="w-100"></div>
+                      <label class="TI-IRSE">TI</label>
+                       <div class="w-100"></div>
+                      <label>Flip Angle</label>
+                    </div>
+
+                    <!--Column 1.1.2: INPUTS (Parameters: TR,TE,TI,FA)-->
+                    <div class="col coltype2">
+
+                      <label class="radio-inline IRSE-checkbox">
+                        <input id="IRSE-check" type="checkbox" name="IRSE"  >
+                      </label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="TR" type="number" min="0" max='10000' class="smallinput param-with-range" name="TR">
+                      </label>
+                      <label>ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="TE" type="number" min="0" max='10000' class="smallinput param-with-range" name="TE" >
+                      </label>
+                      <label>ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label class="TI-IRSE">
+                        <input id="TI" type="number" min="0" class="smallinput TI-IRSE" name="TI">
+                      </label>
+                      <label class="TI-IRSE">ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="FA" min="0" max="360" type="number" class="smallinput param-with-range" name="FA">
+                      </label>
+                      <label>deg</label>
+
+                    </div>
+
+                </div>
+
+              </div>
+
+              <!--Column 2: Sequence Geometry-->
+              <div id="geometry-col" class="col">
+
+                <h2 id="first-row-item">Geometry</h2>
+
+
+
+
+                  <div class="row">
+                    <!--Column 2.1: Slice selection-->
+                    <div id="slselect-col" class="col">
+                      <h3>Slice Selection</h3>
+                      <div class="row">
+                        <!--Column 2.1.1: Tags slice selection parameters -->
+                        <div class="col coltype1">
+                          <label>Orientation</label>
+                            <div class="w-100"></div>
+                          <label>Thickness</label>
+                            <div class="w-100"></div>
+                          <label>Slices</label>
+                            <div class="w-100"></div>
+                          <label>Gap</label>
+                        </div>
+
+                        <!--Column 2.1.2: Fields slice selection parameters -->
+                        <div class="col coltype2 ">
+                          <label>
+                            <select id="sl-orient" class="selector" name="sl-orient">
+                              <option value="axial">Axial</option>
+                              <option value="sagittal">Sagittal</option>
+                              <option value="coronal">Coronal</option>
+                            </select>
+                          </label>
+
+                            <div class="w-100"></div>
+
+                          <label>
+
+                            <input id="thickness" type="number" min="16" max="240" class="smallinput param-with-range" name="thck" >
+                          </label>
+                          <label>mm</label>
+
+                            <div class="w-100"></div>
+
+                          <label>
+                            <input id="slices" type="number" min="1" max="1" class="smallinput param-with-range" name="slicenum">
+                          </label>
+
+                            <div class="w-100"></div>
+
+                          <!-- TODO: Light gray disabled box -->
+                          <label>
+                            <input id="sl-gap" type="number" min="0" max="600" class="smallinput param-with-range"  name="slicegap" disabled>
+                          </label>
+                          <!-- TODO: Decide on % or mm -->
+                          <!--<label>%</label>-->
+
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!--Column 2.2: Spatial Encoding-->
+                    <div class="col">
+                      <h3>Spatial Encoding</h3>
+
+                      <div  class="row">
+
+                        <div class="col">
+                          <div class="row">
+                            <!--Column 2.2.1: tags-->
+                            <div  class="col coltype1">
+
+                                <label>Frequency</label>
+
+                                  <div class="w-100"></div>
+
+                                <label>Phase</label>
+
+                                  <div class="w-100"></div>
+
+                                <label>ADC BW</label>
+
+                            </div>
+
+                            <!--Column 2.2.1: fields-->
+                            <div class="col coltype2">
+
+                              <label>
+                                <select id="freq" class="selector" name="freq">
+                                  <option class="freq" id="x" value="x">x</option>
+                                  <option class="freq" id="y" value="y" disabled>y</option>
+                                  <option class="freq" id="z" value="z" disabled>z</option>
+                                </select>
+                              </label>
+
+                                <div class="w-100"></div>
+
+                              <label>
+                                <select id="phase" class="selector" name="ph">
+                                  <option class="phase" id="y" value="y">y</option>
+                                  <option class="phase" id="x" value="x" disabled>x</option>
+                                  <option class="phase" id="z" value="z" disabled>z</option>
+                                </select>
+                              </label>
+
+                              <div class="w-100"></div>
+
+                              <label>
+                                <input id="ADC-bw" type="number" min="100" max="100" class="smallest-input param-with-range" name="bw" disabled>
+                              </label>
+                              <label>kHz</label>
+
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <!--Column 2.3: N and FOV-->
+                        <div  id="NandFOV-col" class="col">
+                          <div class="row">
+                            <!--Column 2.3.1: N-->
+                            <div class="col coltype1">
+
+                              <label>N</label>
+
+                                <div class="w-100"></div>
+
+                              <label>
+                                <input  id="Nx" type="number" min="0" max="15" class="smallest-input param-with-range" name="Nx" >
+                              </label>
+
+                                <div class="w-100"></div>
+
+                              <label>
+                                <input  id="Ny" type="number"  min="0" max="15" class="smallest-input param-with-range"  name="Ny">
+                              </label>
+
+                            </div>
+
+                            <!--Column 2.3.1: FOV-->
+                            <div class="col coltype2">
+
+                              <label>FOV</label>
+
+                                <div class="w-100"></div>
+
+                              <label>
+                                <input  id="FOVx" type="number" min="0" max="300" class="smallest-input param-with-range" name="FOVx">
+                              </label>
+                              <label>mm</label>
+
+                                <div class="w-100"></div>
+
+                              <label>
+                                <input  id="FOVy" type="number" class="smallest-input" name="FOVy">
+                              </label>
+                              <label>mm</label>
+
+                            </div>
+
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                    </div>
+
+                    <div id="voxelsize-col" class="col">
+                      <p></p>
+                      <h4>Voxel Size:</h4>
+                      <div class="voxsize">
+                        <label>x: <span id="vsx">0</span> mm</label>
+
+                          <div class="w-100"></div>
+
+                        <label>y: <span id="vsy">0</span> mm</label>
+
+                          <div class="w-100"></div>
+
+                        <label>z: <span id="thick">0</span> mm</label>
+                      </div>
+                    </div>
+
+
+
+
+
+                  </div>
+
+              </div>
+
+            </div>
+
+
+          </form>
+
+        </div> <!--Main Panel-->
+
+      </div> <!--Panel container-->
+
+    <div id="seq-panel" class="container">
+      <button id="addseq-btn" type="button" class="btn btn-primary">+</button>
+      <button type="submit" class="btn btn-primary submit-form-btn" disabled>Run Exam</button>
+      <!-- TODO: get panel being able to scroll down -->
+      <div id="seq-history-panel" class="container">
+        <div id="select-seq-sentence" >
+          <h4>Please select a sequence using the <bold>+ button</bold>.</h4>
+        </div>
+        <ul id="seq-history-list" class="no-bullet">
+
+        </ul>
+      </div>
+
+    </div>
+
+  </div> <!-- Enclosing panel-->
+
+  <!--Dialog to be opened to add a new sequence-->
+  <div id="dialog" class="dialog" title="Select a sequence:">
+    <ul class="menu no-bullet">
+      <!--<li><a class="menu-item" href = "#">Localizer</a></li>-->
+      <li ><a class="menu-item" href = "#">SE</a></li>
+      <li ><a class="menu-item" href = "#">GRE</a></li>
+    </ul>
+  </div>
+
+  <div class="help-link"></div>
+
+</body>
+</html>
+  <!-- * fill:#7f98d6;fill-opacity:1;fill-rule:nonzero;stroke:none /* -->

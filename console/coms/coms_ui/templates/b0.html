@@ -1,0 +1,316 @@
+{% extends "base_research.html" %}
+{% block content %}
+<div class="row h-100">
+    <div class="col-4" id="b0-parameters">
+        <div class="card row bg-white">
+            <div class="card-header">Temperature settings</div>
+            <div class="card-body row">
+                <div class="col-12">
+                    <div class="form-group row mb-3">
+                            <div class="col-4">
+                                {{ template_form.temp_sensitivity_field.label(class="form-label") }}
+                            </div>
+                            <div class="col-8">
+                                {{ template_form.temp_sensitivity_field(class="form-control disabled",id="temp_sensitivity") }}
+                            </div>
+            </div>
+            <div class="form-group row mb-3">
+                            <div class="col-4">
+                                <div class="row">
+                                    {{ template_form.temperature_field.label(class="form-label") }}
+                                </div>
+                                    <span id="temp-display">25</span> C
+                            </div>
+                            <div class="col-8">
+                                <div class="row">
+                                    {{ template_form.temperature_field(class="form-range preset-input",id='b0_temperature') }}
+                                    <div class="ticks text-primary">
+                                        {% for shift in [-50,-40,-30,-20,-10,0,10,20,30,40,50] %}
+                                        <span class="tick">{{ shift }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <div class="card row">
+            <div class="card-header">Optimization parameters</div>
+            <div class="card-body p-0">
+                <div class=" p-2 row">
+                    <div class="col-4">
+                        {{ template_form.ring_radii_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.ring_radii_field(class="form-control",id="innerRadii") }}
+                    </div>
+                </div>
+                <div class=" p-2 row">
+                    <div class="col-4">
+                        {{ template_form.num_magnets_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.num_magnets_field(class="form-control",id="innerNum") }}
+                    </div>
+                </div>
+                        <div class=" p-2 row">
+            <div class="col-4">
+                {{ template_form.num_rings_field.label(class="form-label")}}
+                </div>
+            <div class="col-8">
+                {{ template_form.num_rings_field(class="form-control",id="numRings") }}
+            </div>
+        </div>
+                        <div class=" p-2 row">
+            <div class="col-4">
+                {{ template_form.ring_separation_field.label(class="form-label")}}
+                </div>
+            <div class="col-8">
+                {{ template_form.ring_separation_field(class="form-control",id="ringSep") }}
+            </div>
+        </div>
+                        <div class=" p-2 row">
+            <div class="col-4">
+                {{ template_form.dsv_field.label(class="form-label")}}
+                </div>
+            <div class="col-8">
+                {{ template_form.dsv_field(class="form-control",id="dsv") }}
+            </div>
+        </div>
+
+
+                <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.resolution_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.resolution_field(class="form-control",id="resolution") }}
+                    </div>
+                </div>
+                <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.max_gen_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.max_gen_field(class="form-control",id="max-gen") }}
+                    </div>
+                </div>
+                <div class="p-0 row">
+                    <div class="col-12 p-0">
+                        <button class="btn btn-lg btn-success w-100 p-0" id="run-halbach">
+                            <span class="spinner-border spinner-border-sm d-none" id="run-halbach-spinner" role="status" aria-hidden="true"></span>
+                            <span>Run</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 p-0">
+                <button class="btn btn-lg btn-light btn-outline-info w-100" id="b0-save">
+                    <span class="spinner-border spinner-border-sm d-none" id="b0-save-spinner" role="status" aria-hidden="true"></span>
+                    Save
+                </button>
+            </div>
+            <div class="col-4 p-0">
+<!--                <button class="btn btn-lg btn-light btn-outline-success w-100" id="b0-load">-->
+<!--                    <span class="spinner-border spinner-border-sm d-none" id="b0-load-spinner" role="status" aria-hidden="true"></span>-->
+<!--                    Load-->
+<!--                </button>-->
+
+                <!-- Button trigger modal -->
+            <button type="button" class="btn btn-lg btn-light btn-outline-success w-100" data-mdb-toggle="modal" data-mdb-target="#b0-load-modal">
+                Load
+            </button>
+            </div>
+            <div class="col-4 p-0">
+<!--                <button class="btn btn-lg btn-light btn-outline-danger w-100" id="b0-mod">-->
+<!--                    <span class="spinner-border spinner-border-sm d-none" id="b0-mod-spinner" role="status" aria-hidden="true"></span>-->
+<!--                    Mod-->
+<!--                </button>-->
+                    <button type="button" class="btn btn-lg btn-light btn-outline-danger w-100" data-mdb-toggle="modal" data-mdb-target="#b0-mod-modal">
+                Mod
+            </button>
+            </div>
+        </div>
+        <div class="card row">
+            <div class="card-header">Display options</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group p-2 row">
+                              <div class="col-4">
+                                 {{ template_form.dsv_display_field.label(class="form-label")}}
+                            </div>
+                            <div class="col-8">
+                                {{ template_form.dsv_display_field(class="form-control",id='dsv_display') }}
+                            </div>
+                        </div>
+                        <div class="form-group p-2 row">
+                              <div class="col-4">
+                                 {{ template_form.res_display_field.label(class="form-label")}}
+                            </div>
+                            <div class="col-8">
+                                {{ template_form.res_display_field(class="form-control",id='res_display') }}
+                            </div>
+                        </div>
+                        <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.xslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.xslice_field(class="form-control",id='indx') }}
+                    </div>
+                </div>
+                        <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.yslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.yslice_field(class="form-control",id='indy') }}
+                    </div>
+                </div>
+                        <div class="form-group p-2 row">
+                    <div class="col-4">
+                        {{ template_form.zslice_field.label(class="form-label")}}
+                        </div>
+                    <div class="col-8">
+                        {{ template_form.zslice_field(class="form-control",id='indz') }}
+                    </div>
+                </div>
+                        <div class="row p-2">
+                          <button class="btn btn-lg btn-info" id="update-halbach-slices">Update display</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row h-25">
+                                 <div class="btn-group shadow-none">
+                                    <input type="radio" class="btn-check" name="mag-options" id="opt-x" autocomplete="off">
+                                    <label class="btn btn-outline-primary opt-3d" for="opt-x">x</label>
+                                    <input type="radio" class="btn-check" name="mag-options" id="opt-y" autocomplete="off">
+                                    <label class="btn btn-outline-primary opt-3d" for="opt-y">y</label>
+                                    <input type="radio" class="btn-check" name="mag-options" id="opt-z" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary opt-3d" for="opt-z">z</label>
+                                </div>
+                        </div>
+                    <div class="row h-25">
+                        <button class="btn btn-lg btn-primary" id="show-3d">Show 3D</button>
+                    </div>
+<!--                    <div class="row h-25">-->
+<!--                        <button class="btn btn-lg btn-secondary" id="show-evol">Show evol</button>-->
+<!--                    </div>-->
+                    <div class="row h-25">
+                        <button class="btn btn-lg btn-light" id="show-magnet">Show magnet</button>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </div>
+                <div class="row">
+            <div class="card">
+                <div class="card-header">Program outputs</div>
+                <div class="card-body">
+                    <p id="output-space"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-8" id="b0-display">
+
+        <div class="row h-50">
+            <div class="card">
+            <div class="card-header">
+          B0 map
+            </div>
+            <div class="card-body">
+                <div class="chart h-100" id="halbach-chart"></div>
+            </div>
+        </div>
+        </div>
+
+        <div class="row h-50 w-100">
+            <div class="col col-6 card">
+                <div class="card-header">Rings</div>
+                <div class="card-body">
+                    <div class="chart" id="rings-chart-3d"></div>
+                </div>
+            </div>
+            <div class="col col-6 card">
+                <div class="card-header">3D plot</div>
+                <div class="card-body">
+                    <div class="chart" id="halbach-chart-3d"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- Modals -->
+<div class="modal fade" id="b0-load-modal" tabindex="-1" aria-labelledby="b0-load-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="b0-load-modal-label">Load magnet configuration</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+               <div class="col-4">{{ template_form.load_options_field.label(class="form-label") }}</div>
+                        <div class="col-8">
+                            {{ template_form.load_options_field(class="form-control preset-input",id='b0-load-option') }}
+                        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" id="b0-load">
+            <span class="spinner-border spinner-border-sm d-none" id="b0-load-spinner" role="status" aria-hidden="true"></span>
+            Load
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="b0-mod-modal" tabindex="-1" aria-labelledby="b0-load-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="b0-mod-modal-label">Modify magnet configuration</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+           mod options ...
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" id="b0-mod">
+            <span class="spinner-border spinner-border-sm d-none" id="b0-mod-spinner" role="status" aria-hidden="true"></span>
+            Save modifications
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block additional_imports %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <link rel="stylesheet" href="../static/styles/b0_style.css">
+
+    <script src="../static/b0.js"></script>
+
+{% endblock %}

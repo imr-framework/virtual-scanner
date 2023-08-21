@@ -1,0 +1,452 @@
+<!--"""-->
+<!--This script corresponds to the GUI content for the Adjustments tab of the virtual scanner-->
+<!--Parameters-->
+    <!--Requires input from the user regarding scan parameters and shimming procedure-->
+
+<!--Returns-->
+    <!--payload with the form inputs after pressing the run scan button-->
+
+
+<!--Author: Sairam Geethanath-->
+<!--Date: 07/20/2023-->
+<!--Version 0.0-->
+<!--Copyright of the -->
+<!--"""-->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Standard Mode</title>
+
+
+  <!-- CDN-->
+  <!--Bootstrap-->
+  <!--
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!--JQuery-->
+  <!--
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--JQuery UI-->
+  <!--
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
+  <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+
+  <!--Manual links-->
+  <!--Bootstrap & JQuery-->
+  <link rel="stylesheet" href="../static/packages/Bootstrap/bootstrap.min.css">
+  <script  src="../static/packages/Bootstrap/jquery-3.3.1.slim.min.js"></script>
+  <script type="text/javascript" src="../static/packages/Bootstrap/popper.min.js"></script>
+  <script type="text/javascript" src="../static/packages/Bootstrap/bootstrap.min.js"></script>
+
+  <!--JQuery-->
+  <script type="text/javascript" src="../static/packages/jquery-3.3.1.min.js"></script>
+
+  <!--JQuery UI-->
+  <script type="text/javascript" src="../static/packages/jQuery-ui/jquery-ui.js"></script>
+  <!--<link rel="stylesheet" href="../static/packages/jQuery-ui/jquery-ui.css">-->
+
+  <!--JavaScript customized funcitons-->
+  <script type="text/javascript" src="{{url_for('static',filename='adjustments_func.js')}}"></script>
+  <!--<script type="text/javascript" src="{{url_for('static',filename='form2Json.js')}}"></script>-->
+  <script type="text/javascript" src="{{url_for('static',filename='adjustments_func.js')}}"></script>
+  <script src="../static/log_out_func.js"> </script>
+
+  <!--Customized CSS-->
+  <link rel="stylesheet" href="{{url_for('static',filename='/styles/main_style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='/styles/adjustments_style.css')}}">
+
+  <!--Favicon -->
+  <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+<body>
+
+  <!--Enclosing Panel-->
+  <div id="enclosingjumbo" class="jumbotron">
+
+    <h1>MRI4ALL Console - Standard Mode</h1>
+    <input type="button" id = "editconfig-btn" class="btn btn-smallest config-btn" value=&#9881>
+    <input type="button" class="btn btn-primary feedback-btn" value="?">
+    <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
+    <!--Acquired images will be displayed in three views: axial, sagital and coronal-->
+
+    <div class="images-container">
+      <!--Axial-->
+      <!--</input id="axial-slider" class="slider" type="range" min="1" max="4" value="0">-->
+      <div id="axial-container"  class="container acquire-container">
+        <div id="axial-carousel" class="carousel" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+
+            </div>
+            <a class="carousel-control-prev"  href="#axial-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+            </a>
+
+            <a class="carousel-control-next"  href="#axial-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            </a>
+        </div>
+
+        <!--<p>Axial View</p>-->
+      </div>
+
+      <div class="vertical-line"></div>
+
+      <!--Sagital-->
+
+      <div id="sagital-container" class="container acquire-container">
+        <!--<p>Sagittal View</p>-->
+
+          <div id="sagittal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#sagittal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#sagittal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
+      </div>
+
+      <div class="vertical-line"></div>
+
+      <!--Coronal-->
+
+      <div id="coronal-container" class="container acquire-container">
+        <!--<p>Coronal View</p>-->
+
+          <div id="coronal-carousel" class="carousel" data-ride="carousel" data-interval="false">
+              <div class="carousel-inner">
+
+              </div>
+              <a class="carousel-control-prev"  href="#coronal-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+              </a>
+
+              <a class="carousel-control-next"  href="#coronal-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+              </a>
+          </div>
+      </div>
+
+
+      <!--Black containers-->
+
+
+    </div>
+
+
+      <!--Main Panel-->
+    <div id="panel-container" class="container">
+
+        <div id="mainpanel" class="jumbotron">
+
+          <!--Navigation Bar-->
+          <nav >
+            <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_adjustments')}}">Adjustments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
+            </li>
+
+          </nav>
+
+          <form id="adjparameters" method="post" action="/receiver">
+
+            <input type="hidden" id="formId" name="formName" value="adj">
+            <input type="hidden" id="seq-id" name="selectedSeq">
+            <div class="row">
+
+              <!--Column 1: Sequence Contrast-->
+              <div id="parameters-col" class="col">
+
+                <h2 id="first-row-item">Scan Parameters</h2>
+                <div class="row">
+
+                  <!--Column 1.1: Parameters: Frequency, TR, readout duration (Tro), # repetitions, # averages (NSA)-->
+                    <div class="col coltype1">
+                        <div class="w-100"></div>
+                      <label>Frequency</label>
+                       <div class="w-100"></div>
+                      <label>TR</label>
+                       <div class="w-100"></div>
+                      <label>Readout duration</label>
+                       <div class="w-100"></div>
+                      <label>Repetitions</label>
+                        <div class="w-100"></div>
+                      <label>Averages</label>
+                        <div class="w-100"></div>
+                      <label>Tx amplitude</label>
+                        <div class="w-100"></div>
+                      <label>RF Rx gain</label>
+
+                    </div>
+
+                    <!--Column 1.1.2: INPUTS (Parameters: Frequency, TR, readout duration (Tro), # repetitions, # averages (NSA))-->
+                    <div class="col coltype2">
+
+                      <label>
+                        <input id="Frequency" type="number" min="0" max='1e9' value = 8.1809e6 class="smallinput param-with-range" name="Frequency">
+                      </label>
+                      <label>Hz</label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="TR" type="number" min="0" max='10000' value = 1000 class="smallinput param-with-range" name="TR">
+                      </label>
+                      <label>ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="Tro" type="number" min="0" max='100' value=30  class="smallinput param-with-range" name="Tro" >
+                      </label>
+                      <label>ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label class="TI-IRSE">
+                        <input id="TI" type="number" min="0" class="smallinput TI-IRSE" name="TI">
+                      </label>
+                      <label class="TI-IRSE">ms</label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="Rep" min="0" max="1000" type="number" value = 100 class="smallinput param-with-range" name="Rep">
+                      </label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="NSA" min="0" max="1000" type="number" value=1  class="smallinput param-with-range" name="NSA">
+                      </label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="TX_amp" type="number" min="0" max='20' value=3 class="smallinput param-with-range" name="TX_amp" >
+                      </label>
+
+                        <div class="w-100"></div>
+
+                      <label>
+                        <input id="Rx_gain" type="number" min="-9" max='6' value=3 class="smallest-input param-with-range" name="RF_gain" >
+                      </label>
+                      <label>dB</label>
+                      <label_sub>(-9,6)</label_sub>
+
+
+                        <div class="w-100"></div>
+
+
+                    </div>
+
+                </div>
+
+              </div>
+
+              <!--Column 2: Sequence Shimming-->
+              <div id="shim-col" class="col">
+                <h2 id="first-row-item">Adjust</h2>
+
+
+                  <div class="row">
+                    <!--Column 2.1: B0 shimming-->
+                    <div id="slselect-col" class="col">
+                      <h3>B0 shimming</h3>
+                      <div class="row">
+                        <!--Column 2.1.1: Tags slice selection parameters -->
+                        <div class="col coltype1">
+                          <label>Method</label>
+                            <div class="w-100"></div>
+                          <label>X-shim</label>
+                            <div class="w-100"></div>
+                          <label>Y-shim</label>
+                            <div class="w-100"></div>
+                          <label>Z-shim</label>
+                            <div class="w-100"></div>
+
+
+                        </div>
+
+                        <!--Column 2.1.2: B0 shimming methods -->
+                        <div class="col coltype2 ">
+                          <label>
+                            <select id="shim-method" class="selector" name="shim-method">
+                              <option value="Manual">Manual</option>
+                              <option value="Auto">Auto</option>
+
+                            </select>
+                          </label>
+
+                          <label>
+                            <div class="slidecontainer">
+                              <input type="range" min="1" max="100" value="50" type="submit" class="sliderX" name="Xshim">
+                            </div>
+                          </label>
+                            <div class="w-100"></div>
+
+                          <label>
+                            <div class="slidecontainer">
+                              <input type="range" min="1" max="100" value="50" type="submit" class="sliderY" name="Yshim">
+                            </div>
+                          </label>
+                            <div class="w-100"></div>
+
+                          <label>
+                            <div class="slidecontainer">
+                              <input type="range" min="1" max="100" value="50" type="submit" class="sliderZ" name="Zshim">
+                            </div>
+                          </label>
+                            <div class="w-100"></div>
+
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class ="col">
+                      <!--Save and reset buttons-->
+                        <h3> </h3>
+                        <input id="zero-btn" class="btn btn-primary btn-align-left" type="submit" value="Zero Shims" name="ZeroS"/>
+                          <div class="h-25"></div>
+                        <input id="loads-btn" class="btn btn-primary btn-align-left" type="submit" value="Load Shims" name = "LoadS"/>
+                          <div class="h-25"></div>
+                        <input id="save-btn" class="btn btn-primary btn-align-left" type="submit" value="Save Shims" name = "SaveS"/>
+
+                    </div>
+                    <!--Column 2.2: B1 related text-->
+                    <div class="col coltype1">
+                      <h3>B1</h3>
+                      <label>Tx amplitude</label>
+                       <div class="w-100"></div>
+                      <label>Flip angle calibration</label>
+                       <div class="w-100"></div>
+                    </div>
+
+                    <!--Column 2.3: B1 related values-->
+                    <div class="col coltype2">
+                      <h3> ------ </h3>
+                      <label>
+                        <input id="TX_amp" type="number" min="0" max='20' value =3 class="smallinput param-with-range" name="TX_amp" >
+                      </label>
+                        <div class="w-100"></div>
+
+                      <label class="radio-inline FAcalib-checkbox">
+                        <input id="FAcalib-check" type="checkbox" name="FAcalib"  >
+                      </label>
+                    </div>
+
+                   
+
+
+
+
+
+                  </div>
+
+              </div>
+
+            </div>
+
+
+          </form>
+
+        </div> <!--Main Panel-->
+
+      </div> <!--Panel container-->
+
+    <div id="seq-panel" class="container">
+      <button id="addseq-btn" type="button" class="btn btn-primary">+</button>
+      <button type="submit" class="btn btn-primary submit-form-btn" disabled>Run</button>
+      <!-- TODO: get panel being able to scroll down -->
+      <div id="seq-history-panel" class="container">
+        <div id="select-seq-sentence" >
+          <h4>Please select a sequence using the <bold>+ button</bold>.</h4>
+        </div>
+        <ul id="seq-history-list" class="no-bullet">
+
+        </ul>
+      </div>
+
+    </div>
+
+
+  </div> <!-- Enclosing panel-->
+
+  <!--Dialog to be opened to add a new sequence-->
+  <div id="dialog" class="dialog" title="Select a sequence:">
+    <ul id = "sequence-menu"class="menu no-bullet">
+      <!--<li><a class="menu-item" href = "#">Localizer</a></li>-->
+      <li ><a class="menu-item" href = "#">Findf0</a></li>
+      <li ><a class="menu-item" href = "#">RFpulseCalib</a></li>
+      <li ><a class="menu-item" href = "#">GmaxCalib</a></li>
+      <li ><a class="menu-item" href = "#">ShimB0</a></li>
+    </ul>
+  </div>
+
+  <div class="help-link"></div>
+
+  <div id="dialog_config" class="dialog_config" title="Configure System:">
+    <form id="adjconfigparameters" method="post" action="/receiver">
+            <div class="row">
+              <label_dialog>LARMOR FREQ</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>RF MAX</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>RF PI2 FRACTION</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>GX MAX</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>GY MAX</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>GZ MAX</label_dialog>
+                <div class="w-100"></div>
+
+              <label_dialog>MGH PATH</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>LOG PATH</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>SEQ PATH</label_dialog>
+                <div class="w-100"></div>
+              <label_dialog>DATA PATH</label_dialog>
+                <div class="w-100"></div>
+            </div>
+    </form>
+<!--    <ul id ="config_panel" class="menu no-bullet">-->
+<!--      &lt;!&ndash;<li><a class="menu-item" href = "#">Localizer</a></li>&ndash;&gt;-->
+<!--      <li ><a class="menu-item" href = "#">Findf0</a></li>-->
+<!--      <li ><a class="menu-item" href = "#">RFpulseCalib</a></li>-->
+<!--      <li ><a class="menu-item" href = "#">GmaxCalib</a></li>-->
+<!--      <li ><a class="menu-item" href = "#">ShimB0</a></li>-->
+<!--    </ul>-->
+  </div>
+
+</body>
+</html>
+  <!-- * fill:#7f98d6;fill-opacity:1;fill-rule:nonzero;stroke:none /* -->

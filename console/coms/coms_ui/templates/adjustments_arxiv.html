@@ -1,0 +1,429 @@
+<!--"""-->
+<!--https://www.w3schools.com/howto/howto_js_rangeslider.asp-->
+<!--This script corresponds to the GUI content for the Adjustments tab of the virtual scanner-->
+<!--Parameters-->
+
+    <!--Requires input from the user regarding sequence parameters and shim parameters-->
+
+
+<!--Returns-->
+    <!--FID oriented displays: T2, SNR and pulse length-->
+    <!--Shim values-->
+    <!--Flip angles-->
+
+
+<!--Author: Sairam Geethanath-->
+<!--Date: 07/19/2023-->
+<!--Version 0.0-->
+<!--"""-->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Standard Mode</title>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!--jQuery and JS files-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link href= "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="{{url_for('static',filename='adjustments_func.js')}}"></script>
+    <script src="../static/log_out_func.js"> </script>
+
+
+    <!--CSS-->
+    <link rel="stylesheet" href="{{url_for('static',filename='/styles/main_style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='/styles/adjustments_style.css')}}">
+
+    <!--Favicon -->
+    <link rel="shortcut icon"  href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!--JS to capture template variables-->
+    <script type="text/javascript">
+
+      var load_step = '{{ load_success }}'
+<!--      var map_step = '{{ map_success }}'-->
+<!--      var roi_step = '{{ roi_path }}'-->
+
+      //First step: load sample original data:
+      if ('{{ load_success }}'){
+        {% autoescape false %}
+          console.log('load success')
+          var payload1_dict = {{ payload1 }}
+
+          $(document).ready(function(){
+
+            autoFillForm(payload1_dict);
+
+            //displayImages(payload1_dict['data-path']);
+            var im_array = payload1_dict['data-path']
+
+            $("#original-data-carousel").show();
+
+
+            var i;
+            im_array.sort();
+            for (i = 0; i < im_array.length; i++) {
+
+              if (i == 0) {
+                $('#original-data-carousel .carousel-inner').append('<div class="carousel-item active"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
+              }
+              else{
+                $('#original-data-carousel .carousel-inner').append('<div class="carousel-item"><img class="d-block w-100" src="'+im_array[i]+'"></div>');
+              }
+            }
+          });
+
+
+        {% endautoescape %}
+      }
+
+
+      //Second step: load the generated map file
+      if ('{{ map_success }}') {
+        {% autoescape false %}
+        console.log('map success')
+          //var payload1_dict = {{ payload1 }};
+          var payload2_dict = {{ payload2 }}
+          $(document).ready(function(){
+            autoFillForm2(payload2_dict);
+            var map_type=
+            $('#map-container').append('<div class="im-title">'+$("#map-type").val()+ ' mapping </div><img class="d-block " src="'+payload2_dict['map_path']+'"/>');
+
+          });
+        {% endautoescape %}
+      }
+
+
+      if ('{{ roi_success }}'){
+        {% autoescape false %}
+        console.log('roi success')
+
+          var payload3_dict = {{ payload3 }}
+
+          $(document).ready(function(){
+
+            autoFillForm3(payload3_dict);
+            $('#roiresults-container').append('<img class="d-block " src="'+payload3_dict['roi_path']+'"/>');
+          });
+        {% endautoescape %}
+      }
+
+
+    </script>
+
+
+
+
+  </head>
+  <body>
+
+    <div id="enclosingjumbo" class="jumbotron">
+
+      <h1>Virtual MR Scanner - Standard Mode</h1>
+      <input type="button" class="btn btn-primary feedback-btn" value="?">
+      <input id="log-out" class="btn btn-primary" type="button" name="" value="Log-out" style="float:right">
+      <!--Images display panel-->
+      <div class="images-container">
+        <!--Original data-->
+        <div id="data-container" class="container analysis-container">
+        <div id="original-data-carousel" class="carousel" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+
+            </div>
+            <a class="carousel-control-prev"  href="#original-data-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+            </a>
+
+            <a class="carousel-control-next"  href="#original-data-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            </a>
+          </div>
+        </div>
+
+          <div class="vertical-line"></div>
+
+        <!--T1/T2 map-->
+        <div id="fidresults-container" class="container adjustments-container">
+
+
+
+
+        </div>
+
+            <div class="vertical-line"></div>
+
+        <!--ROI analysis results-->
+        <div id="fidresults-container" class="container adjustments-container">
+          <!--<p>ROI ANALYSIS RESULTS</p>-->
+        </div>
+      </div>
+
+      <!--Workspace-->
+      <!--
+      <div class="workspace-container">
+        <h2>Workspace</h2>
+        <ul class="file-list">
+
+        </ul>
+      </div>
+      -->
+
+      <!--Adjustments main panel-->
+      <div id="panel-container" class="container">
+        <div id="mainpanel" class="jumbotron container">
+
+          <!--Navigation Bar-->
+          <nav>
+            <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_register')}}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_acq')}}">Acquire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('on_analyze')}}">Analyze</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('on_analyze')}}">Adjustments</a>
+            </li>
+
+          </nav>
+
+
+
+          <!--Forms-->
+          <div class="row">
+            <div id="param-get-col" class="col">
+              <form class="map-gen-Form" method='post' action='/receiver'>
+                <input type="hidden" id="formId" name="formName" value="adj">
+                <input type="hidden" name="adj-form" value="adj_par">
+
+
+
+                  <!--Column 1 (Map generation): Sequence parameters and model-->
+                <div class="row">
+                  <!--Column 1.1: Sequence parameters-->
+                  <div class="col">
+                    <h2>Parameters</h2>
+
+                    <!--Frequency (Hz): Unique value -->
+                    <label class="tag-label-small">Frequency</label>
+                    <label class="input-label">
+                      <input id="Frequency" class="smallinput" type="number" name="Frequency">
+                    </label>
+                    <label>Hz</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Repetition Time (TR): Unique value -->
+                    <label class="tag-label-small">Repetition Time (TR)</label>
+                    <label class="input-label">
+                      <input id="TR" class="smallinput" type="number" name="TR">
+                    </label>
+                    <label>ms</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Readout duration (ms) : Unique value -->
+                    <label class="tag-label-small">Readout duration</label>
+                    <label class="input-label largeinput-label">
+                      <input id="Readout duration" class="largeinput" type="text" name="TE"  />
+                    </label>
+                    <label>ms</label>
+
+                    <div class="w-100"></div>
+
+                    <!--Number of repetitions : Unique value -->
+                    <label class="tag-label-small"># repetitions</label>
+                    <label class="input-label largeinput-label"# repetitions">
+                      <input id="repetitions" class="largeinput" type="text" name="# repetitions" readonly>
+                    </label>
+                  </div>
+
+                  <div class="w-100"></div>
+                    <!--Number of repetitions : Unique value -->
+                    <label class="tag-label-small"># averages</label>
+                    <label class="input-label largeinput-label"# repetitions">
+                      <input id="NSA" class="largeinput" type="text" name="NSA" readonly>
+                    </label>
+                  </div>
+
+
+                  <div class="w-100"></div>
+                    <!--RF Transmit gain : Unique value -->
+                    <label class="tag-label-small">RF TX amplitude</label>
+                    <label class="input-label largeinput-label"TXA">
+                      <input id="TXA" class="largeinput" type="text" name="TXA" readonly>
+                    </label>
+                  </div>
+
+                  <div class="w-100"></div>
+
+                    <!--Rx gain (dB) : Unique value -->
+                    <label class="tag-label-small">RF Receive gain</label>
+                    <label class="input-label largeinput-label">
+                      <input id="RF Rx gain" class="largeinput" type="text" name="RFRx"  />
+                    </label>
+                    <label>dB (-9 to 6)</label>
+
+
+                  <!--Column 1.2: Shimming-->
+                  <div class="row">
+                    <div class="col">
+
+                    <h2>Shimming</h2>
+
+                    <!--Shim method selection: currently only manual or auto-->
+                    <label>Shim method</label>
+                    <label class="input-label">
+                      <select id="shim-choice" class="selector" name="shim-choice">
+                        <option value="Manual">Manual</option>
+                        <option value="Auto">Auto</option>
+                      </select>
+                    </label>
+
+
+                    <div class="slidecontainer">
+                    <label>X</label>
+                          <input type="range" min="1" max="100" value="50" class="slider" id="Xshim">
+                    </div>
+
+                    <div class="slidecontainer">
+                    <label>Y</label>
+                          <input type="range" min="1" max="100" value="50" class="slider" id="Yshim">
+                    </div>
+
+                    <div class="slidecontainer">
+                    <label>Z</label>
+                          <input type="range" min="1" max="100" value="50" class="slider" id="Zshim">
+                    </div>
+
+<!--                    <label class="input-label largeinput-label ">-->
+
+<!--                      <select id="model-eq" class="selector" name="model-eq">-->
+<!--                        <option value="SE-eq">a(1-exp(-y/b)exp(-x/c))+d</option>-->
+
+<!--                        <option value="IRSE-eq">a(1-2exp(-x/b)+exp(-y/b))</option>-->
+<!--                      </select>-->
+<!--                    </label>-->
+
+                    </div>
+                  </div>
+            </div>
+
+
+                <!--Button for map generation-->
+                <div class="row">
+                  <input  class="btn btn-primary adjustments-btn" type="submit" value="Run Scan"/>
+                </div>
+
+                <div class="row">
+                <div class="col">
+                  <input  class="btn btn-primary adjustments-btn" type="submit" value="Stop"/>
+                </div>
+                </div>
+
+
+              </form>
+            </div>
+
+          <!--Column 1.3: File Operations-->
+                  <div class="col">
+
+            <div id="ROI-ana-col" class="col">
+              <form id="ROI-ana-Form" method="post" action="/receiver">
+                <input type="hidden" name="roi-form" value="roi">
+                <input type="hidden" id="formId" name="formName" value="ana">
+                  <label ><p id="skip-a-line"></p></label>
+                  <h2>File operations</h2>
+
+                <!--Load a shim file-->
+          <form id="original-data-form" method='post' action='/receiver'> <!--First form-->
+            <input type="hidden" id="formId" name="formName" value="ana">
+            <input type="hidden" id="selected-option" name="original-data-opt">
+            <label id="first-row-item" for="fileInput">
+
+              <input id="file-input-display" class="fileInput" type="text" name="fileInput" placeholder="Choose your shim file..."/>
+              <input id="load-btn" class="btn btn-primary" type="button" value="Load" />
+
+              <!-- Hidden file input to trigger file choice dialog to open-->
+              <!--Set accept=".dicom" to filter the files and only allow dicom selection-->
+              <!--<input id="file-select" type="file" accept=".jpg">-->
+
+              <!--Save and reset buttons-->
+              <input class="btn btn-primary btn-align-right" type="button" value="Save"/>
+              <input id="reset-btn" class="btn btn-primary btn-align-right" type="button" value="Reset"/>
+            </label>
+          </form>
+
+                  <!--Map type: Choose between T1 or T2 map-->
+                  <label class="tag-label-med">Map Type</label>
+                  <label class="input-label">
+                    <select id="map-type" class="selector" name="map-type">
+                      <option value="T1">T1</option>
+                      <option value="T2">T2</option>
+                    </select>
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--Map size-->
+                  <label class="tag-label-med">Map Size</label>
+                  <label class="input-label">
+                    <input id="map-size" type="number" class="smallinput" name="map-size">
+                  </label>
+
+                    <div class="w-100"></div>
+
+                  <!--FOV -->
+                  <label class="tag-label-med">Field of View</label>
+                  <label class="input-label ">
+                    <input id="FOV" class="smallinput" type="number" name="map-FOV">
+                  </label>
+                  <label>mm</label>
+
+                  <input id="roi-analysis-button" class="btn btn-primary analysis-btn" type="submit" value="Detect Spheres" disabled/>
+
+
+
+
+
+              </form>
+            </div>
+
+          </div>
+
+        </div><!--Main panel-->
+
+      </div><!--Panel-container-->
+
+
+
+    </div><!--enclosingjumbo-->
+
+    <div id="file-select-dialog" class="dialog" title="Select a folder:">
+      <ul class="menu no-bullet">
+        <li class="ui-state-disabled"><div><a class="menu-item" href = "#">Simulation Results</a></div></li>
+        <li ><div>Analyze Sample Data</div>
+          <ul>
+            <li><a class="menu-item" href = "#">T1</a></li>
+            <li><a class="menu-item" href = "#">T2</a></li>
+          </ul>
+        </li>
+
+
+      </ul>
+    </div>
+
+
+  </body>
+</html>

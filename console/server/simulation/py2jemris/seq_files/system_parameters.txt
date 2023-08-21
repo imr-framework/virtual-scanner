@@ -1,0 +1,12 @@
+  system = Opts(max_grad=32, grad_unit='mT/m', max_slew=130,
+                  slew_unit='T/m/s', rf_ringdown_time=30e-6,
+                  rf_dead_time=100e-6, adc_dead_time=20e-6)
+
+  Pulseq units:
+
+    rf_const = 2*pi/1000 # from Pulseq[Hz]=[1/s] to JEMRIS[rad/ms] rf magnitude conversion constant
+    g_const =  2*pi/1e6 # from Pulseq [Hz/m] to JEMRIS [(rad/ms)/mm] gradient conversion constant
+    slew_const = g_const/1000 # from Pulseq [Hz/(m*s)] to JEMRIS [(rad/ms)/(mm*ms)]
+    ga_const = 2*pi/1000# from Pulseq[1/m] to JEMRIS [2*pi/mm] gradient area conversion constant
+    sec2ms = 1000 # time conversion constant
+

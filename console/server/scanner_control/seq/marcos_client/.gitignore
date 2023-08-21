@@ -1,0 +1,6 @@
+*~
+*__pycache__*
+local_config.py
+*.log
+*.vscode
+# ocra_lib/

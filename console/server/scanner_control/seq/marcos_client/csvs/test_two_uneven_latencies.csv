@@ -1,0 +1,6 @@
+# clock cycles, tx0_i, tx0_q, tx1_i, tx1_q, fhdo_vx, fhdo_vy, fhdo_vz, fhdo_vz2, ocra1_vx, ocra1_vy, ocra1_vz, ocra1_vz2, rx0_rate, rx1_rate, rx0_rate_valid, rx1_rate_valid, rx0_rst_n, rx1_rst_n, rx0_en, rx1_en, tx_gate, rx_gate, trig_out, leds, csv_version_0.2
+#  ticks, tx0_i, tx0_q, tx1_i, tx1_q, fhd_x, fhd_y, fhd_z,fhd_z2,  oc1_x,  oc1_y,  oc1_z, oc1_z2, rx0r, rx1r,v0,v1,r0,r1,e0,e1,tg,rg,to,leds
+       0,     0,     0,     0,     0, 32768, 32768, 32768, 32768,      0,      0,      0,      0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0
+     100,     1,     2,     0,     0, 32768, 32768, 32768, 32768,      0,      0,      0,      0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0
+     101,     3,     4,     0,     0, 32768, 32768, 32768, 32768,      0,      0,      0,      0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0
+     102,     5,     6,     0,     0, 32768, 32768, 32768, 32768,      0,      0,      0,      0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   0     
